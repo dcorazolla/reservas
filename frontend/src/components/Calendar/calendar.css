@@ -1,0 +1,78 @@
+.calendar-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.calendar-table {
+  width: 95%;
+  margin: 0 auto;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+  border: 1px solid #ddd;
+  height: 40px;
+  padding: 0;
+}
+
+/* COLUNA QUARTO */
+.room-col {
+  width: 120px;
+  background: #f9fafb;
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  text-align: left;
+  padding: 0 8px;
+  font-weight: 500;
+}
+
+/* HEADER DIA */
+.day-header {
+  text-align: center;
+  background: #f3f4f6;
+  font-weight: 600;
+  border-left: none;
+  border-right: none;
+}
+
+/* MEIA CÉLULA */
+.half-cell {
+  width: 30px;
+  cursor: pointer;
+}
+
+.half-cell.checkout {
+  border-right: none;
+}
+
+.half-cell.checkin {
+  border-left: none;
+}
+
+/* RESERVA */
+.reservation-cell {
+  color: white;
+  font-size: 12px;
+  border-radius: 4px;
+  padding: 0 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* STATUS */
+.status-pre-reserva {
+  background: #fbbf24;
+}
+
+.status-reservado {
+  background: #10b981;
+}
+
+.status-cancelado {
+  background: #9ca3af;
+}

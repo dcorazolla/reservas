@@ -1,0 +1,92 @@
+.app-menu {
+  height: 48px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px;
+}
+
+/* PRIMEIRO NÍVEL — TODOS IGUAIS */
+.menu-link {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #374151;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu-link:hover {
+  color: #111827;
+}
+
+/* ITEM COM SUBMENU */
+.menu-item {
+  position: relative;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+/* LINK ATIVO */
+.menu-link.active {
+  font-weight: 600;
+  color: #111827;
+  border-bottom: 2px solid #111827;
+}
+
+/* SUBMENU */
+.submenu {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  min-width: 160px;
+  padding: 8px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 50;
+}
+
+.submenu a,
+.submenu span {
+  display: block;
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.submenu a {
+  color: #374151;
+  text-decoration: none;
+}
+
+.submenu a:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.menu-disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.with-chevron {
+  gap: 6px;
+}
+
+.chevron {
+  font-size: 10px;
+  margin-top: 2px;
+  transition: transform 0.15s ease;
+}
+
+/* ROTACIONA QUANDO ABERTO */
+.with-chevron.open .chevron {
+  transform: rotate(180deg);
+}
