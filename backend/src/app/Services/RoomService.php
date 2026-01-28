@@ -34,6 +34,18 @@ class RoomService
 
     public function delete(Room $room): void
     {
-        $room->update(['active' => false]);
+        if ($room->reservations()->exists()) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'room_id' => 'Quarto possui reservas vinculadas e não pode ser removido.',
+            ]);
+        }
+
+        if ($room->rates()->exists() || $room->ratePeriods()->exists()) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'room_id' => 'Quarto possui tarifas/períodos vinculados e não pode ser removido.',
+            ]);
+        }
+
+        $room->delete();
     }
 }

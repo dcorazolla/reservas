@@ -3,16 +3,18 @@ import {
   listRoomCategories,
   deleteRoomCategory,
 } from "../../api/roomCategories";
-import { RoomCategory } from "../../types/roomCategory";
+import type { RoomCategory } from "../../types/roomCategory";
 import RoomCategoryForm from "../../components/RoomCategoryForm";
 import Modal from "../../components/Modal/Modal";
 import ConfirmDialog from "../../components/ConfirmDialog";
+import ErrorDialog from "../../components/Common/ErrorDialog";
 
 export default function RoomCategoriesPage() {
   const [categories, setCategories] = useState<RoomCategory[]>([]);
   const [editing, setEditing] = useState<RoomCategory | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [toDelete, setToDelete] = useState<RoomCategory | null>(null);
+  const [error, setError] = useState<string>("");
 
   async function load() {
     setCategories(await listRoomCategories());
@@ -42,7 +44,7 @@ export default function RoomCategoriesPage() {
           <tr>
             <th>Nome</th>
             <th>Descrição</th>
-            <th width={120}></th>
+            <th style={{ width: 120 }}></th>
           </tr>
         </thead>
         <tbody>
@@ -93,11 +95,17 @@ export default function RoomCategoriesPage() {
         onCancel={() => setToDelete(null)}
         onConfirm={async () => {
           if (!toDelete) return;
-          await deleteRoomCategory(toDelete.id);
-          setToDelete(null);
-          load();
+          try {
+            await deleteRoomCategory(toDelete.id);
+            setToDelete(null);
+            load();
+          } catch (err: any) {
+            setError(err?.message || "Não foi possível excluir a categoria.");
+          }
         }}
       />
+
+      <ErrorDialog open={!!error} message={error} onClose={() => setError("")} />
     </div>
   );
 }

@@ -1,0 +1,29 @@
+meta {
+  name: create
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/api/properties
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "name": "Pousada Central",
+    "timezone": "Europe/Lisbon",
+    "infant_max_age": 2,
+    "child_max_age": 12,
+    "child_factor": 0.5,
+    "base_one_adult": 70,
+    "base_two_adults": 100,
+    "additional_adult": 30,
+    "child_price": 20
+  }
+}

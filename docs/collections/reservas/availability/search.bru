@@ -1,0 +1,29 @@
+meta {
+  name: search
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{api_url}}/api/availability/search
+  body: json
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "checkin": "2026-12-24",
+    "checkout": "2026-12-27",
+    "adults": 2,
+    "children": 0,
+    "infants": 0
+  }
+}

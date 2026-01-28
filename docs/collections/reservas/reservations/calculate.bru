@@ -1,0 +1,21 @@
+meta {
+  name: calculate
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{api_url}}/api/reservations/calculate
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "room_id": 1,
+    "start_date": "2026-12-24",
+    "end_date": "2026-12-27",
+    "people_count": 2
+  }
+  
+}

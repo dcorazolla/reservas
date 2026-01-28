@@ -1,4 +1,5 @@
 const API_URL = import.meta.env.VITE_API_URL;
+import { getAccessToken, isAccessTokenValid } from "../auth/token";
 
 type FetchOptions = RequestInit & {
   json?: boolean;
@@ -10,9 +11,13 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const { json = true, headers, ...rest } = options;
 
+  const token = isAccessTokenValid() ? getAccessToken() : null;
+
   const res = await fetch(`${API_URL}${path}`, {
     headers: {
       ...(json ? { "Content-Type": "application/json" } : {}),
+      Accept: "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },
     ...rest,

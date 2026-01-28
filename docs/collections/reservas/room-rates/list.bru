@@ -1,0 +1,19 @@
+meta {
+  name: list-room-rates
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/api/rooms/1/rates
+  body: none
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}

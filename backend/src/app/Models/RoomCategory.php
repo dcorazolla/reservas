@@ -12,4 +12,14 @@ class RoomCategory extends Model
     {
         return $this->hasMany(Room::class, 'room_category_id');
     }
+
+    public function rate()
+    {
+        return $this->hasOne(RoomCategoryRate::class, 'room_category_id');
+    }
+
+    public function ratePeriods()
+    {
+        return $this->hasMany(RoomCategoryRatePeriod::class, 'room_category_id');
+    }
 }

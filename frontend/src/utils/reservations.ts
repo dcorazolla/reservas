@@ -1,4 +1,4 @@
-import { Reservation } from "../types/calendar";
+import type { Reservation } from "../types/calendar";
 
 export function isDateInReservation(date: string, reservation: Reservation) {
   return date >= reservation.start_date && date < reservation.end_date;

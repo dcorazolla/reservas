@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { RoomCategory } from "../types/roomCategory";
+import type { RoomCategory } from "../types/roomCategory";
 import { createRoomCategory, updateRoomCategory } from "../api/roomCategories";
+import ErrorDialog from "./Common/ErrorDialog";
 
 type Props = {
   category: RoomCategory | null;
@@ -15,6 +16,7 @@ export default function RoomCategoryForm({
 }: Props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     setName(category?.name ?? "");
@@ -23,15 +25,17 @@ export default function RoomCategoryForm({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    if (category) {
-      await updateRoomCategory(category.id, { name, description });
-    } else {
-      await createRoomCategory({ name, description });
+    try {
+      if (category) {
+        await updateRoomCategory(category.id, { name, description });
+      } else {
+        await createRoomCategory({ name, description });
+      }
+      onSaved();
+      onClose();
+    } catch (err: any) {
+      setError(err?.message || "Falha ao salvar a categoria.");
     }
-
-    onSaved();
-    onClose();
   }
 
   return (
@@ -65,6 +69,8 @@ export default function RoomCategoryForm({
           Salvar
         </button>
       </div>
+
+      <ErrorDialog open={!!error} message={error} onClose={() => setError("")} />
     </form>
   );
 }

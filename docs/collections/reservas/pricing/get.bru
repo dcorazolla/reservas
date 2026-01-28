@@ -1,0 +1,19 @@
+meta {
+  name: get-pricing
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/api/properties/pricing
+  body: none
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}

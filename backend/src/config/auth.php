@@ -14,7 +14,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'jwt', // <- Aqui usamos JWTAuth
+            'driver' => 'jwt',
             'provider' => 'users',
             'hash' => false,
         ],

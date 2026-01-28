@@ -1,0 +1,26 @@
+meta {
+  name: create-category-rate
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{api_url}}/api/room-categories/1/rates
+  body: json
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "people_count": 2,
+    "price_per_day": 280
+  }
+}

@@ -1,5 +1,5 @@
 import { apiFetch } from "./client";
-import { RoomCategory } from "../types/roomCategory";
+import type { RoomCategory } from "../types/roomCategory";
 
 export function listRoomCategories() {
   return apiFetch<RoomCategory[]>("/room-categories");

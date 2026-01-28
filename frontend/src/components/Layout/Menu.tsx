@@ -27,9 +27,15 @@ export default function Menu() {
 
         {open && (
           <div className="submenu">
+            <NavLink to="/config/propriedade">Propriedade</NavLink>
             <NavLink to="/config/quartos">Quartos</NavLink>
             <NavLink to="/config/categorias-quartos">Categorias de Quartos</NavLink>
-            <span className="menu-disabled">Tarifário</span>
+            <div className="submenu-group">
+              <span className="submenu-title">Tarifário</span>
+              <NavLink to="/config/tarifario/base">Tarifas base</NavLink>
+              <NavLink to="/config/tarifario/quartos">Tarifas de Quartos</NavLink>
+              <NavLink to="/config/tarifario/periodos">Tarifas de Período</NavLink>
+            </div>
           </div>
         )}
       </div>

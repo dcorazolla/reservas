@@ -1,11 +1,12 @@
 <?php
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseApiController;
+use App\Http\Resources\RoomResource;
 use App\Services\CalendarService;
 use Illuminate\Http\Request;
 
-class CalendarController extends Controller
+class CalendarController extends BaseApiController
 {
     public function __construct(
         private CalendarService $service
@@ -18,11 +19,14 @@ class CalendarController extends Controller
             'end'   => 'required|date|after_or_equal:start',
         ]);
 
-        return response()->json(
-            $this->service->getCalendar(
-                $data['start'],
-                $data['end']
-            )
-        );
+        $propertyId = $this->getPropertyId($request);
+
+        $rooms = $this->service->getRoomsWithReservations($propertyId, $data['start'], $data['end']);
+
+        return $this->ok([
+            'start' => $data['start'],
+            'end'   => $data['end'],
+            'rooms' => RoomResource::collection($rooms),
+        ]);
     }
 }

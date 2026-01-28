@@ -1,0 +1,26 @@
+meta {
+  name: create-room-rate
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/api/rooms/1/rates
+  body: json
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "people_count": 2,
+    "price_per_day": 300
+  }
+}

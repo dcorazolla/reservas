@@ -73,6 +73,40 @@
   margin-top: 16px;
 }
 
+/* Dialog variants */
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dialog-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+}
+
+.confirm-modal.error h3 { color: #b91c1c; }
+.confirm-modal.success h3 { color: #047857; }
+.confirm-modal.info h3 { color: #1d4ed8; }
+.confirm-modal.question h3 { color: #b45309; }
+
+.confirm-modal.error { border-top: 4px solid #ef4444; }
+.confirm-modal.success { border-top: 4px solid #10b981; }
+.confirm-modal.info { border-top: 4px solid #3b82f6; }
+.confirm-modal.question { border-top: 4px solid #f59e0b; }
+
+/* Variant icon backgrounds for static markup (e.g., ConfirmDialog) */
+.confirm-modal.error .dialog-icon { background: #ef4444; }
+.confirm-modal.success .dialog-icon { background: #10b981; }
+.confirm-modal.info .dialog-icon { background: #3b82f6; }
+.confirm-modal.question .dialog-icon { background: #f59e0b; }
+
 
 .form-group {
   display: flex;
@@ -98,4 +132,13 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 16px;
+}
+
+.form-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
 }

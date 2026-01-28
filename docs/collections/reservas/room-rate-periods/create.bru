@@ -1,0 +1,28 @@
+meta {
+  name: create-room-rate-period
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{api_url}}/api/rooms/1/rate-periods
+  body: json
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "start_date": "2026-12-20",
+    "end_date": "2026-12-30",
+    "people_count": 2,
+    "price_per_day": 350
+  }
+}

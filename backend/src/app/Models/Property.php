@@ -9,6 +9,13 @@ class Property extends Model
     protected $fillable = [
         'name',
         'timezone',
+        'infant_max_age',
+        'child_max_age',
+        'child_factor',
+        'base_one_adult',
+        'base_two_adults',
+        'additional_adult',
+        'child_price',
     ];
 
     public function users()

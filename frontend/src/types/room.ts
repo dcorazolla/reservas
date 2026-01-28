@@ -1,4 +1,4 @@
-import { RoomCategory } from "./roomCategory";
+import type { RoomCategory } from "./roomCategory";
 
 export type Room = {
   id: number;

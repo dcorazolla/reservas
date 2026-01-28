@@ -1,5 +1,5 @@
 import { apiFetch } from "./client";
-import { Room } from "../types/room";
+import type { Room } from "../types/room";
 
 export function listRooms() {
   return apiFetch<Room[]>("/rooms");

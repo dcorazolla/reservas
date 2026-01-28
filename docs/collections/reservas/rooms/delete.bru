@@ -1,0 +1,19 @@
+meta {
+  name: delete
+  type: http
+  seq: 3
+}
+
+del {
+  url: {{api_url}}/api/rooms/1
+  body: none
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}

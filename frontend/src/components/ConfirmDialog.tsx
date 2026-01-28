@@ -17,9 +17,12 @@ export default function ConfirmDialog({
 
   return (
     <div className="confirm-backdrop">
-      <div className="confirm-modal">
-        <h3>{title}</h3>
-        <p>{message}</p>
+      <div className="confirm-modal question">
+        <div className="dialog-header">
+          <span className="dialog-icon question">?</span>
+          <h3>{title}</h3>
+        </div>
+        <p style={{ marginTop: 8 }}>{message}</p>
 
         <div className="actions">
           <button onClick={onCancel}>Cancelar</button>

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { Room } from "../types/room";
-import { RoomCategory } from "../types/roomCategory";
+import type { Room } from "../types/room";
+import type { RoomCategory } from "../types/roomCategory";
 import { createRoom, updateRoom } from "../api/rooms";
+import ErrorDialog from "./Common/ErrorDialog";
+import RoomRatesEditor from "./rates/RoomRatesEditor";
+import RoomRatePeriodsEditor from "./rates/RoomRatePeriodsEditor";
 
 type Props = {
   room: Room | null;
@@ -34,76 +37,102 @@ export default function RoomForm({
     }
   }, [room]);
 
+  const [error, setError] = useState<string>("");
+  const [showRates, setShowRates] = useState(false);
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    try {
+      const payload = {
+        ...form,
+        room_category_id: form.room_category_id || null,
+      };
 
-    const payload = {
-      ...form,
-      room_category_id: form.room_category_id || null,
-    };
+      room
+        ? await updateRoom(room.id, payload)
+        : await createRoom(payload);
 
-    room
-      ? await updateRoom(room.id, payload)
-      : await createRoom(payload);
-
-    onSaved();
-    onClose();
+      onSaved();
+      onClose();
+    } catch (err: any) {
+      setError(err?.message || "Falha ao salvar o quarto.");
+    }
   }
 
   return (
     <form onSubmit={submit} className="form">
-      <div className="form-group">
-        <label>Categoria</label>
-        <select
-          value={form.room_category_id}
-          onChange={(e) =>
-            setForm({ ...form, room_category_id: e.target.value })
-          }
-        >
-          <option value="">— Sem categoria —</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="form-group">
+          <label>Categoria</label>
+          <select
+            value={form.room_category_id}
+            onChange={(e) =>
+              setForm({ ...form, room_category_id: e.target.value })
+            }
+          >
+            <option value="">— Sem categoria —</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Número</label>
+          <input
+            value={form.number}
+            onChange={(e) => setForm({ ...form, number: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Nome</label>
+          <input
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Capacidade</label>
+          <input
+            value={form.capacity}
+            onChange={(e) => setForm({ ...form, capacity: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Camas</label>
+          <input
+            value={form.beds}
+            onChange={(e) => setForm({ ...form, beds: e.target.value })}
+            required
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Número</label>
-        <input
-          value={form.number}
-          onChange={(e) => setForm({ ...form, number: e.target.value })}
-          required
-        />
-      </div>
+      <div className="form-divider" />
 
-      <div className="form-group">
-        <label>Nome</label>
+      <label className="checkbox">
         <input
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
+          type="checkbox"
+          checked={showRates}
+          onChange={(e) => setShowRates(e.target.checked)}
         />
-      </div>
+        <span>Editar tarifário do quarto</span>
+      </label>
 
-      <div className="form-group">
-        <label>Capacidade</label>
-        <input
-          value={form.capacity}
-          onChange={(e) => setForm({ ...form, capacity: e.target.value })}
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Camas</label>
-        <input
-          value={form.beds}
-          onChange={(e) => setForm({ ...form, beds: e.target.value })}
-          required
-        />
-      </div>
+      {showRates && room?.id && (
+        <div style={{ display: 'grid', gap: 16 }}>
+          <RoomRatesEditor roomId={room.id} />
+          <RoomRatePeriodsEditor roomId={room.id} />
+        </div>
+      )}
 
       <div className="form-actions">
         <button type="button" className="secondary" onClick={onClose}>
@@ -111,6 +140,8 @@ export default function RoomForm({
         </button>
         <button className="primary">Salvar</button>
       </div>
+
+      <ErrorDialog open={!!error} message={error} onClose={() => setError("")} />
     </form>
   );
 }

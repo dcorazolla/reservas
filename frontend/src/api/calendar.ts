@@ -1,5 +1,5 @@
 import { apiFetch } from "./client";
-import { CalendarResponse } from "../types/calendar";
+import type { CalendarResponse } from "../types/calendar";
 
 export function fetchCalendar(start: string, end: string) {
   return apiFetch<CalendarResponse>(

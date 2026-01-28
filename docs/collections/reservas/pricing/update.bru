@@ -1,0 +1,26 @@
+meta {
+  name: update-pricing
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{api_url}}/api/properties/pricing
+  body: json
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: {{property_id}}
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "base_price_for_two": 300,
+    "additional_price_per_person": 100
+  }
+}

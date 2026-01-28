@@ -1,0 +1,24 @@
+meta {
+  name: login
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{api_url}}/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "admin@admin.com",
+    "password": "123456"
+  }
+}
+
+script:post-response {
+  let accessToken = res.body.access_token;
+  
+  bru.setVar("bearer_token",accessToken);
+}

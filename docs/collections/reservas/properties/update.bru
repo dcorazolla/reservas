@@ -1,0 +1,24 @@
+meta {
+  name: update
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{api_url}}/api/properties/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
+
+body:json {
+  {
+    "name": "Pousada Central Renovada",
+    "timezone": "Europe/Lisbon",
+    "child_factor": 0.6,
+    "base_two_adults": 110
+  }
+}

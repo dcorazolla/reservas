@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import type { Room } from "../../types/room";
 import type { RoomCategory } from "../../types/roomCategory";
-import { listRooms } from "../../api/rooms";
+import { listRooms, deleteRoom } from "../../api/rooms";
 import { listRoomCategories } from "../../api/roomCategories";
 import Modal from "../../components/Modal/Modal";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import ErrorDialog from "../../components/Common/ErrorDialog";
 import RoomForm from "../../components/RoomForm";
 
 export default function RoomsPage() {
@@ -11,6 +13,8 @@ export default function RoomsPage() {
   const [categories, setCategories] = useState<RoomCategory[]>([]);
   const [editing, setEditing] = useState<Room | null>(null);
   const [open, setOpen] = useState(false);
+  const [toDelete, setToDelete] = useState<Room | null>(null);
+  const [error, setError] = useState<string>("");
 
   async function load() {
     setRooms(await listRooms());
@@ -44,7 +48,7 @@ export default function RoomsPage() {
             <th>Categoria</th>
             <th>Capacidade</th>
             <th>Camas</th>
-            <th></th>
+            <th style={{ width: 160 }}></th>
           </tr>
         </thead>
         <tbody>
@@ -65,6 +69,12 @@ export default function RoomsPage() {
                 >
                   Editar
                 </button>
+                <button
+                  className="link"
+                  onClick={() => setToDelete(r)}
+                >
+                  Excluir
+                </button>
               </td>
             </tr>
           ))}
@@ -83,6 +93,24 @@ export default function RoomsPage() {
           onClose={() => setOpen(false)}
         />
       </Modal>
+
+      <ConfirmDialog
+        open={!!toDelete}
+        message={toDelete ? `Remover quarto "${toDelete.name}"?` : ""}
+        onCancel={() => setToDelete(null)}
+        onConfirm={async () => {
+          if (!toDelete) return;
+          try {
+            await deleteRoom(toDelete.id);
+            setToDelete(null);
+            load();
+          } catch (err: any) {
+            setError(err?.message || "Não foi possível excluir o quarto.");
+          }
+        }}
+      />
+
+      <ErrorDialog open={!!error} message={error} onClose={() => setError("")} />
     </div>
   );
 }

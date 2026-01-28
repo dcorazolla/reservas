@@ -8,6 +8,9 @@ export type Reservation = {
   room_id: number;
   guest_name: string;
   people_count: number;
+  adults_count?: number;
+  children_count?: number;
+  infants_count?: number;
   start_date: string;
   end_date: string;
   status: "pre-reserva" | "reservado" | "cancelado";

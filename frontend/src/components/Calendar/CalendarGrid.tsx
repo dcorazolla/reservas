@@ -1,4 +1,5 @@
-import { Room } from "../../types/calendar";
+import React from "react";
+import type { Room } from "../../types/calendar";
 import { generateDateRange } from "../../utils/dates";
 import "./calendar.css";
 
@@ -62,7 +63,7 @@ export default function CalendarGrid({
               };
             });
 
-            const cells: JSX.Element[] = [];
+            const cells: React.ReactElement[] = [];
 
             for (let col = 0; col < totalHalfCols; col++) {
               // reserva começa aqui

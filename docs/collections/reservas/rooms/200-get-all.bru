@@ -1,0 +1,19 @@
+meta {
+  name: 200-get-all
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/api/rooms
+  body: none
+  auth: bearer
+}
+
+headers {
+  X-Property-Id: 1
+}
+
+auth:bearer {
+  token: {{bearer_token}}
+}
