@@ -6,7 +6,7 @@ import { formatMoney } from "../utils/money";
 
 
 type Props = {
-  roomId: number | null;
+  roomId: string | null;
   date: string | null;
   reservation: Reservation | null;
   onClose: () => void;
@@ -79,7 +79,7 @@ export default function ReservationModal({
     async function recalc() {
       try {
         if (!roomId && !reservation) return;
-        const rid = reservation ? reservation.room_id : (roomId as number);
+        const rid = reservation ? reservation.room_id : (roomId as string);
         if (!rid || !startDate || !endDate || !adults) return;
         if (fieldError) return; // skip calc when validation fails
         const calc: any = await calculateReservationPriceDetailed({

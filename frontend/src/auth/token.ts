@@ -29,3 +29,8 @@ export function clearTokens() {
   localStorage.removeItem(REFRESH_KEY);
   localStorage.removeItem(EXPIRES_AT_KEY);
 }
+
+export function getExpiresAt(): number | null {
+  const v = localStorage.getItem(EXPIRES_AT_KEY);
+  return v ? Number(v) : null;
+}

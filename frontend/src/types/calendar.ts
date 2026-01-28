@@ -4,8 +4,8 @@ export type ReservationStatus =
   | "cancelado";
 
 export type Reservation = {
-  id: number;
-  room_id: number;
+  id: string;
+  room_id: string;
   guest_name: string;
   people_count: number;
   adults_count?: number;
@@ -19,7 +19,7 @@ export type Reservation = {
 };
 
 export type Room = {
-  id: number;
+  id: string;
   name: string;
   capacity: number;
   reservations: Reservation[];

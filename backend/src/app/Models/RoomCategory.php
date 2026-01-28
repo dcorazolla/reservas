@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoomCategory extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = ['name', 'description'];
 
     public function rooms()

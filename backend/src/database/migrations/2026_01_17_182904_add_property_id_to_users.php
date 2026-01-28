@@ -8,20 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('property_id')
-                  ->nullable()
-                  ->after('id')
-                  ->constrained()
-                  ->cascadeOnDelete();
-        });
+        // No-op: handled in baseline_domain_tables after properties are created
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['property_id']);
-            $table->dropColumn('property_id');
-        });
+        // No-op
     }
 };

@@ -14,8 +14,8 @@ import CategoryRatePeriodModal from "../../../components/rates/CategoryRatePerio
 export default function PeriodTariffsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [categories, setCategories] = useState<RoomCategory[]>([]);
-  const [roomId, setRoomId] = useState<number | null>(null);
-  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
+  const [categoryId, setCategoryId] = useState<string | null>(null);
   const [roomPeriods, setRoomPeriods] = useState<RoomRatePeriod[]>([]);
   const [categoryPeriods, setCategoryPeriods] = useState<RoomCategoryRatePeriod[]>([]);
 
@@ -52,7 +52,7 @@ export default function PeriodTariffsPage() {
     setRoomPeriods((prev) => [period, ...prev]);
   }
 
-  async function removeRoomPeriod(id: number) {
+  async function removeRoomPeriod(id: string) {
     await deleteRoomRatePeriod(id);
     setRoomPeriods((prev) => prev.filter((r) => r.id !== id));
   }
@@ -63,7 +63,7 @@ export default function PeriodTariffsPage() {
     setCategoryPeriods((prev) => [period, ...prev]);
   }
 
-  async function removeCategoryPeriod(id: number) {
+  async function removeCategoryPeriod(id: string) {
     await deleteCategoryRatePeriod(id);
     setCategoryPeriods((prev) => prev.filter((r) => r.id !== id));
   }
@@ -79,7 +79,7 @@ export default function PeriodTariffsPage() {
         <div className="form-row">
           <label>
             <div>Categoria</div>
-            <select value={categoryId ?? ''} onChange={(e) => setCategoryId(Number(e.target.value))}>
+            <select value={categoryId ?? ''} onChange={(e) => setCategoryId(e.target.value)}>
               <option value="" disabled>Selecione uma categoria</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
@@ -126,7 +126,7 @@ export default function PeriodTariffsPage() {
         <div className="form-row">
           <label>
             <div>Quarto</div>
-            <select value={roomId ?? ''} onChange={(e) => setRoomId(Number(e.target.value))}>
+            <select value={roomId ?? ''} onChange={(e) => setRoomId(e.target.value)}>
               <option value="" disabled>Selecione um quarto</option>
               {rooms.map((r) => (
                 <option key={r.id} value={r.id}>

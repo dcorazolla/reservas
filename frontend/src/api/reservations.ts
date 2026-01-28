@@ -7,7 +7,7 @@ export function createReservation(data: any) {
   });
 }
 
-export function updateReservation(id: number, data: any) {
+export function updateReservation(id: string, data: any) {
   return apiFetch(`/reservations/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
@@ -15,7 +15,7 @@ export function updateReservation(id: number, data: any) {
 }
 
 export function calculateReservationPrice(data: {
-  room_id: number;
+  room_id: string;
   start_date: string;
   end_date: string;
   people_count: number;
@@ -27,7 +27,7 @@ export function calculateReservationPrice(data: {
 }
 
 export function calculateReservationPriceDetailed(data: {
-  room_id: number;
+  room_id: string;
   start_date: string;
   end_date: string;
   adults_count: number;

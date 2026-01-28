@@ -41,14 +41,71 @@ class AuthController extends Controller
             'user_id' => $user->id,
             'jwt_id' => $payload->get('jti'),
             'refresh_token_hash' => hash('sha256', $refreshToken),
-            'expires_at' => now()->addMinutes(config('jwt.ttl')),
+            // store refresh token expiry window
+            'expires_at' => now()->addMinutes((int) config('jwt.refresh_ttl')),
             'ip' => $request->ip(),
             'user_agent' => $request->userAgent(),
+            'last_used_at' => now(),
         ]);
 
         return response()->json([
             'access_token' => $token,
             'refresh_token' => $refreshToken,
+            'token_type' => 'bearer',
+            'expires_in' => config('jwt.ttl') * 60,
+        ]);
+    }
+
+    public function refresh(Request $request)
+    {
+        $data = $request->validate([
+            'refresh_token' => 'required|string',
+        ]);
+
+        // Don't require a valid current token for refresh
+        auth('api')->payload(false);
+
+        // Find active session by refresh token
+        $current = AuthSession::where('refresh_token_hash', hash('sha256', $data['refresh_token']))
+            ->whereNull('revoked_at')
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (!$current) {
+            return response()->json(['message' => 'Refresh token inválido ou expirado'], 401);
+        }
+
+        $user = User::findOrFail($current->user_id);
+
+        // Revoke the old session
+        $current->update([
+            'revoked_at' => now(),
+        ]);
+
+        // Create a new session with a new refresh token
+        $newSessionId = (string) \Illuminate\Support\Str::uuid();
+        $newRefreshToken = \Illuminate\Support\Str::random(64);
+
+        $token = auth('api')->claims([
+            'sid' => $newSessionId,
+        ])->login($user);
+
+        $newPayload = auth('api')->payload();
+
+        AuthSession::create([
+            'id' => $newSessionId,
+            'user_id' => $user->id,
+            'jwt_id' => $newPayload->get('jti'),
+            'refresh_token_hash' => hash('sha256', $newRefreshToken),
+            'expires_at' => now()->addMinutes((int) config('jwt.refresh_ttl')),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'last_used_at' => now(),
+        ]);
+
+        return response()->json([
+            'access_token' => $token,
+            'refresh_token' => $newRefreshToken,
             'token_type' => 'bearer',
             'expires_in' => config('jwt.ttl') * 60,
         ]);

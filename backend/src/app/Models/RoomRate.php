@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RoomRate extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
     use HasFactory;
 
     protected $fillable = [

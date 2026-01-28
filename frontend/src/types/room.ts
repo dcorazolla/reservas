@@ -1,7 +1,7 @@
 import type { RoomCategory } from "./roomCategory";
 
 export type Room = {
-  id: number;
+  id: string;
   number: string;
   name: string;
   beds: number;
@@ -9,6 +9,6 @@ export type Room = {
   active: boolean;
   notes?: string;
 
-  room_category_id?: number | null;
+  room_category_id?: string | null;
   category?: RoomCategory;
 };

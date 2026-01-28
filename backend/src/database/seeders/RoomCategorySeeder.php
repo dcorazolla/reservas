@@ -9,10 +9,8 @@ class RoomCategorySeeder extends Seeder
 {
     public function run()
     {
-        RoomCategory::insert([
-            ['name' => 'Superior'],
-            ['name' => 'Comum com Ar Condicionado'],
-            ['name' => 'Comum sem Ar Condicionado'],
-        ]);
+        RoomCategory::firstOrCreate(['name' => 'Superior']);
+        RoomCategory::firstOrCreate(['name' => 'Comum com Ar Condicionado']);
+        RoomCategory::firstOrCreate(['name' => 'Comum sem Ar Condicionado']);
     }
 }
