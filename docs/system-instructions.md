@@ -3,6 +3,9 @@
 Objetivo deste arquivo
 - Fornecer um único ponto de referência com propósito do sistema, funcionalidades, regras já definidas, convenções e informações necessárias para que o Copilot (ou qualquer desenvolvedor) retome o contexto sem repetição.
 
+Idioma padrão
+- Todas as respostas do assistente devem ser em português (pt-BR), salvo solicitação explícita de outro idioma.
+
 Resumo do sistema
 - Nome: Reservas
 - Propósito: sistema de gestão de propriedades (quartos, tarifas, reservas) com domínios adicionais planejados: parceiros e faturamento.
