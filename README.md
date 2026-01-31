@@ -53,15 +53,22 @@ Integração com SonarQube (opcional, recomendado)
 - Para gerar coverage e enviar para o SonarQube localmente execute:
 
 ```bash
-# Inicia os containers (se necessário)
-docker compose up -d
+# Subir somente serviços de desenvolvimento (app/pg/pgadmin):
+docker compose --profile dev up -d
 
-# Execute testes + envio ao Sonar (set SONAR_LOGIN se o servidor exigir token)
-SONAR_HOST_URL=http://localhost:9000 SONAR_LOGIN="<token>" bash scripts/run_tests_and_sonar.sh
+# Subir o SonarQube apenas quando precisar (perfil 'sonar'):
+docker compose --profile sonar up -d
+
+# Executar testes + cobertura + envio ao Sonar
+# Com token já gerado:
+SONAR_TOKEN="<token>" bash scripts/run_tests_and_sonar.sh
+# Ou gerar token automaticamente via admin:
+SONAR_USERNAME=admin SONAR_PASSWORD='Abcd@123456.' bash scripts/run_tests_and_sonar.sh
 ```
 
 - Observações:
 	- O script gera um relatório Clover XML em `backend/src/storage/coverage/clover.xml` usado pelo Sonar Scanner.
+	- O Sonar está configurado com limites de memória e perfis no `docker-compose.yml` para não iniciar automaticamente e evitar travamentos em máquinas com menos RAM.
 	- Você pode executar um SonarQube local usando a imagem oficial (ex.: `docker run -d --name sonarqube -p 9000:9000 sonarqube:community`).
 	- Em CI preferível executar `sonar-scanner` com variáveis de ambiente `SONAR_HOST_URL` e `SONAR_LOGIN` configuradas.
 

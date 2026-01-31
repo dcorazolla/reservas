@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1769823621">
-  <project timestamp="1769823621" name="Clover Coverage">
+<coverage generated="1769824004">
+  <project timestamp="1769824004" name="Clover Coverage">
     <package name="App\Exceptions">
       <file name="/var/www/html/app/Exceptions/Handler.php">
         <class name="App\Exceptions\Handler" namespace="App\Exceptions">
