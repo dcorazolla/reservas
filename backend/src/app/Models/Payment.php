@@ -12,7 +12,7 @@ class Payment extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['id','partner_id','amount','method','paid_at','notes'];
+    protected $fillable = ['id','external_id','partner_id','amount','method','paid_at','notes'];
 
     protected $casts = [
         'paid_at' => 'date',

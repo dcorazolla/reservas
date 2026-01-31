@@ -22,9 +22,23 @@ class PaymentService
     {
         return DB::transaction(function () use ($data) {
             $invoice = Invoice::findOrFail($data['invoice_id']);
+            // Guard: amount must be positive
+            if (!isset($data['amount']) || (float) $data['amount'] <= 0) {
+                throw new \InvalidArgumentException('Payment amount must be greater than zero');
+            }
+
+            // Idempotent behavior: if caller provides `external_id`, return existing payment
+            // with same external_id to avoid duplicate submissions.
+            if (!empty($data['external_id'])) {
+                $existing = Payment::where('external_id', $data['external_id'])->first();
+                if ($existing) {
+                    return $existing;
+                }
+            }
 
             $payment = Payment::create([
                 'id' => (string) Str::uuid(),
+                'external_id' => $data['external_id'] ?? null,
                 'partner_id' => $invoice->partner_id ?? null,
                 'amount' => $data['amount'],
                 'method' => $data['method'] ?? 'unknown',
