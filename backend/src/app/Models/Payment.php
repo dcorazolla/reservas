@@ -22,4 +22,9 @@ class Payment extends Model
     {
         return $this->belongsTo(Partner::class);
     }
+
+    public function allocations()
+    {
+        return $this->hasMany(InvoiceLinePayment::class, 'payment_id');
+    }
 }

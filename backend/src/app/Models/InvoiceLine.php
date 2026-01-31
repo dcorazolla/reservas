@@ -18,4 +18,9 @@ class InvoiceLine extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+
+    public function allocations()
+    {
+        return $this->hasMany(InvoiceLinePayment::class, 'invoice_line_id');
+    }
 }

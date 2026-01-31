@@ -30,8 +30,7 @@ class Invoice extends Model
         return $this->hasMany(InvoiceLine::class);
     }
 
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
+    // Payments are allocated to invoice lines via `invoice_line_payments`.
+    // Do not define a direct `payments()` relation because `payments` table is shared
+    // across partners and doesn't contain `invoice_id`.
 }

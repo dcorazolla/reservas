@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\FinancialAuditLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\InvoiceLinePayment;
 
 class PaymentService
 {
@@ -31,8 +32,35 @@ class PaymentService
                 'notes' => $data['notes'] ?? null,
             ]);
 
-            // Simple allocation logic for Phase 1: if this payment covers the invoice, mark as paid.
-            if ($payment->amount >= $invoice->total) {
+            // Allocation across invoice lines (greedy by line order).
+            $remaining = $payment->amount;
+            $lines = $invoice->lines()->orderBy('created_at')->get();
+            foreach ($lines as $line) {
+                if ($remaining <= 0) {
+                    break;
+                }
+
+                $already = (float) $line->allocations()->sum('amount');
+                $need = (float) $line->line_total - $already;
+                if ($need <= 0) {
+                    continue;
+                }
+
+                $alloc = min($remaining, $need);
+
+                InvoiceLinePayment::create([
+                    'id' => (string) Str::uuid(),
+                    'payment_id' => $payment->id,
+                    'invoice_line_id' => $line->id,
+                    'amount' => $alloc,
+                ]);
+
+                $remaining -= $alloc;
+            }
+
+            // If total allocated equals invoice total, mark paid.
+            $allocated = InvoiceLinePayment::whereIn('invoice_line_id', $invoice->lines()->pluck('id'))->sum('amount');
+            if ((float) $allocated >= (float) $invoice->total) {
                 $invoice->status = 'paid';
                 $invoice->save();
             }
