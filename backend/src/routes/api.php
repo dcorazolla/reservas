@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\RoomCategoryRatePeriodController;
 use App\Http\Controllers\Api\AvailabilityController;
 use App\Http\Controllers\Api\ReservationPriceController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PartnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,9 @@ Route::middleware(['auth:api'])->group(function () {
 
     // Propriedades
     Route::apiResource('properties', PropertyController::class);
+
+    // Partners & billing
+    Route::apiResource('partners', PartnerController::class);
 
     Route::get('/rooms/{room}/rates', [RoomRateController::class, 'index']);
     Route::post('/rooms/{room}/rates', [RoomRateController::class, 'store']);
