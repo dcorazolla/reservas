@@ -11,8 +11,8 @@ mkdir -p "$BACKEND_COVERAGE_DIR"
 
 echo "Running backend Unit tests and generating coverage (clover + text)..."
 if docker compose ps --services | grep -q app; then
-  # 1) Clover para Sonar
-  docker compose exec -T app sh -lc "vendor/bin/phpunit --colors=never --testsuite Unit --coverage-clover=$BACKEND_COVERAGE_DIR/clover.xml" || true
+  # 1) Clover para Sonar + JUnit
+  docker compose exec -T app sh -lc "vendor/bin/phpunit --colors=never --testsuite Unit --coverage-clover=$BACKEND_COVERAGE_DIR/clover.xml --log-junit=$BACKEND_COVERAGE_DIR/junit.xml" || true
   # 2) Texto legível por humano (redireciona stdout)
   docker compose exec -T app sh -lc "vendor/bin/phpunit --colors=never --testsuite Unit --coverage-text" > "$BACKEND_COVERAGE_DIR/coverage.txt" || true
   # 3) HTML opcional
@@ -43,7 +43,7 @@ fi
 
 # Use Dockerized sonar-scanner
 SONAR_HOST_URL=${SONAR_HOST_URL:-}
-SONAR_LOGIN=${SONAR_LOGIN:-}
+SONAR_TOKEN=${SONAR_TOKEN:-}
 
 # Try to detect compose network via the running SonarQube container
 SCANNER_NETWORK=""
@@ -83,19 +83,19 @@ done
 echo "Running sonar-scanner (docker)..."
 SCANNER_ARGS=("-Dsonar.host.url=$TARGET_SONAR_URL" "-Dsonar.projectBaseDir=/usr/src")
 # If no token provided but username/password exist, try to generate a token via Sonar API
-if [ -z "$SONAR_LOGIN" ] && [ -n "${SONAR_USERNAME:-}" ] && [ -n "${SONAR_PASSWORD:-}" ]; then
+if [ -z "$SONAR_TOKEN" ] && [ -n "${SONAR_USERNAME:-}" ] && [ -n "${SONAR_PASSWORD:-}" ]; then
   echo "Attempting to generate Sonar token via API using provided credentials..."
   TOKEN_JSON=$(docker run --rm $SCANNER_NETWORK curlimages/curl -fsS -u "$SONAR_USERNAME:$SONAR_PASSWORD" -X POST "$TARGET_SONAR_URL/api/user_tokens/generate" -d "name=local-cli-$(date +%s)" || true)
-  SONAR_LOGIN=$(printf "%s" "$TOKEN_JSON" | sed -n 's/.*"token":"\([^\"]*\)".*/\1/p')
-  if [ -n "$SONAR_LOGIN" ]; then
+  SONAR_TOKEN=$(printf "%s" "$TOKEN_JSON" | sed -n 's/.*"token":"\([^\"]*\)".*/\1/p')
+  if [ -n "$SONAR_TOKEN" ]; then
     echo "Generated temporary token for user $SONAR_USERNAME."
   else
     echo "Could not generate token via API; proceeding without auth."
   fi
 fi
 
-if [ -n "$SONAR_LOGIN" ]; then
-  SCANNER_ARGS+=("-Dsonar.login=$SONAR_LOGIN")
+if [ -n "$SONAR_TOKEN" ]; then
+  SCANNER_ARGS+=("-Dsonar.token=$SONAR_TOKEN")
 fi
 
 docker run --rm $SCANNER_NETWORK -v "$ROOT_DIR":/usr/src -w /usr/src sonarsource/sonar-scanner-cli \
