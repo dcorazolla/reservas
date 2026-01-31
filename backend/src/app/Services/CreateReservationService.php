@@ -42,7 +42,6 @@ class CreateReservationService
             return Reservation::create([
                 'room_id'        => $data['room_id'],
                 'guest_name'     => $data['guest_name'],
-                'people_count'   => max(1, $adults + $children),
                 'email'          => $data['email'] ?? null,
                 'phone'          => $data['phone'] ?? null,
                 'adults_count'   => $adults,

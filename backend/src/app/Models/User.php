@@ -11,6 +11,9 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'name',
         'email',
@@ -39,7 +42,13 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims(): array
     {
-        return [];
+        return [
+            'uid' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'property_id' => $this->property_id,
+            'property_name' => optional($this->property)->name,
+        ];
     }
 
     public function property()

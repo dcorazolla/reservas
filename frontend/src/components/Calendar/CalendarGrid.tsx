@@ -5,7 +5,7 @@ import "./calendar.css";
 
 type Props = {
   rooms: Room[];
-  onEmptyCellClick: (roomId: number, date: string) => void;
+  onEmptyCellClick: (roomId: string, date: string) => void;
   onReservationClick: (reservation: any) => void;
 };
 

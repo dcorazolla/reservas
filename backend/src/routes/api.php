@@ -24,8 +24,9 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-// Login público
+// Login/refresh públicos
 Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/refresh', [AuthController::class, 'refresh']);
 
 // Grupo de rotas protegidas pelo JWT
 Route::middleware(['auth:api'])->group(function () {

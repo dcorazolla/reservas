@@ -9,10 +9,12 @@ class Reservation extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'room_id',
         'guest_name',
-        'people_count',
         'adults_count',
         'children_count',
         'infants_count',

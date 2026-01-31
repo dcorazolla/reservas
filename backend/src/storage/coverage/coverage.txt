@@ -1,0 +1,39 @@
+PHPUnit 11.5.50 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.30 with PCOV 1.0.12
+Configuration: /var/www/html/phpunit.xml
+
+..............                                                    14 / 14 (100%)
+
+Time: 00:02.802, Memory: 46.50 MB
+
+OK, but there were issues!
+Tests: 14, Assertions: 24, PHPUnit Deprecations: 13.
+
+
+Code Coverage Report:
+  2026-01-31 01:46:47
+
+ Summary:
+  Classes:  5.45% (3/55)
+  Methods: 12.67% (19/150)
+  Lines:   15.09% (136/901)
+
+App\Models\Reservation
+  Methods:  50.00% ( 1/ 2)   Lines:  83.33% (  5/  6)
+App\Models\Room
+  Methods: 100.00% ( 7/ 7)   Lines: 100.00% (  7/  7)
+App\Providers\AppServiceProvider
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  2/  2)
+App\Services\CalendarService
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  8/  8)
+App\Services\CreateReservationService
+  Methods:  50.00% ( 1/ 2)   Lines:  96.97% ( 32/ 33)
+App\Services\ReservationPriceCalculator
+  Methods:  20.00% ( 1/ 5)   Lines:  32.08% ( 34/106)
+App\Services\ReservationService
+  Methods:  66.67% ( 2/ 3)   Lines:  94.12% ( 32/ 34)
+App\Services\RoomRateService
+  Methods:  25.00% ( 1/ 4)   Lines:  20.00% (  1/  5)
+App\Services\RoomService
+  Methods:  75.00% ( 3/ 4)   Lines:  78.95% ( 15/ 19)

@@ -15,7 +15,21 @@ class ReservationService
             $data['end_date']
         );
 
-        return Reservation::create($data);
+        // Persist only supported columns to avoid schema mismatches
+        return Reservation::create([
+            'room_id'        => $data['room_id'],
+            'guest_name'     => $data['guest_name'],
+            'email'          => $data['email'] ?? null,
+            'phone'          => $data['phone'] ?? null,
+            'adults_count'   => (int) $data['adults_count'],
+            'children_count' => (int) ($data['children_count'] ?? 0),
+            'infants_count'  => (int) ($data['infants_count'] ?? 0),
+            'start_date'     => $data['start_date'],
+            'end_date'       => $data['end_date'],
+            'status'         => $data['status'] ?? 'pre-reserva',
+            'total_value'    => $data['total_value'] ?? null,
+            'notes'          => $data['notes'] ?? null,
+        ]);
     }
 
     public function update(Reservation $reservation, array $data): Reservation
@@ -33,10 +47,10 @@ class ReservationService
     }
 
     protected function assertNoDateConflict(
-        int $roomId,
+        string $roomId,
         string $start,
         string $end,
-        ?int $ignoreReservationId = null
+        ?string $ignoreReservationId = null
     ): void {
         $query = Reservation::conflicting($roomId, $start, $end);
 

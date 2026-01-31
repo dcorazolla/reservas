@@ -10,7 +10,6 @@ use App\Models\RoomCategoryRatePeriod;
 use App\Models\Property;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Cache;
 use RuntimeException;
 
 class ReservationPriceCalculator
@@ -154,18 +153,14 @@ class ReservationPriceCalculator
         }
 
         // 3) room base (by people count)
-        $rb = Cache::remember("room_rate:{$room->id}:{$peopleCount}", 300, function () use ($room, $peopleCount) {
-            return RoomRate::where('room_id', $room->id)
-                ->where('people_count', $peopleCount)
-                ->first();
-        });
+        $rb = RoomRate::where('room_id', $room->id)
+            ->where('people_count', $peopleCount)
+            ->first();
         if ($rb) return ['source' => 'room_base', 'rate' => $rb];
 
         // 4) category base
         if ($room->room_category_id) {
-            $cb = Cache::remember("category_rate:{$room->room_category_id}", 300, function () use ($room) {
-                return RoomCategoryRate::where('room_category_id', $room->room_category_id)->first();
-            });
+            $cb = RoomCategoryRate::where('room_category_id', $room->room_category_id)->first();
             if ($cb) return ['source' => 'category_base', 'rate' => $cb];
         }
 

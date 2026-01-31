@@ -1,6 +1,6 @@
 // src/types/roomCategory.ts
 export type RoomCategory = {
-  id: number;
+  id: string;
   name: string;
   description?: string;
 };

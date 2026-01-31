@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'property_id',
         'room_category_id',
@@ -42,7 +44,7 @@ class Room extends Model
         return $query->where('active', true);
     }
 
-    public function scopeForProperty($query, int $propertyId)
+    public function scopeForProperty($query, string $propertyId)
     {
         return $query->where('property_id', $propertyId);
     }

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /var/www/html/app/Http</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../_css/bootstrap.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../_css/nv.d3.min.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../_css/style.css?v=11.0.12" rel="stylesheet" type="text/css">
+  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../index.html">/var/www/html/app</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Http</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#12">App\Http\Controllers\Api\AuthController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/AvailabilityController.php.html#12">App\Http\Controllers\Api\AvailabilityController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/BaseApiController.php.html#8">App\Http\Controllers\Api\BaseApiController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/CalendarController.php.html#9">App\Http\Controllers\Api\CalendarController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#9">App\Http\Controllers\Api\PropertyController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyPricingController.php.html#9">App\Http\Controllers\Api\PropertyPricingController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationController.php.html#13">App\Http\Controllers\Api\ReservationController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationPriceController.php.html#9">App\Http\Controllers\Api\ReservationPriceController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryController.php.html#10">App\Http\Controllers\Api\RoomCategoryController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRateController.php.html#13">App\Http\Controllers\Api\RoomCategoryRateController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRatePeriodController.php.html#13">App\Http\Controllers\Api\RoomCategoryRatePeriodController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomController.php.html#10">App\Http\Controllers\Api\RoomController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRateController.php.html#14">App\Http\Controllers\Api\RoomRateController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRatePeriodController.php.html#14">App\Http\Controllers\Api\RoomRatePeriodController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Controller.php.html#10">App\Http\Controllers\Controller</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#8">App\Http\Filters\QueryFilter</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/RoomFilter.php.html#5">App\Http\Filters\RoomFilter</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/Authenticate.php.html#7">App\Http\Middleware\Authenticate</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/EnsureJwtSessionIsValid.php.html#9">App\Http\Middleware\EnsureJwtSessionIsValid</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomCategoryRatePeriodRequest.php.html#7">App\Http\Requests\StoreRoomCategoryRatePeriodRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomCategoryRateRequest.php.html#7">App\Http\Requests\StoreRoomCategoryRateRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomRatePeriodRequest.php.html#8">App\Http\Requests\StoreRoomRatePeriodRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomRateRequest.php.html#8">App\Http\Requests\StoreRoomRateRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomCategoryRatePeriodRequest.php.html#7">App\Http\Requests\UpdateRoomCategoryRatePeriodRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomCategoryRateRequest.php.html#7">App\Http\Requests\UpdateRoomCategoryRateRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomRatePeriodRequest.php.html#8">App\Http\Requests\UpdateRoomRatePeriodRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomRateRequest.php.html#8">App\Http\Requests\UpdateRoomRateRequest</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/ReservationResource.php.html#7">App\Http\Resources\ReservationResource</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomCategoryRatePeriodResource.php.html#7">App\Http\Resources\RoomCategoryRatePeriodResource</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomCategoryRateResource.php.html#7">App\Http\Resources\RoomCategoryRateResource</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomRatePeriodResource.php.html#7">App\Http\Resources\RoomRatePeriodResource</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomRateResource.php.html#7">App\Http\Resources\RoomRateResource</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomResource.php.html#7">App\Http\Resources\RoomResource</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Concerns/EnsuresPropertyScope.php.html#8">App\Http\Controllers\Concerns\EnsuresPropertyScope</a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controllers/Controller.php.html#10">App\Http\Controllers\Controller</a></td><td class="text-right">110</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#8">App\Http\Filters\QueryFilter</a></td><td class="text-right">90</td></tr>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#12">App\Http\Controllers\Api\AuthController</a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationController.php.html#13">App\Http\Controllers\Api\ReservationController</a></td><td class="text-right">72</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#9">App\Http\Controllers\Api\PropertyController</a></td><td class="text-right">56</td></tr>
+       <tr><td><a href="Controllers/Api/AvailabilityController.php.html#12">App\Http\Controllers\Api\AvailabilityController</a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Middleware/EnsureJwtSessionIsValid.php.html#9">App\Http\Middleware\EnsureJwtSessionIsValid</a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Controllers/Concerns/EnsuresPropertyScope.php.html#8">App\Http\Controllers\Concerns\EnsuresPropertyScope</a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#14"><abbr title="App\Http\Controllers\Api\AuthController::login">login</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#59"><abbr title="App\Http\Controllers\Api\AuthController::refresh">refresh</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#114"><abbr title="App\Http\Controllers\Api\AuthController::me">me</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#119"><abbr title="App\Http\Controllers\Api\AuthController::logout">logout</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#133"><abbr title="App\Http\Controllers\Api\AuthController::logoutAll">logoutAll</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/AvailabilityController.php.html#14"><abbr title="App\Http\Controllers\Api\AvailabilityController::search">search</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/BaseApiController.php.html#10"><abbr title="App\Http\Controllers\Api\BaseApiController::ok">ok</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/BaseApiController.php.html#15"><abbr title="App\Http\Controllers\Api\BaseApiController::created">created</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/BaseApiController.php.html#20"><abbr title="App\Http\Controllers\Api\BaseApiController::noContent">noContent</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/CalendarController.php.html#11"><abbr title="App\Http\Controllers\Api\CalendarController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/CalendarController.php.html#15"><abbr title="App\Http\Controllers\Api\CalendarController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#11"><abbr title="App\Http\Controllers\Api\PropertyController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#16"><abbr title="App\Http\Controllers\Api\PropertyController::show">show</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#21"><abbr title="App\Http\Controllers\Api\PropertyController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#28"><abbr title="App\Http\Controllers\Api\PropertyController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#35"><abbr title="App\Http\Controllers\Api\PropertyController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#49"><abbr title="App\Http\Controllers\Api\PropertyController::validateData">validateData</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyPricingController.php.html#11"><abbr title="App\Http\Controllers\Api\PropertyPricingController::show">show</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyPricingController.php.html#26"><abbr title="App\Http\Controllers\Api\PropertyPricingController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationController.php.html#15"><abbr title="App\Http\Controllers\Api\ReservationController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationController.php.html#35"><abbr title="App\Http\Controllers\Api\ReservationController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationController.php.html#95"><abbr title="App\Http\Controllers\Api\ReservationController::show">show</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationPriceController.php.html#11"><abbr title="App\Http\Controllers\Api\ReservationPriceController::calculate">calculate</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationPriceController.php.html#30"><abbr title="App\Http\Controllers\Api\ReservationPriceController::calculateDetailed">calculateDetailed</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryController.php.html#12"><abbr title="App\Http\Controllers\Api\RoomCategoryController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryController.php.html#16"><abbr title="App\Http\Controllers\Api\RoomCategoryController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryController.php.html#23"><abbr title="App\Http\Controllers\Api\RoomCategoryController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryController.php.html#36"><abbr title="App\Http\Controllers\Api\RoomCategoryController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryController.php.html#48"><abbr title="App\Http\Controllers\Api\RoomCategoryController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRateController.php.html#15"><abbr title="App\Http\Controllers\Api\RoomCategoryRateController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRateController.php.html#20"><abbr title="App\Http\Controllers\Api\RoomCategoryRateController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRateController.php.html#28"><abbr title="App\Http\Controllers\Api\RoomCategoryRateController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRateController.php.html#35"><abbr title="App\Http\Controllers\Api\RoomCategoryRateController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRatePeriodController.php.html#15"><abbr title="App\Http\Controllers\Api\RoomCategoryRatePeriodController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRatePeriodController.php.html#20"><abbr title="App\Http\Controllers\Api\RoomCategoryRatePeriodController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRatePeriodController.php.html#28"><abbr title="App\Http\Controllers\Api\RoomCategoryRatePeriodController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomCategoryRatePeriodController.php.html#35"><abbr title="App\Http\Controllers\Api\RoomCategoryRatePeriodController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomController.php.html#12"><abbr title="App\Http\Controllers\Api\RoomController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomController.php.html#16"><abbr title="App\Http\Controllers\Api\RoomController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomController.php.html#26"><abbr title="App\Http\Controllers\Api\RoomController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomController.php.html#46"><abbr title="App\Http\Controllers\Api\RoomController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomController.php.html#66"><abbr title="App\Http\Controllers\Api\RoomController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRateController.php.html#16"><abbr title="App\Http\Controllers\Api\RoomRateController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRateController.php.html#24"><abbr title="App\Http\Controllers\Api\RoomRateController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRateController.php.html#35"><abbr title="App\Http\Controllers\Api\RoomRateController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRateController.php.html#45"><abbr title="App\Http\Controllers\Api\RoomRateController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRatePeriodController.php.html#16"><abbr title="App\Http\Controllers\Api\RoomRatePeriodController::index">index</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRatePeriodController.php.html#24"><abbr title="App\Http\Controllers\Api\RoomRatePeriodController::store">store</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRatePeriodController.php.html#35"><abbr title="App\Http\Controllers\Api\RoomRatePeriodController::update">update</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Api/RoomRatePeriodController.php.html#45"><abbr title="App\Http\Controllers\Api\RoomRatePeriodController::destroy">destroy</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Controller.php.html#14"><abbr title="App\Http\Controllers\Controller::getPropertyId">getPropertyId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#13"><abbr title="App\Http\Filters\QueryFilter::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#18"><abbr title="App\Http\Filters\QueryFilter::apply">apply</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#34"><abbr title="App\Http\Filters\QueryFilter::filters">filters</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#36"><abbr title="App\Http\Filters\QueryFilter::applySort">applySort</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#46"><abbr title="App\Http\Filters\QueryFilter::applyPagination">applyPagination</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/RoomFilter.php.html#7"><abbr title="App\Http\Filters\RoomFilter::filters">filters</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/RoomFilter.php.html#17"><abbr title="App\Http\Filters\RoomFilter::search">search</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/RoomFilter.php.html#25"><abbr title="App\Http\Filters\RoomFilter::active">active</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/RoomFilter.php.html#30"><abbr title="App\Http\Filters\RoomFilter::capacity">capacity</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Filters/RoomFilter.php.html#35"><abbr title="App\Http\Filters\RoomFilter::category">category</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/Authenticate.php.html#9"><abbr title="App\Http\Middleware\Authenticate::redirectTo">redirectTo</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Middleware/EnsureJwtSessionIsValid.php.html#11"><abbr title="App\Http\Middleware\EnsureJwtSessionIsValid::handle">handle</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomCategoryRatePeriodRequest.php.html#9"><abbr title="App\Http\Requests\StoreRoomCategoryRatePeriodRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomCategoryRatePeriodRequest.php.html#14"><abbr title="App\Http\Requests\StoreRoomCategoryRatePeriodRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomCategoryRateRequest.php.html#9"><abbr title="App\Http\Requests\StoreRoomCategoryRateRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomCategoryRateRequest.php.html#14"><abbr title="App\Http\Requests\StoreRoomCategoryRateRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomRatePeriodRequest.php.html#10"><abbr title="App\Http\Requests\StoreRoomRatePeriodRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomRatePeriodRequest.php.html#15"><abbr title="App\Http\Requests\StoreRoomRatePeriodRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomRateRequest.php.html#10"><abbr title="App\Http\Requests\StoreRoomRateRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/StoreRoomRateRequest.php.html#15"><abbr title="App\Http\Requests\StoreRoomRateRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomCategoryRatePeriodRequest.php.html#9"><abbr title="App\Http\Requests\UpdateRoomCategoryRatePeriodRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomCategoryRatePeriodRequest.php.html#14"><abbr title="App\Http\Requests\UpdateRoomCategoryRatePeriodRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomCategoryRateRequest.php.html#9"><abbr title="App\Http\Requests\UpdateRoomCategoryRateRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomCategoryRateRequest.php.html#14"><abbr title="App\Http\Requests\UpdateRoomCategoryRateRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomRatePeriodRequest.php.html#10"><abbr title="App\Http\Requests\UpdateRoomRatePeriodRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomRatePeriodRequest.php.html#15"><abbr title="App\Http\Requests\UpdateRoomRatePeriodRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomRateRequest.php.html#10"><abbr title="App\Http\Requests\UpdateRoomRateRequest::authorize">authorize</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Requests/UpdateRoomRateRequest.php.html#15"><abbr title="App\Http\Requests\UpdateRoomRateRequest::rules">rules</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/ReservationResource.php.html#9"><abbr title="App\Http\Resources\ReservationResource::toArray">toArray</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomCategoryRatePeriodResource.php.html#9"><abbr title="App\Http\Resources\RoomCategoryRatePeriodResource::toArray">toArray</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomCategoryRateResource.php.html#9"><abbr title="App\Http\Resources\RoomCategoryRateResource::toArray">toArray</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomRatePeriodResource.php.html#9"><abbr title="App\Http\Resources\RoomRatePeriodResource::toArray">toArray</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomRateResource.php.html#9"><abbr title="App\Http\Resources\RoomRateResource::toArray">toArray</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Resources/RoomResource.php.html#9"><abbr title="App\Http\Resources\RoomResource::toArray">toArray</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controllers/Concerns/EnsuresPropertyScope.php.html#10"><abbr title="App\Http\Controllers\Concerns\EnsuresPropertyScope::assertBelongsToProperty">assertBelongsToProperty</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controllers/Controller.php.html#14"><abbr title="App\Http\Controllers\Controller::getPropertyId">getPropertyId</abbr></a></td><td class="text-right">110</td></tr>
+       <tr><td><a href="Controllers/Api/ReservationController.php.html#35"><abbr title="App\Http\Controllers\Api\ReservationController::update">update</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Controllers/Api/AvailabilityController.php.html#14"><abbr title="App\Http\Controllers\Api\AvailabilityController::search">search</abbr></a></td><td class="text-right">30</td></tr>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#14"><abbr title="App\Http\Controllers\Api\AuthController::login">login</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#18"><abbr title="App\Http\Filters\QueryFilter::apply">apply</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#36"><abbr title="App\Http\Filters\QueryFilter::applySort">applySort</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Middleware/EnsureJwtSessionIsValid.php.html#11"><abbr title="App\Http\Middleware\EnsureJwtSessionIsValid::handle">handle</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Controllers/Api/AuthController.php.html#59"><abbr title="App\Http\Controllers\Api\AuthController::refresh">refresh</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Controllers/Api/PropertyController.php.html#35"><abbr title="App\Http\Controllers\Api\PropertyController::destroy">destroy</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Filters/QueryFilter.php.html#46"><abbr title="App\Http\Filters\QueryFilter::applyPagination">applyPagination</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Controllers/Concerns/EnsuresPropertyScope.php.html#10"><abbr title="App\Http\Controllers\Concerns\EnsuresPropertyScope::assertBelongsToProperty">assertBelongsToProperty</abbr></a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.12</a> using <a href="https://www.php.net/" target="_top">PHP 8.2.30</a> and <a href="https://phpunit.de/">PHPUnit 11.5.50</a> at Sat Jan 31 1:46:52 UTC 2026.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../_js/jquery.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../_js/d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script src="../_js/nv.d3.min.js?v=11.0.12" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([34,0,0,0,0,0,0,0,0,0,0,1], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([86,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,8,"<a href=\"Controllers\/Api\/AuthController.php.html#12\">App\\Http\\Controllers\\Api\\AuthController<\/a>"],[0,5,"<a href=\"Controllers\/Api\/AvailabilityController.php.html#12\">App\\Http\\Controllers\\Api\\AvailabilityController<\/a>"],[0,3,"<a href=\"Controllers\/Api\/BaseApiController.php.html#8\">App\\Http\\Controllers\\Api\\BaseApiController<\/a>"],[0,2,"<a href=\"Controllers\/Api\/CalendarController.php.html#9\">App\\Http\\Controllers\\Api\\CalendarController<\/a>"],[0,7,"<a href=\"Controllers\/Api\/PropertyController.php.html#9\">App\\Http\\Controllers\\Api\\PropertyController<\/a>"],[0,2,"<a href=\"Controllers\/Api\/PropertyPricingController.php.html#9\">App\\Http\\Controllers\\Api\\PropertyPricingController<\/a>"],[0,8,"<a href=\"Controllers\/Api\/ReservationController.php.html#13\">App\\Http\\Controllers\\Api\\ReservationController<\/a>"],[0,2,"<a href=\"Controllers\/Api\/ReservationPriceController.php.html#9\">App\\Http\\Controllers\\Api\\ReservationPriceController<\/a>"],[0,5,"<a href=\"Controllers\/Api\/RoomCategoryController.php.html#10\">App\\Http\\Controllers\\Api\\RoomCategoryController<\/a>"],[0,4,"<a href=\"Controllers\/Api\/RoomCategoryRateController.php.html#13\">App\\Http\\Controllers\\Api\\RoomCategoryRateController<\/a>"],[0,4,"<a href=\"Controllers\/Api\/RoomCategoryRatePeriodController.php.html#13\">App\\Http\\Controllers\\Api\\RoomCategoryRatePeriodController<\/a>"],[0,5,"<a href=\"Controllers\/Api\/RoomController.php.html#10\">App\\Http\\Controllers\\Api\\RoomController<\/a>"],[0,4,"<a href=\"Controllers\/Api\/RoomRateController.php.html#14\">App\\Http\\Controllers\\Api\\RoomRateController<\/a>"],[0,4,"<a href=\"Controllers\/Api\/RoomRatePeriodController.php.html#14\">App\\Http\\Controllers\\Api\\RoomRatePeriodController<\/a>"],[0,10,"<a href=\"Controllers\/Controller.php.html#10\">App\\Http\\Controllers\\Controller<\/a>"],[0,9,"<a href=\"Filters\/QueryFilter.php.html#8\">App\\Http\\Filters\\QueryFilter<\/a>"],[0,5,"<a href=\"Filters\/RoomFilter.php.html#5\">App\\Http\\Filters\\RoomFilter<\/a>"],[100,0,"<a href=\"Kernel.php.html#7\">App\\Http\\Kernel<\/a>"],[0,1,"<a href=\"Middleware\/Authenticate.php.html#7\">App\\Http\\Middleware\\Authenticate<\/a>"],[0,3,"<a href=\"Middleware\/EnsureJwtSessionIsValid.php.html#9\">App\\Http\\Middleware\\EnsureJwtSessionIsValid<\/a>"],[0,2,"<a href=\"Requests\/StoreRoomCategoryRatePeriodRequest.php.html#7\">App\\Http\\Requests\\StoreRoomCategoryRatePeriodRequest<\/a>"],[0,2,"<a href=\"Requests\/StoreRoomCategoryRateRequest.php.html#7\">App\\Http\\Requests\\StoreRoomCategoryRateRequest<\/a>"],[0,2,"<a href=\"Requests\/StoreRoomRatePeriodRequest.php.html#8\">App\\Http\\Requests\\StoreRoomRatePeriodRequest<\/a>"],[0,2,"<a href=\"Requests\/StoreRoomRateRequest.php.html#8\">App\\Http\\Requests\\StoreRoomRateRequest<\/a>"],[0,2,"<a href=\"Requests\/UpdateRoomCategoryRatePeriodRequest.php.html#7\">App\\Http\\Requests\\UpdateRoomCategoryRatePeriodRequest<\/a>"],[0,2,"<a href=\"Requests\/UpdateRoomCategoryRateRequest.php.html#7\">App\\Http\\Requests\\UpdateRoomCategoryRateRequest<\/a>"],[0,2,"<a href=\"Requests\/UpdateRoomRatePeriodRequest.php.html#8\">App\\Http\\Requests\\UpdateRoomRatePeriodRequest<\/a>"],[0,2,"<a href=\"Requests\/UpdateRoomRateRequest.php.html#8\">App\\Http\\Requests\\UpdateRoomRateRequest<\/a>"],[0,1,"<a href=\"Resources\/ReservationResource.php.html#7\">App\\Http\\Resources\\ReservationResource<\/a>"],[0,1,"<a href=\"Resources\/RoomCategoryRatePeriodResource.php.html#7\">App\\Http\\Resources\\RoomCategoryRatePeriodResource<\/a>"],[0,1,"<a href=\"Resources\/RoomCategoryRateResource.php.html#7\">App\\Http\\Resources\\RoomCategoryRateResource<\/a>"],[0,1,"<a href=\"Resources\/RoomRatePeriodResource.php.html#7\">App\\Http\\Resources\\RoomRatePeriodResource<\/a>"],[0,1,"<a href=\"Resources\/RoomRateResource.php.html#7\">App\\Http\\Resources\\RoomRateResource<\/a>"],[0,1,"<a href=\"Resources\/RoomResource.php.html#7\">App\\Http\\Resources\\RoomResource<\/a>"],[0,2,"<a href=\"Controllers\/Concerns\/EnsuresPropertyScope.php.html#8\">App\\Http\\Controllers\\Concerns\\EnsuresPropertyScope<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,3,"<a href=\"Controllers\/Api\/AuthController.php.html#14\">App\\Http\\Controllers\\Api\\AuthController::login<\/a>"],[0,2,"<a href=\"Controllers\/Api\/AuthController.php.html#59\">App\\Http\\Controllers\\Api\\AuthController::refresh<\/a>"],[0,1,"<a href=\"Controllers\/Api\/AuthController.php.html#114\">App\\Http\\Controllers\\Api\\AuthController::me<\/a>"],[0,1,"<a href=\"Controllers\/Api\/AuthController.php.html#119\">App\\Http\\Controllers\\Api\\AuthController::logout<\/a>"],[0,1,"<a href=\"Controllers\/Api\/AuthController.php.html#133\">App\\Http\\Controllers\\Api\\AuthController::logoutAll<\/a>"],[0,5,"<a href=\"Controllers\/Api\/AvailabilityController.php.html#14\">App\\Http\\Controllers\\Api\\AvailabilityController::search<\/a>"],[0,1,"<a href=\"Controllers\/Api\/BaseApiController.php.html#10\">App\\Http\\Controllers\\Api\\BaseApiController::ok<\/a>"],[0,1,"<a href=\"Controllers\/Api\/BaseApiController.php.html#15\">App\\Http\\Controllers\\Api\\BaseApiController::created<\/a>"],[0,1,"<a href=\"Controllers\/Api\/BaseApiController.php.html#20\">App\\Http\\Controllers\\Api\\BaseApiController::noContent<\/a>"],[0,1,"<a href=\"Controllers\/Api\/CalendarController.php.html#11\">App\\Http\\Controllers\\Api\\CalendarController::__construct<\/a>"],[0,1,"<a href=\"Controllers\/Api\/CalendarController.php.html#15\">App\\Http\\Controllers\\Api\\CalendarController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/PropertyController.php.html#11\">App\\Http\\Controllers\\Api\\PropertyController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/PropertyController.php.html#16\">App\\Http\\Controllers\\Api\\PropertyController::show<\/a>"],[0,1,"<a href=\"Controllers\/Api\/PropertyController.php.html#21\">App\\Http\\Controllers\\Api\\PropertyController::store<\/a>"],[0,1,"<a href=\"Controllers\/Api\/PropertyController.php.html#28\">App\\Http\\Controllers\\Api\\PropertyController::update<\/a>"],[0,2,"<a href=\"Controllers\/Api\/PropertyController.php.html#35\">App\\Http\\Controllers\\Api\\PropertyController::destroy<\/a>"],[0,1,"<a href=\"Controllers\/Api\/PropertyController.php.html#49\">App\\Http\\Controllers\\Api\\PropertyController::validateData<\/a>"],[0,1,"<a href=\"Controllers\/Api\/PropertyPricingController.php.html#11\">App\\Http\\Controllers\\Api\\PropertyPricingController::show<\/a>"],[0,1,"<a href=\"Controllers\/Api\/PropertyPricingController.php.html#26\">App\\Http\\Controllers\\Api\\PropertyPricingController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/ReservationController.php.html#15\">App\\Http\\Controllers\\Api\\ReservationController::store<\/a>"],[0,6,"<a href=\"Controllers\/Api\/ReservationController.php.html#35\">App\\Http\\Controllers\\Api\\ReservationController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/ReservationController.php.html#95\">App\\Http\\Controllers\\Api\\ReservationController::show<\/a>"],[0,1,"<a href=\"Controllers\/Api\/ReservationPriceController.php.html#11\">App\\Http\\Controllers\\Api\\ReservationPriceController::calculate<\/a>"],[0,1,"<a href=\"Controllers\/Api\/ReservationPriceController.php.html#30\">App\\Http\\Controllers\\Api\\ReservationPriceController::calculateDetailed<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryController.php.html#12\">App\\Http\\Controllers\\Api\\RoomCategoryController::__construct<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryController.php.html#16\">App\\Http\\Controllers\\Api\\RoomCategoryController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryController.php.html#23\">App\\Http\\Controllers\\Api\\RoomCategoryController::store<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryController.php.html#36\">App\\Http\\Controllers\\Api\\RoomCategoryController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryController.php.html#48\">App\\Http\\Controllers\\Api\\RoomCategoryController::destroy<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRateController.php.html#15\">App\\Http\\Controllers\\Api\\RoomCategoryRateController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRateController.php.html#20\">App\\Http\\Controllers\\Api\\RoomCategoryRateController::store<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRateController.php.html#28\">App\\Http\\Controllers\\Api\\RoomCategoryRateController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRateController.php.html#35\">App\\Http\\Controllers\\Api\\RoomCategoryRateController::destroy<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRatePeriodController.php.html#15\">App\\Http\\Controllers\\Api\\RoomCategoryRatePeriodController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRatePeriodController.php.html#20\">App\\Http\\Controllers\\Api\\RoomCategoryRatePeriodController::store<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRatePeriodController.php.html#28\">App\\Http\\Controllers\\Api\\RoomCategoryRatePeriodController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomCategoryRatePeriodController.php.html#35\">App\\Http\\Controllers\\Api\\RoomCategoryRatePeriodController::destroy<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomController.php.html#12\">App\\Http\\Controllers\\Api\\RoomController::__construct<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomController.php.html#16\">App\\Http\\Controllers\\Api\\RoomController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomController.php.html#26\">App\\Http\\Controllers\\Api\\RoomController::store<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomController.php.html#46\">App\\Http\\Controllers\\Api\\RoomController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomController.php.html#66\">App\\Http\\Controllers\\Api\\RoomController::destroy<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRateController.php.html#16\">App\\Http\\Controllers\\Api\\RoomRateController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRateController.php.html#24\">App\\Http\\Controllers\\Api\\RoomRateController::store<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRateController.php.html#35\">App\\Http\\Controllers\\Api\\RoomRateController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRateController.php.html#45\">App\\Http\\Controllers\\Api\\RoomRateController::destroy<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRatePeriodController.php.html#16\">App\\Http\\Controllers\\Api\\RoomRatePeriodController::index<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRatePeriodController.php.html#24\">App\\Http\\Controllers\\Api\\RoomRatePeriodController::store<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRatePeriodController.php.html#35\">App\\Http\\Controllers\\Api\\RoomRatePeriodController::update<\/a>"],[0,1,"<a href=\"Controllers\/Api\/RoomRatePeriodController.php.html#45\">App\\Http\\Controllers\\Api\\RoomRatePeriodController::destroy<\/a>"],[0,10,"<a href=\"Controllers\/Controller.php.html#14\">App\\Http\\Controllers\\Controller::getPropertyId<\/a>"],[0,1,"<a href=\"Filters\/QueryFilter.php.html#13\">App\\Http\\Filters\\QueryFilter::__construct<\/a>"],[0,3,"<a href=\"Filters\/QueryFilter.php.html#18\">App\\Http\\Filters\\QueryFilter::apply<\/a>"],[0,0,"<a href=\"Filters\/QueryFilter.php.html#34\">App\\Http\\Filters\\QueryFilter::filters<\/a>"],[0,3,"<a href=\"Filters\/QueryFilter.php.html#36\">App\\Http\\Filters\\QueryFilter::applySort<\/a>"],[0,2,"<a href=\"Filters\/QueryFilter.php.html#46\">App\\Http\\Filters\\QueryFilter::applyPagination<\/a>"],[0,1,"<a href=\"Filters\/RoomFilter.php.html#7\">App\\Http\\Filters\\RoomFilter::filters<\/a>"],[0,1,"<a href=\"Filters\/RoomFilter.php.html#17\">App\\Http\\Filters\\RoomFilter::search<\/a>"],[0,1,"<a href=\"Filters\/RoomFilter.php.html#25\">App\\Http\\Filters\\RoomFilter::active<\/a>"],[0,1,"<a href=\"Filters\/RoomFilter.php.html#30\">App\\Http\\Filters\\RoomFilter::capacity<\/a>"],[0,1,"<a href=\"Filters\/RoomFilter.php.html#35\">App\\Http\\Filters\\RoomFilter::category<\/a>"],[0,1,"<a href=\"Middleware\/Authenticate.php.html#9\">App\\Http\\Middleware\\Authenticate::redirectTo<\/a>"],[0,3,"<a href=\"Middleware\/EnsureJwtSessionIsValid.php.html#11\">App\\Http\\Middleware\\EnsureJwtSessionIsValid::handle<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomCategoryRatePeriodRequest.php.html#9\">App\\Http\\Requests\\StoreRoomCategoryRatePeriodRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomCategoryRatePeriodRequest.php.html#14\">App\\Http\\Requests\\StoreRoomCategoryRatePeriodRequest::rules<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomCategoryRateRequest.php.html#9\">App\\Http\\Requests\\StoreRoomCategoryRateRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomCategoryRateRequest.php.html#14\">App\\Http\\Requests\\StoreRoomCategoryRateRequest::rules<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomRatePeriodRequest.php.html#10\">App\\Http\\Requests\\StoreRoomRatePeriodRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomRatePeriodRequest.php.html#15\">App\\Http\\Requests\\StoreRoomRatePeriodRequest::rules<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomRateRequest.php.html#10\">App\\Http\\Requests\\StoreRoomRateRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/StoreRoomRateRequest.php.html#15\">App\\Http\\Requests\\StoreRoomRateRequest::rules<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomCategoryRatePeriodRequest.php.html#9\">App\\Http\\Requests\\UpdateRoomCategoryRatePeriodRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomCategoryRatePeriodRequest.php.html#14\">App\\Http\\Requests\\UpdateRoomCategoryRatePeriodRequest::rules<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomCategoryRateRequest.php.html#9\">App\\Http\\Requests\\UpdateRoomCategoryRateRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomCategoryRateRequest.php.html#14\">App\\Http\\Requests\\UpdateRoomCategoryRateRequest::rules<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomRatePeriodRequest.php.html#10\">App\\Http\\Requests\\UpdateRoomRatePeriodRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomRatePeriodRequest.php.html#15\">App\\Http\\Requests\\UpdateRoomRatePeriodRequest::rules<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomRateRequest.php.html#10\">App\\Http\\Requests\\UpdateRoomRateRequest::authorize<\/a>"],[0,1,"<a href=\"Requests\/UpdateRoomRateRequest.php.html#15\">App\\Http\\Requests\\UpdateRoomRateRequest::rules<\/a>"],[0,1,"<a href=\"Resources\/ReservationResource.php.html#9\">App\\Http\\Resources\\ReservationResource::toArray<\/a>"],[0,1,"<a href=\"Resources\/RoomCategoryRatePeriodResource.php.html#9\">App\\Http\\Resources\\RoomCategoryRatePeriodResource::toArray<\/a>"],[0,1,"<a href=\"Resources\/RoomCategoryRateResource.php.html#9\">App\\Http\\Resources\\RoomCategoryRateResource::toArray<\/a>"],[0,1,"<a href=\"Resources\/RoomRatePeriodResource.php.html#9\">App\\Http\\Resources\\RoomRatePeriodResource::toArray<\/a>"],[0,1,"<a href=\"Resources\/RoomRateResource.php.html#9\">App\\Http\\Resources\\RoomRateResource::toArray<\/a>"],[0,1,"<a href=\"Resources\/RoomResource.php.html#9\">App\\Http\\Resources\\RoomResource::toArray<\/a>"],[0,2,"<a href=\"Controllers\/Concerns\/EnsuresPropertyScope.php.html#10\">App\\Http\\Controllers\\Concerns\\EnsuresPropertyScope::assertBelongsToProperty<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

@@ -1,5 +1,5 @@
 import { apiFetch } from "./client";
-import { setTokens, clearTokens } from "../auth/token";
+import { setTokens, clearTokens, getRefreshToken } from "../auth/token";
 
 type LoginRequest = {
   email: string;
@@ -28,4 +28,15 @@ export async function me<TUser = any>(): Promise<TUser> {
 export async function logout(): Promise<void> {
   await apiFetch<void>("/auth/logout", { method: "POST" });
   clearTokens();
+}
+
+export async function refresh(): Promise<void> {
+  const currentRt = getRefreshToken();
+  if (!currentRt) throw new Error("Sem refresh token");
+  const res = await apiFetch<LoginResponse>("/auth/refresh", {
+    method: "POST",
+    body: JSON.stringify({ refresh_token: currentRt }),
+  });
+  const nextRt = (res as any).refresh_token ?? currentRt;
+  setTokens(res.access_token, nextRt, res.expires_in);
 }

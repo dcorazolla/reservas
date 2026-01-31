@@ -4,14 +4,31 @@ import { getErrorMessage } from "../../utils/errors";
 
 type Props = {
   open: boolean;
+  initial?: { start_date?: string; end_date?: string; base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null; description?: string | null };
   onClose: () => void;
   onSave: (values: { start_date: string; end_date: string; base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null; description?: string | null }) => Promise<void>;
 };
 
-export default function CategoryRatePeriodModal({ open, onClose, onSave }: Props) {
-  const [values, setValues] = useState<{ start_date: string; end_date: string; base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null; description?: string | null }>({ start_date: "", end_date: "" });
+export default function CategoryRatePeriodModal({ open, initial, onClose, onSave }: Props) {
+  const [values, setValues] = useState<{ start_date: string; end_date: string; base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null; description?: string | null }>(
+    { start_date: initial?.start_date || "", end_date: initial?.end_date || "", base_one_adult: initial?.base_one_adult, base_two_adults: initial?.base_two_adults, additional_adult: initial?.additional_adult, child_price: initial?.child_price, description: initial?.description }
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string>("");
+
+  React.useEffect(() => {
+    if (open) {
+      setValues({
+        start_date: initial?.start_date || "",
+        end_date: initial?.end_date || "",
+        base_one_adult: initial?.base_one_adult,
+        base_two_adults: initial?.base_two_adults,
+        additional_adult: initial?.additional_adult,
+        child_price: initial?.child_price,
+        description: initial?.description,
+      });
+    }
+  }, [open, initial]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

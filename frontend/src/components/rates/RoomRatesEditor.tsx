@@ -5,7 +5,7 @@ import ErrorDialog from "../Common/ErrorDialog";
 import { formatMoney } from "../../utils/money";
 
 type Props = {
-  roomId: number;
+  roomId: string;
 };
 
 export default function RoomRatesEditor({ roomId }: Props) {
@@ -44,7 +44,7 @@ export default function RoomRatesEditor({ roomId }: Props) {
     }
   }
 
-  async function remove(id: number) {
+  async function remove(id: string) {
     try {
       await deleteRoomRate(id);
       setRates((prev) => prev.filter((x) => x.id !== id));

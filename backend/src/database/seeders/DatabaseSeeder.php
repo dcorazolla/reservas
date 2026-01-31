@@ -16,21 +16,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
         $this->call([
-            // RoomSeeder::class,
-            // RoomCategorySeeder::class,
-            // PropertyBootstrapSeeder::class,
-            // RoomPropertyBackfillSeeder::class,
-            // RoomRateSeeder::class,
-            // RoomRatePeriodSeeder::class,
-            // AdminUserSeeder::class,
+            AdminUserSeeder::class,
+            PropertyBootstrapSeeder::class,
+            RoomCategorySeeder::class,
+            RoomSeeder::class,
+            RoomCategoryRateSeeder::class,
+            RoomCategoryRatePeriodSeeder::class,
+            RoomRateSeeder::class,
+            RoomRatePeriodSeeder::class,
         ]);
     }
 }

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('auth_sessions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
 
             $table->string('jwt_id')->unique();
             $table->string('refresh_token_hash');

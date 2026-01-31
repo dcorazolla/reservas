@@ -1,13 +1,13 @@
 export type RoomRate = {
-  id: number;
-  room_id: number;
+  id: string;
+  room_id: string;
   people_count: number;
   price_per_day: number;
 };
 
 export type RoomRatePeriod = {
-  id: number;
-  room_id: number;
+  id: string;
+  room_id: string;
   people_count: number;
   start_date: string; // YYYY-MM-DD
   end_date: string;   // YYYY-MM-DD
@@ -26,8 +26,8 @@ export type PropertyPricing = {
 };
 
 export type RoomCategoryRate = {
-  id: number;
-  room_category_id: number;
+  id: string;
+  room_category_id: string;
   base_one_adult: number | null;
   base_two_adults: number | null;
   additional_adult: number | null;
@@ -35,8 +35,8 @@ export type RoomCategoryRate = {
 };
 
 export type RoomCategoryRatePeriod = {
-  id: number;
-  room_category_id: number;
+  id: string;
+  room_category_id: string;
   start_date: string;
   end_date: string;
   base_one_adult: number | null;

@@ -12,14 +12,14 @@ export function createProperty(data: Partial<Property>) {
   });
 }
 
-export function updateProperty(id: number, data: Partial<Property>) {
+export function updateProperty(id: string, data: Partial<Property>) {
   return apiFetch<Property>(`/properties/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
   });
 }
 
-export function deleteProperty(id: number) {
+export function deleteProperty(id: string) {
   return apiFetch<void>(`/properties/${id}`, {
     method: "DELETE",
   });

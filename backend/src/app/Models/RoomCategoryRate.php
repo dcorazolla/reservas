@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoomCategoryRate extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'room_category_id',
         'base_one_adult',

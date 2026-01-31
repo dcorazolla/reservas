@@ -1,5 +1,5 @@
 export type Property = {
-  id: number;
+  id: string;
   name: string;
   timezone?: string | null;
   infant_max_age?: number | null;
