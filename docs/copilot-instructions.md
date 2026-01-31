@@ -51,7 +51,9 @@ Commits automáticos e mensagens
 - No final de cada ciclo de trabalho (ou quando o assistente julgar apropriado), o Copilot pode criar commits automaticamente das mudanças realizadas.
 - Mensagens de commit devem ser curtas (<=72 chars), objetivas e seguir convenções básicas: `feat:`, `fix:`, `docs:`, `test:`, `chore:`. Exemplo: `feat: add invoice preview endpoint`.
 - Antes de commitar automaticamente, o Copilot deve:
-	- Executar a suíte de testes (backend e frontend).
+	- Executar a suíte de testes (backend e frontend) e garantir que TODOS os testes passem.
+	- Garantir cobertura adequada: não commitar mudanças que reduzam cobertura em áreas alteradas; preferir cobertura >=80% em código novo/alterado (meta de projeto é próxima de 100% para domínio crítico).
+	- Apenas depois dos testes passarem e da cobertura ser validada, executar o `git commit` e `git push`.
 	- Garantir que novas alterações tenham testes cobrindo a funcionalidade.
 	- Atualizar documentação relevante (`docs/`, `README.md`, `public/openapi.yaml`) e coleção Bruno (`docs/collections/reservas`).
 	- Gerar mensagem de commit concisa descrevendo o que foi alterado (feature/resumo + arquivos principais).

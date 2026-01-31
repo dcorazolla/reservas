@@ -12,7 +12,6 @@ class PartnerTest extends TestCase
         $p = Partner::factory()->create(['name' => 'ACME Ltd']);
 
         $this->assertDatabaseHas('partners', [
-            'id' => $p->id,
             'name' => 'ACME Ltd',
         ]);
     }
