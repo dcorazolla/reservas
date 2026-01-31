@@ -15,8 +15,10 @@ trait CreatesApplication
     {
         // Ensure APP_KEY is set for testing environment to avoid MissingAppKeyException
         if (empty(getenv('APP_KEY')) && empty($_ENV['APP_KEY'] ?? '')) {
-            putenv('APP_KEY=testing');
-            $_ENV['APP_KEY'] = 'testing';
+            // Generate a valid 32-byte base64 key for encryption
+            $random = base64_encode(random_bytes(32));
+            putenv('APP_KEY="base64:'.$random.'"');
+            $_ENV['APP_KEY'] = 'base64:'.$random;
         }
 
         $app = require __DIR__ . '/../bootstrap/app.php';
