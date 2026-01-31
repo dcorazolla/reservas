@@ -11,10 +11,17 @@ mkdir -p "$BACKEND_COVERAGE_DIR"
 
 echo "Running backend Unit tests and generating coverage (clover + text)..."
 if docker compose ps --services | grep -q app; then
-  docker compose exec -T app sh -lc "vendor/bin/phpunit --colors=never --testsuite Unit --coverage-clover=$BACKEND_COVERAGE_DIR/clover.xml --coverage-text=$BACKEND_COVERAGE_DIR/coverage.txt || test_exit=\$?; exit \${test_exit:-0}"
+  # 1) Clover para Sonar
+  docker compose exec -T app sh -lc "vendor/bin/phpunit --colors=never --testsuite Unit --coverage-clover=$BACKEND_COVERAGE_DIR/clover.xml" || true
+  # 2) Texto legível por humano (redireciona stdout)
+  docker compose exec -T app sh -lc "vendor/bin/phpunit --colors=never --testsuite Unit --coverage-text" > "$BACKEND_COVERAGE_DIR/coverage.txt" || true
+  # 3) HTML opcional
+  docker compose exec -T app sh -lc "vendor/bin/phpunit --colors=never --testsuite Unit --coverage-html=$BACKEND_COVERAGE_DIR/html" || true
 else
   echo "Warning: docker 'app' container not running. Running phpunit locally..."
-  vendor/bin/phpunit --colors=never --testsuite Unit --coverage-clover=$BACKEND_COVERAGE_DIR/clover.xml --coverage-text=$BACKEND_COVERAGE_DIR/coverage.txt || true
+  vendor/bin/phpunit --colors=never --testsuite Unit --coverage-clover=$BACKEND_COVERAGE_DIR/clover.xml || true
+  vendor/bin/phpunit --colors=never --testsuite Unit --coverage-text > "$BACKEND_COVERAGE_DIR/coverage.txt" || true
+  vendor/bin/phpunit --colors=never --testsuite Unit --coverage-html=$BACKEND_COVERAGE_DIR/html || true
 fi
 
 echo
@@ -40,14 +47,26 @@ SONAR_LOGIN=${SONAR_LOGIN:-}
 
 echo "Using Sonar host: $SONAR_HOST_URL"
 
-if [ -z "$SONAR_LOGIN" ]; then
-  echo "SONAR_LOGIN not provided. If your SonarQube requires authentication, set SONAR_LOGIN env var. Proceeding without auth (may fail)."
-fi
+# Aguarda SonarQube ficar UP (até ~60s)
+echo "Waiting for SonarQube to be UP..."
+for i in $(seq 1 30); do
+  if docker run --rm --network host curlimages/curl -fsS "$SONAR_HOST_URL/api/system/status" | grep -q 'UP' 2>/dev/null; then
+    echo "SonarQube is UP."
+    break
+  fi
+  sleep 2
+  if [ "$i" -eq 30 ]; then
+    echo "SonarQube not UP after waiting. Proceeding anyway."
+  fi
+done
 
 echo "Running sonar-scanner (docker)..."
-docker run --rm -e SONAR_HOST_URL="$SONAR_HOST_URL" -e SONAR_LOGIN="$SONAR_LOGIN" -v "$ROOT_DIR":/usr/src -w /usr/src sonarsource/sonar-scanner-cli \
-  -Dsonar.host.url="$SONAR_HOST_URL" \
-  -Dsonar.login="$SONAR_LOGIN" \
-  -Dsonar.projectBaseDir=/usr/src || echo "Sonar scan failed or requires authentication; continuing."
+SCANNER_ARGS=("-Dsonar.host.url=$SONAR_HOST_URL" "-Dsonar.projectBaseDir=/usr/src")
+if [ -n "$SONAR_LOGIN" ]; then
+  SCANNER_ARGS+=("-Dsonar.login=$SONAR_LOGIN")
+fi
+
+docker run --rm -e SONAR_HOST_URL="$SONAR_HOST_URL" -v "$ROOT_DIR":/usr/src -w /usr/src sonarsource/sonar-scanner-cli \
+  "${SCANNER_ARGS[@]}" || echo "Sonar scan failed (server down or auth required); continuing."
 
 echo "Sonar scan completed (or attempted)."
