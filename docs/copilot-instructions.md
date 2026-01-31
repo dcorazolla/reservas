@@ -126,9 +126,19 @@ Regras de testes e cobertura
 - Dados de teste não podem poluir o banco principal: use a configuração de ambiente de testes (`phpunit.xml`, DB_TEST) ou containers separados.
 - Ao alterar contratos de API, atualizar imediatamente os testes de integração, OpenAPI (`public/openapi.yaml`) e a coleção Bruno.
 
-Uso do script de commit/teste
-- Há um script auxiliar proposto em `scripts/commit_and_test.sh`. O Copilot deve executá-lo antes de commitar mudanças automaticamente. O script executa testes, valida e cria commit com a mensagem fornecida.
 
+Uso do script de commit/teste
+- Há um script auxiliar em `scripts/commit_and_test.sh`. Ele é o padrão para commits automatizados ou manuais e executa os seguintes passos:
+	- Executa a suíte de testes backend (PHPUnit). Se os testes falharem, o commit é abortado.
+	- Verifica que, se houve alterações no backend (`backend/src/` ou `backend/`), o commit também inclua atualizações na especificação OpenAPI (`public/openapi.yaml`) ou na coleção Bruno (`docs/collections/reservas/`). Caso contrário, o commit é abortado para evitar divergência entre API e documentação.
+- Existe um template de `pre-commit` em `scripts/hooks/pre-commit` que invoca `scripts/commit_and_test.sh`. Para ativar localmente, crie um link em `.git/hooks/pre-commit` apontando para esse arquivo:
+
+```bash
+ln -s ../../scripts/hooks/pre-commit .git/hooks/pre-commit
+chmod +x scripts/hooks/pre-commit
+```
+
+Essas regras aumentam a disciplina: nenhuma mudança de backend deve ser comitada sem a documentação e a coleção de requests atualizadas.
 
 ## Sempre leia antes de agir
 
