@@ -82,6 +82,18 @@ done
 
 echo "Running sonar-scanner (docker)..."
 SCANNER_ARGS=("-Dsonar.host.url=$TARGET_SONAR_URL" "-Dsonar.projectBaseDir=/usr/src")
+# If no token provided but username/password exist, try to generate a token via Sonar API
+if [ -z "$SONAR_LOGIN" ] && [ -n "${SONAR_USERNAME:-}" ] && [ -n "${SONAR_PASSWORD:-}" ]; then
+  echo "Attempting to generate Sonar token via API using provided credentials..."
+  TOKEN_JSON=$(docker run --rm $SCANNER_NETWORK curlimages/curl -fsS -u "$SONAR_USERNAME:$SONAR_PASSWORD" -X POST "$TARGET_SONAR_URL/api/user_tokens/generate" -d "name=local-cli-$(date +%s)" || true)
+  SONAR_LOGIN=$(printf "%s" "$TOKEN_JSON" | sed -n 's/.*"token":"\([^\"]*\)".*/\1/p')
+  if [ -n "$SONAR_LOGIN" ]; then
+    echo "Generated temporary token for user $SONAR_USERNAME."
+  else
+    echo "Could not generate token via API; proceeding without auth."
+  fi
+fi
+
 if [ -n "$SONAR_LOGIN" ]; then
   SCANNER_ARGS+=("-Dsonar.login=$SONAR_LOGIN")
 fi
