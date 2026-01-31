@@ -48,29 +48,24 @@ docker compose exec app bash
 vendor/bin/phpunit
 ```
 
-Integração com SonarQube (opcional, recomendado)
-- O projeto fornece `sonar-project.properties` e um script para enviar relatórios de cobertura ao SonarQube.
-- Para gerar coverage e enviar para o SonarQube localmente execute:
+## Development workflow (Trunk-Based)
 
-```bash
-# Subir somente serviços de desenvolvimento (app/pg/pgadmin):
-docker compose --profile dev up -d
+This project uses a trunk-based development workflow with `main` as the release-ready trunk. Feature work should happen on short-lived branches and go through PRs with CI and human review.
 
-# Subir o SonarQube apenas quando precisar (perfil 'sonar'):
-docker compose --profile sonar up -d
+Key points:
 
-# Executar testes + cobertura + envio ao Sonar
-# Com token já gerado:
-SONAR_TOKEN="<token>" bash scripts/run_tests_and_sonar.sh
-# Ou gerar token automaticamente via admin:
-SONAR_USERNAME=admin SONAR_PASSWORD='Abcd@123456.' bash scripts/run_tests_and_sonar.sh
-```
+- Branch naming: `feature/<short-desc>-<ticket>` (e.g. `feature/partner-invoicing-42`).
+- Keep branches small and short-lived (prefer multiple focused PRs).
+- Use Feature Flags for big changes and safe deploys.
+- Agent automation: the project agent can create branches, commits, pushes, and open PRs, but it will never merge without human approval and passing CI.
 
-- Observações:
-	- O script gera um relatório Clover XML em `backend/src/storage/coverage/clover.xml` usado pelo Sonar Scanner.
-	- O Sonar está configurado com limites de memória e perfis no `docker-compose.yml` para não iniciar automaticamente e evitar travamentos em máquinas com menos RAM.
-	- Você pode executar um SonarQube local usando a imagem oficial (ex.: `docker run -d --name sonarqube -p 9000:9000 sonarqube:community`).
-	- Em CI preferível executar `sonar-scanner` com variáveis de ambiente `SONAR_HOST_URL` e `SONAR_LOGIN` configuradas.
+Commands:
+
+- Create branch: `git checkout -b feature/xxx`.
+- Run tests (backend): `./backend/src/vendor/bin/phpunit`.
+- Run frontend tests: `pnpm test`.
+
+See `docs/copilot-instructions.md` for detailed agent automation and branching rules.
 
 Arquivos importantes
 - `backend/src` — código Laravel.

@@ -56,6 +56,58 @@ Commits automáticos e mensagens
 	- Atualizar documentação relevante (`docs/`, `README.md`, `public/openapi.yaml`) e coleção Bruno (`docs/collections/reservas`).
 	- Gerar mensagem de commit concisa descrevendo o que foi alterado (feature/resumo + arquivos principais).
 
+## Fluxo Git (Trunk-Based Development)
+
+- Mantemos `main` como trunk: sempre em estado "releasable".
+- Novas funcionalidades criam branches curtas a partir de `main`: `feature/<descrição-curta>`.
+- Quando possível, desenvolva a feature com Feature Flag:
+	- Implementação controlada por flag (`feature.<nome>`) para deploy contínuo sem ativação imediata.
+	- Flags documentadas em `docs/feature-flags.md`.
+
+Regras de branch/merge
+- Crie branch: `feature/<resumo>-<ticket>` (ex.: `feature/partner-invoicing-42`).
+- Commits pequenos e atômicos; mensagens no padrão:
+	- `feat: adicionar criação de partner`
+	- `fix: corrigir cálculo de desconto em reservation`
+- Antes do PR:
+	- Rodar todos os testes (unit + integration) e gerar cobertura.
+	- Atualizar documentação pertinente e collections (Bruno/Postman).
+- Workflow de PR:
+	- Abra PR contra `main`.
+	- CI deve passar (testes + linters).
+	- Requer pelo menos 1 aprovação humana (code review).
+	- Squash-merge ou merge quando CI e reviews aprovados.
+- Após merge:
+	- Agent fecha o branch remoto localmente e atualiza o `TODO.md`.
+
+Automação e responsabilidades do agente
+- O agente (Copilot) cuidará automaticamente de:
+	- Criar branches conforme convenção.
+	- Fazer commits com mensagens concisas e padronizadas.
+	- Fazer push dos branches.
+	- Abrir Pull Requests com descrição do que foi feito e checklist.
+	- Atualizar `TODO.md` e documentação referente.
+	- Após merge, fechar branch remoto e atualizar logs.
+- Operações automáticas respeitam sempre a política de revisão: o agente NÃO faz merge sem CI verde e uma aprovação humana (salvo exceções explicitadas em `docs/release-policy.md`).
+
+Testes e documentação
+- Antes de cada commit que altera comportamento: escrever/atualizar testes.
+- A cobertura deve ser alta; atualizar relatórios em CI.
+- Toda alteração de comportamento requer atualização de `docs/` e `docs/adr/` quando aplica.
+
+Conflitos e rebase
+- Agent deverá tentar rebase/sync com `main` antes do PR.
+- Em caso de conflito não resolvível automaticamente, o agente abre uma nota/issue para intervenção humana.
+
+## Sempre antes de agir
+- Antes de propor ou aplicar qualquer mudança, leia integralmente:
+	- `docs/system-instructions.md`
+	- todos os arquivos em `docs/adr/`
+	- `TODO.md` (na raiz do projeto)
+	- `public/openapi.yaml` e a coleção em `docs/collections/reservas` quando a mudança afetar APIs
+
+- Atualize `TODO.md` (arquivo humano) e o `manage_todo_list` (ferramenta) para refletir progresso e mudanças de status. O `manage_todo_list` é a fonte canônica para a automação; `TODO.md` é um snapshot persistido para leitura e retomada humana.
+
 Regra de nomenclatura para testes
 - Todos os métodos de teste devem seguir o padrão: `should_[o que espero]_when_[o metodo que estou invocando]_given_[quais parametros ou qual situacao]`.
 - Exemplos:
