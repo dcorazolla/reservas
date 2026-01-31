@@ -42,15 +42,35 @@ if [ ! -f sonar-project.properties ]; then
 fi
 
 # Use Dockerized sonar-scanner
-SONAR_HOST_URL=${SONAR_HOST_URL:-http://localhost:9000}
+SONAR_HOST_URL=${SONAR_HOST_URL:-}
 SONAR_LOGIN=${SONAR_LOGIN:-}
 
-echo "Using Sonar host: $SONAR_HOST_URL"
+# Try to detect compose network via the running SonarQube container
+SCANNER_NETWORK=""
+if docker ps --format '{{.Names}}' | grep -q '^reservas_sonarqube$'; then
+  NET=$(docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{printf "%s" $k}}{{end}}' reservas_sonarqube 2>/dev/null || true)
+  if [ -n "$NET" ]; then
+    SCANNER_NETWORK="--network $NET"
+  fi
+fi
 
-# Aguarda SonarQube ficar UP (até ~60s)
+# Decide target URL: prefer service name if on same network, else fallback to localhost
+if [ -z "$SONAR_HOST_URL" ]; then
+  if [ -n "$SCANNER_NETWORK" ]; then
+    TARGET_SONAR_URL="http://sonarqube:9000"
+  else
+    TARGET_SONAR_URL="http://localhost:9000"
+  fi
+else
+  TARGET_SONAR_URL="$SONAR_HOST_URL"
+fi
+
+echo "Using Sonar host: $TARGET_SONAR_URL"
+
+# Wait for SonarQube to be UP (up to ~60s)
 echo "Waiting for SonarQube to be UP..."
 for i in $(seq 1 30); do
-  if docker run --rm --network host curlimages/curl -fsS "$SONAR_HOST_URL/api/system/status" | grep -q 'UP' 2>/dev/null; then
+  if docker run --rm $SCANNER_NETWORK curlimages/curl -fsS "$TARGET_SONAR_URL/api/system/status" | grep -q 'UP' 2>/dev/null; then
     echo "SonarQube is UP."
     break
   fi
@@ -61,12 +81,12 @@ for i in $(seq 1 30); do
 done
 
 echo "Running sonar-scanner (docker)..."
-SCANNER_ARGS=("-Dsonar.host.url=$SONAR_HOST_URL" "-Dsonar.projectBaseDir=/usr/src")
+SCANNER_ARGS=("-Dsonar.host.url=$TARGET_SONAR_URL" "-Dsonar.projectBaseDir=/usr/src")
 if [ -n "$SONAR_LOGIN" ]; then
   SCANNER_ARGS+=("-Dsonar.login=$SONAR_LOGIN")
 fi
 
-docker run --rm -e SONAR_HOST_URL="$SONAR_HOST_URL" -v "$ROOT_DIR":/usr/src -w /usr/src sonarsource/sonar-scanner-cli \
+docker run --rm $SCANNER_NETWORK -v "$ROOT_DIR":/usr/src -w /usr/src sonarsource/sonar-scanner-cli \
   "${SCANNER_ARGS[@]}" || echo "Sonar scan failed (server down or auth required); continuing."
 
 echo "Sonar scan completed (or attempted)."
