@@ -4,14 +4,21 @@ import { getErrorMessage } from "../../utils/errors";
 
 type Props = {
   open: boolean;
+  initial?: { base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null };
   onClose: () => void;
   onSave: (values: { base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null }) => Promise<void>;
 };
 
-export default function CategoryRateModal({ open, onClose, onSave }: Props) {
-  const [values, setValues] = useState<{ base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null }>({});
+export default function CategoryRateModal({ open, initial, onClose, onSave }: Props) {
+  const [values, setValues] = useState<{ base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null }>(initial || {});
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string>("");
+
+  React.useEffect(() => {
+    if (open) {
+      setValues(initial || {});
+    }
+  }, [open, initial]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class RoomService
 {
-    public function list(int $propertyId, Request $request)
+    public function list(string $propertyId, Request $request)
     {
         $query = Room::with('category')
             ->forProperty($propertyId);
@@ -18,7 +18,7 @@ class RoomService
         return $filter->apply($query)->get();
     }
 
-    public function create(array $data, int $propertyId): Room
+    public function create(array $data, string $propertyId): Room
     {
         return Room::create([
             ...$data,

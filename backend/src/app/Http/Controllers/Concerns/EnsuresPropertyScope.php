@@ -7,9 +7,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait EnsuresPropertyScope
 {
-    protected function assertBelongsToProperty(Model $model, int $propertyId): void
+    protected function assertBelongsToProperty(Model $model, string $propertyId): void
     {
-        if ((int) $model->property_id !== $propertyId) {
+        if ((string) $model->property_id !== (string) $propertyId) {
             throw new NotFoundHttpException();
         }
     }

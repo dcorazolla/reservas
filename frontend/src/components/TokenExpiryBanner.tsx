@@ -1,36 +1,55 @@
+import { useEffect, useState } from "react";
 import { useTokenExpiryWarning } from "../auth/useTokenExpiryWarning";
 
 export default function TokenExpiryBanner() {
   const { expiringSoon, msRemaining, renew } = useTokenExpiryWarning();
-  if (!expiringSoon) return null;
+  const [dismissed, setDismissed] = useState<boolean>(false);
+
+  useEffect(() => {
+    setDismissed(localStorage.getItem("tokenExpiryBannerDismissed") === "true");
+  }, []);
+
+  if (!expiringSoon || dismissed) return null;
 
   const minutes = Math.max(0, Math.floor(((msRemaining || 0) / 60000)));
+
+  const dismiss = () => {
+    setDismissed(true);
+    localStorage.setItem("tokenExpiryBannerDismissed", "true");
+  };
 
   return (
     <div
       style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
         background: "#fff3cd",
         color: "#664d03",
-        padding: "8px 12px",
+        padding: "6px 10px",
         borderBottom: "1px solid #ffecb5",
-        zIndex: 1000,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        gap: 8,
       }}
     >
       <span>
         Sessão expira em ~{minutes} min.
       </span>
       <button
-        onClick={renew}
-        style={{ marginLeft: 12, padding: "6px 10px", cursor: "pointer" }}
+        onClick={async () => {
+          await renew();
+          localStorage.removeItem("tokenExpiryBannerDismissed");
+          setDismissed(false);
+        }}
+        style={{ padding: "4px 8px", cursor: "pointer" }}
       >
         Renovar sessão
+      </button>
+      <button
+        onClick={dismiss}
+        style={{ padding: "4px 8px", cursor: "pointer", background: "transparent", border: "none", color: "#664d03" }}
+        aria-label="Ignorar aviso de sessão"
+      >
+        Fechar
       </button>
     </div>
   );

@@ -17,7 +17,7 @@ class ReservationResource extends JsonResource
             'adults_count' => $this->adults_count,
             'children_count' => $this->children_count,
             'infants_count' => $this->infants_count,
-            'people_count' => $this->people_count,
+            'people_count' => max(1, (int)$this->adults_count + (int)$this->children_count),
             'start_date' => optional($this->start_date)->toDateString(),
             'end_date' => optional($this->end_date)->toDateString(),
             'status' => $this->status,

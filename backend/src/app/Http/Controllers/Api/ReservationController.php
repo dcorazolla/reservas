@@ -84,7 +84,6 @@ class ReservationController extends BaseApiController
             'adults_count'   => (int) $adults,
             'children_count' => (int) $children,
             'infants_count'  => (int) $infants,
-            'people_count'   => max(1, (int)$adults + (int)$children),
             'total_value'    => $calc['total'],
         ];
 

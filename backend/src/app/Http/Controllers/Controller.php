@@ -11,33 +11,29 @@ abstract class Controller
 {
     use EnsuresPropertyScope;
 
-    final protected function getPropertyId(Request $request): int
+    final protected function getPropertyId(Request $request): string
     {
         if ($request->attributes->has('property_id')) {
-            return $request->attributes->get('property_id');
+            return (string) $request->attributes->get('property_id');
         }
 
         // JWT (futuro padrão)
         if ($request->user()?->property_id) {
-            $propertyId = (int) $request->user()->property_id;
+            $propertyId = (string) $request->user()->property_id;
         } else {
             // Header (temporário) ou Query Param
-            $propertyId = (int) ($request->header('X-Property-Id')
+            $propertyId = (string) ($request->header('X-Property-Id')
                            ?: $request->header('Property-Id')
                            ?: $request->query('property_id')
-                           ?: $request->query('propertyId'));
+                           ?: $request->query('propertyId')
+                           ?: '');
         }
 
         // Fallbacks para ambiente local/testing
-        if (!$propertyId) {
-            $default = (int) env('DEFAULT_PROPERTY_ID', 0);
-            if ($default) {
-                $propertyId = $default;
-            }
-        }
+        // Removido fallback numérico. Em ambiente local/teste, tenta primeiro ID existente.
 
         if (!$propertyId && app()->environment(['local', 'testing'])) {
-            $propertyId = (int) (Property::query()->orderBy('id')->value('id') ?? 0);
+            $propertyId = (string) (Property::query()->orderBy('id')->value('id') ?? '');
         }
 
         if (!$propertyId) {
@@ -46,6 +42,6 @@ abstract class Controller
 
         $request->attributes->set('property_id', $propertyId);
 
-        return $propertyId;
+        return (string) $propertyId;
     }
 }

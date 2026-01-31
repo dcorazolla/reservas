@@ -3,8 +3,8 @@ import { listRooms } from "../../../api/rooms";
 import { listRoomCategories } from "../../../api/roomCategories";
 import type { Room } from "../../../types/room";
 import type { RoomCategory } from "../../../types/roomCategory";
-import { listRoomRates, createRoomRate, deleteRoomRate } from "../../../api/rates";
-import { listCategoryRates, createCategoryRate, deleteCategoryRate } from "../../../api/rates";
+import { listRoomRates, createRoomRate, deleteRoomRate, updateRoomRate } from "../../../api/rates";
+import { listCategoryRates, createCategoryRate, deleteCategoryRate, updateCategoryRate } from "../../../api/rates";
 import type { RoomRate, RoomCategoryRate } from "../../../types/rate";
 import { formatMoney, formatMoneyNullable } from "../../../utils/money";
 import RateModal from "../../../components/rates/RateModal";
@@ -17,14 +17,23 @@ export default function RoomTariffsPage() {
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [roomRates, setRoomRates] = useState<RoomRate[]>([]);
   const [categoryRates, setCategoryRates] = useState<RoomCategoryRate[]>([]);
+  const [categoryRatesMap, setCategoryRatesMap] = useState<Record<string, RoomCategoryRate[]>>({});
 
   const [openRoomRate, setOpenRoomRate] = useState(false);
   const [openCategoryRate, setOpenCategoryRate] = useState(false);
+  const [editingRoomRate, setEditingRoomRate] = useState<{ id: string; initial: RoomRate } | null>(null);
+  const [editingCategoryRate, setEditingCategoryRate] = useState<{ id: string; categoryId: string; initial: RoomCategoryRate } | null>(null);
 
   useEffect(() => {
     (async () => {
-      setRooms(await listRooms());
-      setCategories(await listRoomCategories());
+      const [rs, cs] = await Promise.all([listRooms(), listRoomCategories()]);
+      setRooms(rs);
+      setCategories(cs);
+      // Preload category rates for all categories
+      const entries = await Promise.all(cs.map(async (c) => [c.id, await listCategoryRates(c.id)] as const));
+      const map: Record<string, RoomCategoryRate[]> = {};
+      for (const [id, rates] of entries) map[id] = rates;
+      setCategoryRatesMap(map);
     })();
   }, []);
 
@@ -38,7 +47,9 @@ export default function RoomTariffsPage() {
   useEffect(() => {
     (async () => {
       if (!categoryId) return;
-      setCategoryRates(await listCategoryRates(categoryId));
+      const rates = await listCategoryRates(categoryId);
+      setCategoryRates(rates);
+      setCategoryRatesMap((prev) => ({ ...prev, [categoryId]: rates }));
     })();
   }, [categoryId]);
 
@@ -56,15 +67,39 @@ export default function RoomTariffsPage() {
     setRoomRates((prev) => prev.filter((r) => r.id !== id));
   }
 
+  async function saveEditedRoomRate(values: { people_count: number; price_per_day: number }) {
+    if (!editingRoomRate) return;
+    const updated = await updateRoomRate(editingRoomRate.id, values);
+    setRoomRates((prev) => [...prev.filter((r) => r.id !== updated.id), updated].sort((a, b) => a.people_count - b.people_count));
+    setEditingRoomRate(null);
+  }
+
   async function saveCategoryRate(values: { base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null }) {
     if (!categoryId) return;
     const rate = await createCategoryRate(categoryId, values);
     setCategoryRates([rate]);
+    setCategoryRatesMap((prev) => ({ ...prev, [categoryId]: [rate] }));
   }
 
   async function removeCategoryRate(id: string) {
     await deleteCategoryRate(id);
     setCategoryRates((prev) => prev.filter((r) => r.id !== id));
+    if (categoryId) {
+      setCategoryRatesMap((prev) => ({ ...prev, [categoryId]: (prev[categoryId] || []).filter((r) => r.id !== id) }));
+    }
+  }
+
+  async function saveEditedCategoryRate(values: { base_one_adult?: number | null; base_two_adults?: number | null; additional_adult?: number | null; child_price?: number | null }) {
+    if (!editingCategoryRate) return;
+    const updated = await updateCategoryRate(editingCategoryRate.id, values);
+    setCategoryRatesMap((prev) => {
+      const list = (prev[editingCategoryRate.categoryId] || []).map((r) => (r.id === updated.id ? updated : r));
+      return { ...prev, [editingCategoryRate.categoryId]: list };
+    });
+    if (categoryId === editingCategoryRate.categoryId) {
+      setCategoryRates((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+    }
+    setEditingCategoryRate(null);
   }
 
   return (
@@ -88,32 +123,47 @@ export default function RoomTariffsPage() {
           <button className="primary" onClick={() => setOpenCategoryRate(true)} disabled={!categoryId}>Adicionar</button>
         </div>
 
-        {selectedCategory && (
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Base 1 adulto</th>
-                <th>Base 2 adultos</th>
-                <th>Adicional adulto</th>
-                <th>Preço criança</th>
-                <th style={{ width: 120 }}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {categoryRates.map((r) => (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Categoria</th>
+              <th>Base 1 adulto</th>
+              <th>Base 2 adultos</th>
+              <th>Adicional adulto</th>
+              <th>Preço criança</th>
+              <th style={{ width: 160 }}></th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map((c) => {
+              const rates = categoryRatesMap[c.id] || [];
+              if (rates.length === 0) {
+                return (
+                  <tr key={c.id}>
+                    <td>{c.name}</td>
+                    <td colSpan={4} style={{ color: '#666' }}>Sem tarifa cadastrada</td>
+                    <td className="table-actions">
+                      <button className="link" onClick={() => { setCategoryId(c.id); setOpenCategoryRate(true); }}>Adicionar</button>
+                    </td>
+                  </tr>
+                );
+              }
+              return rates.map((r) => (
                 <tr key={r.id}>
+                  <td>{c.name}</td>
                   <td>{formatMoneyNullable(r.base_one_adult)}</td>
                   <td>{formatMoneyNullable(r.base_two_adults)}</td>
                   <td>{formatMoneyNullable(r.additional_adult)}</td>
                   <td>{formatMoneyNullable(r.child_price)}</td>
                   <td className="table-actions">
+                    <button className="link" onClick={() => setEditingCategoryRate({ id: r.id, categoryId: c.id, initial: r })}>Editar</button>
                     <button className="link" onClick={() => removeCategoryRate(r.id)}>Excluir</button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              ));
+            })}
+          </tbody>
+        </table>
       </section>
 
       <section className="card">
@@ -139,7 +189,7 @@ export default function RoomTariffsPage() {
               <tr>
                 <th>Pessoas</th>
                 <th>Preço/dia</th>
-                <th style={{ width: 120 }}></th>
+                <th style={{ width: 160 }}></th>
               </tr>
             </thead>
             <tbody>
@@ -148,6 +198,7 @@ export default function RoomTariffsPage() {
                   <td>{r.people_count}</td>
                   <td>{formatMoney(r.price_per_day)}</td>
                   <td className="table-actions">
+                    <button className="link" onClick={() => setEditingRoomRate({ id: r.id, initial: r })}>Editar</button>
                     <button className="link" onClick={() => removeRoomRate(r.id)}>Excluir</button>
                   </td>
                 </tr>
@@ -158,7 +209,9 @@ export default function RoomTariffsPage() {
       </section>
 
       <RateModal open={openRoomRate} initial={{}} onClose={()=>setOpenRoomRate(false)} onSave={saveRoomRate} title="Tarifa Base do Quarto" />
+      <RateModal open={!!editingRoomRate} initial={editingRoomRate?.initial || {}} onClose={()=>setEditingRoomRate(null)} onSave={saveEditedRoomRate} title="Editar Tarifa do Quarto" />
       <CategoryRateModal open={openCategoryRate} onClose={()=>setOpenCategoryRate(false)} onSave={saveCategoryRate} />
+      <CategoryRateModal open={!!editingCategoryRate} initial={editingCategoryRate?.initial} onClose={()=>setEditingCategoryRate(null)} onSave={saveEditedCategoryRate} />
     </div>
   );
 }

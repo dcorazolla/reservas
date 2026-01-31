@@ -28,6 +28,7 @@ export function useTokenExpiryWarning() {
   const renew = async () => {
     await refresh();
     setExpiringSoon(false);
+    localStorage.removeItem("tokenExpiryBannerDismissed");
     const expStr = localStorage.getItem("expires_at");
     const exp = expStr ? Number(expStr) : 0;
     setMsRemaining(exp ? exp - Date.now() : null);

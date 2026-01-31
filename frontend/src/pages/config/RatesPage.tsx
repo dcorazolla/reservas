@@ -14,7 +14,7 @@ import {
 
 export default function RatesPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
-  const [roomId, setRoomId] = useState<number | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
   const [pricing, setPricing] = useState<PropertyPricing>({
     base_one_adult: null,
     base_two_adults: null,
@@ -72,7 +72,7 @@ export default function RatesPage() {
     setBaseRates((prev) => [...prev.filter((r) => r.id !== rate.id), rate].sort((a, b) => a.people_count - b.people_count));
   }
 
-  async function removeBaseRate(id: number) {
+  async function removeBaseRate(id: string) {
     await deleteRoomRate(id);
     setBaseRates((prev) => prev.filter((r) => r.id !== id));
   }
@@ -93,7 +93,7 @@ export default function RatesPage() {
     setPeriodRates((prev) => [rate, ...prev]);
   }
 
-  async function removePeriodRate(id: number) {
+  async function removePeriodRate(id: string) {
     await deleteRoomRatePeriod(id);
     setPeriodRates((prev) => prev.filter((r) => r.id !== id));
   }
@@ -143,7 +143,7 @@ export default function RatesPage() {
         <div className="form-row">
           <label>
             <div>Quarto</div>
-            <select value={roomId ?? ''} onChange={(e) => setRoomId(Number(e.target.value))}>
+            <select value={roomId ?? ''} onChange={(e) => setRoomId(e.target.value)}>
               <option value="" disabled>Selecione um quarto</option>
               {rooms.map((r) => (
                 <option key={r.id} value={r.id}>

@@ -5,7 +5,7 @@ use App\Models\Room;
 
 class CalendarService
 {
-    public function getRoomsWithReservations(int $propertyId, string $start, string $end)
+    public function getRoomsWithReservations(string $propertyId, string $start, string $end)
     {
         return Room::active()
             ->forProperty($propertyId)
