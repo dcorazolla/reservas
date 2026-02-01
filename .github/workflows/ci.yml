@@ -17,7 +17,7 @@ jobs:
         uses: shivammathur/setup-php@v4
         with:
           php-version: '8.3'
-          coverage: phpdbg
+          coverage: pcov
           extensions: mbstring, xml, curl, zip, sqlite
 
       - name: Validate composer.json
@@ -42,7 +42,7 @@ jobs:
       - name: Run PHPUnit (coverage)
         working-directory: backend/src
         run: |
-          phpdbg -qrr ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=clover.xml
+          php -dpcov.enabled=1 ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=clover.xml
 
       - name: Upload coverage artifact
         if: always()
