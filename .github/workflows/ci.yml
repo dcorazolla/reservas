@@ -96,9 +96,20 @@ jobs:
             -Dsonar.php.coverage.reportPaths=backend/src/clover.xml
 
       - name: Upload coverage to Codecov (optional)
-        if: secrets.CODECOV_TOKEN
+        if: ${{ env.CODECOV_ENABLED == 'true' }}
         uses: codecov/codecov-action@v4
         with:
           files: backend/src/clover.xml
           flags: backend-php
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Prepare Codecov env
+        if: ${{ always() }}
+        run: |
+          if [ -n "${CODECOV_TOKEN}" ]; then
+            echo "CODECOV_ENABLED=true" >> $GITHUB_ENV
+          else
+            echo "CODECOV_ENABLED=false" >> $GITHUB_ENV
+          fi
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
