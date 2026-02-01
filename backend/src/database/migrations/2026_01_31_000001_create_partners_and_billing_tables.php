@@ -13,9 +13,14 @@ return new class extends Migration {
         } catch (\Throwable $e) {
         }
 
+        $driver = Schema::getConnection()->getDriverName();
         if (!Schema::hasTable('partners')) {
-            Schema::create('partners', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('partners', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('property_id')->nullable();
                 $table->string('name');
                 $table->string('email')->nullable();
@@ -28,8 +33,12 @@ return new class extends Migration {
         }
 
         if (!Schema::hasTable('invoices')) {
-            Schema::create('invoices', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('invoices', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('partner_id');
                 $table->uuid('property_id')->nullable();
                 $table->string('number')->nullable();
@@ -43,8 +52,12 @@ return new class extends Migration {
         }
 
         if (!Schema::hasTable('invoice_lines')) {
-            Schema::create('invoice_lines', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('invoice_lines', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('invoice_id');
                 $table->string('description');
                 $table->integer('quantity')->default(1);
@@ -56,8 +69,12 @@ return new class extends Migration {
         }
 
         if (!Schema::hasTable('payments')) {
-            Schema::create('payments', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('payments', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('partner_id')->nullable();
                 $table->decimal('amount', 12, 2);
                 $table->string('method')->nullable();
@@ -68,8 +85,12 @@ return new class extends Migration {
         }
 
         if (!Schema::hasTable('invoice_line_payments')) {
-            Schema::create('invoice_line_payments', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('invoice_line_payments', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('payment_id');
                 $table->uuid('invoice_line_id');
                 $table->decimal('amount', 12, 2);
@@ -80,8 +101,12 @@ return new class extends Migration {
         }
 
         if (!Schema::hasTable('financial_audit_logs')) {
-            Schema::create('financial_audit_logs', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('financial_audit_logs', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->string('event_type');
                 $table->jsonb('payload')->nullable();
                 $table->string('actor_type')->nullable();

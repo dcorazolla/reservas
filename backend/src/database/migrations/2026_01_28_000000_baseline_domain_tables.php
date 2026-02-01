@@ -16,8 +16,13 @@ return new class extends Migration {
         }
         // Properties with full pricing and thresholds
         if (!Schema::hasTable('properties')) {
-            Schema::create('properties', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            $driver = Schema::getConnection()->getDriverName();
+            Schema::create('properties', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->string('name');
                 $table->string('timezone')->default('America/Sao_Paulo');
                 $table->unsignedTinyInteger('infant_max_age')->default(2);
@@ -43,8 +48,12 @@ return new class extends Migration {
 
         // Room categories
         if (!Schema::hasTable('room_categories')) {
-            Schema::create('room_categories', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('room_categories', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->string('name')->unique();
                 $table->text('description')->nullable();
                 $table->timestamps();
@@ -53,8 +62,12 @@ return new class extends Migration {
 
         // Rooms with full fields and relations
         if (!Schema::hasTable('rooms')) {
-            Schema::create('rooms', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('rooms', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('property_id');
                 $table->uuid('room_category_id')->nullable();
                 $table->foreign('property_id')->references('id')->on('properties')->cascadeOnDelete();
@@ -71,8 +84,12 @@ return new class extends Migration {
 
         // Room base rates by people
         if (!Schema::hasTable('room_rates')) {
-            Schema::create('room_rates', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('room_rates', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('room_id');
                 $table->foreign('room_id')->references('id')->on('rooms')->cascadeOnDelete();
                 $table->unsignedTinyInteger('people_count');
@@ -84,8 +101,12 @@ return new class extends Migration {
 
         // Room rate periods by people
         if (!Schema::hasTable('room_rate_periods')) {
-            Schema::create('room_rate_periods', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('room_rate_periods', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('room_id');
                 $table->foreign('room_id')->references('id')->on('rooms')->cascadeOnDelete();
                 $table->unsignedTinyInteger('people_count');
@@ -100,8 +121,12 @@ return new class extends Migration {
 
         // Category base rates
         if (!Schema::hasTable('room_category_rates')) {
-            Schema::create('room_category_rates', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('room_category_rates', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('room_category_id');
                 $table->foreign('room_category_id')->references('id')->on('room_categories')->cascadeOnDelete();
                 $table->decimal('base_one_adult', 10, 2)->nullable();
@@ -114,8 +139,12 @@ return new class extends Migration {
 
         // Category rate periods
         if (!Schema::hasTable('room_category_rate_periods')) {
-            Schema::create('room_category_rate_periods', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('room_category_rate_periods', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('room_category_id');
                 $table->foreign('room_category_id')->references('id')->on('room_categories')->cascadeOnDelete();
                 $table->date('start_date');
@@ -132,8 +161,12 @@ return new class extends Migration {
 
         // Reservations with counts and contacts
         if (!Schema::hasTable('reservations')) {
-            Schema::create('reservations', function (Blueprint $table) {
-                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            Schema::create('reservations', function (Blueprint $table) use ($driver) {
+                if ($driver === 'sqlite') {
+                    $table->uuid('id')->primary();
+                } else {
+                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+                }
                 $table->uuid('room_id');
                 $table->foreign('room_id')->references('id')->on('rooms')->cascadeOnDelete();
                 $table->unsignedTinyInteger('adults_count')->default(1);

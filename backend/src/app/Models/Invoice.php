@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Payment;
+use App\Models\Traits\HasUuidPrimary;
 
 class Invoice extends Model
 {
     use HasFactory;
+    use HasUuidPrimary;
 
     public $incrementing = false;
     protected $keyType = 'string';

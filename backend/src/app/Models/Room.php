@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasUuidPrimary;
 
 class Room extends Model
 {
@@ -58,5 +59,7 @@ class Room extends Model
     {
         return $this->hasMany(RoomRatePeriod::class);
     }
+    
+    use HasUuidPrimary;
     
 }
