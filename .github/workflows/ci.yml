@@ -69,6 +69,18 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
 
+      - name: Diagnose Sonar auth and project
+        if: ${{ env.SONAR_ENABLED == 'true' }}
+        run: |
+          echo "Validating Sonar token..."
+          curl -s -S -u "$SONAR_TOKEN": "https://sonarcloud.io/api/authentication/validate" || true
+          echo
+          echo "Checking project existence for key: $SONAR_PROJECT_KEY"
+          curl -s -S -u "$SONAR_TOKEN": "https://sonarcloud.io/api/components/search?projectKeys=$SONAR_PROJECT_KEY" || true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+
       - name: Run SonarCloud scan
         if: ${{ env.SONAR_ENABLED == 'true' }}
         uses: sonarsource/sonarcloud-github-action@v1
