@@ -5,196 +5,711 @@
     "version": "1.0"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8000" },
-    { "key": "bearer_token", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "bearer_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "property_id",
+      "value": ""
+    },
+    {
+      "key": "room_category_id",
+      "value": ""
+    },
+    {
+      "key": "room_id",
+      "value": ""
+    },
+    {
+      "key": "partner_id",
+      "value": ""
+    },
+    {
+      "key": "invoice",
+      "value": ""
+    }
   ],
-  "items": [
+  
+  "item": [
     {
       "name": "Auth - Login",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/login", "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@admin.com\",\n  \"password\": \"123456\"\n}" } }
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@admin.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+                "var data = pm.response.json();\nif(data){\n  if(data.access_token) pm.environment.set('bearer_token', data.access_token);\n  if(data.refresh_token) pm.environment.set('refresh_token', data.refresh_token);\n}"
+              ]
+          }
+        }
+      ]
     },
     {
       "name": "Auth - Refresh",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/refresh" }
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/refresh",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
+        }
+      }
     },
     {
       "name": "Auth - Me",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/auth/me", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/auth/me",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
-      "name": "Auth - Logout",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/logout", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "name": "Setup - Create Property",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/properties",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Property\",\n  \"timezone\": \"UTC\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('property_id', d.id);"
+            ]
+          }
+        }
+      ]
     },
     {
-      "name": "Auth - Logout All",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/logout-all", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "name": "Setup - Create Room Category",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/room-categories",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Category\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('room_category_id', d.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Room",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/rooms",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Property-Id",
+            "value": "{{property_id}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"number\": \"100\",\n  \"name\": \"Test Room\",\n  \"beds\": 1,\n  \"capacity\": 2,\n  \"room_category_id\": \"{{room_category_id}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('room_id', d.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Partner",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/partners",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Partner\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('partner_id', d.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Invoice",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/invoices",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"partner_id\": \"{{partner_id}}\",\n  \"lines\": [ { \"description\": \"Test\", \"quantity\": 1, \"unit_price\": 10.0 } ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('invoice', d.id);"
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "Calendar - Index",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/calendar", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/calendar",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Reservations - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/reservations", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": { "mode":"raw", "raw": "{\n  \"property_id\": \"{{property_id}}\",\n  \"room_id\": \"{{room_id}}\",\n  \"guest_name\": \"Test Guest\",\n  \"checkin\": \"2026-02-01\",\n  \"checkout\": \"2026-02-03\"\n}" } }
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/reservations",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"property_id\": \"{{property_id}}\",\n  \"room_id\": \"{{room_id}}\",\n  \"guest_name\": \"Test Guest\",\n  \"checkin\": \"2026-02-01\",\n  \"checkout\": \"2026-02-03\"\n}"
+        }
+      }
     },
     {
       "name": "Reservations - Update",
-      "request": { "method": "PUT", "url": "{{baseUrl}}/api/reservations/{reservation}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"guest_name\": \"Updated Guest\"\n}"} }
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/api/reservations/{reservation}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"guest_name\": \"Updated Guest\"\n}"
+        }
+      }
     },
     {
       "name": "Reservations - Show",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/reservations/{reservation}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/reservations/{reservation}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Reservations - Calculate (simple)",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/reservations/calculate", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"property_id\": \"{{property_id}}\",\n  \"start\": \"2026-02-01\",\n  \"end\": \"2026-02-03\",\n  \"room_category_id\": \"{{room_category_id}}\"\n}"} }
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/reservations/calculate",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"property_id\": \"{{property_id}}\",\n  \"start\": \"2026-02-01\",\n  \"end\": \"2026-02-03\",\n  \"room_category_id\": \"{{room_category_id}}\"\n}"
+        }
+      }
     },
     {
       "name": "Availability - Search",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/availability/search", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"property_id\": \"{{property_id}}\",\n  \"start\": \"2026-02-01\",\n  \"end\": \"2026-02-03\"\n}" } }
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/availability/search",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"property_id\": \"{{property_id}}\",\n  \"start\": \"2026-02-01\",\n  \"end\": \"2026-02-03\"\n}"
+        }
+      }
     },
     {
       "name": "Room Categories - List",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/room-categories", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/room-categories",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Room Categories - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/room-categories", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Comum Teste\"\n}" } }
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/room-categories",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Comum Teste\"\n}"
+        }
+      }
     },
     {
       "name": "Room Categories - Show",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/room-categories/{room_category}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/room-categories/{room_category}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Room Categories - Update",
-      "request": { "method": "PUT", "url": "{{baseUrl}}/api/room-categories/{room_category}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Comum Atualizado\"\n}" } }
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/api/room-categories/{room_category}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Comum Atualizado\"\n}"
+        }
+      }
     },
     {
       "name": "Room Categories - Delete",
-      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/room-categories/{room_category}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/room-categories/{room_category}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Rooms - List",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/rooms", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/rooms",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Rooms - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/rooms", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"number\": \"101\",\n  \"room_category_id\": \"{{room_category_id}}\"\n}" } }
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/rooms",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"number\": \"101\",\n  \"room_category_id\": \"{{room_category_id}}\"\n}"
+        }
+      }
     },
     {
       "name": "Rooms - Show",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/rooms/{room}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/rooms/{room}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Rooms - Update",
-      "request": { "method": "PUT", "url": "{{baseUrl}}/api/rooms/{room}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"number\": \"102\"\n}" } }
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/api/rooms/{room}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"number\": \"102\"\n}"
+        }
+      }
     },
     {
       "name": "Rooms - Delete",
-      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/rooms/{room}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/rooms/{room}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Properties - List",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/properties", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/properties",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     },
     {
       "name": "Properties - Pricing - Show",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/properties/pricing", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Properties - Pricing - Update",
-      "request": { "method": "PUT", "url": "{{baseUrl}}/api/properties/pricing", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"base_rate\": 100.0\n}"} }
-    },
-    {
-      "name": "Properties - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/properties", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"My Property\"\n}" } }
-    },
-    {
-      "name": "Properties - Update",
-      "request": { "method": "PUT", "url": "{{baseUrl}}/api/properties/{{property_id}}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Updated Property\"\n}" } }
-    },
-    {
-      "name": "Properties - Delete",
-      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/properties/{property}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Partners - List",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/partners", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Partners - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/partners", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Partner A\"\n}" } }
-    },
-    {
-      "name": "Partners - Show",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/partners/{{partner_id}}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Partners - Update",
-      "request": { "method": "PUT", "url": "{{baseUrl}}/api/partners/{partner}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Partner Updated\"\n}" } }
-    },
-    {
-      "name": "Partners - Delete",
-      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/partners/{partner}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Invoices - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/invoices", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"partner_id\": \"{{partner_id}}\",\n  \"lines\": [ { \"description\": \"Room\", \"quantity\": 1, \"unit_price\": 120.0 } ]\n}" } }
-    },
-    {
-      "name": "Invoices - List",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/invoices", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Invoices - Show",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/invoices/{{invoice}}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Payments - Create (invoice)",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/invoices/{{invoice}}/payments", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"amount\": 120.0,\n  \"method\": \"card\"\n}" } }
-    },
-    {
-      "name": "Room Rates - List (room)",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/rooms/{room}/rates", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Room Rates - Create (room)",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/rooms/{{room_id}}/rates", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Standard Rate\",\n  \"price\": 100.0\n}" } }
-    },
-    {
-      "name": "Room Rate - Update",
-      "request": { "method": "PUT", "url": "{{baseUrl}}/api/room-rates/{rate}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"price\": 110.0\n}" } }
-    },
-    {
-      "name": "Room Rate - Delete",
-      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/room-rates/{rate}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Room Rate Periods - List (room)",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/rooms/{{room_id}}/rate-periods", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Room Rate Periods - Create (room)",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/rooms/{{room_id}}/rate-periods", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"start\": \"2026-02-01\",\n  \"end\": \"2026-02-28\",\n  \"price\": 120.0\n}" } }
-    },
-    {
-      "name": "Room Category Rates - List",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/room-categories/{{room_category_id}}/rates", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Room Category Rates - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/room-categories/{{room_category_id}}/rates", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"Category Rate\",\n  \"price\": 95.0\n}" } }
-    },
-    {
-      "name": "Room Category Rate Periods - List",
-      "request": { "method": "GET", "url": "{{baseUrl}}/api/room-categories/{{room_category_id}}/rate-periods", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
-    },
-    {
-      "name": "Room Category Rate Periods - Create",
-      "request": { "method": "POST", "url": "{{baseUrl}}/api/room-categories/{{room_category_id}}/rate-periods", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"start\": \"2026-02-01\",\n  \"end\": \"2026-02-28\",\n  \"price\": 95.0\n}" } }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/properties/pricing",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     }
-    ,
-    {
+  ]
+}
       "name": "Room Category Rate - Update",
       "request": { "method": "PUT", "url": "{{baseUrl}}/api/room-category-rates/{rate}", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"price\": 99.0\n}" } }
     },
