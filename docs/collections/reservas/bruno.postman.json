@@ -41,8 +41,8 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "var data = pm.response.json(); if(data && data.access_token){ pm.environment.set('bearer_token', data.access_token); }"
-            ]
+                "var data = pm.response.json();\nif(data){\n  if(data.access_token) pm.environment.set('bearer_token', data.access_token);\n  if(data.refresh_token) pm.environment.set('refresh_token', data.refresh_token);\n}"
+              ]
           }
         }
       ]
@@ -61,7 +61,11 @@
             "key": "Content-Type",
             "value": "application/json"
           }
-        ]
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refresh_token\": \"{{refresh_token}}\"\n}"
+        }
       }
     },
     {
@@ -85,48 +89,7 @@
         ]
       }
     },
-    {
-      "name": "Auth - Logout",
-      "request": {
-        "method": "POST",
-        "url": "{{baseUrl}}/api/auth/logout",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{bearer_token}}"
-          },
-          {
-            "key": "Accept",
-            "value": "application/json"
-          },
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Auth - Logout All",
-      "request": {
-        "method": "POST",
-        "url": "{{baseUrl}}/api/auth/logout-all",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer {{bearer_token}}"
-          },
-          {
-            "key": "Accept",
-            "value": "application/json"
-          },
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ]
-      }
-    },
+    
     {
       "name": "Calendar - Index",
       "request": {
@@ -1190,6 +1153,48 @@
       "request": {
         "method": "DELETE",
         "url": "{{baseUrl}}/api/room-rate-periods/{period}",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Auth - Logout",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/logout",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Auth - Logout All",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/auth/logout-all",
         "header": [
           {
             "key": "Authorization",
