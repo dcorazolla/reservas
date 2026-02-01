@@ -26,6 +26,10 @@
       "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/logout", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
     },
     {
+      "name": "Auth - Logout All",
+      "request": { "method": "POST", "url": "{{baseUrl}}/api/auth/logout-all", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+    },
+    {
       "name": "Calendar - Index",
       "request": { "method": "GET", "url": "{{baseUrl}}/api/calendar", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
     },
@@ -94,6 +98,14 @@
       "request": { "method": "GET", "url": "{{baseUrl}}/api/properties", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
     },
     {
+      "name": "Properties - Pricing - Show",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/properties/pricing", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
+    },
+    {
+      "name": "Properties - Pricing - Update",
+      "request": { "method": "PUT", "url": "{{baseUrl}}/api/properties/pricing", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"base_rate\": 100.0\n}"} }
+    },
+    {
       "name": "Properties - Create",
       "request": { "method": "POST", "url": "{{baseUrl}}/api/properties", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"name\": \"My Property\"\n}" } }
     },
@@ -128,6 +140,10 @@
     {
       "name": "Invoices - Create",
       "request": { "method": "POST", "url": "{{baseUrl}}/api/invoices", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}], "body": {"mode":"raw","raw":"{\n  \"partner_id\": \"{{partner_id}}\",\n  \"lines\": [ { \"description\": \"Room\", \"quantity\": 1, \"unit_price\": 120.0 } ]\n}" } }
+    },
+    {
+      "name": "Invoices - List",
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/invoices", "header": [{"key":"Authorization","value":"Bearer {{bearer_token}}"}] }
     },
     {
       "name": "Invoices - Show",
