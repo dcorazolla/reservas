@@ -58,11 +58,23 @@ jobs:
           echo "Listing coverage file path:" && ls -l clover.xml || echo "clover.xml not found"
           if [ -f clover.xml ]; then echo "--- head of clover.xml ---" && head -n 40 clover.xml || true; fi
 
+      - name: Prepare Sonar env
+        run: |
+          if [ -n "${SONAR_TOKEN}" ] && [ -n "${SONAR_PROJECT_KEY}" ]; then
+            echo "SONAR_ENABLED=true" >> $GITHUB_ENV
+          else
+            echo "SONAR_ENABLED=false" >> $GITHUB_ENV
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+
       - name: Run SonarCloud scan
-        if: ${{ secrets.SONAR_TOKEN != '' && secrets.SONAR_PROJECT_KEY != '' }}
+        if: ${{ env.SONAR_ENABLED == 'true' }}
         uses: sonarsource/sonarcloud-github-action@v1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
         with:
           args: >
             -X
