@@ -8,10 +8,11 @@ use App\Models\RoomRate;
 use App\Services\RoomRateService;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RoomRateServiceTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function should_return_rates_when_list_called_given_room()
     {
         $property = new Property(['name' => 'PR1']);

@@ -8,10 +8,11 @@ use App\Services\CreateReservationService;
 use App\Services\ReservationPriceCalculator;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class CreateReservationServiceTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function should_create_reservation_when_create_called_given_valid_capacity_and_price()
     {
         $property = new Property(['name' => 'CP1']);
@@ -48,7 +49,7 @@ class CreateReservationServiceTest extends TestCase
         $this->assertGreaterThan(0, $res->total_value);
     }
 
-    /** @test */
+    #[Test]
     public function should_throw_runtime_exception_when_create_called_given_exceed_capacity()
     {
         $this->expectException(\RuntimeException::class);

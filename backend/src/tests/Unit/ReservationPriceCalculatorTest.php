@@ -8,10 +8,11 @@ use App\Models\RoomRate;
 use App\Services\ReservationPriceCalculator;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ReservationPriceCalculatorTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function should_compute_total_using_room_rate_when_available()
     {
         $property = new Property(['name' => 'PRC1', 'base_two_adults' => 100]);
