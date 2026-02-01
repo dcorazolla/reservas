@@ -1,17 +1,25 @@
 name: CI
 
 on:
+  # Run CI on direct pushes to `main` (e.g. merges) and on pull requests targeting `main`.
+  # This avoids running both a `push` and a `pull_request` workflow for the same commit
+  # (pushes to feature branches will only trigger the pull_request workflow when a PR exists).
   push:
-    branches: [ main, refactor/backend-cleanup, '**/feature/**', '**/fix/**' ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
   phpunit:
     runs-on: ubuntu-latest
+    # Run the job only for PR events or direct pushes to `main`.
+    if: "github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Sonar requests SCM info (blame/author). Disable shallow clone so sonarcloud gets proper SCM metadata.
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
