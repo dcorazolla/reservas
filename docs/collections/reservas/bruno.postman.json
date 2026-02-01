@@ -135,7 +135,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Test Property\"\n}"
+          "raw": "{\n  \"name\": \"Test Property\",\n  \"timezone\": \"UTC\"\n}"
         }
       },
       "event": [
@@ -203,6 +203,10 @@
           {
             "key": "Content-Type",
             "value": "application/json"
+          },
+          {
+            "key": "X-Property-Id",
+            "value": "{{property_id}}"
           }
         ],
         "body": {
