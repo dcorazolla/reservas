@@ -32,6 +32,20 @@ docker compose exec app bash
 php artisan migrate --seed
 ```
 
+Notas importantes (chaves e ambiente)
+- **Gerar `APP_KEY` e `JWT_SECRET`:** se ao acessar a API você receber erro relacionado a "Secret is not set" ou autenticação falhar, gere a chave da aplicação e um `JWT_SECRET` dentro do container `app`:
+
+```bash
+docker compose exec app bash
+php artisan key:generate
+# add a random JWT secret (example using openssl):
+printf "\nJWT_SECRET=%s\n" "$(openssl rand -hex 32)" >> .env
+php artisan config:clear
+php artisan cache:clear
+```
+
+- **Test DB & UUIDs:** the project uses PostgreSQL with UUID PKs. Ensure the DB has `pgcrypto` extension enabled for tests/migrations.
+
 3. Frontend (local):
 
 ```bash
@@ -47,6 +61,16 @@ Testing e utilitários
 docker compose exec app bash
 vendor/bin/phpunit
 ```
+
+Rodar tests com cobertura (PCOV)
+- PCOV is enabled in the development PHP image. To run PHPUnit and collect coverage inside the `app` container and output a clover report:
+
+```bash
+docker compose exec app bash
+vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
+```
+
+The generated `build/logs/clover.xml` can be used by CI or local tools to inspect coverage. Focused coverage runs for the billing domain can be done by pointing PHPUnit to the specific test directory (e.g., `tests/Unit/Billing`).
 
 ## Development workflow (Trunk-Based)
 

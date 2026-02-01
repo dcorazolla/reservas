@@ -1,0 +1,21 @@
+meta {
+  name: set-room-category-id
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/room-categories
+  auth: none
+  header: [ { Authorization: "Bearer {{bearer_token}}" } ]
+}
+
+script:post-response {
+  let body = res.body;
+  let first = (body && body.data && body.data.length) ? body.data[0] : (Array.isArray(body) ? body[0] : null);
+  if (!first) first = body && body.items && body.items[0] ? body.items[0] : null;
+  if (first) {
+    let id = first.id || first.uuid || first.room_category_id || first._id;
+    bru.setVar('room_category_id', id);
+  }
+}

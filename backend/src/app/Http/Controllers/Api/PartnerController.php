@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\BaseApiController;
+use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Partner;
 use Illuminate\Http\Request;
 
@@ -24,6 +24,8 @@ class PartnerController extends BaseApiController
         ]);
 
         $partner = Partner::create($data);
+        // Refresh to pick up DB-generated UUID defaults
+        $partner->refresh();
 
         return response()->json($partner, 201);
     }

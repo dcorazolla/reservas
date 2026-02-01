@@ -65,9 +65,10 @@ Route::middleware(['auth:api'])->group(function () {
     Route::apiResource('partners', PartnerController::class);
 
     // Invoices & payments
+    Route::get('/invoices', [InvoiceController::class, 'index']);
     Route::post('/invoices', [InvoiceController::class, 'store']);
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
-    Route::post('/invoices/{invoice}/payments', [PaymentController::class, 'store']);
+    Route::post('/invoices/{invoice_id}/payments', [PaymentController::class, 'store']);
 
     Route::get('/rooms/{room}/rates', [RoomRateController::class, 'index']);
     Route::post('/rooms/{room}/rates', [RoomRateController::class, 'store']);

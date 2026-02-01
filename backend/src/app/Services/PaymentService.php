@@ -3,14 +3,21 @@
 namespace App\Services;
 
 use App\Models\Payment;
-use App\Models\Invoice;
 use App\Models\FinancialAuditLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\InvoiceLinePayment;
+use App\Repositories\InvoiceRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PaymentService
 {
+    protected InvoiceRepositoryInterface $invoices;
+
+    public function __construct(?InvoiceRepositoryInterface $invoices = null)
+    {
+        $this->invoices = $invoices ?? app(InvoiceRepositoryInterface::class);
+    }
     /**
      * Create a payment and allocate it to the invoice.
      * Updates invoice status to 'paid' when fully paid.
@@ -21,7 +28,27 @@ class PaymentService
     public function createPayment(array $data): Payment
     {
         return DB::transaction(function () use ($data) {
-            $invoice = Invoice::findOrFail($data['invoice_id']);
+            // Resolve invoice id from payload, provided model, or current route
+            $invoiceId = $data['invoice_id'] ?? null;
+            if (!$invoiceId && isset($data['invoice']) && is_object($data['invoice']) && property_exists($data['invoice'], 'id')) {
+                $invoiceId = $data['invoice']->id;
+            }
+
+            if (!$invoiceId && function_exists('request')) {
+                $routeInvoice = request()->route('invoice');
+                if ($routeInvoice && is_object($routeInvoice) && property_exists($routeInvoice, 'id')) {
+                    $invoiceId = $routeInvoice->id;
+                }
+            }
+
+            if (!$invoiceId) {
+                throw new ModelNotFoundException('Invoice id not provided');
+            }
+
+            $invoice = $this->invoices->find((string) $invoiceId);
+            if (!$invoice) {
+                throw new ModelNotFoundException('Invoice not found');
+            }
             // Guard: amount must be positive
             if (!isset($data['amount']) || (float) $data['amount'] <= 0) {
                 throw new \InvalidArgumentException('Payment amount must be greater than zero');

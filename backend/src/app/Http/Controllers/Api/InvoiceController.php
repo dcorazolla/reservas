@@ -16,6 +16,18 @@ class InvoiceController extends Controller
         $this->service = $service;
     }
 
+    public function index(Request $request)
+    {
+        $propertyId = $this->getPropertyId($request);
+        $perPage = (int) $request->query('per_page', 15);
+
+        $query = Invoice::with('lines', 'payments')
+            ->where('property_id', $propertyId)
+            ->orderBy('issued_at', 'desc');
+
+        return response()->json($query->paginate($perPage));
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -29,6 +41,16 @@ class InvoiceController extends Controller
             'lines.*.quantity' => 'nullable|numeric',
             'lines.*.unit_price' => 'required|numeric',
         ]);
+
+        // Ensure the invoice gets a property context when available so subsequent
+        // operations (payments, allocations) can correctly scope resources.
+        try {
+            if (empty($data['property_id'])) {
+                $data['property_id'] = $this->getPropertyId($request);
+            }
+        } catch (\Symfony\Component\HttpKernel\Exception\BadRequestHttpException $e) {
+            // No property context available; proceed without setting it.
+        }
 
         $invoice = $this->service->createInvoice($data);
 

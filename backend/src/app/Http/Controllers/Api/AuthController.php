@@ -18,6 +18,12 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
+        if (empty(config('jwt.secret'))) {
+            return response()->json([
+                'message' => 'JWT configuration missing: set JWT_SECRET environment variable.'
+            ], 500);
+        }
+
         $user = User::where('email', $data['email'])->first();
 
         if (! $user || ! Hash::check($data['password'], $user->password)) {
@@ -61,6 +67,12 @@ class AuthController extends Controller
         $data = $request->validate([
             'refresh_token' => 'required|string',
         ]);
+
+        if (empty(config('jwt.secret'))) {
+            return response()->json([
+                'message' => 'JWT configuration missing: set JWT_SECRET environment variable.'
+            ], 500);
+        }
 
         // Don't require a valid current token for refresh
         auth('api')->payload(false);
