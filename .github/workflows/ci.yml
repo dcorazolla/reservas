@@ -16,7 +16,7 @@ jobs:
     if: "github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')"
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        uses: actions/checkout@v4
         with:
           # Sonar requests SCM info (blame/author). Disable shallow clone so sonarcloud gets proper SCM metadata.
           fetch-depth: 0
@@ -89,6 +89,16 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
 
+      - name: Check git status (validate checkout)
+        if: ${{ env.SONAR_ENABLED == 'true' }}
+        run: |
+          echo "Validating git checkout and history..."
+          git --version || true
+          echo "Repository root listing:"
+          ls -la | sed -n '1,120p'
+          echo "Top-level git status (first lines):" || true
+          git status --porcelain -b || true
+
       - name: Run SonarScanner CLI via Docker
         if: ${{ env.SONAR_ENABLED == 'true' }}
         env:
@@ -99,24 +109,24 @@ jobs:
           echo "Running SonarScanner CLI (Docker) and saving logs to sonar-scanner.log"
           echo "Listing coverage file before scanning:"
           ls -l backend/src/clover.xml || true
-          echo "Mounting backend/src into scanner and setting projectBaseDir to /usr/src"
-          # Run scanner and capture both stdout and stderr into sonar-scanner.log
+          echo "Mounting full repository into scanner and setting projectBaseDir to backend/src"
+          # Mount the whole repo so git metadata and working tree match inside the container.
           docker run --rm \
             -e SONAR_TOKEN="${SONAR_TOKEN}" \
             -e SONAR_HOST_URL="https://sonarcloud.io" \
             -e SONAR_ORGANIZATION="${SONAR_ORGANIZATION}" \
-            -v "$PWD/.git":/usr/src/.git \
-            -v "$PWD/backend/src":/usr/src \
+            -v "$PWD":/usr/src:rw \
+            -v "$PWD/.git":/usr/src/.git:rw \
             sonarsource/sonar-scanner-cli:latest \
               -Dsonar.host.url=https://sonarcloud.io \
               -Dsonar.organization=${SONAR_ORGANIZATION} \
               -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-              -Dsonar.projectBaseDir=/usr/src \
+              -Dsonar.projectBaseDir=/usr/src/backend/src \
               -Dsonar.sources=. \
               -Dsonar.scm.provider=git \
               -Dsonar.exclusions=vendor/**,node_modules/**,storage/**,public/docs/**,tests/**,docs/** \
               -Dsonar.inclusions=app/** \
-              -Dsonar.php.coverage.reportPaths=clover.xml -X 2>&1 | tee sonar-scanner.log
+              -Dsonar.php.coverage.reportPaths=/usr/src/backend/src/clover.xml -X 2>&1 | tee sonar-scanner.log
           rc=${PIPESTATUS[0]:-0}
           echo "Sonar scanner exit code: $rc"
           exit $rc
