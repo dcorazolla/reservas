@@ -114,7 +114,7 @@ jobs:
               -Dsonar.sources=. \
               -Dsonar.scm.provider=git \
               -Dsonar.exclusions=vendor/**,node_modules/**,storage/**,public/docs/**,tests/**,docs/** \
-              -Dsonar.inclusions=app/**,config/**,routes/**,resources/**,public/**,database/**,bootstrap/**,scripts/**,composer.json \
+              -Dsonar.inclusions=app/** \
               -Dsonar.php.coverage.reportPaths=clover.xml -X 2>&1 | tee sonar-scanner.log
           rc=${PIPESTATUS[0]:-0}
           echo "Sonar scanner exit code: $rc"
