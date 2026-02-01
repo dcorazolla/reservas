@@ -12,8 +12,33 @@
     {
       "key": "bearer_token",
       "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "property_id",
+      "value": ""
+    },
+    {
+      "key": "room_category_id",
+      "value": ""
+    },
+    {
+      "key": "room_id",
+      "value": ""
+    },
+    {
+      "key": "partner_id",
+      "value": ""
+    },
+    {
+      "key": "invoice",
+      "value": ""
     }
   ],
+  
   "item": [
     {
       "name": "Auth - Login",
@@ -88,6 +113,186 @@
           }
         ]
       }
+    },
+    {
+      "name": "Setup - Create Property",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/properties",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Property\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('property_id', d.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Room Category",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/room-categories",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Category\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('room_category_id', d.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Room",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/rooms",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"number\": \"100\",\n  \"room_category_id\": \"{{room_category_id}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('room_id', d.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Partner",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/partners",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Test Partner\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('partner_id', d.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Invoice",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/invoices",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{bearer_token}}"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"partner_id\": \"{{partner_id}}\",\n  \"lines\": [ { \"description\": \"Test\", \"quantity\": 1, \"unit_price\": 10.0 } ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var d = pm.response.json(); if(d && d.id) pm.environment.set('invoice', d.id);"
+            ]
+          }
+        }
+      ]
     },
     
     {
