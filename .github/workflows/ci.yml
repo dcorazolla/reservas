@@ -105,6 +105,7 @@ jobs:
             -e SONAR_TOKEN="${SONAR_TOKEN}" \
             -e SONAR_HOST_URL="https://sonarcloud.io" \
             -e SONAR_ORGANIZATION="${SONAR_ORGANIZATION}" \
+            -v "$PWD/.git":/usr/src/.git \
             -v "$PWD/backend/src":/usr/src \
             sonarsource/sonar-scanner-cli:latest \
               -Dsonar.host.url=https://sonarcloud.io \
