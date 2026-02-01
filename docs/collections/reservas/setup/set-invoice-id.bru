@@ -5,17 +5,16 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/api/invoices
-  auth: none
-  header: [ { Authorization: "Bearer {{bearer_token}}" } ]
+  url: {{api_url}}/api/invoices
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
 }
 
 script:post-response {
-  let body = res.body;
-  let first = (body && body.data && body.data.length) ? body.data[0] : (Array.isArray(body) ? body[0] : null);
-  if (!first) first = body && body.items && body.items[0] ? body.items[0] : null;
-  if (first) {
-    let id = first.id || first.uuid || first.invoice_id || first._id;
-    bru.setVar('invoice', id);
-  }
+  let data = res.body.data;
+  bru.setVar('invoice_id', data[0].id);
 }
