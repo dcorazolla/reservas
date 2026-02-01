@@ -16,13 +16,13 @@ jobs:
     if: "github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           # Sonar requests SCM info (blame/author). Disable shallow clone so sonarcloud gets proper SCM metadata.
           fetch-depth: 0
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@d59004228537ca90c8dca680592a08a675bf52b6
         with:
           php-version: '8.3'
           coverage: pcov
@@ -110,7 +110,7 @@ jobs:
 
       - name: Upload coverage to Codecov (optional)
         if: ${{ env.CODECOV_ENABLED == 'true' }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238
         with:
           files: backend/src/clover.xml
           flags: backend-php
