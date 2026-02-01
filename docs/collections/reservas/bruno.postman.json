@@ -211,7 +211,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"number\": \"100\",\n  \"room_category_id\": \"{{room_category_id}}\"\n}"
+          "raw": "{\n  \"number\": \"100\",\n  \"name\": \"Test Room\",\n  \"beds\": 1,\n  \"capacity\": 2,\n  \"room_category_id\": \"{{room_category_id}}\"\n}"
         }
       },
       "event": [
