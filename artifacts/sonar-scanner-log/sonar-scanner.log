@@ -1,0 +1,908 @@
+Unable to find image 'sonarsource/sonar-scanner-cli:latest' locally
+latest: Pulling from sonarsource/sonar-scanner-cli
+1c7de4eb5ced: Pulling fs layer
+5a8cbd3c4373: Pulling fs layer
+c060cd763202: Pulling fs layer
+6e5b5e384bff: Pulling fs layer
+db292a031e66: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+6e5b5e384bff: Waiting
+db292a031e66: Waiting
+4f4fb700ef54: Waiting
+c060cd763202: Verifying Checksum
+c060cd763202: Download complete
+1c7de4eb5ced: Download complete
+db292a031e66: Verifying Checksum
+db292a031e66: Download complete
+4f4fb700ef54: Verifying Checksum
+4f4fb700ef54: Download complete
+5a8cbd3c4373: Verifying Checksum
+5a8cbd3c4373: Download complete
+6e5b5e384bff: Verifying Checksum
+6e5b5e384bff: Download complete
+1c7de4eb5ced: Pull complete
+5a8cbd3c4373: Pull complete
+c060cd763202: Pull complete
+6e5b5e384bff: Pull complete
+db292a031e66: Pull complete
+4f4fb700ef54: Pull complete
+Digest: sha256:97c145e4f8fe1786906c604272d17901e745051bc6c8173582f31aac8d0eb7fe
+Status: Downloaded newer image for sonarsource/sonar-scanner-cli:latest
+19:46:07.757 INFO  Scanner configuration file: /opt/sonar-scanner/conf/sonar-scanner.properties
+19:46:07.760 INFO  Project root configuration file: NONE
+19:46:07.776 INFO  SonarScanner CLI 8.0.1.6346
+19:46:07.777 DEBUG Java 21.0.9 Amazon.com Inc. (64-bit)
+19:46:07.781 INFO  Linux 6.11.0-1018-azure amd64
+19:46:07.788 DEBUG Scanner max available memory: 3 GB
+19:46:07.820 DEBUG uname -m returned 'x86_64'
+19:46:07.822 DEBUG Using JVM default truststore: /usr/lib/jvm/java-21-amazon-corretto.x86_64/lib/security/cacerts
+19:46:07.823 DEBUG Download cache base directory: /opt/sonar-scanner/.sonar/cache
+19:46:07.823 DEBUG Create: /opt/sonar-scanner/.sonar/cache/_tmp
+19:46:07.917 DEBUG Loading OS trusted SSL certificates...
+19:46:07.917 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+19:46:08.277 DEBUG Loaded [143] system trusted certificates
+19:46:08.696 DEBUG Loaded truststore from '/usr/lib/jvm/java-21-amazon-corretto.x86_64/lib/security/cacerts' containing 143 certificates
+19:46:08.815 INFO  Communicating with SonarQube Cloud
+19:46:08.816 INFO  JRE provisioning: os[linux], arch[x86_64]
+19:46:08.819 DEBUG --> GET https://api.sonarcloud.io/analysis/jres?os=linux&arch=x86_64
+19:46:09.305 DEBUG <-- 200 https://api.sonarcloud.io/analysis/jres?os=linux&arch=x86_64 (485ms)
+19:46:09.333 DEBUG Download https://scanner.sonarcloud.io/jres/OpenJDK21U-jre_x64_linux_hotspot_21.0.9_10.tar.gz to /opt/sonar-scanner/.sonar/cache/_tmp/OpenJDK21U-jre_x64_linux_hotspot_21.0.9_10.tar14691748646328325500gz
+19:46:09.333 DEBUG --> GET https://scanner.sonarcloud.io/jres/OpenJDK21U-jre_x64_linux_hotspot_21.0.9_10.tar.gz
+19:46:10.301 DEBUG <-- 200 https://scanner.sonarcloud.io/jres/OpenJDK21U-jre_x64_linux_hotspot_21.0.9_10.tar.gz (967ms)
+19:46:10.465 DEBUG Create: /opt/sonar-scanner/.sonar/cache/aeab55d064a1a27a3744b0880b9b414077b4ed2b1790817eea3df60aec946431
+19:46:11.271 DEBUG Executing: /opt/sonar-scanner/.sonar/cache/aeab55d064a1a27a3744b0880b9b414077b4ed2b1790817eea3df60aec946431/OpenJDK21U-jre_x64_linux_hotspot_21.0.9_10.tar.gz_extracted/jdk-21.0.9+10-jre/bin/java --version
+19:46:11.297 DEBUG openjdk 21.0.9 2025-10-21 LTS
+19:46:11.297 DEBUG OpenJDK Runtime Environment Temurin-21.0.9+10 (build 21.0.9+10-LTS)
+19:46:11.297 DEBUG OpenJDK 64-Bit Server VM Temurin-21.0.9+10 (build 21.0.9+10-LTS, mixed mode, sharing)
+19:46:11.301 DEBUG --> GET https://api.sonarcloud.io/analysis/engine
+19:46:11.461 DEBUG <-- 200 https://api.sonarcloud.io/analysis/engine (159ms)
+19:46:11.463 DEBUG Download https://scanner.sonarcloud.io/engines/sonarcloud-scanner-engine-12.15.0.2342-all.jar to /opt/sonar-scanner/.sonar/cache/_tmp/sonarcloud-scanner-engine-12.15.0.2342-all14661026687020008493jar
+19:46:11.463 DEBUG --> GET https://scanner.sonarcloud.io/engines/sonarcloud-scanner-engine-12.15.0.2342-all.jar
+19:46:11.672 DEBUG <-- 200 https://scanner.sonarcloud.io/engines/sonarcloud-scanner-engine-12.15.0.2342-all.jar (208ms)
+19:46:11.745 DEBUG Create: /opt/sonar-scanner/.sonar/cache/2323a46e4f0f483cad4ff725bce8f1fc21e7deafaf587623d527def0c71f3871
+19:46:11.747 DEBUG Work directory: /tmp/.scannerwork
+19:46:11.754 DEBUG Executing: /opt/sonar-scanner/.sonar/cache/aeab55d064a1a27a3744b0880b9b414077b4ed2b1790817eea3df60aec946431/OpenJDK21U-jre_x64_linux_hotspot_21.0.9_10.tar.gz_extracted/jdk-21.0.9+10-jre/bin/java -Dorg.bouncycastle.pkcs12.ignore_useless_passwd=true -jar /opt/sonar-scanner/.sonar/cache/2323a46e4f0f483cad4ff725bce8f1fc21e7deafaf587623d527def0c71f3871/sonarcloud-scanner-engine-12.15.0.2342-all.jar
+19:46:12.009 INFO  Starting SonarScanner Engine...
+19:46:12.010 INFO  Java 21.0.9 Eclipse Adoptium (64-bit)
+19:46:12.062 DEBUG JVM max available memory: 3 GB
+19:46:12.312 DEBUG Sonar User Home: /opt/sonar-scanner/.sonar
+19:46:12.325 DEBUG Initialize DefaultScannerWsClient
+19:46:12.417 DEBUG Loading OS trusted SSL certificates...
+19:46:12.418 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+19:46:12.804 DEBUG Loaded [1001] system trusted certificates
+19:46:13.019 DEBUG Loaded truststore from '/usr/lib/jvm/java-21-amazon-corretto.x86_64/lib/security/cacerts' containing 143 certificates
+19:46:13.172 INFO  Load global settings
+19:46:13.182 DEBUG --> GET https://sonarcloud.io/api/settings/values.protobuf
+19:46:13.860 DEBUG <-- 200 https://sonarcloud.io/api/settings/values.protobuf (677ms, unknown-length body)
+19:46:13.881 INFO  Load global settings (done) | time=709ms
+19:46:13.939 INFO  Server id: 1BD809FA-AWHW8ct9-T_TB3XqouNu
+19:46:13.947 DEBUG Initialize DownloadPluginsScannerWsClient
+19:46:13.950 DEBUG Loading OS trusted SSL certificates...
+19:46:13.950 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+19:46:14.211 DEBUG Loaded [1001] system trusted certificates
+19:46:14.241 DEBUG Loaded truststore from '/usr/lib/jvm/java-21-amazon-corretto.x86_64/lib/security/cacerts' containing 143 certificates
+19:46:14.259 DEBUG Create : /opt/sonar-scanner/.sonar/_tmp
+19:46:14.260 DEBUG User cache: /opt/sonar-scanner/.sonar/cache
+19:46:14.268 INFO  Loading required plugins
+19:46:14.269 INFO  Load plugins index
+19:46:14.272 DEBUG --> GET https://sonarcloud.io/api/plugins/installed
+19:46:14.407 DEBUG <-- 200 https://sonarcloud.io/api/plugins/installed (136ms, unknown-length body)
+19:46:14.417 INFO  Load plugins index (done) | time=148ms
+19:46:14.418 INFO  Load/download plugins
+19:46:14.420 DEBUG Download plugin 'iac' to '/opt/sonar-scanner/.sonar/_tmp/fileCache904193396266402353.tmp'
+19:46:14.420 DEBUG --> GET https://scanner.sonarcloud.io/plugins/iac/versions/9df6f20d1a180901be2fdffeca689a77.jar
+19:46:14.594 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/iac/versions/9df6f20d1a180901be2fdffeca689a77.jar (172ms, 23888726-byte body)
+19:46:15.151 DEBUG Download plugin 'textenterprise' to '/opt/sonar-scanner/.sonar/_tmp/fileCache3119694774040620317.tmp'
+19:46:15.151 DEBUG --> GET https://scanner.sonarcloud.io/plugins/textenterprise/versions/0ddc1a5d4d73ea2bc8f89d039b0577ab.jar
+19:46:15.156 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/textenterprise/versions/0ddc1a5d4d73ea2bc8f89d039b0577ab.jar (5ms, 8094639-byte body)
+19:46:15.276 INFO  Load/download plugins (done) | time=858ms
+19:46:15.280 DEBUG Plugins not loaded because they are optional: [abap, sonarapex, architecture, architecturejavascriptfrontend, architecturepythonfrontend, architecturecsharpfrontend, architecturejavafrontend, csharpenterprise, cpp, cobol, dart, dbd, dbdjavafrontend, dbdpythonfrontend, dre, flex, go, web, jcl, jacoco, javasymbolicexecution, java, javaa3scontextcollector, javascript, kotlin, php, pli, plsql, python, rpg, ruby, rust, sonarscala, jasmin, swift, tsql, vbnetenterprise, vb, security, securitycsharpfrontend, securitygofrontend, securityjavafrontend, securitykotlinfrontend, securityphpfrontend, securitypythonfrontend, securityvbnetfrontend, xml]
+19:46:15.341 DEBUG Plugins loaded:
+19:46:15.342 DEBUG   * Text Code Quality and Security 2.38.0.10279 (textenterprise)
+19:46:15.343 DEBUG   * IaC Code Quality and Security 2.5.0.18803 (iac)
+19:46:15.344 DEBUG --> GET https://sonarcloud.io/api/server/version
+19:46:15.468 DEBUG <-- 200 https://sonarcloud.io/api/server/version (123ms, 11-byte body)
+19:46:15.470 DEBUG Updated analysis started with a difference of -63 milliseconds
+19:46:15.475 DEBUG Started at Sun Feb 01 19:46:13 UTC 2026
+19:46:15.516 INFO  Loaded core extensions: sca, architecture, a3s
+19:46:15.523 DEBUG Installed scanner extension: sca
+19:46:15.526 DEBUG Installed scanner extension: architecture
+19:46:15.526 DEBUG Installed scanner extension: a3s
+19:46:15.620 DEBUG register org.eclipse.jgit.util.FS$FileStoreAttributes$$Lambda/0x00007f47a0365738@397ef2 with shutdown hook
+19:46:15.780 INFO  Process project properties
+19:46:15.786 DEBUG Process project properties (done) | time=8ms
+19:46:15.796 INFO  Project key: dcorazolla_reservas
+19:46:15.797 INFO  Base dir: /usr/src
+19:46:15.797 INFO  Working dir: /tmp/.scannerwork
+19:46:15.798 DEBUG Project global encoding: UTF-8, default locale: en
+19:46:15.814 DEBUG Could not detect any CI vendor
+19:46:15.818 INFO  Load project branches
+19:46:15.820 DEBUG --> GET https://sonarcloud.io/api/project_branches/list?project=dcorazolla_reservas
+19:46:16.054 DEBUG <-- 200 https://sonarcloud.io/api/project_branches/list?project=dcorazolla_reservas (232ms, unknown-length body)
+19:46:16.064 INFO  Load project branches (done) | time=246ms
+19:46:16.071 INFO  Load project settings for component key: 'dcorazolla_reservas'
+19:46:16.072 DEBUG --> GET https://sonarcloud.io/api/settings/values.protobuf?component=dcorazolla_reservas
+19:46:16.467 DEBUG <-- 200 https://sonarcloud.io/api/settings/values.protobuf?component=dcorazolla_reservas (395ms, unknown-length body)
+19:46:16.468 INFO  Load project settings for component key: 'dcorazolla_reservas' (done) | time=398ms
+19:46:16.475 DEBUG Initialize DomainApiWsClient
+19:46:16.476 DEBUG Loading OS trusted SSL certificates...
+19:46:16.476 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+19:46:16.651 DEBUG Loaded [1001] system trusted certificates
+19:46:16.675 DEBUG Loaded truststore from '/usr/lib/jvm/java-21-amazon-corretto.x86_64/lib/security/cacerts' containing 143 certificates
+19:46:16.686 DEBUG Request URL: https://api.sonarcloud.io/feature-flags-provisioning/feature-flags
+19:46:16.686 DEBUG --> GET https://api.sonarcloud.io/feature-flags-provisioning/feature-flags?organizationKey=dcorazolla
+19:46:16.909 DEBUG <-- 200 https://api.sonarcloud.io/feature-flags-provisioning/feature-flags?organizationKey=dcorazolla (223ms, 476-byte body)
+19:46:16.920 DEBUG Response: FeatureFlagResponse[featureFlags={design-architecture-squad-enable-advanced=false, security-insights-enable-asast-csharp=false, security-insights-enable-asast-vbnet=false, cfamily-configure-shallow-mode-threshold=0, cfamily-configure-shallow-mode-max-steps=10000, cloud-security-enable-generic-yaml-and-json-analyzer=false, mobile-security-use-deprecated-swift-analyzer=false, design-architecture-squad-enable-basic=false, analysis-processing-a3s-ci-context-collector-enabled=false}]
+19:46:16.928 DEBUG Architecture feature flags are disabled, skipping config loading.
+19:46:16.931 INFO  Check ALM binding of project 'dcorazolla_reservas'
+19:46:16.931 DEBUG --> GET https://sonarcloud.io/api/alm_integration/is_project_bound?project=dcorazolla_reservas
+19:46:17.160 DEBUG <-- 200 https://sonarcloud.io/api/alm_integration/is_project_bound?project=dcorazolla_reservas (228ms, unknown-length body)
+19:46:17.161 INFO  Detected project binding: BOUND
+19:46:17.162 INFO  Check ALM binding of project 'dcorazolla_reservas' (done) | time=230ms
+19:46:17.165 INFO  Load project pull requests
+19:46:17.166 DEBUG --> GET https://sonarcloud.io/api/project_pull_requests/list?project=dcorazolla_reservas
+19:46:17.343 DEBUG <-- 200 https://sonarcloud.io/api/project_pull_requests/list?project=dcorazolla_reservas (176ms, unknown-length body)
+19:46:17.346 INFO  Load project pull requests (done) | time=181ms
+19:46:17.351 INFO  Load branch configuration
+19:46:17.352 INFO  Load branch configuration (done) | time=1ms
+19:46:17.356 DEBUG Creating module hierarchy
+19:46:17.357 DEBUG   Init module 'dcorazolla_reservas'
+19:46:17.358 DEBUG     Base dir: /usr/src
+19:46:17.358 DEBUG     Working dir: /tmp/.scannerwork
+19:46:17.359 DEBUG     Module global encoding: UTF-8, default locale: en
+19:46:17.363 INFO  Load quality profiles
+19:46:17.363 DEBUG --> GET https://sonarcloud.io/api/qualityprofiles/search.protobuf?projectKey=dcorazolla_reservas&organization=dcorazolla
+19:46:17.837 DEBUG <-- 200 https://sonarcloud.io/api/qualityprofiles/search.protobuf?projectKey=dcorazolla_reservas&organization=dcorazolla (474ms, 5300-byte body)
+19:46:17.847 INFO  Load quality profiles (done) | time=485ms
+19:46:17.862 INFO  Create analysis
+19:46:17.872 DEBUG Create analysis with parameters CreateAnalysisRequest[organizationKey=dcorazolla, projectKey=dcorazolla_reservas, projectVersion=not provided, branchName=null, pullRequestKey=null, referenceBranchId=null, analysisId=null]
+19:46:17.874 DEBUG --> POST https://api.sonarcloud.io/analysis/analyses (99-byte body)
+19:46:18.085 DEBUG <-- 201 https://api.sonarcloud.io/analysis/analyses (210ms, 347-byte body)
+19:46:18.095 DEBUG Created analysis Analysis[uuid=8edb1834-f9e1-45d1-8852-c224c166a2b1, branchId=946afb62-b49a-4439-998b-c941241fd5c4, branchType=long, newCodePeriod=NewCodePeriod[type=previous_version, value=null, analysisDate=1769958208096, analysisId=4d21eac1-e16d-4264-9f10-8b9d8d4fc747]]
+19:46:18.095 INFO  Create analysis (done) | time=232ms
+19:46:18.097 DEBUG ScaApiWsClient url: https://api.sonarcloud.io
+19:46:18.098 DEBUG Loading OS trusted SSL certificates...
+19:46:18.098 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+19:46:18.240 DEBUG Loaded [1001] system trusted certificates
+19:46:18.278 DEBUG Loaded truststore from '/usr/lib/jvm/java-21-amazon-corretto.x86_64/lib/security/cacerts' containing 143 certificates
+19:46:18.300 INFO  Load active rules
+19:46:18.309 DEBUG --> GET https://api.sonarcloud.io/analysis/active-rules?organization=dcorazolla&project=dcorazolla_reservas
+19:46:18.898 DEBUG <-- 200 https://api.sonarcloud.io/analysis/active-rules?organization=dcorazolla&project=dcorazolla_reservas (588ms, unknown-length body)
+19:46:19.766 INFO  Load active rules (done) | time=1464ms
+19:46:19.792 DEBUG --> GET https://sonarcloud.io/api/languages/list
+19:46:19.916 DEBUG <-- 200 https://sonarcloud.io/api/languages/list (123ms, unknown-length body)
+19:46:19.938 INFO  Organization key: dcorazolla
+19:46:19.941 DEBUG Declared patterns of language Kubernetes were converted to sonar.lang.patterns.kubernetes : 
+19:46:19.943 DEBUG Declared patterns of language CSS were converted to sonar.lang.patterns.css : **/*.css,**/*.less,**/*.scss,**/*.sass
+19:46:19.943 DEBUG Declared patterns of language Scala were converted to sonar.lang.patterns.scala : **/*.scala
+19:46:19.943 DEBUG Declared patterns of language JSP were converted to sonar.lang.patterns.jsp : **/*.jsp,**/*.jspf,**/*.jspx
+19:46:19.943 DEBUG Declared patterns of language JavaScript were converted to sonar.lang.patterns.js : **/*.js,**/*.jsx,**/*.cjs,**/*.mjs,**/*.vue
+19:46:19.943 DEBUG Declared patterns of language Python were converted to sonar.lang.patterns.py : **/*.py
+19:46:19.944 DEBUG Declared patterns of language Ansible were converted to sonar.lang.patterns.ansible : 
+19:46:19.944 DEBUG Declared patterns of language Apex were converted to sonar.lang.patterns.apex : **/*.cls,**/*.trigger
+19:46:19.944 DEBUG Declared patterns of language Docker were converted to sonar.lang.patterns.docker : **/*.dockerfile,**/Dockerfile,**/dockerfile
+19:46:19.944 DEBUG Declared patterns of language PL/SQL were converted to sonar.lang.patterns.plsql : **/*.sql,**/*.tab,**/*.pkb
+19:46:19.944 DEBUG Declared patterns of language Dart were converted to sonar.lang.patterns.dart : **/*.dart
+19:46:19.944 DEBUG Declared patterns of language Rust were converted to sonar.lang.patterns.rust : **/*.rs
+19:46:19.944 DEBUG Declared patterns of language JCL were converted to sonar.lang.patterns.jcl : **/*.jcl
+19:46:19.945 DEBUG Declared patterns of language Java were converted to sonar.lang.patterns.java : **/*.java,**/*.jav
+19:46:19.945 DEBUG Declared patterns of language HTML were converted to sonar.lang.patterns.web : **/*.html,**/*.xhtml,**/*.cshtml,**/*.vbhtml,**/*.aspx,**/*.ascx,**/*.rhtml,**/*.erb,**/*.shtm,**/*.shtml,**/*.cmp,**/*.twig
+19:46:19.951 DEBUG Declared patterns of language Flex were converted to sonar.lang.patterns.flex : **/*.as
+19:46:19.951 DEBUG Declared patterns of language XML were converted to sonar.lang.patterns.xml : **/*.xml,**/*.xsd,**/*.xsl,**/*.config
+19:46:19.952 DEBUG Declared patterns of language JSON were converted to sonar.lang.patterns.json : **/*.json
+19:46:19.952 DEBUG Declared patterns of language IPython Notebooks were converted to sonar.lang.patterns.ipynb : **/*.ipynb
+19:46:19.952 DEBUG Declared patterns of language Text were converted to sonar.lang.patterns.text : 
+19:46:19.952 DEBUG Declared patterns of language VB.NET were converted to sonar.lang.patterns.vbnet : **/*.vb
+19:46:19.953 DEBUG Declared patterns of language CloudFormation were converted to sonar.lang.patterns.cloudformation : 
+19:46:19.953 DEBUG Declared patterns of language Swift were converted to sonar.lang.patterns.swift : **/*.swift
+19:46:19.953 DEBUG Declared patterns of language YAML were converted to sonar.lang.patterns.yaml : **/*.yaml,**/*.yml
+19:46:19.955 DEBUG Declared patterns of language C++ were converted to sonar.lang.patterns.cpp : **/*.cc,**/*.cpp,**/*.cxx,**/*.c++,**/*.hh,**/*.hpp,**/*.hxx,**/*.h++,**/*.ipp,**/*.ixx,**/*.mxx,**/*.cppm,**/*.ccm,**/*.cxxm,**/*.c++m
+19:46:19.955 DEBUG Declared patterns of language C were converted to sonar.lang.patterns.c : **/*.c,**/*.h
+19:46:19.955 DEBUG Declared patterns of language Go were converted to sonar.lang.patterns.go : **/*.go
+19:46:19.955 DEBUG Declared patterns of language Kotlin were converted to sonar.lang.patterns.kotlin : **/*.kt,**/*.kts
+19:46:19.956 DEBUG Declared patterns of language RPG were converted to sonar.lang.patterns.rpg : **/*.rpg,**/*.rpgle,**/*.sqlrpgle,**/*.rpg,**/*.rpgle,**/*.sqlrpgle
+19:46:19.956 DEBUG Declared patterns of language PL/I were converted to sonar.lang.patterns.pli : **/*.pli
+19:46:19.956 DEBUG Declared patterns of language T-SQL were converted to sonar.lang.patterns.tsql : **/*.tsql
+19:46:19.956 DEBUG Declared patterns of language Vb were converted to sonar.lang.patterns.vb : **/*.bas,**/*.frm,**/*.ctl
+19:46:19.956 DEBUG Declared patterns of language Secrets were converted to sonar.lang.patterns.secrets : 
+19:46:19.956 DEBUG Declared patterns of language Ruby were converted to sonar.lang.patterns.ruby : **/*.rb
+19:46:19.956 DEBUG Declared patterns of language C# were converted to sonar.lang.patterns.cs : **/*.cs,**/*.razor
+19:46:19.956 DEBUG Declared patterns of language COBOL were converted to sonar.lang.patterns.cobol : 
+19:46:19.957 DEBUG Declared patterns of language Shell were converted to sonar.lang.patterns.shell : **/*.sh,**/*.bash
+19:46:19.957 DEBUG Declared patterns of language PHP were converted to sonar.lang.patterns.php : **/*.php,**/*.php3,**/*.php4,**/*.php5,**/*.phtml,**/*.inc
+19:46:19.957 DEBUG Declared patterns of language Terraform were converted to sonar.lang.patterns.terraform : **/*.tf
+19:46:19.957 DEBUG Declared patterns of language Azure Resource Manager were converted to sonar.lang.patterns.azureresourcemanager : **/*.bicep
+19:46:19.957 DEBUG Declared patterns of language ABAP were converted to sonar.lang.patterns.abap : **/*.abap,**/*.ab4,**/*.flow,**/*.asprog
+19:46:19.957 DEBUG Declared patterns of language GitHub Actions were converted to sonar.lang.patterns.githubactions : 
+19:46:19.960 DEBUG Declared patterns of language Objective-C were converted to sonar.lang.patterns.objc : **/*.m
+19:46:19.961 DEBUG Declared patterns of language TypeScript were converted to sonar.lang.patterns.ts : **/*.ts,**/*.tsx,**/*.cts,**/*.mts
+19:46:19.981 INFO  Preprocessing files...
+19:46:20.007 DEBUG loading config FileBasedConfig[/tmp/jgit/config]
+19:46:20.007 DEBUG readpipe [/usr/bin/git, --version],/usr/bin
+19:46:20.015 DEBUG readpipe may return 'git version 2.50.1'
+19:46:20.016 DEBUG remaining output:
+
+19:46:20.016 DEBUG readpipe [/usr/bin/git, config, --system, --show-origin, --list, -z],/usr/bin
+19:46:20.018 DEBUG readpipe may return 'null'
+19:46:20.018 DEBUG remaining output:
+
+19:46:20.064 DEBUG readpipe rc=128
+19:46:20.064 DEBUG Exception caught during execution of command '[/usr/bin/git, config, --system, --show-origin, --list, -z]' in '/usr/bin', return code '128', error message 'fatal: unable to read config file '/etc/gitconfig': No such file or directory
+'
+19:46:20.065 DEBUG loading config FileBasedConfig[/tmp/git/config]
+19:46:20.065 DEBUG loading config UserConfigFile[/home/scanner-cli/.gitconfig]
+19:46:20.159 DEBUG 393 non excluded files in this Git repository
+19:46:20.547 INFO  1 language detected in 72 preprocessed files (done) | time=569ms
+19:46:20.548 INFO  8868 files ignored because of inclusion/exclusion patterns
+19:46:20.549 INFO  0 files ignored because of scm ignore settings
+19:46:20.592 INFO  Loading plugins for detected languages
+19:46:20.593 DEBUG Detected languages: [php]
+19:46:20.593 INFO  Load/download plugins
+19:46:20.593 DEBUG Download plugin 'web' to '/opt/sonar-scanner/.sonar/_tmp/fileCache5242893525611508469.tmp'
+19:46:20.594 DEBUG --> GET https://scanner.sonarcloud.io/plugins/web/versions/38204dee9af108fee1d12dda2d948e60.jar
+19:46:20.598 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/web/versions/38204dee9af108fee1d12dda2d948e60.jar (4ms, 1610022-byte body)
+19:46:20.620 DEBUG Download plugin 'php' to '/opt/sonar-scanner/.sonar/_tmp/fileCache9101858175602648366.tmp'
+19:46:20.620 DEBUG --> GET https://scanner.sonarcloud.io/plugins/php/versions/72143cd96e8519cc4d6e59dcf41668dd.jar
+19:46:20.676 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/php/versions/72143cd96e8519cc4d6e59dcf41668dd.jar (55ms, 2912305-byte body)
+19:46:20.705 DEBUG Download plugin 'security' to '/opt/sonar-scanner/.sonar/_tmp/fileCache2480820814128583147.tmp'
+19:46:20.706 DEBUG --> GET https://scanner.sonarcloud.io/plugins/security/versions/178d5e6c3420e72fc09ed25b386988bd.jar
+19:46:20.710 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/security/versions/178d5e6c3420e72fc09ed25b386988bd.jar (4ms, 36454687-byte body)
+19:46:21.063 DEBUG Download plugin 'securityphpfrontend' to '/opt/sonar-scanner/.sonar/_tmp/fileCache11373415725816928244.tmp'
+19:46:21.064 DEBUG --> GET https://scanner.sonarcloud.io/plugins/securityphpfrontend/versions/7ff88af6ce69001b166989ec61652806.jar
+19:46:21.068 DEBUG <-- 200 https://scanner.sonarcloud.io/plugins/securityphpfrontend/versions/7ff88af6ce69001b166989ec61652806.jar (4ms, 2221430-byte body)
+19:46:21.089 INFO  Load/download plugins (done) | time=497ms
+19:46:21.090 DEBUG Optional language-specific plugins not loaded: [abap, sonarapex, architecture, architecturejavascriptfrontend, architecturepythonfrontend, architecturecsharpfrontend, architecturejavafrontend, csharpenterprise, cpp, cobol, dart, dbd, dbdjavafrontend, dbdpythonfrontend, dre, flex, go, jcl, jacoco, javasymbolicexecution, java, javaa3scontextcollector, javascript, kotlin, pli, plsql, python, rpg, ruby, rust, sonarscala, jasmin, swift, tsql, vbnetenterprise, vb, securitycsharpfrontend, securitygofrontend, securityjavafrontend, securitykotlinfrontend, securitypythonfrontend, securityvbnetfrontend, xml]
+19:46:21.113 DEBUG Plugins loaded:
+19:46:21.114 DEBUG   * PHP Code Quality and Security 3.54.0.15452 (php)
+19:46:21.115 DEBUG   * Vulnerability Analysis 11.16.0.43340 (security)
+19:46:21.116 DEBUG   * HTML Code Quality and Security 3.21.0.7002 (web)
+19:46:21.117 DEBUG   * Vulnerability Rules for PHP 11.16.0.43340 (securityphpfrontend)
+19:46:21.166 INFO  Load project repositories
+19:46:21.167 DEBUG --> GET https://sonarcloud.io/batch/project.protobuf?key=dcorazolla_reservas
+19:46:21.365 DEBUG <-- 200 https://sonarcloud.io/batch/project.protobuf?key=dcorazolla_reservas (197ms, 5711-byte body)
+19:46:21.372 INFO  Load project repositories (done) | time=205ms
+19:46:21.388 INFO  Indexing files...
+19:46:21.389 INFO  Project configuration:
+19:46:21.389 INFO    Included sources: app/**
+19:46:21.390 INFO    Excluded sources: vendor/**, node_modules/**, storage/**, public/docs/**, tests/**, docs/**, **/build-wrapper-dump.json
+19:46:21.397 DEBUG 'app/Http/Middleware/Authenticate.php' generated metadata with charset 'UTF-8'
+19:46:21.401 DEBUG 'app/Http/Middleware/Authenticate.php' indexed with language 'php'
+19:46:21.404 DEBUG 'app/Http/Middleware/EnsureJwtSessionIsValid.php' generated metadata with charset 'UTF-8'
+19:46:21.404 DEBUG 'app/Http/Middleware/EnsureJwtSessionIsValid.php' indexed with language 'php'
+19:46:21.405 DEBUG 'app/Http/Filters/RoomFilter.php' generated metadata with charset 'UTF-8'
+19:46:21.406 DEBUG 'app/Http/Filters/RoomFilter.php' indexed with language 'php'
+19:46:21.408 DEBUG 'app/Http/Filters/QueryFilter.php' generated metadata with charset 'UTF-8'
+19:46:21.409 DEBUG 'app/Http/Filters/QueryFilter.php' indexed with language 'php'
+19:46:21.411 DEBUG 'app/Http/Kernel.php' generated metadata with charset 'UTF-8'
+19:46:21.412 DEBUG 'app/Http/Kernel.php' indexed with language 'php'
+19:46:21.413 DEBUG 'app/Http/Requests/UpdateRoomCategoryRateRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.414 DEBUG 'app/Http/Requests/UpdateRoomCategoryRateRequest.php' indexed with language 'php'
+19:46:21.415 DEBUG 'app/Http/Requests/StoreRoomRatePeriodRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.416 DEBUG 'app/Http/Requests/StoreRoomRatePeriodRequest.php' indexed with language 'php'
+19:46:21.417 DEBUG 'app/Http/Requests/StoreRoomCategoryRatePeriodRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.417 DEBUG 'app/Http/Requests/StoreRoomCategoryRatePeriodRequest.php' indexed with language 'php'
+19:46:21.418 DEBUG 'app/Http/Requests/UpdateRoomRateRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.419 DEBUG 'app/Http/Requests/UpdateRoomRateRequest.php' indexed with language 'php'
+19:46:21.421 DEBUG 'app/Http/Requests/UpdateRoomCategoryRatePeriodRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.423 DEBUG 'app/Http/Requests/UpdateRoomCategoryRatePeriodRequest.php' indexed with language 'php'
+19:46:21.424 DEBUG 'app/Http/Requests/StoreRoomCategoryRateRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.425 DEBUG 'app/Http/Requests/StoreRoomCategoryRateRequest.php' indexed with language 'php'
+19:46:21.427 DEBUG 'app/Http/Requests/UpdateRoomRatePeriodRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.427 DEBUG 'app/Http/Requests/UpdateRoomRatePeriodRequest.php' indexed with language 'php'
+19:46:21.428 DEBUG 'app/Http/Requests/StoreRoomRateRequest.php' generated metadata with charset 'UTF-8'
+19:46:21.430 DEBUG 'app/Http/Requests/StoreRoomRateRequest.php' indexed with language 'php'
+19:46:21.431 DEBUG 'app/Http/Controllers/Controller.php' generated metadata with charset 'UTF-8'
+19:46:21.433 DEBUG 'app/Http/Controllers/Controller.php' indexed with language 'php'
+19:46:21.434 DEBUG 'app/Http/Controllers/Api/ReservationPriceController.php' generated metadata with charset 'UTF-8'
+19:46:21.435 DEBUG 'app/Http/Controllers/Api/ReservationPriceController.php' indexed with language 'php'
+19:46:21.437 DEBUG 'app/Http/Controllers/Api/PropertyPricingController.php' generated metadata with charset 'UTF-8'
+19:46:21.438 DEBUG 'app/Http/Controllers/Api/PropertyPricingController.php' indexed with language 'php'
+19:46:21.442 DEBUG 'app/Http/Controllers/Api/AuthController.php' generated metadata with charset 'UTF-8'
+19:46:21.443 DEBUG 'app/Http/Controllers/Api/AuthController.php' indexed with language 'php'
+19:46:21.445 DEBUG 'app/Http/Controllers/Api/BaseApiController.php' generated metadata with charset 'UTF-8'
+19:46:21.446 DEBUG 'app/Http/Controllers/Api/BaseApiController.php' indexed with language 'php'
+19:46:21.447 DEBUG 'app/Http/Controllers/Api/RoomRateController.php' generated metadata with charset 'UTF-8'
+19:46:21.448 DEBUG 'app/Http/Controllers/Api/RoomRateController.php' indexed with language 'php'
+19:46:21.449 DEBUG 'app/Http/Controllers/Api/PartnerController.php' generated metadata with charset 'UTF-8'
+19:46:21.450 DEBUG 'app/Http/Controllers/Api/PartnerController.php' indexed with language 'php'
+19:46:21.452 DEBUG 'app/Http/Controllers/Api/InvoiceController.php' generated metadata with charset 'UTF-8'
+19:46:21.452 DEBUG 'app/Http/Controllers/Api/InvoiceController.php' indexed with language 'php'
+19:46:21.453 DEBUG 'app/Http/Controllers/Api/RoomController.php' generated metadata with charset 'UTF-8'
+19:46:21.454 DEBUG 'app/Http/Controllers/Api/RoomController.php' indexed with language 'php'
+19:46:21.454 DEBUG 'app/Http/Controllers/Api/AvailabilityController.php' generated metadata with charset 'UTF-8'
+19:46:21.456 DEBUG 'app/Http/Controllers/Api/AvailabilityController.php' indexed with language 'php'
+19:46:21.457 DEBUG 'app/Http/Controllers/Api/RoomCategoryRateController.php' generated metadata with charset 'UTF-8'
+19:46:21.458 DEBUG 'app/Http/Controllers/Api/RoomCategoryRateController.php' indexed with language 'php'
+19:46:21.458 DEBUG 'app/Http/Controllers/Api/PropertyController.php' generated metadata with charset 'UTF-8'
+19:46:21.459 DEBUG 'app/Http/Controllers/Api/PropertyController.php' indexed with language 'php'
+19:46:21.463 DEBUG 'app/Http/Controllers/Api/PaymentController.php' generated metadata with charset 'UTF-8'
+19:46:21.464 DEBUG 'app/Http/Controllers/Api/PaymentController.php' indexed with language 'php'
+19:46:21.465 DEBUG 'app/Http/Controllers/Api/RoomCategoryController.php' generated metadata with charset 'UTF-8'
+19:46:21.468 DEBUG 'app/Http/Controllers/Api/RoomCategoryController.php' indexed with language 'php'
+19:46:21.468 DEBUG 'app/Http/Controllers/Api/RoomCategoryRatePeriodController.php' generated metadata with charset 'UTF-8'
+19:46:21.468 DEBUG 'app/Http/Controllers/Api/RoomCategoryRatePeriodController.php' indexed with language 'php'
+19:46:21.470 DEBUG 'app/Http/Controllers/Api/ReservationController.php' generated metadata with charset 'UTF-8'
+19:46:21.471 DEBUG 'app/Http/Controllers/Api/ReservationController.php' indexed with language 'php'
+19:46:21.472 DEBUG 'app/Http/Controllers/Api/CalendarController.php' generated metadata with charset 'UTF-8'
+19:46:21.473 DEBUG 'app/Http/Controllers/Api/CalendarController.php' indexed with language 'php'
+19:46:21.474 DEBUG 'app/Http/Controllers/Api/RoomRatePeriodController.php' generated metadata with charset 'UTF-8'
+19:46:21.474 DEBUG 'app/Http/Controllers/Api/RoomRatePeriodController.php' indexed with language 'php'
+19:46:21.475 DEBUG 'app/Http/Controllers/Concerns/EnsuresPropertyScope.php' generated metadata with charset 'UTF-8'
+19:46:21.476 DEBUG 'app/Http/Controllers/Concerns/EnsuresPropertyScope.php' indexed with language 'php'
+19:46:21.477 DEBUG 'app/Http/Resources/RoomCategoryRateResource.php' generated metadata with charset 'UTF-8'
+19:46:21.477 DEBUG 'app/Http/Resources/RoomCategoryRateResource.php' indexed with language 'php'
+19:46:21.477 DEBUG 'app/Http/Resources/RoomCategoryRatePeriodResource.php' generated metadata with charset 'UTF-8'
+19:46:21.477 DEBUG 'app/Http/Resources/RoomCategoryRatePeriodResource.php' indexed with language 'php'
+19:46:21.477 DEBUG 'app/Http/Resources/RoomRatePeriodResource.php' generated metadata with charset 'UTF-8'
+19:46:21.477 DEBUG 'app/Http/Resources/RoomRatePeriodResource.php' indexed with language 'php'
+19:46:21.479 DEBUG 'app/Http/Resources/RoomRateResource.php' generated metadata with charset 'UTF-8'
+19:46:21.479 DEBUG 'app/Http/Resources/RoomRateResource.php' indexed with language 'php'
+19:46:21.479 DEBUG 'app/Http/Resources/RoomResource.php' generated metadata with charset 'UTF-8'
+19:46:21.479 DEBUG 'app/Http/Resources/RoomResource.php' indexed with language 'php'
+19:46:21.480 DEBUG 'app/Http/Resources/ReservationResource.php' generated metadata with charset 'UTF-8'
+19:46:21.481 DEBUG 'app/Http/Resources/ReservationResource.php' indexed with language 'php'
+19:46:21.482 DEBUG 'app/Services/RoomService.php' generated metadata with charset 'UTF-8'
+19:46:21.483 DEBUG 'app/Services/RoomService.php' indexed with language 'php'
+19:46:21.483 DEBUG 'app/Services/ReservationService.php' generated metadata with charset 'UTF-8'
+19:46:21.484 DEBUG 'app/Services/ReservationService.php' indexed with language 'php'
+19:46:21.484 DEBUG 'app/Services/RoomCategoryService.php' generated metadata with charset 'UTF-8'
+19:46:21.484 DEBUG 'app/Services/RoomCategoryService.php' indexed with language 'php'
+19:46:21.485 DEBUG 'app/Services/RoomCategoryRateService.php' generated metadata with charset 'UTF-8'
+19:46:21.487 DEBUG 'app/Services/RoomCategoryRateService.php' indexed with language 'php'
+19:46:21.488 DEBUG 'app/Services/RoomRatePeriodService.php' generated metadata with charset 'UTF-8'
+19:46:21.488 DEBUG 'app/Services/RoomRatePeriodService.php' indexed with language 'php'
+19:46:21.488 DEBUG 'app/Services/ReservationPriceCalculator.php' generated metadata with charset 'UTF-8'
+19:46:21.489 DEBUG 'app/Services/ReservationPriceCalculator.php' indexed with language 'php'
+19:46:21.490 DEBUG 'app/Services/RoomCategoryRatePeriodService.php' generated metadata with charset 'UTF-8'
+19:46:21.491 DEBUG 'app/Services/RoomCategoryRatePeriodService.php' indexed with language 'php'
+19:46:21.493 DEBUG 'app/Services/RoomRateService.php' generated metadata with charset 'UTF-8'
+19:46:21.493 DEBUG 'app/Services/RoomRateService.php' indexed with language 'php'
+19:46:21.496 DEBUG 'app/Services/InvoiceService.php' generated metadata with charset 'UTF-8'
+19:46:21.496 DEBUG 'app/Services/InvoiceService.php' indexed with language 'php'
+19:46:21.497 DEBUG 'app/Services/PaymentService.php' generated metadata with charset 'UTF-8'
+19:46:21.499 DEBUG 'app/Services/PaymentService.php' indexed with language 'php'
+19:46:21.499 DEBUG 'app/Services/CreateReservationService.php' generated metadata with charset 'UTF-8'
+19:46:21.500 DEBUG 'app/Services/CreateReservationService.php' indexed with language 'php'
+19:46:21.500 DEBUG 'app/Services/CalendarService.php' generated metadata with charset 'UTF-8'
+19:46:21.502 DEBUG 'app/Services/CalendarService.php' indexed with language 'php'
+19:46:21.502 DEBUG 'app/Providers/RouteServiceProvider.php' generated metadata with charset 'UTF-8'
+19:46:21.502 DEBUG 'app/Providers/RouteServiceProvider.php' indexed with language 'php'
+19:46:21.503 DEBUG 'app/Providers/AppServiceProvider.php' generated metadata with charset 'UTF-8'
+19:46:21.503 DEBUG 'app/Providers/AppServiceProvider.php' indexed with language 'php'
+19:46:21.505 DEBUG 'app/Models/AuthSession.php' generated metadata with charset 'UTF-8'
+19:46:21.505 DEBUG 'app/Models/AuthSession.php' indexed with language 'php'
+19:46:21.505 DEBUG 'app/Models/RoomCategory.php' generated metadata with charset 'UTF-8'
+19:46:21.505 DEBUG 'app/Models/RoomCategory.php' indexed with language 'php'
+19:46:21.506 DEBUG 'app/Models/Invoice.php' generated metadata with charset 'UTF-8'
+19:46:21.508 DEBUG 'app/Models/Invoice.php' indexed with language 'php'
+19:46:21.508 DEBUG 'app/Models/Payment.php' generated metadata with charset 'UTF-8'
+19:46:21.508 DEBUG 'app/Models/Payment.php' indexed with language 'php'
+19:46:21.509 DEBUG 'app/Models/InvoiceLinePayment.php' generated metadata with charset 'UTF-8'
+19:46:21.511 DEBUG 'app/Models/InvoiceLinePayment.php' indexed with language 'php'
+19:46:21.511 DEBUG 'app/Models/InvoiceLine.php' generated metadata with charset 'UTF-8'
+19:46:21.511 DEBUG 'app/Models/InvoiceLine.php' indexed with language 'php'
+19:46:21.511 DEBUG 'app/Models/RoomRate.php' generated metadata with charset 'UTF-8'
+19:46:21.512 DEBUG 'app/Models/RoomRate.php' indexed with language 'php'
+19:46:21.513 DEBUG 'app/Models/Room.php' generated metadata with charset 'UTF-8'
+19:46:21.514 DEBUG 'app/Models/Room.php' indexed with language 'php'
+19:46:21.516 DEBUG 'app/Models/RoomCategoryRate.php' generated metadata with charset 'UTF-8'
+19:46:21.516 DEBUG 'app/Models/RoomCategoryRate.php' indexed with language 'php'
+19:46:21.516 DEBUG 'app/Models/Reservation.php' generated metadata with charset 'UTF-8'
+19:46:21.516 DEBUG 'app/Models/Reservation.php' indexed with language 'php'
+19:46:21.518 DEBUG 'app/Models/User.php' generated metadata with charset 'UTF-8'
+19:46:21.519 DEBUG 'app/Models/User.php' indexed with language 'php'
+19:46:21.520 DEBUG 'app/Models/FinancialAuditLog.php' generated metadata with charset 'UTF-8'
+19:46:21.520 DEBUG 'app/Models/FinancialAuditLog.php' indexed with language 'php'
+19:46:21.522 DEBUG 'app/Models/RoomRatePeriod.php' generated metadata with charset 'UTF-8'
+19:46:21.522 DEBUG 'app/Models/RoomRatePeriod.php' indexed with language 'php'
+19:46:21.522 DEBUG 'app/Models/Traits/HasUuidPrimary.php' generated metadata with charset 'UTF-8'
+19:46:21.522 DEBUG 'app/Models/Traits/HasUuidPrimary.php' indexed with language 'php'
+19:46:21.525 DEBUG 'app/Models/Partner.php' generated metadata with charset 'UTF-8'
+19:46:21.526 DEBUG 'app/Models/Partner.php' indexed with language 'php'
+19:46:21.526 DEBUG 'app/Models/Property.php' generated metadata with charset 'UTF-8'
+19:46:21.526 DEBUG 'app/Models/Property.php' indexed with language 'php'
+19:46:21.527 DEBUG 'app/Models/RoomCategoryRatePeriod.php' generated metadata with charset 'UTF-8'
+19:46:21.528 DEBUG 'app/Models/RoomCategoryRatePeriod.php' indexed with language 'php'
+19:46:21.529 DEBUG 'app/Exceptions/Handler.php' generated metadata with charset 'UTF-8'
+19:46:21.530 DEBUG 'app/Exceptions/Handler.php' indexed with language 'php'
+19:46:21.532 DEBUG 'app/Repositories/EloquentInvoiceRepository.php' generated metadata with charset 'UTF-8'
+19:46:21.532 DEBUG 'app/Repositories/EloquentInvoiceRepository.php' indexed with language 'php'
+19:46:21.533 DEBUG 'app/Repositories/InvoiceRepositoryInterface.php' generated metadata with charset 'UTF-8'
+19:46:21.533 DEBUG 'app/Repositories/InvoiceRepositoryInterface.php' indexed with language 'php'
+19:46:21.536 INFO  72 files indexed (done) | time=140ms
+19:46:21.536 DEBUG Available languages:
+19:46:21.537 DEBUG   * PHP => "php"
+19:46:21.538 DEBUG   * HTML => "web"
+19:46:21.539 DEBUG   * JSP => "jsp"
+19:46:21.540 DEBUG   * Secrets => "secrets"
+19:46:21.540 DEBUG   * Text => "text"
+19:46:21.541 DEBUG   * Terraform => "terraform"
+19:46:21.542 DEBUG   * CloudFormation => "cloudformation"
+19:46:21.542 DEBUG   * Kubernetes => "kubernetes"
+19:46:21.543 DEBUG   * Docker => "docker"
+19:46:21.544 DEBUG   * Azure Resource Manager => "azureresourcemanager"
+19:46:21.544 DEBUG   * YAML => "yaml"
+19:46:21.545 DEBUG   * JSON => "json"
+19:46:21.545 DEBUG   * Ansible => "ansible"
+19:46:21.545 DEBUG   * GitHub Actions => "githubactions"
+19:46:21.545 DEBUG   * Shell => "shell"
+19:46:21.545 INFO  Quality profile for php: Sonar way
+19:46:21.546 INFO  ------------- Run sensors on module dcorazolla_reservas
+19:46:21.600 INFO  Load metrics repository
+19:46:21.600 DEBUG --> GET https://sonarcloud.io/api/metrics/search?f=name,description,direction,qualitative&ps=500&p=1
+19:46:21.728 DEBUG <-- 200 https://sonarcloud.io/api/metrics/search?f=name,description,direction,qualitative&ps=500&p=1 (126ms, unknown-length body)
+19:46:21.734 INFO  Load metrics repository (done) | time=134ms
+19:46:21.743 INFO  Sensor cache enabled
+19:46:21.748 INFO  Load sensor cache
+19:46:21.748 DEBUG --> GET https://api.sonarcloud.io/analysis/sensor-cache/prepare-read?organization=dcorazolla&project=dcorazolla_reservas
+19:46:21.958 DEBUG <-- 200 https://api.sonarcloud.io/analysis/sensor-cache/prepare-read?organization=dcorazolla&project=dcorazolla_reservas (210ms, unknown-length body)
+19:46:21.978 DEBUG --> GET https://analysis-sensorcache-eu-central-1-prod.s3.eu-central-1.amazonaws.com/AZwZuUKHG_-GgRMsyvU8/AZwZus8t47QlDmTp26gw/AZwZus8t47QlDmTp26gw?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEAwaDGV1LWNlbnRyYWwtMSJHMEUCICeZhB5RYlLu8qzO1Y%2BiThFwgiE6fFXAfMR1QEJVs%2B0WAiEA%2BWHI8o3FyXLGq4HPq%2Faok4OtEQgXwzTi8NwGwl82fPAqrwMI1f%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgw0ODgwNTk5NjU2MzUiDFGIr0TYgVZ%2BEjH6tiqDAz%2BnPR9KRCd8hbNHy%2Bl0VMlEQTVpDpok0QxDTcVLgci4mQKQzaN14jH8HK3wt8ymSC%2BKhITEM7HNg2NF7yUb1a%2B5CTynwAfTw2dQmQS7AZBYvX009CPiLh%2Bnh4AsXrsKesLdpNpM%2FaU7fBJWnPvAjwoIeNW6SWzkzWLdi%2FiSP0lFoC%2B3E6NkYUdvS3zGlq49%2B5ZOsunmxN%2FKtTQaicytdS8l7iuCvhIleTlMeZ7ywAId7B0mt%2FFc0DypzpRts8SKjCynw2CgKB9pAHoDXCBkLiwwfw3YkB2W3lA5q%2BwxsEXK1oHrL3We5oz%2BjhIiUK63oQmefqb8muLmXzXv4isKcqWYJM%2BlG6ZZF91kX8kWWHCYB5VCGcf6Nr6jbAD2Ec7X7qe6Lf0JznHLylj0Zp%2FrG8dTODK1mH559Zy5o8KnVjxNchAondCrey5yF7hMi9aNePoFAzIFFKHMWmfH%2FxEc1%2BS5BtxTfZ7S%2FqFaAIy%2FqGW9odX8OIr6%2FDT56L3mnacmA6q54jCj2P7LBjqdAS%2Bs7jTF11fLTM4kDKekIb8N8zUkyRja7yYbevwDxohGS%2Br9eXrlvcniL84X5mRrQDVkPtK8bpi6Eqc08g6%2BlUvAj0ANDeaAZ6EtAc8%2FxPCtsAQXwuWy3VDf5NUgwf30aVTcws%2Fgth74C0EcyZf8sc%2FwRaNdRZ5FwAeVyhSbXDcvzoSZHoKjGJgznV9T1Z%2BuRyP7j5iXfjKvcvGktmo%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260201T194621Z&X-Amz-SignedHeaders=host&X-Amz-Credential=ASIAXDIVECDBQCJGGE5A%2F20260201%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Expires=900&X-Amz-Signature=6afc6d2adf76a3dbc82cdbdf6e5aa3a3713fb29318059a3aa7a8efc84fbe4d5c
+19:46:22.526 DEBUG <-- 200 OK https://analysis-sensorcache-eu-central-1-prod.s3.eu-central-1.amazonaws.com/AZwZuUKHG_-GgRMsyvU8/AZwZus8t47QlDmTp26gw/AZwZus8t47QlDmTp26gw?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEAwaDGV1LWNlbnRyYWwtMSJHMEUCICeZhB5RYlLu8qzO1Y%2BiThFwgiE6fFXAfMR1QEJVs%2B0WAiEA%2BWHI8o3FyXLGq4HPq%2Faok4OtEQgXwzTi8NwGwl82fPAqrwMI1f%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgw0ODgwNTk5NjU2MzUiDFGIr0TYgVZ%2BEjH6tiqDAz%2BnPR9KRCd8hbNHy%2Bl0VMlEQTVpDpok0QxDTcVLgci4mQKQzaN14jH8HK3wt8ymSC%2BKhITEM7HNg2NF7yUb1a%2B5CTynwAfTw2dQmQS7AZBYvX009CPiLh%2Bnh4AsXrsKesLdpNpM%2FaU7fBJWnPvAjwoIeNW6SWzkzWLdi%2FiSP0lFoC%2B3E6NkYUdvS3zGlq49%2B5ZOsunmxN%2FKtTQaicytdS8l7iuCvhIleTlMeZ7ywAId7B0mt%2FFc0DypzpRts8SKjCynw2CgKB9pAHoDXCBkLiwwfw3YkB2W3lA5q%2BwxsEXK1oHrL3We5oz%2BjhIiUK63oQmefqb8muLmXzXv4isKcqWYJM%2BlG6ZZF91kX8kWWHCYB5VCGcf6Nr6jbAD2Ec7X7qe6Lf0JznHLylj0Zp%2FrG8dTODK1mH559Zy5o8KnVjxNchAondCrey5yF7hMi9aNePoFAzIFFKHMWmfH%2FxEc1%2BS5BtxTfZ7S%2FqFaAIy%2FqGW9odX8OIr6%2FDT56L3mnacmA6q54jCj2P7LBjqdAS%2Bs7jTF11fLTM4kDKekIb8N8zUkyRja7yYbevwDxohGS%2Br9eXrlvcniL84X5mRrQDVkPtK8bpi6Eqc08g6%2BlUvAj0ANDeaAZ6EtAc8%2FxPCtsAQXwuWy3VDf5NUgwf30aVTcws%2Fgth74C0EcyZf8sc%2FwRaNdRZ5FwAeVyhSbXDcvzoSZHoKjGJgznV9T1Z%2BuRyP7j5iXfjKvcvGktmo%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260201T194621Z&X-Amz-SignedHeaders=host&X-Amz-Credential=ASIAXDIVECDBQCJGGE5A%2F20260201%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Expires=900&X-Amz-Signature=6afc6d2adf76a3dbc82cdbdf6e5aa3a3713fb29318059a3aa7a8efc84fbe4d5c (548ms, 166935-byte body)
+19:46:22.758 INFO  Load sensor cache (163 KB) | time=1011ms
+19:46:23.218 DEBUG null
+19:46:23.218 WARN  Failed to initialize bash parser. This may happen on unsupported platforms or when the user home directory does not exist.
+19:46:23.382 INFO  Reflections took 74 ms to scan 1 urls, producing 24 keys and 257 values
+19:46:23.425 DEBUG 'Import external issues report' skipped because of missing configuration requirements.
+Accessed configuration:
+- sonar.externalIssuesReportPaths: <empty>
+19:46:23.427 DEBUG 'Import of PHPStan issues' skipped because of missing configuration requirements.
+Accessed configuration:
+- sonar.php.phpstan.reportPaths: <empty>
+- sonar.externalIssuesReportPaths: <empty>
+19:46:23.427 DEBUG 'Import of Psalm issues' skipped because of missing configuration requirements.
+Accessed configuration:
+- sonar.php.psalm.reportPaths: <empty>
+- sonar.php.phpstan.reportPaths: <empty>
+- sonar.externalIssuesReportPaths: <empty>
+19:46:23.428 DEBUG 'IaC Terraform Sensor' skipped because there is no related file in current project
+19:46:23.429 DEBUG 'IaC TFLint report Sensor' skipped because there is no related file in current project
+19:46:23.429 DEBUG 'IaC CloudFormation Sensor' skipped because there is no related file in current project
+19:46:23.430 DEBUG 'IaC cfn-lint report Sensor' skipped because there is no related file in current project
+19:46:23.430 DEBUG 'IaC Kubernetes Sensor' skipped because there is no related file in current project
+19:46:23.430 DEBUG 'IaC Azure Resource Manager Sensor' skipped because there is no related file in current project
+19:46:23.433 DEBUG 'IaC Ansible Sensor' skipped because there is no related file in current project
+19:46:23.433 DEBUG 'IaC ansible-lint report Sensor' skipped because there is no related file in current project
+19:46:23.433 DEBUG 'IaC YAML Sensor' skipped because there is no related file in current project
+19:46:23.433 DEBUG 'IaC JSON Sensor' skipped because there is no related file in current project
+19:46:23.433 DEBUG 'Serverless configuration file sensor' skipped because there is no related file in current project
+19:46:23.433 DEBUG 'AWS SAM template file sensor' skipped because there is no related file in current project
+19:46:23.436 DEBUG 'Generic Coverage Report' skipped because of missing configuration requirements.
+Accessed configuration:
+- sonar.genericcoverage.reportPath: <empty>
+- sonar.genericcoverage.itReportPaths: <empty>
+- sonar.php.psalm.reportPaths: <empty>
+- sonar.coverageReportPaths: <empty>
+- sonar.genericcoverage.reportPaths: <empty>
+- sonar.php.phpstan.reportPaths: <empty>
+- sonar.genericcoverage.overallReportPaths: <empty>
+- sonar.externalIssuesReportPaths: <empty>
+19:46:23.436 DEBUG 'Generic Test Executions Report' skipped because of missing configuration requirements.
+Accessed configuration:
+- sonar.genericcoverage.reportPath: <empty>
+- sonar.genericcoverage.itReportPaths: <empty>
+- sonar.php.psalm.reportPaths: <empty>
+- sonar.coverageReportPaths: <empty>
+- sonar.genericcoverage.reportPaths: <empty>
+- sonar.testExecutionReportPaths: <empty>
+- sonar.php.phpstan.reportPaths: <empty>
+- sonar.genericcoverage.overallReportPaths: <empty>
+- sonar.externalIssuesReportPaths: <empty>
+19:46:23.439 DEBUG 'JavaSecuritySensor' skipped because there is no related file in current project
+19:46:23.439 DEBUG 'CSharpSecuritySensor' skipped because there is no related file in current project
+19:46:23.440 DEBUG 'VbNetSecuritySensor' skipped because there is no related file in current project
+19:46:23.440 DEBUG 'PythonSecuritySensor' skipped because there is no related file in current project
+19:46:23.441 DEBUG 'KotlinSecuritySensor' skipped because there is no related file in current project
+19:46:23.443 DEBUG 'GoSecuritySensor' skipped because there is no related file in current project
+19:46:23.443 DEBUG Sensors : PHP sensor -> Analyzer for "php.ini" files -> PHPUnit report sensor -> IaC hadolint report Sensor -> Java Config Sensor -> IaC Docker Sensor -> IaC GitHub Actions Sensor -> IaC Shell Sensor -> HTML -> PhpModuleSecuritySensor -> EnterpriseTextAndSecretsSensor -> PhpSecuritySensor
+19:46:23.444 INFO  Sensor PHP sensor [php]
+19:46:23.479 INFO  Starting PHP symbol indexer
+19:46:23.483 INFO  72 source files to be analyzed
+19:46:23.977 INFO  72/72 source files have been analyzed
+19:46:23.977 INFO  Cached information of global symbols will be used for 0 out of 72 files. Global symbols were recomputed for the remaining files.
+19:46:24.002 INFO  Starting PHP rules
+19:46:24.003 INFO  72 source files to be analyzed
+19:46:24.529 DEBUG Not enough content in 'app/Repositories/InvoiceRepositoryInterface.php' to have CPD blocks, it will not be part of the duplication detection
+19:46:24.534 DEBUG No original CFG available to create UCFG 'app\repositories\invoicerepositoryinterface::create' in 'InvoiceRepositoryInterface.php'
+19:46:24.534 DEBUG No original CFG available to create UCFG 'app\repositories\invoicerepositoryinterface::find' in 'InvoiceRepositoryInterface.php'
+19:46:24.534 DEBUG No original CFG available to create UCFG 'app\repositories\invoicerepositoryinterface::paginatebyproperty' in 'InvoiceRepositoryInterface.php'
+19:46:25.291 DEBUG Not enough content in 'app/Http/Controllers/Concerns/EnsuresPropertyScope.php' to have CPD blocks, it will not be part of the duplication detection
+19:46:25.311 DEBUG Not enough content in 'app/Http/Middleware/Authenticate.php' to have CPD blocks, it will not be part of the duplication detection
+19:46:25.819 DEBUG No original CFG available to create UCFG 'app\http\filters\queryfilter::filters' in 'QueryFilter.php'
+19:46:26.091 INFO  72/72 source files have been analyzed
+19:46:26.092 INFO  The PHP analyzer was able to leverage cached data from previous analyses for 0 out of 72 files. These files were not parsed.
+19:46:26.092 INFO  Sensor PHP sensor [php] (done) | time=2647ms
+19:46:26.093 INFO  Sensor Analyzer for "php.ini" files [php]
+19:46:26.095 INFO  Sensor Analyzer for "php.ini" files [php] (done) | time=4ms
+19:46:26.095 INFO  Sensor PHPUnit report sensor [php]
+19:46:26.097 INFO  No PHPUnit tests reports provided (see 'sonar.php.tests.reportPath' property)
+19:46:26.097 INFO  Importing /usr/src/clover.xml
+19:46:26.227 INFO  Sensor PHPUnit report sensor [php] (done) | time=130ms
+19:46:26.227 INFO  Sensor IaC hadolint report Sensor [iac]
+19:46:26.227 INFO  Sensor IaC hadolint report Sensor [iac] (done) | time=1ms
+19:46:26.228 INFO  Sensor Java Config Sensor [iac]
+19:46:26.233 INFO  There are no files to be analyzed for the Java language
+19:46:26.235 INFO  Sensor Java Config Sensor [iac] (done) | time=6ms
+19:46:26.236 INFO  Sensor IaC Docker Sensor [iac]
+19:46:26.236 DEBUG Sensor IaC Docker Sensor is allowed to analyze hidden files
+19:46:26.236 INFO  There are no files to be analyzed for the Docker language
+19:46:26.236 INFO  Sensor IaC Docker Sensor [iac] (done) | time=1ms
+19:46:26.237 INFO  Sensor IaC GitHub Actions Sensor [iac]
+19:46:26.237 DEBUG Sensor IaC GitHub Actions Sensor is allowed to analyze hidden files
+19:46:26.238 INFO  There are no files to be analyzed for the GitHub Actions language
+19:46:26.238 INFO  Sensor IaC GitHub Actions Sensor [iac] (done) | time=0ms
+19:46:26.238 INFO  Sensor IaC Shell Sensor [iac]
+19:46:26.239 DEBUG Sensor IaC Shell Sensor is allowed to analyze hidden files
+19:46:26.240 INFO  Shell analysis will be skipped because the parser could not be initialized.
+19:46:26.240 INFO  Sensor IaC Shell Sensor [iac] (done) | time=0ms
+19:46:26.241 INFO  Sensor HTML [web]
+19:46:26.285 INFO  Sensor HTML [web] (done) | time=50ms
+19:46:26.286 INFO  Sensor PhpModuleSecuritySensor [securityphpfrontend]
+19:46:26.286 INFO  Sensor PhpModuleSecuritySensor [securityphpfrontend] (done) | time=1ms
+19:46:26.286 INFO  Sensor EnterpriseTextAndSecretsSensor [textenterprise]
+19:46:26.287 DEBUG Sensor EnterpriseTextAndSecretsSensor is allowed to analyze hidden files
+19:46:26.295 INFO  Available processors: 4
+19:46:26.295 INFO  Using 4 threads for analysis.
+19:46:26.296 DEBUG Initializing SecretsStateContainer with specification loader.
+19:46:26.659 INFO  The property "sonar.tests" is not set. To improve the analysis accuracy, we categorize a file as a test file if any of the following is true:
+  * The filename starts with "test"
+  * The filename contains "test." or "tests."
+  * Any directory in the file path is named: "doc", "docs", "test", "tests", "mock" or "mocks"
+  * Any directory in the file path has a name ending in "test" or "tests"
+
+19:46:26.719 DEBUG Initializing ChecksContainer with checks and trie construction.
+19:46:26.734 DEBUG ChecksContainer initialized successfully with 15 checks without pre-filter and trie containing 463 patterns.
+19:46:26.734 INFO  Start fetching files for the text and secrets analysis
+19:46:26.738 DEBUG Read the "git --version" stdout in thread "pool-7-thread-1"
+19:46:26.739 DEBUG git --version returned: git version 2.50.1
+19:46:26.740 INFO  Using Git CLI to retrieve dirty files
+19:46:26.741 DEBUG Read the "git -C /usr/src status --untracked-files=all --porcelain" stdout in thread "pool-7-thread-1"
+19:46:26.743 DEBUG Process [git, -C, /usr/src, status, --untracked-files=all, --porcelain] exited with code 128
+19:46:26.744 DEBUG Unable to retrieve git status
+19:46:26.744 WARN  Retrieving only language associated files, make sure to run the analysis inside a git repository to make use of inclusions specified via "sonar.text.inclusions"
+19:46:26.744 INFO  Starting the text and secrets analysis
+19:46:26.746 INFO  72 source files to be analyzed for the text and secrets analysis
+19:46:26.857 INFO  72/72 source files have been analyzed for the text and secrets analysis
+19:46:26.858 DEBUG Analyzed files for the text and secrets analysis: 72
+19:46:26.858 DEBUG Unable to retrieve git status
+19:46:26.858 INFO  Start fetching files for the binary file analysis
+19:46:26.858 INFO  There are no files to be analyzed for the binary file analysis
+19:46:26.860 INFO  Sensor EnterpriseTextAndSecretsSensor [textenterprise] (done) | time=573ms
+19:46:26.861 INFO  Sensor PhpSecuritySensor [security]
+19:46:26.868 INFO  18 taint analysis rules enabled.
+19:46:26.868 DEBUG Enabled taint analysis rules: S2076, S2078, S2083, S2091, S2631, S3649, S5131, S5135, S5144, S5145, S5146, S5334, S5335, S5883, S6173, S6287, S6350, S7044
+19:46:26.869 DEBUG Load type hierarchy and UCFGs: Starting
+19:46:26.869 DEBUG Load type hierarchy: Starting
+19:46:26.870 DEBUG Reading type hierarchy from: /tmp/.scannerwork/ucfg2/php
+19:46:26.955 DEBUG Read 307 type definitions
+19:46:26.961 DEBUG Load type hierarchy: Time spent was 00:00:00.090
+19:46:26.961 DEBUG Load UCFGs: Starting
+19:46:26.961 DEBUG Reading UCFGs from: /tmp/.scannerwork/ucfg2/php
+19:46:27.221 DEBUG Loaded 848 ucfgs from 848 files(s) in [/tmp/.scannerwork/ucfg2/php]
+19:46:27.226 DEBUG Load UCFGs: Time spent was 00:00:00.265
+19:46:27.226 DEBUG Load type hierarchy and UCFGs: Time spent was 00:00:00.355
+19:46:27.226 INFO  Analyzing 848 UCFGs to detect vulnerabilities.
+19:46:27.227 DEBUG Check cache: Starting
+19:46:27.227 DEBUG Load cache: Starting
+19:46:27.227 DEBUG Load cache: Time spent was 00:00:00.000
+19:46:27.227 DEBUG Check cache: Time spent was 00:00:00.000
+19:46:27.227 DEBUG Create runtime call graph: Starting
+19:46:27.228 DEBUG Create declared type propagation graph: Starting
+19:46:27.251 DEBUG Create declared type propagation graph: Time spent was 00:00:00.024
+19:46:27.252 DEBUG Run SCC (Tarjan) on 2586 nodes: Starting
+19:46:27.258 DEBUG Run SCC (Tarjan) on 2586 nodes: Time spent was 00:00:00.005
+19:46:27.258 DEBUG Tarjan found 2586 strongly connected components
+19:46:27.258 DEBUG Propagate runtime types to strongly connected components: Starting
+19:46:27.285 DEBUG Propagate runtime types to strongly connected components: Time spent was 00:00:00.027
+19:46:27.288 DEBUG Variable Type Analysis #1: Starting
+19:46:27.289 DEBUG Create runtime type propagation graph: Starting
+19:46:27.306 DEBUG Create runtime type propagation graph: Time spent was 00:00:00.017
+19:46:27.306 DEBUG Run SCC (Tarjan) on 2892 nodes: Starting
+19:46:27.310 DEBUG Run SCC (Tarjan) on 2892 nodes: Time spent was 00:00:00.004
+19:46:27.310 DEBUG Tarjan found 2884 strongly connected components
+19:46:27.310 DEBUG Propagate runtime types to strongly connected components: Starting
+19:46:27.321 DEBUG Propagate runtime types to strongly connected components: Time spent was 00:00:00.010
+19:46:27.322 DEBUG Variable Type Analysis #1: Time spent was 00:00:00.033
+19:46:27.322 DEBUG Variable Type Analysis #2: Starting
+19:46:27.322 DEBUG Create runtime type propagation graph: Starting
+19:46:27.337 DEBUG Create runtime type propagation graph: Time spent was 00:00:00.014
+19:46:27.337 DEBUG Run SCC (Tarjan) on 2886 nodes: Starting
+19:46:27.340 DEBUG Run SCC (Tarjan) on 2886 nodes: Time spent was 00:00:00.003
+19:46:27.343 DEBUG Tarjan found 2878 strongly connected components
+19:46:27.343 DEBUG Propagate runtime types to strongly connected components: Starting
+19:46:27.352 DEBUG Propagate runtime types to strongly connected components: Time spent was 00:00:00.009
+19:46:27.353 DEBUG Variable Type Analysis #2: Time spent was 00:00:00.028
+19:46:27.355 DEBUG Create runtime call graph: Time spent was 00:00:00.128
+19:46:27.355 DEBUG Load config: Starting
+19:46:27.363 DEBUG Refreshing resources in /config/phpsecurity/sources/
+19:46:27.481 DEBUG Loaded 373 sources.
+19:46:27.483 DEBUG Refreshing resources in /config/phpsecurity/sanitizers/
+19:46:27.513 DEBUG Loaded 161 sanitizers.
+19:46:27.513 DEBUG Refreshing resources in /config/phpsecurity/validators/
+19:46:27.525 DEBUG Loaded 71 validators.
+19:46:27.526 DEBUG Refreshing resources in /config/phpsecurity/passthroughs/
+19:46:27.537 DEBUG Loaded 111 passthroughs.
+19:46:27.540 DEBUG Loaded 0 collectionHandlers.
+19:46:27.540 DEBUG Refreshing resources in /config/phpsecurity/sinks/
+19:46:27.583 DEBUG Loaded 652 sinks.
+19:46:27.583 DEBUG Refreshing resources in /config/phpsecurity/encoders/
+19:46:27.590 DEBUG Loaded 3 encoders.
+19:46:27.590 DEBUG Refreshing resources in /config/phpsecurity/decoders/
+19:46:27.596 DEBUG Loaded 3 decoders.
+19:46:27.597 DEBUG Resource file /config/phpsecurity-autogenerated/safe.bin not found, skipping safe method IDs hashes population.
+19:46:27.597 DEBUG Loaded 0 safe method ids hashes.
+19:46:27.601 DEBUG Load config: Time spent was 00:00:00.246
+19:46:27.601 DEBUG Compute entry points: Starting
+19:46:27.642 DEBUG Compute entry points: Time spent was 00:00:00.039
+19:46:27.642 INFO  All rules entry points : 2
+19:46:27.642 DEBUG Slice call graph: Starting
+19:46:27.642 INFO  Retained UCFGs : 11
+19:46:27.642 DEBUG Slice call graph: Time spent was 00:00:00.000
+19:46:27.642 DEBUG Live variable analysis: Starting
+19:46:27.648 DEBUG Live variable analysis: Time spent was 00:00:00.006
+19:46:27.648 DEBUG Taint analysis for php: Starting
+19:46:27.656 INFO  0 / 11 UCFGs simulated, memory usage: 129 MB
+19:46:27.745 INFO  10 / 11 UCFGs simulated, memory usage: 135 MB
+19:46:27.745 DEBUG Taint analysis for php: Time spent was 00:00:00.096
+19:46:27.746 DEBUG Report issues: Starting
+19:46:27.746 DEBUG Reporting 0 issues for rule phpsecurity:S2076
+19:46:27.747 DEBUG Reporting 0 issues for rule phpsecurity:S2078
+19:46:27.747 DEBUG Reporting 0 issues for rule phpsecurity:S2083
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S2091
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S2631
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S3649
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5131
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5135
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5144
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5145
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5146
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5334
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5335
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S5883
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S6173
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S6287
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S6350
+19:46:27.748 DEBUG Reporting 0 issues for rule phpsecurity:S7044
+19:46:27.748 DEBUG Report issues: Time spent was 00:00:00.003
+19:46:27.754 DEBUG Store cache: Starting
+19:46:27.754 DEBUG Store cache: Time spent was 00:00:00.002
+19:46:27.755 DEBUG php security sensor: Time spent was 00:00:00.889
+19:46:27.755 INFO  php security sensor: Begin: 2026-02-01T19:46:26.863707771Z, End: 2026-02-01T19:46:27.753024161Z, Duration: 00:00:00.889
+  Load type hierarchy and UCFGs: Begin: 2026-02-01T19:46:26.868956105Z, End: 2026-02-01T19:46:27.224915234Z, Duration: 00:00:00.355
+    Load type hierarchy: Begin: 2026-02-01T19:46:26.869005768Z, End: 2026-02-01T19:46:26.959035311Z, Duration: 00:00:00.090
+    Load UCFGs: Begin: 2026-02-01T19:46:26.959358736Z, End: 2026-02-01T19:46:27.224788156Z, Duration: 00:00:00.265
+  Check cache: Begin: 2026-02-01T19:46:27.225018236Z, End: 2026-02-01T19:46:27.225642044Z, Duration: 00:00:00.000
+    Load cache: Begin: 2026-02-01T19:46:27.225336843Z, End: 2026-02-01T19:46:27.225387908Z, Duration: 00:00:00.000
+  Create runtime call graph: Begin: 2026-02-01T19:46:27.225714590Z, End: 2026-02-01T19:46:27.354173095Z, Duration: 00:00:00.128
+    Create declared type propagation graph: Begin: 2026-02-01T19:46:27.226835989Z, End: 2026-02-01T19:46:27.251259506Z, Duration: 00:00:00.024
+    Run SCC (Tarjan) on 2586 nodes: Begin: 2026-02-01T19:46:27.252597591Z, End: 2026-02-01T19:46:27.257721041Z, Duration: 00:00:00.005
+    Propagate runtime types to strongly connected components: Begin: 2026-02-01T19:46:27.257870901Z, End: 2026-02-01T19:46:27.285411995Z, Duration: 00:00:00.027
+    Variable Type Analysis #1: Begin: 2026-02-01T19:46:27.288066685Z, End: 2026-02-01T19:46:27.321291396Z, Duration: 00:00:00.033
+      Create runtime type propagation graph: Begin: 2026-02-01T19:46:27.288133971Z, End: 2026-02-01T19:46:27.305605613Z, Duration: 00:00:00.017
+      Run SCC (Tarjan) on 2892 nodes: Begin: 2026-02-01T19:46:27.305784818Z, End: 2026-02-01T19:46:27.310372235Z, Duration: 00:00:00.004
+      Propagate runtime types to strongly connected components: Begin: 2026-02-01T19:46:27.310521825Z, End: 2026-02-01T19:46:27.321137198Z, Duration: 00:00:00.010
+    Variable Type Analysis #2: Begin: 2026-02-01T19:46:27.321709278Z, End: 2026-02-01T19:46:27.350378322Z, Duration: 00:00:00.028
+      Create runtime type propagation graph: Begin: 2026-02-01T19:46:27.321742030Z, End: 2026-02-01T19:46:27.336609850Z, Duration: 00:00:00.014
+      Run SCC (Tarjan) on 2886 nodes: Begin: 2026-02-01T19:46:27.336777423Z, End: 2026-02-01T19:46:27.340120491Z, Duration: 00:00:00.003
+      Propagate runtime types to strongly connected components: Begin: 2026-02-01T19:46:27.340225007Z, End: 2026-02-01T19:46:27.350149163Z, Duration: 00:00:00.009
+  Load config: Begin: 2026-02-01T19:46:27.354337002Z, End: 2026-02-01T19:46:27.600871184Z, Duration: 00:00:00.246
+  Compute entry points: Begin: 2026-02-01T19:46:27.601322439Z, End: 2026-02-01T19:46:27.640582488Z, Duration: 00:00:00.039
+  Slice call graph: Begin: 2026-02-01T19:46:27.640770520Z, End: 2026-02-01T19:46:27.641435986Z, Duration: 00:00:00.000
+  Live variable analysis: Begin: 2026-02-01T19:46:27.641510615Z, End: 2026-02-01T19:46:27.647794317Z, Duration: 00:00:00.006
+  Taint analysis for php: Begin: 2026-02-01T19:46:27.648235363Z, End: 2026-02-01T19:46:27.744541823Z, Duration: 00:00:00.096
+  Report issues: Begin: 2026-02-01T19:46:27.744625099Z, End: 2026-02-01T19:46:27.748034290Z, Duration: 00:00:00.003
+  Store cache: Begin: 2026-02-01T19:46:27.748935878Z, End: 2026-02-01T19:46:27.751739346Z, Duration: 00:00:00.002
+19:46:27.756 INFO  php security sensor peak memory: 194 MB
+19:46:27.756 DEBUG Debug information:
+  Merging block summaries: Invocations: 51, Total: 00:00:00.003, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.001
+    Merging generic summary data: Invocations: 51, Total: 00:00:00.000, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.000
+    Merging variable flows: Invocations: 51, Total: 00:00:00.001, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.000
+  Apply callee summaries: Invocations: 10, Total: 00:00:00.006, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.004
+    Clone callee summaries: Invocations: 10, Total: 00:00:00.001, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.001
+    Apply field writes: Invocations: 10, Total: 00:00:00.001, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.001
+    Apply array writes: Invocations: 10, Total: 00:00:00.000, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.000
+    Apply parameter by reference writes: Invocations: 10, Total: 00:00:00.000, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.000
+    Assigning return values: Invocations: 10, Total: 00:00:00.002, Average: 00:00:00.000, Min: 00:00:00.000, Max: 00:00:00.001
+19:46:27.756 INFO  Sensor PhpSecuritySensor [security] (done) | time=895ms
+19:46:27.765 INFO  ------------- Run sensors on project
+19:46:27.860 DEBUG 'Import external issues report from SARIF file.' skipped because of missing configuration requirements.
+Accessed configuration:
+- sonar.sarifReportPaths: <empty>
+19:46:27.862 DEBUG 'Java CPD Block Indexer' skipped because there is no related file in current project
+19:46:27.862 DEBUG Sensors : Zero Coverage Sensor
+19:46:27.863 INFO  Sensor Zero Coverage Sensor
+19:46:27.863 INFO  Sensor Zero Coverage Sensor (done) | time=1ms
+19:46:27.864 DEBUG ScaCliDownloadClient url: https://scanner.sonarcloud.io/tidelift-cli
+19:46:27.866 DEBUG Loading OS trusted SSL certificates...
+19:46:27.867 DEBUG This operation might be slow or even get stuck. You can skip it by passing the scanner property 'sonar.scanner.skipSystemTruststore=true'
+19:46:28.084 DEBUG Loaded [1001] system trusted certificates
+19:46:28.106 DEBUG Loaded truststore from '/usr/lib/jvm/java-21-amazon-corretto.x86_64/lib/security/cacerts' containing 143 certificates
+19:46:28.117 INFO  ------------- Gather SCA dependencies on project
+19:46:28.118 INFO  Checking if SCA is enabled for organization dcorazolla
+19:46:28.118 DEBUG Request URL: https://api.sonarcloud.io/sca/feature-enabled
+19:46:28.118 DEBUG --> GET https://api.sonarcloud.io/sca/feature-enabled?organization=dcorazolla
+19:46:28.467 DEBUG <-- 200 https://api.sonarcloud.io/sca/feature-enabled?organization=dcorazolla (349ms, unknown-length body)
+19:46:28.469 DEBUG SCA Enabled Response: EnabledResponse[enabled=false]
+19:46:28.469 INFO  Dependency analysis skipped
+19:46:28.475 INFO  CPD Executor 3 files had no CPD blocks
+19:46:28.476 INFO  CPD Executor Calculating CPD for 69 files
+19:46:28.476 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/BaseApiController.php
+19:46:28.478 DEBUG Detection of duplications for /usr/src/app/Services/PaymentService.php
+19:46:28.481 DEBUG Detection of duplications for /usr/src/app/Http/Requests/UpdateRoomRateRequest.php
+19:46:28.482 DEBUG Detection of duplications for /usr/src/app/Http/Requests/UpdateRoomRatePeriodRequest.php
+19:46:28.482 DEBUG Detection of duplications for /usr/src/app/Providers/RouteServiceProvider.php
+19:46:28.482 DEBUG Detection of duplications for /usr/src/app/Http/Filters/RoomFilter.php
+19:46:28.482 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/PartnerController.php
+19:46:28.482 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/PaymentController.php
+19:46:28.483 DEBUG Detection of duplications for /usr/src/app/Models/AuthSession.php
+19:46:28.483 DEBUG Detection of duplications for /usr/src/app/Models/InvoiceLinePayment.php
+19:46:28.483 DEBUG Detection of duplications for /usr/src/app/Models/Reservation.php
+19:46:28.485 DEBUG Detection of duplications for /usr/src/app/Services/RoomRatePeriodService.php
+19:46:28.486 DEBUG Detection of duplications for /usr/src/app/Http/Resources/ReservationResource.php
+19:46:28.487 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/RoomController.php
+19:46:28.489 DEBUG Detection of duplications for /usr/src/app/Services/ReservationPriceCalculator.php
+19:46:28.489 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/RoomRateController.php
+19:46:28.489 DEBUG Detection of duplications for /usr/src/app/Http/Requests/StoreRoomCategoryRatePeriodRequest.php
+19:46:28.489 DEBUG Detection of duplications for /usr/src/app/Models/RoomRate.php
+19:46:28.491 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/RoomRatePeriodController.php
+19:46:28.491 DEBUG Detection of duplications for /usr/src/app/Http/Resources/RoomResource.php
+19:46:28.492 DEBUG Detection of duplications for /usr/src/app/Models/User.php
+19:46:28.492 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/PropertyPricingController.php
+19:46:28.492 DEBUG Detection of duplications for /usr/src/app/Services/RoomRateService.php
+19:46:28.492 DEBUG Detection of duplications for /usr/src/app/Http/Resources/RoomCategoryRateResource.php
+19:46:28.493 DEBUG Detection of duplications for /usr/src/app/Models/Room.php
+19:46:28.493 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/RoomCategoryRatePeriodController.php
+19:46:28.494 DEBUG Detection of duplications for /usr/src/app/Http/Resources/RoomCategoryRatePeriodResource.php
+19:46:28.494 DEBUG Detection of duplications for /usr/src/app/Http/Requests/UpdateRoomCategoryRateRequest.php
+19:46:28.495 DEBUG Detection of duplications for /usr/src/app/Models/Partner.php
+19:46:28.495 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/ReservationPriceController.php
+19:46:28.495 DEBUG Detection of duplications for /usr/src/app/Http/Filters/QueryFilter.php
+19:46:28.496 DEBUG Detection of duplications for /usr/src/app/Models/RoomCategory.php
+19:46:28.496 DEBUG Detection of duplications for /usr/src/app/Models/RoomCategoryRatePeriod.php
+19:46:28.496 DEBUG Detection of duplications for /usr/src/app/Repositories/EloquentInvoiceRepository.php
+19:46:28.497 DEBUG Detection of duplications for /usr/src/app/Models/RoomRatePeriod.php
+19:46:28.497 DEBUG Detection of duplications for /usr/src/app/Models/FinancialAuditLog.php
+19:46:28.497 DEBUG Detection of duplications for /usr/src/app/Http/Kernel.php
+19:46:28.498 DEBUG Detection of duplications for /usr/src/app/Services/InvoiceService.php
+19:46:28.498 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/RoomCategoryRateController.php
+19:46:28.498 DEBUG Detection of duplications for /usr/src/app/Http/Resources/RoomRateResource.php
+19:46:28.499 DEBUG Detection of duplications for /usr/src/app/Models/Traits/HasUuidPrimary.php
+19:46:28.499 DEBUG Detection of duplications for /usr/src/app/Http/Requests/StoreRoomCategoryRateRequest.php
+19:46:28.500 DEBUG Detection of duplications for /usr/src/app/Http/Requests/StoreRoomRatePeriodRequest.php
+19:46:28.500 DEBUG Detection of duplications for /usr/src/app/Services/RoomCategoryService.php
+19:46:28.500 DEBUG Detection of duplications for /usr/src/app/Http/Requests/UpdateRoomCategoryRatePeriodRequest.php
+19:46:28.501 DEBUG Detection of duplications for /usr/src/app/Exceptions/Handler.php
+19:46:28.501 DEBUG Detection of duplications for /usr/src/app/Services/CreateReservationService.php
+19:46:28.501 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/AvailabilityController.php
+19:46:28.504 DEBUG Detection of duplications for /usr/src/app/Http/Resources/RoomRatePeriodResource.php
+19:46:28.504 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Controller.php
+19:46:28.504 DEBUG Detection of duplications for /usr/src/app/Services/CalendarService.php
+19:46:28.504 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/PropertyController.php
+19:46:28.504 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/AuthController.php
+19:46:28.505 DEBUG Detection of duplications for /usr/src/app/Models/RoomCategoryRate.php
+19:46:28.505 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/ReservationController.php
+19:46:28.505 DEBUG Detection of duplications for /usr/src/app/Models/InvoiceLine.php
+19:46:28.505 DEBUG Detection of duplications for /usr/src/app/Http/Requests/StoreRoomRateRequest.php
+19:46:28.505 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/CalendarController.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Models/Payment.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Providers/AppServiceProvider.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Http/Middleware/EnsureJwtSessionIsValid.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Services/RoomCategoryRateService.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/InvoiceController.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Models/Property.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Services/RoomService.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Services/ReservationService.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Services/RoomCategoryRatePeriodService.php
+19:46:28.506 DEBUG Detection of duplications for /usr/src/app/Http/Controllers/Api/RoomCategoryController.php
+19:46:28.507 DEBUG Detection of duplications for /usr/src/app/Models/Invoice.php
+19:46:28.508 INFO  CPD Executor CPD calculation finished (done) | time=33ms
+19:46:28.509 INFO  SCM Publisher SCM provider for this project is: git
+19:46:28.510 INFO  SCM Publisher 72 source files to be analyzed
+19:46:28.512 DEBUG Collecting committed files
+19:46:28.520 DEBUG Thread[#1,main,5,main]: cannot measure timestamp resolution in read-only directory /usr/src/.git
+19:46:28.533 DEBUG Collecting committed files (done) | time=21ms
+19:46:28.533 DEBUG Using GIT_NATIVE_BLAME strategy to blame files
+19:46:28.540 DEBUG [main] Executing command [[git, --version]]...
+19:46:28.590 DEBUG [main] Command [[git, --version]] executed with exit value [0]
+19:46:28.592 DEBUG Found GIT version: 2.50.1
+19:46:28.596 INFO  SCM Publisher 0/72 source files have been analyzed (done) | time=85ms
+19:46:28.597 WARN  Missing blame information for the following files:
+19:46:28.597 WARN    * app/Services/PaymentService.php
+19:46:28.597 WARN    * app/Models/Invoice.php
+19:46:28.597 WARN    * app/Services/RoomRateService.php
+19:46:28.597 WARN    * app/Http/Controllers/Api/PropertyPricingController.php
+19:46:28.597 WARN    * app/Http/Controllers/Api/BaseApiController.php
+19:46:28.597 WARN    * app/Http/Resources/RoomCategoryRateResource.php
+19:46:28.597 WARN    * app/Http/Requests/UpdateRoomRateRequest.php
+19:46:28.597 WARN    * app/Repositories/InvoiceRepositoryInterface.php
+19:46:28.597 WARN    * app/Http/Resources/RoomResource.php
+19:46:28.597 WARN    * app/Http/Requests/UpdateRoomCategoryRateRequest.php
+19:46:28.598 WARN    * app/Services/RoomService.php
+19:46:28.598 WARN    * app/Http/Middleware/EnsureJwtSessionIsValid.php
+19:46:28.598 WARN    * app/Services/RoomRatePeriodService.php
+19:46:28.598 WARN    * app/Http/Controllers/Api/PartnerController.php
+19:46:28.598 WARN    * app/Models/Room.php
+19:46:28.598 WARN    * app/Http/Kernel.php
+19:46:28.598 WARN    * app/Models/Reservation.php
+19:46:28.598 WARN    * app/Providers/RouteServiceProvider.php
+19:46:28.598 WARN    * app/Http/Requests/StoreRoomRatePeriodRequest.php
+19:46:28.598 WARN    * app/Http/Requests/StoreRoomCategoryRateRequest.php
+19:46:28.598 WARN    * app/Http/Controllers/Api/AuthController.php
+19:46:28.598 WARN    * app/Http/Filters/RoomFilter.php
+19:46:28.598 WARN    * app/Models/RoomCategoryRate.php
+19:46:28.598 WARN    * app/Http/Controllers/Api/RoomRatePeriodController.php
+19:46:28.598 WARN    * app/Services/ReservationService.php
+19:46:28.598 WARN    * app/Models/User.php
+19:46:28.598 WARN    * app/Http/Controllers/Api/RoomCategoryRateController.php
+19:46:28.598 WARN    * app/Services/RoomCategoryRateService.php
+19:46:28.598 WARN    * app/Http/Requests/StoreRoomCategoryRatePeriodRequest.php
+19:46:28.598 WARN    * app/Services/RoomCategoryRatePeriodService.php
+19:46:28.599 WARN    * app/Models/Property.php
+19:46:28.599 WARN    * app/Http/Requests/UpdateRoomRatePeriodRequest.php
+19:46:28.599 WARN    * app/Exceptions/Handler.php
+19:46:28.599 WARN    * app/Models/FinancialAuditLog.php
+19:46:28.599 WARN    * app/Http/Controllers/Api/AvailabilityController.php
+19:46:28.599 WARN    * app/Http/Controllers/Api/PropertyController.php
+19:46:28.599 WARN    * app/Http/Controllers/Concerns/EnsuresPropertyScope.php
+19:46:28.599 WARN    * app/Models/Payment.php
+19:46:28.599 WARN    * app/Http/Middleware/Authenticate.php
+19:46:28.599 WARN    * app/Http/Resources/RoomCategoryRatePeriodResource.php
+19:46:28.599 WARN    * app/Repositories/EloquentInvoiceRepository.php
+19:46:28.599 WARN    * app/Http/Controllers/Api/RoomRateController.php
+19:46:28.599 WARN    * app/Models/RoomCategoryRatePeriod.php
+19:46:28.605 WARN    * app/Http/Requests/UpdateRoomCategoryRatePeriodRequest.php
+19:46:28.605 WARN    * app/Models/RoomRatePeriod.php
+19:46:28.605 WARN    * app/Services/CalendarService.php
+19:46:28.605 WARN    * app/Models/InvoiceLine.php
+19:46:28.606 WARN    * app/Providers/AppServiceProvider.php
+19:46:28.606 WARN    * app/Services/ReservationPriceCalculator.php
+19:46:28.606 WARN    * app/Models/RoomCategory.php
+19:46:28.607 WARN    * app/Http/Controllers/Api/ReservationController.php
+19:46:28.607 WARN    * app/Http/Controllers/Api/RoomCategoryRatePeriodController.php
+19:46:28.607 WARN    * app/Http/Controllers/Api/PaymentController.php
+19:46:28.608 WARN    * app/Services/CreateReservationService.php
+19:46:28.608 WARN    * app/Http/Resources/RoomRatePeriodResource.php
+19:46:28.609 WARN    * app/Models/AuthSession.php
+19:46:28.609 WARN    * app/Http/Requests/StoreRoomRateRequest.php
+19:46:28.609 WARN    * app/Http/Controllers/Api/ReservationPriceController.php
+19:46:28.609 WARN    * app/Http/Resources/RoomRateResource.php
+19:46:28.610 WARN    * app/Http/Controllers/Api/RoomCategoryController.php
+19:46:28.610 WARN    * app/Http/Controllers/Api/RoomController.php
+19:46:28.610 WARN    * app/Models/Partner.php
+19:46:28.610 WARN    * app/Models/RoomRate.php
+19:46:28.611 WARN    * app/Services/RoomCategoryService.php
+19:46:28.611 WARN    * app/Models/InvoiceLinePayment.php
+19:46:28.611 WARN    * app/Http/Controllers/Api/CalendarController.php
+19:46:28.611 WARN    * app/Http/Filters/QueryFilter.php
+19:46:28.611 WARN    * app/Http/Resources/ReservationResource.php
+19:46:28.611 WARN    * app/Http/Controllers/Controller.php
+19:46:28.611 WARN    * app/Services/InvoiceService.php
+19:46:28.611 WARN    * app/Http/Controllers/Api/InvoiceController.php
+19:46:28.611 WARN    * app/Models/Traits/HasUuidPrimary.php
+19:46:28.611 WARN  This may lead to missing/broken features in SonarCloud
+19:46:28.685 DEBUG Could not detect the dotnet / msbuild version
+19:46:28.686 DEBUG MSBuild version NOT found.
+19:46:28.795 INFO  Analysis report generated in 185ms, dir size=502 KB
+19:46:28.936 INFO  Analysis report compressed in 140ms, zip size=200 KB
+19:46:28.936 INFO  Analysis report generated in /tmp/.scannerwork/scanner-report
+19:46:28.936 DEBUG Upload report
+19:46:28.938 DEBUG --> POST https://sonarcloud.io/api/ce/submit?organization=dcorazolla&projectKey=dcorazolla_reservas (205211-byte body)
+19:46:29.771 DEBUG <-- 200 https://sonarcloud.io/api/ce/submit?organization=dcorazolla&projectKey=dcorazolla_reservas (832ms, 44-byte body)
+19:46:29.773 INFO  Analysis report uploaded in 837ms
+19:46:29.774 DEBUG Report metadata written to /tmp/.scannerwork/report-task.txt
+19:46:29.774 INFO  ANALYSIS SUCCESSFUL, you can find the results at: https://sonarcloud.io/dashboard?id=dcorazolla_reservas
+19:46:29.774 INFO  Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+19:46:29.775 INFO  More about the report processing at https://sonarcloud.io/api/ce/task?id=AZwavhCe47QlDmTp28YV
+19:46:29.775 INFO  ------------- Upload SCA dependency files
+19:46:29.775 DEBUG No architecture data to send, skipping architecture reporting
+19:46:29.791 DEBUG --> GET https://api.sonarcloud.io/analysis/sensor-cache/prepare-write?organization=dcorazolla&project=dcorazolla_reservas
+19:46:30.043 DEBUG <-- 200 https://api.sonarcloud.io/analysis/sensor-cache/prepare-write?organization=dcorazolla&project=dcorazolla_reservas (251ms, unknown-length body)
+19:46:30.044 DEBUG --> PUT https://analysis-sensorcache-eu-central-1-prod.s3.eu-central-1.amazonaws.com/AZwZuUKHG_-GgRMsyvU8/AZwZus8t47QlDmTp26gw/AZwZus8t47QlDmTp26gw?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEAwaDGV1LWNlbnRyYWwtMSJHMEUCICeZhB5RYlLu8qzO1Y%2BiThFwgiE6fFXAfMR1QEJVs%2B0WAiEA%2BWHI8o3FyXLGq4HPq%2Faok4OtEQgXwzTi8NwGwl82fPAqrwMI1f%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgw0ODgwNTk5NjU2MzUiDFGIr0TYgVZ%2BEjH6tiqDAz%2BnPR9KRCd8hbNHy%2Bl0VMlEQTVpDpok0QxDTcVLgci4mQKQzaN14jH8HK3wt8ymSC%2BKhITEM7HNg2NF7yUb1a%2B5CTynwAfTw2dQmQS7AZBYvX009CPiLh%2Bnh4AsXrsKesLdpNpM%2FaU7fBJWnPvAjwoIeNW6SWzkzWLdi%2FiSP0lFoC%2B3E6NkYUdvS3zGlq49%2B5ZOsunmxN%2FKtTQaicytdS8l7iuCvhIleTlMeZ7ywAId7B0mt%2FFc0DypzpRts8SKjCynw2CgKB9pAHoDXCBkLiwwfw3YkB2W3lA5q%2BwxsEXK1oHrL3We5oz%2BjhIiUK63oQmefqb8muLmXzXv4isKcqWYJM%2BlG6ZZF91kX8kWWHCYB5VCGcf6Nr6jbAD2Ec7X7qe6Lf0JznHLylj0Zp%2FrG8dTODK1mH559Zy5o8KnVjxNchAondCrey5yF7hMi9aNePoFAzIFFKHMWmfH%2FxEc1%2BS5BtxTfZ7S%2FqFaAIy%2FqGW9odX8OIr6%2FDT56L3mnacmA6q54jCj2P7LBjqdAS%2Bs7jTF11fLTM4kDKekIb8N8zUkyRja7yYbevwDxohGS%2Br9eXrlvcniL84X5mRrQDVkPtK8bpi6Eqc08g6%2BlUvAj0ANDeaAZ6EtAc8%2FxPCtsAQXwuWy3VDf5NUgwf30aVTcws%2Fgth74C0EcyZf8sc%2FwRaNdRZ5FwAeVyhSbXDcvzoSZHoKjGJgznV9T1Z%2BuRyP7j5iXfjKvcvGktmo%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260201T194629Z&X-Amz-SignedHeaders=host&X-Amz-Credential=ASIAXDIVECDBQCJGGE5A%2F20260201%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Expires=900&X-Amz-Signature=b8bf45f2874581e82c6148695a6e402bd5bdca03e18bee5ced34c9415a49ac28 (166935-byte body)
+19:46:31.162 DEBUG <-- 200 OK https://analysis-sensorcache-eu-central-1-prod.s3.eu-central-1.amazonaws.com/AZwZuUKHG_-GgRMsyvU8/AZwZus8t47QlDmTp26gw/AZwZus8t47QlDmTp26gw?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEAwaDGV1LWNlbnRyYWwtMSJHMEUCICeZhB5RYlLu8qzO1Y%2BiThFwgiE6fFXAfMR1QEJVs%2B0WAiEA%2BWHI8o3FyXLGq4HPq%2Faok4OtEQgXwzTi8NwGwl82fPAqrwMI1f%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgw0ODgwNTk5NjU2MzUiDFGIr0TYgVZ%2BEjH6tiqDAz%2BnPR9KRCd8hbNHy%2Bl0VMlEQTVpDpok0QxDTcVLgci4mQKQzaN14jH8HK3wt8ymSC%2BKhITEM7HNg2NF7yUb1a%2B5CTynwAfTw2dQmQS7AZBYvX009CPiLh%2Bnh4AsXrsKesLdpNpM%2FaU7fBJWnPvAjwoIeNW6SWzkzWLdi%2FiSP0lFoC%2B3E6NkYUdvS3zGlq49%2B5ZOsunmxN%2FKtTQaicytdS8l7iuCvhIleTlMeZ7ywAId7B0mt%2FFc0DypzpRts8SKjCynw2CgKB9pAHoDXCBkLiwwfw3YkB2W3lA5q%2BwxsEXK1oHrL3We5oz%2BjhIiUK63oQmefqb8muLmXzXv4isKcqWYJM%2BlG6ZZF91kX8kWWHCYB5VCGcf6Nr6jbAD2Ec7X7qe6Lf0JznHLylj0Zp%2FrG8dTODK1mH559Zy5o8KnVjxNchAondCrey5yF7hMi9aNePoFAzIFFKHMWmfH%2FxEc1%2BS5BtxTfZ7S%2FqFaAIy%2FqGW9odX8OIr6%2FDT56L3mnacmA6q54jCj2P7LBjqdAS%2Bs7jTF11fLTM4kDKekIb8N8zUkyRja7yYbevwDxohGS%2Br9eXrlvcniL84X5mRrQDVkPtK8bpi6Eqc08g6%2BlUvAj0ANDeaAZ6EtAc8%2FxPCtsAQXwuWy3VDf5NUgwf30aVTcws%2Fgth74C0EcyZf8sc%2FwRaNdRZ5FwAeVyhSbXDcvzoSZHoKjGJgznV9T1Z%2BuRyP7j5iXfjKvcvGktmo%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260201T194629Z&X-Amz-SignedHeaders=host&X-Amz-Credential=ASIAXDIVECDBQCJGGE5A%2F20260201%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Expires=900&X-Amz-Signature=b8bf45f2874581e82c6148695a6e402bd5bdca03e18bee5ced34c9415a49ac28 (1116ms, 0-byte body)
+19:46:31.162 INFO  Sensor cache published successfully
+19:46:31.162 DEBUG Quality Gate check disabled - skipping
+19:46:31.166 DEBUG Post-jobs : 
+19:46:31.173 INFO  Analysis total time: 15.656 s
+19:46:31.173 INFO  SonarScanner Engine completed successfully
+19:46:31.174 DEBUG Cleanup org.eclipse.jgit.util.FS$FileStoreAttributes$$Lambda/0x00007f47a0365738@397ef2 during JVM shutdown
+19:46:31.511 INFO  EXECUTION SUCCESS
+19:46:31.512 INFO  Total time: 23.757s

@@ -21,7 +21,7 @@ class InvoiceController extends Controller
         $propertyId = $this->getPropertyId($request);
         $perPage = (int) $request->query('per_page', 15);
 
-        $query = Invoice::with('lines', 'payments')
+        $query = Invoice::with('lines')
             ->where('property_id', $propertyId)
             ->orderBy('issued_at', 'desc');
 
@@ -59,6 +59,6 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice)
     {
-        return response()->json($invoice->load('lines','payments'));
+        return response()->json($invoice->load('lines'));
     }
 }
