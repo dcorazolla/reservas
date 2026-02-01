@@ -51,14 +51,23 @@ jobs:
           name: php-clover
           path: backend/src/clover.xml
 
+      - name: Show coverage file
+        if: ${{ always() }}
+        working-directory: backend/src
+        run: |
+          echo "Listing coverage file path:" && ls -l clover.xml || echo "clover.xml not found"
+          if [ -f clover.xml ]; then echo "--- head of clover.xml ---" && head -n 40 clover.xml || true; fi
+
       - name: Run SonarCloud scan
-        if: secrets.SONAR_TOKEN
+        if: ${{ secrets.SONAR_TOKEN != '' && secrets.SONAR_PROJECT_KEY != '' }}
         uses: sonarsource/sonarcloud-github-action@v1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
+            -X
             -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.php.coverage.reportPaths=backend/src/clover.xml
 
