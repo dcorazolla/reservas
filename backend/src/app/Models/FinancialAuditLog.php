@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasUuidPrimary;
 
 class FinancialAuditLog extends Model
 {
     use HasFactory;
+    use HasUuidPrimary;
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -17,4 +19,6 @@ class FinancialAuditLog extends Model
     protected $casts = [
         'payload' => 'array',
     ];
+
+    // UUID generation handled by HasUuidPrimary trait
 }

@@ -18,8 +18,14 @@ return new class extends Migration
         } catch (\Throwable $e) {
             // ignore if not supported
         }
-        Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+        $driver = Schema::getConnection()->getDriverName();
+        Schema::create('users', function (Blueprint $table) use ($driver) {
+            if ($driver === 'sqlite') {
+                // sqlite doesn't support expression defaults like gen_random_uuid()
+                $table->uuid('id')->primary();
+            } else {
+                $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
+            }
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

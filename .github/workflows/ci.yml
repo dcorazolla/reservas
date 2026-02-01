@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, refactor/backend-cleanup, '**/feature/**', '**/fix/**' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v4
+        with:
+          php-version: '8.3'
+          coverage: phpdbg
+          extensions: mbstring, xml, curl, zip, sqlite
+
+      - name: Validate composer.json
+        run: php -r "echo PHP_VERSION . ' on ' . PHP_OS . PHP_EOL;"
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.COMPOSER_CACHE_DIR }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+        working-directory: backend/src
+
+      - name: Run PHPUnit (coverage)
+        working-directory: backend/src
+        run: |
+          phpdbg -qrr ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=clover.xml
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-clover
+          path: backend/src/clover.xml
+
+      - name: Run Sonar scanner
+        if: secrets.SONAR_TOKEN
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          args: >
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.php.coverage.reportPaths=backend/src/clover.xml
+
+      - name: Upload coverage to Codecov (optional)
+        if: secrets.CODECOV_TOKEN
+        uses: codecov/codecov-action@v4
+        with:
+          files: backend/src/clover.xml
+          flags: backend-php
+          token: ${{ secrets.CODECOV_TOKEN }}

@@ -57,3 +57,24 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Running tests with Docker (CI parity)
+
+To ensure your local environment matches CI, use the provided Dockerfile and docker-compose at the repository root.
+
+- Build and start the app container (this mounts `backend/src` into `/var/www/html`):
+
+```bash
+docker-compose build --no-cache app
+docker-compose run --rm app sh -lc "composer install --no-dev --prefer-dist"
+```
+
+- To run the test suite inside the container (matches the GitHub Action):
+
+```bash
+docker-compose run --rm app sh -lc "cd /var/www/html && phpdbg -qrr ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=clover.xml"
+```
+
+- The container image includes PCOV for fast coverage collection. The CI uses `phpdbg` to run PHPUnit with `--coverage-clover` and uploads `clover.xml` for Sonar/Codecov.
+
+If you prefer not to use Docker, install PHP 8.3 and the following system packages / PHP extensions locally: `mbstring`, `xml`, `curl`, `zip`, `pdo_sqlite` (sqlite). The CI uses `shivammathur/setup-php` with those extensions enabled.
