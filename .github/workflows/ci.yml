@@ -107,11 +107,15 @@ jobs:
             -e SONAR_ORGANIZATION="${SONAR_ORGANIZATION}" \
             -v "$PWD/backend/src":/usr/src \
             sonarsource/sonar-scanner-cli:latest \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.organization=${SONAR_ORGANIZATION} \
-            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-            -Dsonar.projectBaseDir=/usr/src \
-            -Dsonar.php.coverage.reportPaths=clover.xml -X 2>&1 | tee sonar-scanner.log
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.organization=${SONAR_ORGANIZATION} \
+              -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+              -Dsonar.projectBaseDir=/usr/src \
+              -Dsonar.sources=. \
+              -Dsonar.scm.provider=git \
+              -Dsonar.exclusions=vendor/**,node_modules/**,storage/**,public/docs/**,tests/**,docs/** \
+              -Dsonar.inclusions=app/**,config/**,routes/**,resources/**,public/**,database/**,bootstrap/**,scripts/**,composer.json \
+              -Dsonar.php.coverage.reportPaths=clover.xml -X 2>&1 | tee sonar-scanner.log
           rc=${PIPESTATUS[0]:-0}
           echo "Sonar scanner exit code: $rc"
           exit $rc
