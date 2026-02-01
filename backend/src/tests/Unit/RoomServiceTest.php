@@ -10,10 +10,11 @@ use App\Models\RoomRate;
 use App\Services\RoomService;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class RoomServiceTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function should_assign_property_when_create_called_given_valid_data()
     {
         $property = new Property(['name' => 'P1']);
@@ -38,7 +39,7 @@ class RoomServiceTest extends TestCase
         $this->assertEquals('Room A', $room->name);
     }
 
-    /** @test */
+    #[Test]
     public function should_return_loaded_category_when_update_called_given_room()
     {
         $property = new Property(['name' => 'P2']);
@@ -65,7 +66,7 @@ class RoomServiceTest extends TestCase
         $this->assertTrue($updated->relationLoaded('category'));
     }
 
-    /** @test */
+    #[Test]
     public function should_throw_validation_exception_when_delete_called_given_room_with_reservations()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
@@ -95,7 +96,7 @@ class RoomServiceTest extends TestCase
         $svc->delete($room);
     }
 
-    /** @test */
+    #[Test]
     public function should_throw_validation_exception_when_delete_called_given_room_with_rates()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
@@ -123,7 +124,7 @@ class RoomServiceTest extends TestCase
         $svc->delete($room);
     }
 
-    /** @test */
+    #[Test]
     public function should_delete_room_when_delete_called_given_room_without_relations()
     {
         $property = new Property(['name' => 'P5']);

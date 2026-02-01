@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\BaseApiController;
+use App\Http\Controllers\Api\BaseApiController;
 use App\Models\Partner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
 class PartnerController extends BaseApiController
 {
@@ -15,17 +17,30 @@ class PartnerController extends BaseApiController
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        Log::debug('PartnerController@store start', ['input' => $request->all()]);
+
+        try {
+            $data = $request->validate([
             'name' => 'required|string|max:191',
             'email' => 'nullable|email',
             'phone' => 'nullable|string',
             'tax_id' => 'nullable|string',
             'address' => 'nullable|string',
         ]);
+            // Ensure we have an ID client-side so we don't rely on DB defaults
+            if (empty($data['id'])) {
+                $data['id'] = (string) \Illuminate\Support\Str::uuid();
+            }
 
-        $partner = Partner::create($data);
+            $partner = Partner::create($data);
 
-        return response()->json($partner, 201);
+            Log::debug('PartnerController@store created', ['partner_id' => $partner->id]);
+
+            return response()->json($partner, 201);
+        } catch (Exception $e) {
+            Log::error('PartnerController@store exception', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            throw $e;
+        }
     }
 
     public function show(Partner $partner)

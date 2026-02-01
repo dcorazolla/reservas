@@ -784,3 +784,67 @@ paths:
           schema: { type: string, format: uuid }
       responses:
         '204': { description: Excluído }
+
+  /invoices:
+    post:
+      tags: [Partners]
+      summary: Criar fatura
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [partner_id, lines]
+              properties:
+                partner_id: { type: string, format: uuid }
+                property_id: { type: string, format: uuid }
+                number: { type: string }
+                issued_at: { type: string, format: date }
+                due_at: { type: string, format: date }
+                lines:
+                  type: array
+                  items:
+                    type: object
+                    required: [description, unit_price]
+                    properties:
+                      description: { type: string }
+                      quantity: { type: integer }
+                      unit_price: { type: number }
+      responses:
+        '201': { description: Fatura criada }
+
+  /invoices/{invoice}:
+    get:
+      tags: [Partners]
+      summary: Detalhe da fatura
+      parameters:
+        - in: path
+          name: invoice
+          schema: { type: string, format: uuid }
+          required: true
+      responses:
+        '200': { description: Fatura }
+
+  /invoices/{invoice}/payments:
+    post:
+      tags: [Partners]
+      summary: Criar pagamento para fatura
+      parameters:
+        - in: path
+          name: invoice
+          schema: { type: string, format: uuid }
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount]
+              properties:
+                amount: { type: number }
+                method: { type: string }
+                paid_at: { type: string, format: date }
+      responses:
+        '201': { description: Pagamento criado }

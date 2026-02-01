@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Payment;
+use App\Models\Traits\HasUuidPrimary;
 
 class Invoice extends Model
 {
     use HasFactory;
+    use HasUuidPrimary;
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -28,4 +31,8 @@ class Invoice extends Model
     {
         return $this->hasMany(InvoiceLine::class);
     }
+
+    // Payments are allocated to invoice lines via `invoice_line_payments`.
+    // Do not define a direct `payments()` relation because `payments` table is shared
+    // across partners and doesn't contain `invoice_id`.
 }

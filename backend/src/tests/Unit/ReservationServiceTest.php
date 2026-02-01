@@ -8,10 +8,11 @@ use App\Models\Reservation;
 use App\Services\ReservationService;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ReservationServiceTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function should_persist_fields_when_create_called_given_valid_data()
     {
         $property = new Property(['name' => 'P6']);
@@ -40,7 +41,7 @@ class ReservationServiceTest extends TestCase
         $this->assertEquals(2, $res->adults_count);
     }
 
-    /** @test */
+    #[Test]
     public function should_throw_validation_exception_when_create_called_given_conflicting_dates()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);
@@ -77,7 +78,7 @@ class ReservationServiceTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function should_throw_validation_exception_when_update_called_given_conflicting_dates()
     {
         $this->expectException(\Illuminate\Validation\ValidationException::class);

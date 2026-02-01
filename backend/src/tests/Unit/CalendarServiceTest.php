@@ -8,10 +8,11 @@ use App\Models\Reservation;
 use App\Services\CalendarService;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class CalendarServiceTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function should_return_rooms_with_reservations_when_getRoomsWithReservations_called_given_interval()
     {
         $property = new Property(['name' => 'CalP']);

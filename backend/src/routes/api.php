@@ -15,6 +15,8 @@ use App\Http\Controllers\Api\AvailabilityController;
 use App\Http\Controllers\Api\ReservationPriceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PartnerController;
+use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +63,12 @@ Route::middleware(['auth:api'])->group(function () {
 
     // Partners & billing
     Route::apiResource('partners', PartnerController::class);
+
+    // Invoices & payments
+    Route::get('/invoices', [InvoiceController::class, 'index']);
+    Route::post('/invoices', [InvoiceController::class, 'store']);
+    Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
+    Route::post('/invoices/{invoice_id}/payments', [PaymentController::class, 'store']);
 
     Route::get('/rooms/{room}/rates', [RoomRateController::class, 'index']);
     Route::post('/rooms/{room}/rates', [RoomRateController::class, 'store']);

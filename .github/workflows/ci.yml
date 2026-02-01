@@ -1,0 +1,158 @@
+name: CI
+
+on:
+  # Run CI on direct pushes to `main` (e.g. merges) and on pull requests targeting `main`.
+  # This avoids running both a `push` and a `pull_request` workflow for the same commit
+  # (pushes to feature branches will only trigger the pull_request workflow when a PR exists).
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    # Run the job only for PR events or direct pushes to `main`.
+    if: "github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Sonar requests SCM info (blame/author). Disable shallow clone so sonarcloud gets proper SCM metadata.
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@d59004228537ca90c8dca680592a08a675bf52b6
+        with:
+          php-version: '8.3'
+          coverage: pcov
+          extensions: mbstring, xml, curl, zip, sqlite
+
+      - name: Validate composer.json
+        run: php -r "echo PHP_VERSION . ' on ' . PHP_OS . PHP_EOL;"
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.COMPOSER_CACHE_DIR }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist
+        working-directory: backend/src
+
+      - name: Run PHPUnit (coverage)
+        working-directory: backend/src
+        run: |
+          php -dpcov.enabled=1 ./vendor/bin/phpunit -c phpunit.xml --coverage-clover=clover.xml
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: php-clover
+          path: backend/src/clover.xml
+
+      - name: Show coverage file
+        if: ${{ always() }}
+        working-directory: backend/src
+        run: |
+          echo "Listing coverage file path:" && ls -l clover.xml || echo "clover.xml not found"
+          if [ -f clover.xml ]; then echo "--- head of clover.xml ---" && head -n 40 clover.xml || true; fi
+
+      - name: Prepare Sonar env
+        run: |
+          if [ -n "${SONAR_TOKEN}" ] && [ -n "${SONAR_PROJECT_KEY}" ]; then
+            echo "SONAR_ENABLED=true" >> $GITHUB_ENV
+          else
+            echo "SONAR_ENABLED=false" >> $GITHUB_ENV
+          fi
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+
+      - name: Diagnose Sonar auth and project
+        if: ${{ env.SONAR_ENABLED == 'true' }}
+        run: |
+          echo "Validating Sonar token..."
+          curl -s -S -u "$SONAR_TOKEN": "https://sonarcloud.io/api/authentication/validate" || true
+          echo
+          echo "Checking project existence for key: $SONAR_PROJECT_KEY"
+          curl -s -S -u "$SONAR_TOKEN": "https://sonarcloud.io/api/components/search?projectKeys=$SONAR_PROJECT_KEY" || true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+
+      - name: Check git status (validate checkout)
+        if: ${{ env.SONAR_ENABLED == 'true' }}
+        run: |
+          echo "Validating git checkout and history..."
+          git --version || true
+          echo "Repository root listing:"
+          ls -la | sed -n '1,120p'
+          echo "Top-level git status (first lines):" || true
+          git status --porcelain -b || true
+
+      - name: Run SonarScanner CLI via Docker
+        if: ${{ env.SONAR_ENABLED == 'true' }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+        run: |
+          echo "Running SonarScanner CLI (Docker) and saving logs to sonar-scanner.log"
+          echo "Listing coverage file before scanning:"
+          ls -l backend/src/clover.xml || true
+          echo "Mounting full repository into scanner and setting projectBaseDir to backend/src"
+          # Mount the whole repo so git metadata and working tree match inside the container.
+          docker run --rm \
+            -e SONAR_TOKEN="${SONAR_TOKEN}" \
+            -e SONAR_HOST_URL="https://sonarcloud.io" \
+            -e SONAR_ORGANIZATION="${SONAR_ORGANIZATION}" \
+            -v "$PWD":/usr/src:rw \
+            -v "$PWD/.git":/usr/src/.git:rw \
+            sonarsource/sonar-scanner-cli:latest \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.organization=${SONAR_ORGANIZATION} \
+              -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+              -Dsonar.projectBaseDir=/usr/src/backend/src \
+              -Dsonar.sources=. \
+              -Dsonar.scm.provider=git \
+              -Dsonar.exclusions=vendor/**,node_modules/**,storage/**,public/docs/**,tests/**,docs/** \
+              -Dsonar.inclusions=app/** \
+              -Dsonar.php.coverage.reportPaths=/usr/src/backend/src/clover.xml -X 2>&1 | tee sonar-scanner.log
+          rc=${PIPESTATUS[0]:-0}
+          echo "Sonar scanner exit code: $rc"
+          exit $rc
+
+      - name: Upload coverage to Codecov (optional)
+        if: ${{ env.CODECOV_ENABLED == 'true' }}
+        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238
+        with:
+          files: backend/src/clover.xml
+          flags: backend-php
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Prepare Codecov env
+        if: ${{ always() }}
+        run: |
+          if [ -n "${CODECOV_TOKEN}" ]; then
+            echo "CODECOV_ENABLED=true" >> $GITHUB_ENV
+          else
+            echo "CODECOV_ENABLED=false" >> $GITHUB_ENV
+          fi
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload Sonar scanner log
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sonar-scanner-log
+          path: sonar-scanner.log

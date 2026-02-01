@@ -59,6 +59,12 @@ class Handler extends ExceptionHandler
                 $payload['message'] = $e->getMessage() ?: $payload['message'];
             }
 
+            // In debug mode include exception class and trace to aid development debugging
+            if (config('app.debug')) {
+                $payload['exception'] = get_class($e);
+                $payload['trace'] = $e->getTraceAsString();
+            }
+
             return new JsonResponse($payload, $status);
         }
 

@@ -15,7 +15,7 @@ use RuntimeException;
 class ReservationPriceCalculator
 {
     public function calculate(
-        int $roomId,
+        string|int $roomId,
         string $startDate,
         string $endDate,
         int $peopleCount
@@ -58,7 +58,7 @@ class ReservationPriceCalculator
     }
 
     protected function priceForDayLegacy(
-        int $roomId,
+        string|int $roomId,
         int $peopleCount,
         Carbon $date
     ): float {
