@@ -17,7 +17,7 @@ export default function Menu() {
       </NavLink>
 
       <div
-        className="menu-item"
+        className="menu-entry"
         onMouseEnter={() => setFinanceOpen(true)}
         onMouseLeave={() => setFinanceOpen(false)}
       >
@@ -34,7 +34,7 @@ export default function Menu() {
       </div>
 
       <div
-        className="menu-item"
+        className="menu-entry"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >

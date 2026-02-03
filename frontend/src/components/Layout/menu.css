@@ -28,7 +28,7 @@
 }
 
 /* ITEM COM SUBMENU */
-.menu-item {
+.menu-entry {
   position: relative;
   height: 48px;
   display: flex;
