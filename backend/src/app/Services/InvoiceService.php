@@ -73,4 +73,50 @@ class InvoiceService
             return $this->repository->find($invoice->id) ?? $invoice->fresh();
         });
     }
+
+    /**
+     * Update basic invoice fields. This does not modify allocated payments.
+     */
+    public function updateInvoice(\App\Models\Invoice $invoice, array $data)
+    {
+        return DB::transaction(function () use ($invoice, $data) {
+            $allowed = ['partner_id', 'number', 'issued_at', 'due_at', 'status'];
+            foreach ($allowed as $k) {
+                if (array_key_exists($k, $data)) {
+                    $invoice->{$k} = $data[$k];
+                }
+            }
+
+            $invoice->save();
+
+            \App\Models\FinancialAuditLog::create([
+                'event_type' => 'invoice.updated',
+                'payload' => ['invoice_id' => $invoice->id, 'changes' => $data],
+                'resource_type' => 'invoice',
+                'resource_id' => $invoice->id,
+            ]);
+
+            return $invoice->fresh();
+        });
+    }
+
+    /**
+     * Cancel an invoice (set status to cancelled). Does not revert payments.
+     */
+    public function cancelInvoice(\App\Models\Invoice $invoice)
+    {
+        return DB::transaction(function () use ($invoice) {
+            $invoice->status = 'cancelled';
+            $invoice->save();
+
+            \App\Models\FinancialAuditLog::create([
+                'event_type' => 'invoice.cancelled',
+                'payload' => ['invoice_id' => $invoice->id],
+                'resource_type' => 'invoice',
+                'resource_id' => $invoice->id,
+            ]);
+
+            return $invoice->fresh();
+        });
+    }
 }
