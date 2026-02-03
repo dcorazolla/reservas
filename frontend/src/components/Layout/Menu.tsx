@@ -15,6 +15,13 @@ export default function Menu() {
         Reservas
       </NavLink>
 
+      <div className="menu-item">
+        <span className={`menu-link`}>Financeiro</span>
+        <div className="submenu">
+          <NavLink to="/invoices">Faturas</NavLink>
+        </div>
+      </div>
+
       <div
         className="menu-item"
         onMouseEnter={() => setOpen(true)}

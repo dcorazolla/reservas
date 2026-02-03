@@ -6,3 +6,7 @@ export function createPayment(invoiceId: string, payload: { amount: number; meth
     body: JSON.stringify(payload),
   });
 }
+
+export function listPayments(invoiceId: string) {
+  return apiFetch<any>(`/invoices/${invoiceId}/payments`);
+}
