@@ -28,6 +28,7 @@ export default function Menu() {
         {open && (
           <div className="submenu">
             <NavLink to="/config/propriedade">Propriedade</NavLink>
+            <NavLink to="/config/parceiros">Parceiros</NavLink>
             <NavLink to="/config/quartos">Quartos</NavLink>
             <NavLink to="/config/categorias-quartos">Categorias de Quartos</NavLink>
             <div className="submenu-group">

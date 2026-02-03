@@ -68,6 +68,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/invoices', [InvoiceController::class, 'index']);
     Route::post('/invoices', [InvoiceController::class, 'store']);
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
+    Route::get('/invoices/{invoice_id}/payments', [PaymentController::class, 'index']);
     Route::post('/invoices/{invoice_id}/payments', [PaymentController::class, 'store']);
 
     Route::get('/rooms/{room}/rates', [RoomRateController::class, 'index']);
