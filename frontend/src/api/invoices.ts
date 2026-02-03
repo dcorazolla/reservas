@@ -22,3 +22,11 @@ export function createInvoice(payload: Partial<Invoice> & { lines: any[] }) {
 export function getInvoice(id: string) {
   return apiFetch<Invoice>(`/invoices/${id}`);
 }
+
+export function updateInvoice(id: string, payload: Partial<Invoice>) {
+  return apiFetch<Invoice>(`/invoices/${id}`, { method: 'PUT', body: JSON.stringify(payload) });
+}
+
+export function cancelInvoice(id: string) {
+  return apiFetch<Invoice>(`/invoices/${id}/cancel`, { method: 'POST' });
+}
