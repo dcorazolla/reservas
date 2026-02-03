@@ -59,6 +59,21 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice)
     {
-        return response()->json($invoice->load('lines'));
+        // Eager-load partner and allocations (payments) so frontend can show
+        // payment history and allocation per line without extra requests.
+        $invoice->load('partner', 'lines.allocations.payment');
+
+        // Calculate total paid by summing allocations
+        $lineIds = $invoice->lines->pluck('id')->all();
+        $paid = 0;
+        if (!empty($lineIds)) {
+            $paid = (float) \App\Models\InvoiceLinePayment::whereIn('invoice_line_id', $lineIds)->sum('amount');
+        }
+
+        $payload = $invoice->toArray();
+        $payload['paid_amount'] = $paid;
+        $payload['balance'] = (float) $invoice->total - $paid;
+
+        return response()->json($payload);
     }
 }

@@ -16,6 +16,25 @@ class PaymentController extends Controller
         $this->service = $service;
     }
 
+    public function index(Request $request, string $invoice_id)
+    {
+        // Return payments related to an invoice by inspecting invoice lines' allocations
+        $invoice = Invoice::find($invoice_id);
+        if (!$invoice) {
+            return response()->json([], 200);
+        }
+
+        $lineIds = $invoice->lines()->pluck('id')->all();
+        if (empty($lineIds)) {
+            return response()->json([], 200);
+        }
+
+        $paymentIds = \App\Models\InvoiceLinePayment::whereIn('invoice_line_id', $lineIds)->pluck('payment_id')->unique()->all();
+        $payments = \App\Models\Payment::whereIn('id', $paymentIds)->orderBy('paid_at', 'desc')->get();
+
+        return response()->json($payments);
+    }
+
     public function store(Request $request, string $invoice_id)
     {
         $data = $request->validate([
