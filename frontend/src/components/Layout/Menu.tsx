@@ -4,6 +4,7 @@ import "./menu.css";
 
 export default function Menu() {
   const [open, setOpen] = useState(false);
+  const [financeOpen, setFinanceOpen] = useState(false);
 
   return (
     <nav className="app-menu horizontal">
@@ -15,11 +16,21 @@ export default function Menu() {
         Reservas
       </NavLink>
 
-      <div className="menu-item">
-        <span className={`menu-link`}>Financeiro</span>
-        <div className="submenu">
-          <NavLink to="/invoices">Faturas</NavLink>
-        </div>
+      <div
+        className="menu-item"
+        onMouseEnter={() => setFinanceOpen(true)}
+        onMouseLeave={() => setFinanceOpen(false)}
+      >
+        <span className={`menu-link with-chevron ${financeOpen ? 'open' : ''}`}>
+          Financeiro
+          <span className="chevron">▾</span>
+        </span>
+
+        {financeOpen && (
+          <div className="submenu">
+            <NavLink to="/invoices">Faturas</NavLink>
+          </div>
+        )}
       </div>
 
       <div
