@@ -76,4 +76,27 @@ class InvoiceController extends Controller
 
         return response()->json($payload);
     }
+
+    public function update(Request $request, Invoice $invoice)
+    {
+        $data = $request->validate([
+            'partner_id' => 'nullable|uuid',
+            'number' => 'nullable|string',
+            'issued_at' => 'nullable|date',
+            'due_at' => 'nullable|date',
+            'status' => 'nullable|in:draft,issued,paid,cancelled',
+        ]);
+
+        $updated = $this->service->updateInvoice($invoice, $data);
+
+        return response()->json($updated);
+    }
+
+    public function cancel(Request $request, Invoice $invoice)
+    {
+        // For now cancellation is a status flip; payments are not modified.
+        $updated = $this->service->cancelInvoice($invoice);
+
+        return response()->json($updated);
+    }
 }

@@ -340,7 +340,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"property_id\": \"{{property_id}}\",\n  \"room_id\": \"{{room_id}}\",\n  \"guest_name\": \"Test Guest\",\n  \"checkin\": \"2026-02-01\",\n  \"checkout\": \"2026-02-03\"\n}"
+          "raw": "{\n  \"property_id\": \"{{property_id}}\",\n  \"room_id\": \"{{room_id}}\",\n  \"partner_id\": \"{{partner_id}}\",\n  \"guest_name\": \"Test Guest\",\n  \"checkin\": \"2026-02-01\",\n  \"checkout\": \"2026-02-03\"\n}"
         }
       }
     },
