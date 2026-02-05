@@ -1,4 +1,4 @@
-name: CI
+name: testes backend
 
 on:
   # Run CI on direct pushes to `main` (e.g. merges) and on pull requests targeting `main`.
