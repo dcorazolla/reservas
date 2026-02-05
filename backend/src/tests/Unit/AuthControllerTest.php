@@ -180,8 +180,9 @@ class AuthControllerTest extends TestCase
             'name' => 'L',
         ]);
 
+        $sessId = (string) \Illuminate\Support\Str::uuid();
         AuthSession::create([
-            'id' => (string) \Illuminate\Support\Str::uuid(),
+            'id' => $sessId,
             'user_id' => $user->id,
             'jwt_id' => 'jti-logout',
             'refresh_token_hash' => hash('sha256', 'x'),
@@ -205,7 +206,7 @@ class AuthControllerTest extends TestCase
         $resp = (new \App\Http\Controllers\Api\AuthController())->logout();
 
         $this->assertEquals(204, $resp->getStatusCode());
-        $this->assertDatabaseMissing('auth_sessions', ['id' => 'sess-logout', 'revoked_at' => null]);
+        $this->assertDatabaseMissing('auth_sessions', ['id' => $sessId, 'revoked_at' => null]);
     }
 
     public function test_logoutAll_revokes_all_sessions_and_logs_out()

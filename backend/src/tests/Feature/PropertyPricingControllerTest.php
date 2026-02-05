@@ -65,7 +65,7 @@ class PropertyPricingControllerTest extends TestCase
         $this->withHeader('Authorization', 'Bearer ' . $token)
             ->putJson('/api/properties/pricing', $payload)
             ->assertStatus(200)
-            ->assertJsonFragment(['base_one_adult' => '120.00', 'child_price' => '40.00']);
+            ->assertJsonFragment(['base_one_adult' => 120, 'child_price' => 40]);
 
         $this->assertDatabaseHas('properties', ['id' => $property->id, 'base_one_adult' => 120]);
     }

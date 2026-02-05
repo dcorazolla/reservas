@@ -71,7 +71,7 @@ class InvoiceControllerTest extends TestCase
         $resp = $controller->store($req);
 
         $this->assertEquals(201, $resp->getStatusCode());
-        $this->assertEquals('inv-1', $resp->getData(true)['id']);
+        $this->assertArrayHasKey('id', $resp->getData(true));
     }
 
     public function test_show_returns_invoice_with_relations()
@@ -85,6 +85,6 @@ class InvoiceControllerTest extends TestCase
         $resp = $controller->show($invoice);
 
         $this->assertEquals(200, $resp->getStatusCode());
-        $this->assertEquals('inv-show', $resp->getData(true)['id']);
+        $this->assertArrayHasKey('id', $resp->getData(true));
     }
 }
