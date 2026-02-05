@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Run tests before push. To enable hooks locally run:
+# git config core.hooksPath .githooks
+
+set -euo pipefail
+
+./scripts/test-all.sh

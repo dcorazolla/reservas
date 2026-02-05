@@ -26,8 +26,17 @@ class ReservationPriceCalculator
             throw new RuntimeException('Número de pessoas excede a capacidade do quarto.');
         }
 
-        $start = Carbon::parse($startDate)->startOfDay();
-        $end   = Carbon::parse($endDate)->startOfDay();
+        try {
+            $start = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
+        } catch (\Throwable $e) {
+            $start = Carbon::parse($startDate)->startOfDay();
+        }
+
+        try {
+            $end = Carbon::createFromFormat('Y-m-d', $endDate)->startOfDay();
+        } catch (\Throwable $e) {
+            $end = Carbon::parse($endDate)->startOfDay();
+        }
 
         if ($end <= $start) {
             throw new RuntimeException('Data de saída deve ser maior que a data de entrada.');
@@ -105,8 +114,17 @@ class ReservationPriceCalculator
         int $children,
         int $infants = 0
     ): array {
-        $start = Carbon::parse($startDate)->startOfDay();
-        $end   = Carbon::parse($endDate)->startOfDay();
+        try {
+            $start = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
+        } catch (\Throwable $e) {
+            $start = Carbon::parse($startDate)->startOfDay();
+        }
+
+        try {
+            $end = Carbon::createFromFormat('Y-m-d', $endDate)->startOfDay();
+        } catch (\Throwable $e) {
+            $end = Carbon::parse($endDate)->startOfDay();
+        }
 
         $days = [];
         $total = 0.0;

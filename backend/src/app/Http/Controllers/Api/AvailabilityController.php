@@ -8,6 +8,7 @@ use App\Models\Reservation;
 use App\Services\ReservationPriceCalculator;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class AvailabilityController extends Controller
 {
@@ -15,7 +16,7 @@ class AvailabilityController extends Controller
     {
         $data = $request->validate([
             'checkin'      => 'required|date',
-            'checkout'     => 'required|date|after:checkin',
+            'checkout'     => 'required|date',
             'adults'       => 'required|integer|min:1',
             'children'     => 'required|integer|min:0',
             'infants'      => 'nullable|integer|min:0',
@@ -23,12 +24,30 @@ class AvailabilityController extends Controller
             'property_ids.*' => 'integer',
         ]);
 
+        // Validate that checkout is after checkin using safe parsing to avoid
+        // Carbon::parse internals inside the validator which can throw on some
+        // environments. Try Y-m-d first then fallback to parse().
+        try {
+            $start = Carbon::createFromFormat('Y-m-d', $data['checkin'])->startOfDay();
+        } catch (\Throwable $e) {
+            $start = Carbon::parse($data['checkin'])->startOfDay();
+        }
+
+        try {
+            $end = Carbon::createFromFormat('Y-m-d', $data['checkout'])->startOfDay();
+        } catch (\Throwable $e) {
+            $end = Carbon::parse($data['checkout'])->startOfDay();
+        }
+
+        if ($end <= $start) {
+            throw ValidationException::withMessages(['checkout' => 'The checkout must be a date after checkin.']);
+        }
+
         $adults   = (int) $data['adults'];
         $children = (int) $data['children'];
         $infants  = (int) ($data['infants'] ?? 0);
 
-        $start = Carbon::parse($data['checkin'])->startOfDay();
-        $end   = Carbon::parse($data['checkout'])->startOfDay();
+        // $start and $end already created above
 
         $propertyId = $this->getPropertyId($request);
 

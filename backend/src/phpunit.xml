@@ -19,6 +19,7 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
+        <ini name="date.timezone" value="UTC"/>
         <env name="APP_KEY" value="base64:lfdZ3jPc88zcgEDbMqNG3BywTgt2r7PctSl+myYUA10="/>
         <env name="JWT_SECRET" value="01387f9cb81972388ae067c3f8dbbff5da16e6c3a96e4ef707089d4cfd1b821cee4"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
