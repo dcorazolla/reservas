@@ -1,0 +1,35 @@
+/* Styles for ReservationModal component */
+.reservation-modal .form {
+  display: grid;
+  gap: 12px;
+}
+
+.reservation-modal .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.reservation-modal label {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.reservation-modal input,
+.reservation-modal select,
+.reservation-modal textarea {
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.reservation-modal .form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.reservation-modal .form-error {
+  color: #b91c1c;
+}

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Reservation, ReservationStatus } from "../types/calendar";
 import type { Partner } from "../types/partner";
 import { createReservation, updateReservation, calculateReservationPriceDetailed } from "../api/reservations";
 import { listPartners } from "../api/partners";
 import Modal from "./Modal/Modal";
+import "./ReservationModal.css";
 import { formatMoney } from "../utils/money";
 
 
@@ -41,19 +42,45 @@ export default function ReservationModal({
 
   const editing = !!reservation;
 
+  const firstFieldRef = useRef<HTMLInputElement | null>(null);
+  const previousActive = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
-  if (reservation) {
-    setGuestName(reservation.guest_name);
-    setAdults(reservation.adults_count || reservation.people_count || 1);
-    setChildren(reservation.children_count || 0);
-    setInfants(reservation.infants_count || 0);
-    setStartDate(reservation.start_date);
-    setEndDate(reservation.end_date);
-    setStatus(reservation.status);
-    setNotes(reservation.notes ?? "");
-    setPartnerId(reservation.partner_id ?? null);
-  }
-}, [reservation]);
+    if (reservation) {
+      setGuestName(reservation.guest_name);
+      setAdults(reservation.adults_count || reservation.people_count || 1);
+      setChildren(reservation.children_count || 0);
+      setInfants(reservation.infants_count || 0);
+      setStartDate(reservation.start_date);
+      setEndDate(reservation.end_date);
+      setStatus(reservation.status);
+      setNotes(reservation.notes ?? "");
+      setPartnerId(reservation.partner_id ?? null);
+    }
+  }, [reservation]);
+
+  // Accessibility: manage focus when modal opens and handle ESC to close
+  useEffect(() => {
+    previousActive.current = document.activeElement as HTMLElement | null;
+    // focus first input when modal mounts
+    const timer = setTimeout(() => {
+      firstFieldRef.current?.focus();
+    }, 0);
+
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    }
+
+    document.addEventListener("keydown", onKey);
+
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      if (previousActive.current) previousActive.current.focus();
+      clearTimeout(timer);
+    };
+  }, [onClose]);
 
   useEffect(() => {
     // default end date to next day when creating
@@ -124,37 +151,37 @@ export default function ReservationModal({
 
   return (
     <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} onClose={onClose}>
-      <div className="form">
+        <div className="form reservation-modal" role="dialog" aria-modal="true" aria-labelledby="reservation-title">
         {(error || fieldError) && (
-          <div className="form-error">{error}</div>
+          <div className="form-error" aria-live="assertive">{error}</div>
         )}
 
         <div className="form-group">
-          <label>Hóspede</label>
-          <input value={guestName} onChange={e => setGuestName(e.target.value)} />
+          <label htmlFor="guestName">Hóspede</label>
+          <input id="guestName" ref={firstFieldRef} value={guestName} onChange={e => setGuestName(e.target.value)} />
         </div>
 
         <div className="form-group">
-          <label>Adultos</label>
-          <input type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />
+          <label htmlFor="adults">Adultos</label>
+          <input id="adults" type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />
         </div>
         <div className="form-group">
-          <label>Crianças</label>
-          <input type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />
+          <label htmlFor="children">Crianças</label>
+          <input id="children" type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />
         </div>
         <div className="form-group">
-          <label>Bebês</label>
-          <input type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />
-        </div>
-
-        <div className="form-group">
-          <label>Entrada</label>
-          <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+          <label htmlFor="infants">Bebês</label>
+          <input id="infants" type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />
         </div>
 
         <div className="form-group">
-          <label>Saída</label>
-          <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+          <label htmlFor="startDate">Entrada</label>
+          <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="endDate">Saída</label>
+          <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
         </div>
 
         {editing && (
@@ -170,8 +197,8 @@ export default function ReservationModal({
 
         <div className="form-group">
           <label>Resumo</label>
-          <div style={{ display: 'grid', gap: 8 }}>
-            <div style={{ fontWeight: 600 }}>Total: {formatMoney(calcTotal)}</div>
+          <div className="summary">
+            <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
             {days.length > 0 && (
               <div>
                 {days.map((d: any) => (
@@ -183,13 +210,13 @@ export default function ReservationModal({
         </div>
 
         <div className="form-group">
-          <label>Observações</label>
-          <textarea value={notes} onChange={e => setNotes(e.target.value)} />
+          <label htmlFor="notes">Observações</label>
+          <textarea id="notes" value={notes} onChange={e => setNotes(e.target.value)} />
         </div>
 
         <div className="form-group">
-          <label>Parceiro</label>
-          <select value={partnerId ?? ""} onChange={e => setPartnerId(e.target.value || null)}>
+          <label htmlFor="partner">Parceiro</label>
+          <select id="partner" value={partnerId ?? ""} onChange={e => setPartnerId(e.target.value || null)}>
             <option value="">(Nenhum)</option>
             {partners.map(p => (
               <option key={p.id} value={p.id}>{p.name}</option>
@@ -198,8 +225,8 @@ export default function ReservationModal({
         </div>
 
         <div className="form-actions">
-          <button className="secondary" onClick={onClose}>Cancelar</button>
-          <button className="primary" disabled={!!fieldError} onClick={async () => {
+          <button type="button" className="secondary" onClick={onClose}>Cancelar</button>
+          <button type="button" className="primary" disabled={!!fieldError} onClick={async () => {
             try {
               if (reservation) {
                 await updateReservation(reservation.id, {
@@ -232,7 +259,7 @@ export default function ReservationModal({
               console.error('Erro ao salvar reserva:', e);
               setError(e?.error || e?.message || "Erro ao salvar reserva");
             }
-          }}>Salvar</button>
+            }}>Salvar</button>
         </div>
       </div>
       
