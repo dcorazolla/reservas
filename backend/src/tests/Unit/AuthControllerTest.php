@@ -181,7 +181,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         AuthSession::create([
-            'id' => 'sess-logout',
+            'id' => (string) \Illuminate\Support\Str::uuid(),
             'user_id' => $user->id,
             'jwt_id' => 'jti-logout',
             'refresh_token_hash' => hash('sha256', 'x'),
@@ -217,7 +217,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         AuthSession::create([
-            'id' => 's1',
+            'id' => (string) \Illuminate\Support\Str::uuid(),
             'user_id' => $user->id,
             'jwt_id' => 'j1',
             'refresh_token_hash' => hash('sha256', 'a'),
@@ -227,7 +227,7 @@ class AuthControllerTest extends TestCase
             'last_used_at' => now(),
         ]);
         AuthSession::create([
-            'id' => 's2',
+            'id' => (string) \Illuminate\Support\Str::uuid(),
             'user_id' => $user->id,
             'jwt_id' => 'j2',
             'refresh_token_hash' => hash('sha256', 'b'),
