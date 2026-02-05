@@ -150,8 +150,8 @@ export default function ReservationModal({
 
 
   return (
-    <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} onClose={onClose}>
-        <div className="form reservation-modal" role="dialog" aria-modal="true" aria-labelledby="reservation-title">
+    <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose}>
+      <div className="form reservation-modal">
         {(error || fieldError) && (
           <div className="form-error" aria-live="assertive">{error}</div>
         )}
