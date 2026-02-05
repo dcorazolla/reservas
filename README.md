@@ -106,3 +106,25 @@ Próximos passos (planejados)
 
 Licença
 - Código interno do projeto — seguir políticas da organização.
+
+Local test helper
+
+- Run all tests locally (backend + frontend):
+
+```bash
+./scripts/test-all.sh
+```
+
+Git hooks
+
+- This repository includes a sample pre-push hook at `.githooks/pre-push` that will run `./scripts/test-all.sh` before pushing. To enable it locally:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+- You can disable it later with:
+
+```bash
+git config --unset core.hooksPath
+```

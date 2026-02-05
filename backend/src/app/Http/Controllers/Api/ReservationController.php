@@ -14,6 +14,7 @@ class ReservationController extends BaseApiController
 {
     public function store(Request $request, CreateReservationService $service)
     {
+
         $data = $request->validate([
             'room_id'        => 'required|exists:rooms,id',
             'partner_id'     => 'sometimes|nullable|uuid|exists:partners,id',
@@ -24,9 +25,30 @@ class ReservationController extends BaseApiController
             'children_count' => 'required|integer|min:0',
             'infants_count'  => 'nullable|integer|min:0',
             'start_date'     => 'required|date',
-            'end_date'       => 'required|date|after:start_date',
+            'end_date'       => 'required|date',
             'notes'          => 'nullable|string',
         ]);
+
+        // Manually enforce end_date > start_date using a safe parse to avoid
+        // DateMalformedStringException in some environments when using the
+        // built-in 'after' validator which relies on Carbon::parse.
+        try {
+            $start = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
+        } catch (\Throwable $e) {
+            $start = \Carbon\Carbon::parse($data['start_date'])->startOfDay();
+        }
+
+        try {
+            $end = \Carbon\Carbon::createFromFormat('Y-m-d', $data['end_date'])->startOfDay();
+        } catch (\Throwable $e) {
+            $end = \Carbon\Carbon::parse($data['end_date'])->startOfDay();
+        }
+
+        if ($end <= $start) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'end_date' => ['The end date must be a date after start date.'],
+            ]);
+        }
 
         $reservation = $service->create($data);
 
@@ -49,10 +71,31 @@ class ReservationController extends BaseApiController
             'children_count' => 'sometimes|integer|min:0',
             'infants_count'  => 'sometimes|integer|min:0',
             'start_date'     => 'sometimes|date',
-            'end_date'       => 'sometimes|date|after:start_date',
+            'end_date'       => 'sometimes|date',
             'status'         => 'sometimes|string',
             'notes'          => 'sometimes|nullable|string',
         ]);
+
+        // If both dates are provided, validate ordering similarly to store().
+        if (array_key_exists('start_date', $data) && array_key_exists('end_date', $data)) {
+            try {
+                $start = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
+            } catch (\Throwable $e) {
+                $start = \Carbon\Carbon::parse($data['start_date'])->startOfDay();
+            }
+
+            try {
+                $end = \Carbon\Carbon::createFromFormat('Y-m-d', $data['end_date'])->startOfDay();
+            } catch (\Throwable $e) {
+                $end = \Carbon\Carbon::parse($data['end_date'])->startOfDay();
+            }
+
+            if ($end <= $start) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'end_date' => ['The end date must be a date after start date.'],
+                ]);
+            }
+        }
 
         $room = $reservation->room;
 
