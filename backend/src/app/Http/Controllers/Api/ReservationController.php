@@ -16,6 +16,7 @@ class ReservationController extends BaseApiController
     {
         $data = $request->validate([
             'room_id'        => 'required|exists:rooms,id',
+            'partner_id'     => 'sometimes|nullable|uuid|exists:partners,id',
             'guest_name'     => 'required|string|max:255',
             'email'          => 'nullable|email',
             'phone'          => 'nullable|string',
@@ -40,6 +41,7 @@ class ReservationController extends BaseApiController
     ) {
         $data = $request->validate([
             'guest_name'     => 'sometimes|required|string|max:255',
+            'partner_id'     => 'sometimes|nullable|uuid|exists:partners,id',
             'email'          => 'sometimes|nullable|email',
             'phone'          => 'sometimes|nullable|string',
             'people_count'   => 'sometimes|integer|min:1',
@@ -74,6 +76,7 @@ class ReservationController extends BaseApiController
         $calc = $calculator->calculateDetailed($room, $start, $end, (int)$adults, (int)$children, (int)$infants);
 
         $update = [
+            'partner_id'     => array_key_exists('partner_id', $data) ? $data['partner_id'] : $reservation->partner_id,
             'guest_name'     => $data['guest_name']     ?? $reservation->guest_name,
             'email'          => array_key_exists('email', $data) ? $data['email'] : $reservation->email,
             'phone'          => array_key_exists('phone', $data) ? $data['phone'] : $reservation->phone,
@@ -94,6 +97,8 @@ class ReservationController extends BaseApiController
 
     public function show(Reservation $reservation)
     {
+        $reservation->loadMissing('partner');
+
         return $this->ok(new ReservationResource($reservation));
     }
 }

@@ -23,6 +23,13 @@ class ReservationResource extends JsonResource
             'status' => $this->status,
             'total_value' => $this->total_value,
             'notes' => $this->notes,
+            'partner_id' => $this->partner_id,
+            'partner' => $this->whenLoaded('partner', function () {
+                return [
+                    'id' => $this->partner->id,
+                    'name' => $this->partner->name,
+                ];
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

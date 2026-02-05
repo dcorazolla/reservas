@@ -18,6 +18,7 @@ class ReservationService
         // Persist only supported columns to avoid schema mismatches
         return Reservation::create([
             'room_id'        => $data['room_id'],
+            'partner_id'     => $data['partner_id'] ?? null,
             'guest_name'     => $data['guest_name'],
             'email'          => $data['email'] ?? null,
             'phone'          => $data['phone'] ?? null,

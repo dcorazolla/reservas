@@ -15,6 +15,7 @@ class Reservation extends Model
 
     protected $fillable = [
         'room_id',
+        'partner_id',
         'guest_name',
         'adults_count',
         'children_count',
@@ -37,6 +38,11 @@ class Reservation extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
     }
 
     public function scopeConflicting($query, $roomId, $start, $end)
