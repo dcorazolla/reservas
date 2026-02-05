@@ -145,6 +145,66 @@ class ReservationControllerTest extends TestCase
         ]);
     }
 
+    public function test_store_allows_setting_partner_id()
+    {
+        $property = Property::create([
+            'name' => 'Partner Property',
+            'timezone' => 'UTC',
+            'infant_max_age' => 2,
+            'child_max_age' => 12,
+            'child_factor' => 50,
+            'base_one_adult' => 100,
+            'base_two_adults' => 150,
+            'additional_adult' => 30,
+            'child_price' => 25,
+        ]);
+
+        $room = Room::create([
+            'property_id' => $property->id,
+            'room_category_id' => null,
+            'number' => '401',
+            'name' => 'Room 401',
+            'beds' => 1,
+            'capacity' => 2,
+            'active' => true,
+        ]);
+
+        $partner = \App\Models\Partner::create([
+            'property_id' => $property->id,
+            'name' => 'Acme Agency',
+        ]);
+
+        $user = User::factory()->create();
+        $login = $this->postJson('/api/auth/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])->assertStatus(200);
+
+        $token = $login->json('access_token');
+
+        $payload = [
+            'room_id' => $room->id,
+            'guest_name' => 'Partner Guest',
+            'adults_count' => 2,
+            'children_count' => 0,
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(1)->toDateString(),
+            'partner_id' => $partner->id,
+        ];
+
+        $res = $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->postJson('/api/reservations', $payload)
+            ->assertStatus(201)
+            ->json();
+
+        $id = $res['data']['id'] ?? $res['id'] ?? null;
+        $this->assertNotNull($id, 'Expected reservation id in response');
+        $this->assertDatabaseHas('reservations', [
+            'id' => $id,
+            'partner_id' => $partner->id,
+        ]);
+    }
+
     public function test_update_recalculates_total()
     {
         $property = Property::create([

@@ -68,6 +68,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/invoices', [InvoiceController::class, 'index']);
     Route::post('/invoices', [InvoiceController::class, 'store']);
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
+    Route::put('/invoices/{invoice}', [InvoiceController::class, 'update']);
+    Route::post('/invoices/{invoice}/cancel', [InvoiceController::class, 'cancel']);
     Route::get('/invoices/{invoice_id}/payments', [PaymentController::class, 'index']);
     Route::post('/invoices/{invoice_id}/payments', [PaymentController::class, 'store']);
 

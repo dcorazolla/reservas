@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Reservation, ReservationStatus } from "../types/calendar";
+import type { Partner } from "../types/partner";
 import { createReservation, updateReservation, calculateReservationPriceDetailed } from "../api/reservations";
+import { listPartners } from "../api/partners";
 import Modal from "./Modal/Modal";
 import { formatMoney } from "../utils/money";
 
@@ -30,6 +32,8 @@ export default function ReservationModal({
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState<ReservationStatus>("pre-reserva");
   const [notes, setNotes] = useState("");
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [partnerId, setPartnerId] = useState<string | null>(null);
   const [calcTotal, setCalcTotal] = useState<number>(0);
   const [days, setDays] = useState<Array<{ date: string; price: number }>>([]);
   const [error, setError] = useState("");
@@ -47,6 +51,7 @@ export default function ReservationModal({
     setEndDate(reservation.end_date);
     setStatus(reservation.status);
     setNotes(reservation.notes ?? "");
+    setPartnerId(reservation.partner_id ?? null);
   }
 }, [reservation]);
 
@@ -103,6 +108,18 @@ export default function ReservationModal({
     }
     recalc();
   }, [roomId, reservation, startDate, endDate, adults, children, infants, fieldError]);
+
+  useEffect(() => {
+    async function loadPartners() {
+      try {
+        const p: any = await listPartners();
+        setPartners(p || []);
+      } catch (e) {
+        console.warn('Não foi possível carregar parceiros', e);
+      }
+    }
+    loadPartners();
+  }, []);
 
 
   return (
@@ -170,12 +187,23 @@ export default function ReservationModal({
           <textarea value={notes} onChange={e => setNotes(e.target.value)} />
         </div>
 
+        <div className="form-group">
+          <label>Parceiro</label>
+          <select value={partnerId ?? ""} onChange={e => setPartnerId(e.target.value || null)}>
+            <option value="">(Nenhum)</option>
+            {partners.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+
         <div className="form-actions">
           <button className="secondary" onClick={onClose}>Cancelar</button>
           <button className="primary" disabled={!!fieldError} onClick={async () => {
             try {
               if (reservation) {
                 await updateReservation(reservation.id, {
+                    partner_id: partnerId,
                   guest_name: guestName,
                   adults_count: adults,
                   children_count: children,
@@ -188,6 +216,7 @@ export default function ReservationModal({
               } else {
                 await createReservation({
                   room_id: roomId,
+                    partner_id: partnerId,
                   guest_name: guestName,
                   adults_count: adults,
                   children_count: children,

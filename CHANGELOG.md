@@ -10,3 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Notes
 - PHPUnit reported 13 deprecations during the verification run; these will be addressed in a follow-up PR.
+
+## [Unreleased]
+
+- Feature: add `partner_id` to `reservations` table and allow associating a `Partner` when creating or updating reservations. Back-end: migration, controller/service/resource changes. Front-end: reservation modal now exposes a partner select and sends `partner_id`.
+

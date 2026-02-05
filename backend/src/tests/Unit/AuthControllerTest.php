@@ -180,8 +180,9 @@ class AuthControllerTest extends TestCase
             'name' => 'L',
         ]);
 
+        $sessId = (string) \Illuminate\Support\Str::uuid();
         AuthSession::create([
-            'id' => 'sess-logout',
+            'id' => $sessId,
             'user_id' => $user->id,
             'jwt_id' => 'jti-logout',
             'refresh_token_hash' => hash('sha256', 'x'),
@@ -205,7 +206,7 @@ class AuthControllerTest extends TestCase
         $resp = (new \App\Http\Controllers\Api\AuthController())->logout();
 
         $this->assertEquals(204, $resp->getStatusCode());
-        $this->assertDatabaseMissing('auth_sessions', ['id' => 'sess-logout', 'revoked_at' => null]);
+        $this->assertDatabaseMissing('auth_sessions', ['id' => $sessId, 'revoked_at' => null]);
     }
 
     public function test_logoutAll_revokes_all_sessions_and_logs_out()
@@ -217,7 +218,7 @@ class AuthControllerTest extends TestCase
         ]);
 
         AuthSession::create([
-            'id' => 's1',
+            'id' => (string) \Illuminate\Support\Str::uuid(),
             'user_id' => $user->id,
             'jwt_id' => 'j1',
             'refresh_token_hash' => hash('sha256', 'a'),
@@ -227,7 +228,7 @@ class AuthControllerTest extends TestCase
             'last_used_at' => now(),
         ]);
         AuthSession::create([
-            'id' => 's2',
+            'id' => (string) \Illuminate\Support\Str::uuid(),
             'user_id' => $user->id,
             'jwt_id' => 'j2',
             'refresh_token_hash' => hash('sha256', 'b'),

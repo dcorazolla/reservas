@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { listInvoices } from '../api/invoices';
+import { listInvoices, updateInvoice, cancelInvoice } from '../api/invoices';
+import Modal from '../components/Modal/Modal';
+import ErrorDialog from '../components/Common/ErrorDialog';
 import { Link } from 'react-router-dom';
 import type { Invoice } from '../types/invoice';
 
@@ -9,6 +11,30 @@ function formatMoney(v: number) {
 
 export default function InvoicesPage() {
   const [items, setItems] = useState<Invoice[]>([]);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editing, setEditing] = useState<Invoice | null>(null);
+  const [error, setError] = useState('');
+
+  async function doUpdate(id: string, payload: Partial<Invoice>) {
+    try {
+      await updateInvoice(id, payload);
+      setEditOpen(false);
+      setEditing(null);
+      await load();
+    } catch (err: any) {
+      setError(err?.message || 'Falha ao atualizar fatura');
+    }
+  }
+
+  async function doCancel(id: string) {
+    if (!confirm('Confirma cancelar esta fatura?')) return;
+    try {
+      await cancelInvoice(id);
+      await load();
+    } catch (err: any) {
+      setError(err?.message || 'Falha ao cancelar fatura');
+    }
+  }
 
   async function load() {
     const res = await listInvoices({ per_page: 50 });
@@ -36,11 +62,25 @@ export default function InvoicesPage() {
               <td>{i.issued_at || '-'}</td>
               <td>{formatMoney(i.total)}</td>
               <td>{i.status}</td>
-              <td><Link to={`/invoices/${i.id}`}>Ver</Link></td>
+                <td>
+                  <Link to={`/invoices/${i.id}`}>Ver</Link>
+                  {' | '}
+                  <button className="link-like" onClick={() => { setEditing(i); setEditOpen(true); }}>Editar</button>
+                  {' | '}
+                  <button className="link-like danger" onClick={() => doCancel(i.id)}>Cancelar</button>
+                </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <Modal open={editOpen} title="Editar Fatura" onClose={() => { setEditOpen(false); setEditing(null); }}>
+        {editing ? (
+          <InvoiceEditForm invoice={editing} onSave={doUpdate} onCancel={() => { setEditOpen(false); setEditing(null); }} />
+        ) : null}
+      </Modal>
+
+      <ErrorDialog open={!!error} message={error} onClose={() => setError('')} />
     </div>
   );
 }

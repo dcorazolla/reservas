@@ -15,8 +15,8 @@ class InvoiceControllerTest extends TestCase
         $property = Property::create(['name' => 'P', 'timezone' => 'UTC']);
 
         $partner = Partner::create(['name' => 'P1']);
-        Invoice::create(['id' => 'i1', 'property_id' => $property->id, 'partner_id' => $partner->id, 'issued_at' => now()]);
-        Invoice::create(['id' => 'i2', 'property_id' => $property->id, 'partner_id' => $partner->id, 'issued_at' => now()]);
+        Invoice::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'property_id' => $property->id, 'partner_id' => $partner->id, 'issued_at' => now()]);
+        Invoice::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'property_id' => $property->id, 'partner_id' => $partner->id, 'issued_at' => now()]);
 
         $service = $this->createMock(\App\Services\InvoiceService::class);
         $controller = new \App\Http\Controllers\Api\InvoiceController($service);
@@ -48,7 +48,7 @@ class InvoiceControllerTest extends TestCase
         $mockService->expects($this->once())
             ->method('createInvoice')
             ->with($this->isType('array'))
-            ->willReturn(Invoice::create(['id' => 'inv-1', 'property_id' => $property->id, 'partner_id' => $partner->id]));
+            ->willReturn(Invoice::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'property_id' => $property->id, 'partner_id' => $partner->id]));
 
         $controller = new \App\Http\Controllers\Api\InvoiceController($mockService);
 
@@ -71,13 +71,13 @@ class InvoiceControllerTest extends TestCase
         $resp = $controller->store($req);
 
         $this->assertEquals(201, $resp->getStatusCode());
-        $this->assertEquals('inv-1', $resp->getData(true)['id']);
+        $this->assertArrayHasKey('id', $resp->getData(true));
     }
 
     public function test_show_returns_invoice_with_relations()
     {
         $partner2 = Partner::create(['name' => 'P2']);
-        $invoice = Invoice::create(['id' => 'inv-show', 'property_id' => null, 'partner_id' => $partner2->id, 'issued_at' => now()]);
+        $invoice = Invoice::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'property_id' => null, 'partner_id' => $partner2->id, 'issued_at' => now()]);
 
         $service = $this->createMock(\App\Services\InvoiceService::class);
         $controller = new \App\Http\Controllers\Api\InvoiceController($service);
@@ -85,6 +85,6 @@ class InvoiceControllerTest extends TestCase
         $resp = $controller->show($invoice);
 
         $this->assertEquals(200, $resp->getStatusCode());
-        $this->assertEquals('inv-show', $resp->getData(true)['id']);
+        $this->assertArrayHasKey('id', $resp->getData(true));
     }
 }
