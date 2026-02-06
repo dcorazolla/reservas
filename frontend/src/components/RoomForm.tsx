@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useId } from "react";
 import type { Room } from "../types/room";
 import type { RoomCategory } from "../types/roomCategory";
 import { createRoom, updateRoom } from "../api/rooms";
@@ -19,6 +19,7 @@ export default function RoomForm({
   onSaved,
   onClose,
 }: Props) {
+  const id = useId();
   const [form, setForm] = useState<any>({
     number: "",
     name: "",
@@ -63,8 +64,9 @@ export default function RoomForm({
     <form onSubmit={submit} className="form">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <div className="form-group">
-          <label>Categoria</label>
+          <label htmlFor={`${id}-category`}>Categoria</label>
           <select
+            id={`${id}-category`}
             value={form.room_category_id}
             onChange={(e) =>
               setForm({ ...form, room_category_id: e.target.value })
@@ -80,8 +82,9 @@ export default function RoomForm({
         </div>
 
         <div className="form-group">
-          <label>Número</label>
+          <label htmlFor={`${id}-number`}>Número</label>
           <input
+            id={`${id}-number`}
             value={form.number}
             onChange={(e) => setForm({ ...form, number: e.target.value })}
             required
@@ -89,8 +92,9 @@ export default function RoomForm({
         </div>
 
         <div className="form-group">
-          <label>Nome</label>
+          <label htmlFor={`${id}-name`}>Nome</label>
           <input
+            id={`${id}-name`}
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             required
@@ -98,8 +102,9 @@ export default function RoomForm({
         </div>
 
         <div className="form-group">
-          <label>Capacidade</label>
+          <label htmlFor={`${id}-capacity`}>Capacidade</label>
           <input
+            id={`${id}-capacity`}
             value={form.capacity}
             onChange={(e) => setForm({ ...form, capacity: e.target.value })}
             required
@@ -107,8 +112,9 @@ export default function RoomForm({
         </div>
 
         <div className="form-group">
-          <label>Camas</label>
+          <label htmlFor={`${id}-beds`}>Camas</label>
           <input
+            id={`${id}-beds`}
             value={form.beds}
             onChange={(e) => setForm({ ...form, beds: e.target.value })}
             required

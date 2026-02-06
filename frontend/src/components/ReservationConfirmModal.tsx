@@ -77,17 +77,17 @@ export default function ReservationConfirmModal({ open, item, checkin, checkout,
         <div className="form-divider" />
 
         <div className="form-group">
-          <label>Nome do hóspede</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} required />
+          <label htmlFor="guest-name">Nome do hóspede</label>
+          <input id="guest-name" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div className="form-group">
-            <label>Email (opcional)</label>
-            <input type="email" value={mail} onChange={(e) => setMail(e.target.value)} />
+            <label htmlFor="guest-email">Email (opcional)</label>
+            <input id="guest-email" type="email" value={mail} onChange={(e) => setMail(e.target.value)} />
           </div>
           <div className="form-group">
-            <label>Telefone (opcional)</label>
-            <input type="tel" value={tel} onChange={(e) => setTel(e.target.value)} />
+            <label htmlFor="guest-phone">Telefone (opcional)</label>
+            <input id="guest-phone" type="tel" value={tel} onChange={(e) => setTel(e.target.value)} />
           </div>
         </div>
 
