@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useId } from 'react';
 import type { Partner } from '../types/partner';
 import { createPartner, updatePartner } from '../api/partners';
 import ErrorDialog from './Common/ErrorDialog';
@@ -10,6 +10,7 @@ type Props = {
 };
 
 export default function PartnerForm({ partner, onSaved, onClose }: Props) {
+  const id = useId();
   const [form, setForm] = useState<Partial<Partner>>({
     name: '',
     email: '',
@@ -45,33 +46,33 @@ export default function PartnerForm({ partner, onSaved, onClose }: Props) {
     <form onSubmit={submit} className="form">
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <div className="form-group">
-          <label>Nome</label>
-          <input value={form.name || ''} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+          <label htmlFor={`${id}-name`}>Nome</label>
+          <input id={`${id}-name`} value={form.name || ''} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
         </div>
 
         <div className="form-group">
-          <label>Email</label>
-          <input type="email" value={form.email || ''} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+          <label htmlFor={`${id}-email`}>Email</label>
+          <input id={`${id}-email`} type="email" value={form.email || ''} onChange={(e) => setForm({ ...form, email: e.target.value })} />
         </div>
 
         <div className="form-group">
-          <label>Telefone</label>
-          <input value={form.phone || ''} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          <label htmlFor={`${id}-phone`}>Telefone</label>
+          <input id={`${id}-phone`} value={form.phone || ''} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
         </div>
 
         <div className="form-group">
-          <label>CPF / CNPJ</label>
-          <input value={form.tax_id || ''} onChange={(e) => setForm({ ...form, tax_id: e.target.value })} />
+          <label htmlFor={`${id}-tax`}>CPF / CNPJ</label>
+          <input id={`${id}-tax`} value={form.tax_id || ''} onChange={(e) => setForm({ ...form, tax_id: e.target.value })} />
         </div>
 
         <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-          <label>Endereço</label>
-          <input value={form.address || ''} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+          <label htmlFor={`${id}-address`}>Endereço</label>
+          <input id={`${id}-address`} value={form.address || ''} onChange={(e) => setForm({ ...form, address: e.target.value })} />
         </div>
 
         <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-          <label>Notas</label>
-          <textarea value={form.notes || ''} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
+          <label htmlFor={`${id}-notes`}>Notas</label>
+          <textarea id={`${id}-notes`} value={form.notes || ''} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
         </div>
       </div>
 

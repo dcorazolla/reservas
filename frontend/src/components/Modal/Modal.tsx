@@ -1,4 +1,5 @@
 import "./modal.css";
+import { useId } from 'react';
 
 type Props = {
   open: boolean;
@@ -11,18 +12,21 @@ type Props = {
 export default function Modal({ open, title, children, onClose, titleId }: Props) {
   if (!open) return null;
 
+  const autoId = useId();
+  const titleElId = titleId ?? `modal-title-${autoId}`;
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div
         className="modal"
         role="dialog"
         aria-modal="true"
-        aria-labelledby={titleId ?? undefined}
+        aria-labelledby={titleElId}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h3 id={titleId ?? undefined}>{title}</h3>
+          <h3 id={titleElId}>{title}</h3>
           <button className="modal-close" aria-label="Fechar" onClick={onClose}>
             ×
           </button>
