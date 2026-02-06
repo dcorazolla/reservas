@@ -35,3 +35,15 @@ Onde encontrar código importante
 Notas operacionais
 - Não commitar credenciais; usar `.env` e documentar variáveis necessárias.
 - Antes de commitar mudanças que alterem comportamentos, rodar testes e atualizar documentação e OpenAPI quando aplicável.
+
+Políticas obrigatórias (aplicáveis a todos os desenvolvedores e agentes)
+- Cobertura de testes: todo código novo/alterado deve ser coberto por testes. O objetivo obrigatório do projeto é manter cobertura de testes acima de **95%** nas áreas modificadas. Pull requests que reduzam cobertura abaixo desse limiar devem ser rejeitados até correção.
+- Execução de testes: execute a suíte completa de testes (backend + frontend) antes de qualquer push e antes de abrir PR. Use `./scripts/test-all.sh` e garanta que todos os testes passem.
+- Critério para push/PR: só avançar com push ou abertura de PR se:
+  1. Todos os testes passarem localmente.
+  2. A cobertura mínima definida (95% nas áreas modificadas) for atendida.
+  3. Documentação relacionada tiver sido atualizada (README/OVERVIEW/SETUP/RELEASE_NOTES/OpenAPI/ADRs quando aplicável).
+
+Referência de documentação central
+- Há um índice principal em `docs/DOCS_INDEX.md` que referencia todos os documentos essenciais do projeto (OVERVIEW, SETUP, ARCHITECTURE, AGENT_CONTEXT, front/back TODOs, release notes).
+
