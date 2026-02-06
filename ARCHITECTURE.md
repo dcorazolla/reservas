@@ -28,3 +28,20 @@ Onde encontrar o código (mapa rápido)
 Decisões importantes (resumo)
 - Auditoria financeira: todas as alterações financeiras são registradas em logs append-only (ver ADRs quando existentes)
 - Separação de responsabilidades: serviços (business logic) não devem usar lógica de controle/HTTP
+
+Hotspots & Workplan (resumo do relatório de auditoria)
+- Hotspots identificados:
+  - Ambiguidade de route-model binding sem escopo por `property_id`, causando erros intermitentes.
+  - Controllers com lógica de criação direta de models (devem ser finos e delegar a Services).
+  - Services que misturam lógica de negócio com persistência; recomenda-se extrair Repositories.
+  - Cobertura de testes insuficiente em helpers de escopo (ex.: `EnsuresPropertyScope`).
+  - Falta de análise estática e linting automatizado (PHPStan / Pint).
+
+- Plano incremental sugerido:
+  1. Implementar scoped route-model binding no `RouteServiceProvider` para modelos sensíveis ao `property_id`.
+  2. Tornar controllers finos (ex.: `InvoiceController`) usando `FormRequest` e `Services` para regras de negócio.
+  3. Extrair persistência para `Repositories` (ex.: `InvoiceRepository`) e injetar nos `Services`.
+  4. Adicionar helpers de teste e coverage para scoping e falhas previamente intermitentes.
+  5. Incluir ferramentas de análise (PHPStan) e formatação (Pint) e integrar na CI.
+
+Esses passos foram arquivados originalmente em um relatório de auditoria (`docs/architecture/backend-audit.md`) e sintetizados aqui para referência operacional.

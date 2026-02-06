@@ -47,3 +47,7 @@ Políticas obrigatórias (aplicáveis a todos os desenvolvedores e agentes)
 Referência de documentação central
 - Há um índice principal em `docs/DOCS_INDEX.md` que referencia todos os documentos essenciais do projeto (OVERVIEW, SETUP, ARCHITECTURE, AGENT_CONTEXT, front/back TODOs, release notes).
 
+Referências úteis
+- Checklist para PRs e mudanças importantes: `CHECKLIST.md` (root)
+
+
