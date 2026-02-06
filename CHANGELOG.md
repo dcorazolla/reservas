@@ -15,3 +15,10 @@ All notable changes to this project will be documented in this file.
 
 - Feature: add `partner_id` to `reservations` table and allow associating a `Partner` when creating or updating reservations. Back-end: migration, controller/service/resource changes. Front-end: reservation modal now exposes a partner select and sends `partner_id`.
 
+ 
+## 2026-02-05
+
+- Frontend: upgraded testing libraries (`@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `vitest`) and added `@testing-library/dom` to fix test imports.
+- CI: removed temporary `--legacy-peer-deps` flag from frontend workflow and ensured `npm ci` runs deterministically. Changes are covered by PRs #13, #18 and #20.
+- Misc: small accessibility and modal improvements and added Vitest accessibility/keyboard tests for `ReservationModal`.
+
