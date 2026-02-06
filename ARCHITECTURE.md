@@ -1,0 +1,30 @@
+# ARCHITECTURE
+
+Resumo arquitetural do sistema `reservas`.
+
+Camadas principais
+- Backend (Laravel): API REST, services de negócio em `app/Services`, controllers em `app/Http/Controllers`, migrations em `database/migrations`.
+- Frontend (React): SPA em `frontend/src`, components e pages organizados por funcionalidade.
+- Persitência: Postgres em produção; SQLite para testes.
+
+Entidades principais
+- Property
+  - Campos chave: id (uuid), name, address, timezone
+- Room
+  - Campos: id, property_id, name, capacity, price_base
+- Reservation
+  - Campos: id, property_id, room_id, guest_name, start_date, end_date, status, total_price
+- Invoice
+  - Campos: id, reservation_id, amount, currency, status, issued_at, paid_at
+- Payment
+  - Campos: id, invoice_id, amount, provider, provider_id, status
+
+Onde encontrar o código (mapa rápido)
+- `backend/src/app/Services` — lógica de cálculo de preço, criação de reserva, faturamento
+- `backend/src/app/Http/Controllers/Api` — endpoints REST (reservations, invoices, payments)
+- `frontend/src/components` — componentes UI reutilizáveis (Modal, Form, Header)
+- `frontend/src/pages` — páginas (ReservationsPage, InvoicesPage)
+
+Decisões importantes (resumo)
+- Auditoria financeira: todas as alterações financeiras são registradas em logs append-only (ver ADRs quando existentes)
+- Separação de responsabilidades: serviços (business logic) não devem usar lógica de controle/HTTP
