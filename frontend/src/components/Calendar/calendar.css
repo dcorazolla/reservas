@@ -115,3 +115,23 @@
 .status-cancelado {
   background: #9ca3af;
 }
+
+/* Room block visuals */
+.room-block-cell {
+  background: linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
+  color: #374151;
+  font-size: 12px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.room-block-cell .block-label {
+  font-size: 14px;
+}
+
+.room-block-cell .block-reason {
+  font-size: 12px;
+  opacity: 0.9;
+}

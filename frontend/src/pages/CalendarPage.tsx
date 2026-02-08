@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { fetchCalendar } from "../api/calendar";
+import { fetchRoomBlocks } from "../api/roomBlocks";
 import type { Room, Reservation } from "../types/calendar";
 import CalendarGrid from "../components/Calendar/CalendarGrid";
 import ReservationModal from "../components/ReservationModal";
+import RoomBlockModal from "../components/RoomBlockModal";
 import { formatDate } from "../utils/dates";
 
 function monthStart(date: Date) {
@@ -38,6 +40,7 @@ export default function CalendarPage() {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [showBlockModal, setShowBlockModal] = useState(false);
   const selectedRoom = selectedRoomId ? rooms.find((r) => r.id === selectedRoomId) : null;
   const selectedCapacity =
     selectedRoom?.capacity || (selectedReservation ? rooms.find((r) => r.id === selectedReservation.room_id)?.capacity : undefined);
@@ -48,7 +51,14 @@ export default function CalendarPage() {
       const end = new Date(start);
       end.setDate(end.getDate() + len - 1);
       const data = await fetchCalendar(start, end.toISOString().slice(0, 10));
-      setRooms(data.rooms || []);
+      const blocks = await fetchRoomBlocks(start, end.toISOString().slice(0, 10));
+
+      // merge blocks into rooms
+      const roomsWithBlocks = (data.rooms || []).map((r: any) => ({
+        ...r,
+        room_blocks: (blocks || []).filter((b) => b.room_id === r.id),
+      }));
+      setRooms(roomsWithBlocks);
     } finally {
       setLoading(false);
     }
@@ -58,8 +68,6 @@ export default function CalendarPage() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, days]);
-
-  if (loading) return <p>Carregando calendário...</p>;
 
   return (
     <>
@@ -88,12 +96,14 @@ export default function CalendarPage() {
 
         <div style={{ marginLeft: 'auto' }}><strong>Período:</strong> {formatDate(startDate)} → {formatDate(new Date(new Date(startDate).setDate(new Date(startDate).getDate() + days - 1)).toISOString().slice(0,10))}</div>
       </div>
+      {loading ? <p>Carregando calendário...</p> : null}
 
       <CalendarGrid
         rooms={rooms}
         startDate={startDate}
         days={days}
         onEmptyCellClick={(roomId, date) => {
+          // do not allow creating reservations in blocked cells; the grid will not produce empty cells for blocked ranges
           setSelectedRoomId(roomId);
           setSelectedDate(date);
           setSelectedReservation(null);
@@ -104,6 +114,19 @@ export default function CalendarPage() {
           setSelectedDate(null);
         }}
       />
+
+      {/* Room block modal trigger */}
+      <div style={{ marginTop: 10 }}>
+        <button onClick={() => setShowBlockModal(true)}>Criar bloqueio de quarto</button>
+      </div>
+
+      {showBlockModal && (
+        <RoomBlockModal
+          open={showBlockModal}
+          onClose={() => setShowBlockModal(false)}
+          onSaved={() => { setShowBlockModal(false); load(); }}
+        />
+      )}
 
       {(selectedRoomId || selectedReservation) && (
         <ReservationModal

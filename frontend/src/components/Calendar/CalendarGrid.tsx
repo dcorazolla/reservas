@@ -1,5 +1,6 @@
 import React from "react";
 import type { Room } from "../../types/calendar";
+type RoomBlock = { id: string; room_id: string; start_date: string; end_date: string; reason?: string };
 import { generateDateRange } from "../../utils/dates";
 import "./calendar.css";
 export default function CalendarGrid({
@@ -67,6 +68,19 @@ export default function CalendarGrid({
               };
             });
 
+            // blocks mapping
+            const blockMap: Record<number, any> = {};
+            const blocks: RoomBlock[] = (room as any).room_blocks || [];
+            blocks.forEach((b) => {
+              const startDay = dates.indexOf(b.start_date);
+              const endDay = dates.indexOf(b.end_date);
+              if (startDay === -1) return;
+              const startCol = startDay * 2;
+              const endCol = endDay === -1 ? (dates.length * 2) - 1 : endDay * 2 + 1;
+              const span = Math.max(endCol - startCol + 1, 1);
+              blockMap[startCol] = { ...b, span };
+            });
+
             const cells: React.ReactElement[] = [];
 
             for (let col = 0; col < totalHalfCols; col++) {
@@ -90,6 +104,25 @@ export default function CalendarGrid({
                 );
 
                 col += r.span - 1;
+                continue;
+              }
+
+              // bloqueio começa aqui (blocks take precedence over creating reservations)
+              if (blockMap[col]) {
+                const b = blockMap[col];
+                cells.push(
+                  <td
+                    key={`block-${b.id}`}
+                    colSpan={b.span}
+                    className={`room-block-cell`}
+                    title={`Bloqueado: ${b.reason || 'bloqueio'}\n${b.start_date} → ${b.end_date}`}
+                  >
+                    <span className="block-label">🔒</span>
+                    <span className="block-reason">{b.reason || 'Bloqueado'}</span>
+                  </td>
+                );
+
+                col += b.span - 1;
                 continue;
               }
 
