@@ -26,6 +26,9 @@ class PartnerController extends BaseApiController
             'phone' => 'nullable|string',
             'tax_id' => 'nullable|string',
             'address' => 'nullable|string',
+            'notes' => 'nullable|string',
+            'billing_rule' => 'nullable|in:none,charge_partner,charge_guest',
+            'partner_discount_percent' => 'nullable|numeric|min:0|max:100',
         ]);
             // Ensure we have an ID client-side so we don't rely on DB defaults
             if (empty($data['id'])) {
@@ -56,6 +59,9 @@ class PartnerController extends BaseApiController
             'phone' => 'nullable|string',
             'tax_id' => 'nullable|string',
             'address' => 'nullable|string',
+            'notes' => 'nullable|string',
+            'billing_rule' => 'nullable|in:none,charge_partner,charge_guest',
+            'partner_discount_percent' => 'nullable|numeric|min:0|max:100',
         ]);
 
         $partner->update($data);

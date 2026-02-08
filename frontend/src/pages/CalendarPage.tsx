@@ -6,7 +6,25 @@ import ReservationModal from "../components/ReservationModal";
 import { formatDate } from "../utils/dates";
 
 function monthStart(date: Date) {
+  // Use local year/month to avoid ISO parsing timezone shifts
   return new Date(date.getFullYear(), date.getMonth(), 1).toISOString().slice(0, 10);
+}
+
+function addMonthsToIsoDate(isoDate: string, deltaMonths: number) {
+  // isoDate expected format: YYYY-MM-DD
+  const parts = isoDate.split('-');
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // zero-based
+
+  const d = new Date(year, month + deltaMonths, 1);
+  return new Date(d.getFullYear(), d.getMonth(), 1).toISOString().slice(0, 10);
+}
+
+function addDaysToIsoDate(isoDate: string, deltaDays: number) {
+  // isoDate expected format: YYYY-MM-DD
+  const d = new Date(isoDate.length > 10 ? isoDate : `${isoDate}T00:00:00`);
+  d.setDate(d.getDate() + deltaDays);
+  return d.toISOString().slice(0, 10);
 }
 
 export default function CalendarPage() {
@@ -47,14 +65,12 @@ export default function CalendarPage() {
     <>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
         <button onClick={() => {
-          const d = new Date(startDate);
-          d.setMonth(d.getMonth() - 1);
-          setStartDate(monthStart(d));
+          // Advance by number of days window (allows sliding window behavior)
+          setStartDate(addDaysToIsoDate(startDate, -days));
         }}>Anterior</button>
         <button onClick={() => {
-          const d = new Date(startDate);
-          d.setMonth(d.getMonth() + 1);
-          setStartDate(monthStart(d));
+          // Advance forward by the visible window length
+          setStartDate(addDaysToIsoDate(startDate, +days));
         }}>Próximo</button>
 
         <label style={{ marginLeft: 8 }}>

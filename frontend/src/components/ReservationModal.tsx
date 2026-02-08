@@ -141,6 +141,7 @@ export default function ReservationModal({
       try {
         const p: any = await listPartners();
         setPartners(p || []);
+        // Do not preselect a partner automatically; leave selection to the user
       } catch (e) {
         console.warn('Não foi possível carregar parceiros', e);
       }
