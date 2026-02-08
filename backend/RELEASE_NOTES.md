@@ -36,3 +36,48 @@ Deployment notes:
 - Run `php artisan migrate --force` to apply migrations.
 - Verify `APP_KEY` and `JWT_SECRET` are set in the environment for production/staging to avoid runtime errors when creating invoices.
 
+Developer workflow (version, tests, push, merge)
+
+- Update version:
+  - Edit `backend/src/composer.json` and set the `version` field to the new SemVer value (e.g. `0.1.2`).
+  - Add a short entry into `backend/RELEASE_NOTES.md` describing the changes.
+
+- Run tests locally (recommended in Docker):
+  ```bash
+  # Start DB + app containers
+  docker compose up -d pg app
+
+  # Install PHP deps (if needed) and run migrations
+  docker compose exec app sh -lc "composer install --no-interaction --prefer-dist || true"
+  docker compose exec app sh -lc "php artisan migrate --force"
+
+  # Run the backend test suite
+  docker compose exec app sh -lc "./vendor/bin/phpunit --colors=never"
+  ```
+
+- Commit & push:
+  ```bash
+  git add backend/src/composer.json backend/RELEASE_NOTES.md
+  git commit -m "chore(release): backend vX.Y.Z"
+  git push origin <branch>
+  ```
+
+- Open a PR and ensure CI passes. When all checks pass and reviews are approved, merge via PR. Prefer using `gh` for automation:
+  ```bash
+  gh pr create --fill --base main --head <branch>
+  # optionally enable auto-merge
+  gh pr merge <number> --auto --merge
+  ```
+
+- After merge, create annotated tag and GitHub Release (example):
+  ```bash
+  git fetch origin
+  git checkout main
+  git pull origin main
+  git tag -a backend/vX.Y.Z -m "backend vX.Y.Z"
+  git push origin backend/vX.Y.Z
+  gh release create backend/vX.Y.Z --title "backend vX.Y.Z" --notes-file backend/RELEASE_NOTES.md --target main
+  ```
+
+Note: this workflow mirrors the project's `docs/CHECKLIST.md` release section; keep both updated if processes change.
+
