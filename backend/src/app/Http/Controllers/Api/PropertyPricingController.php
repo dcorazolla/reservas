@@ -13,13 +13,13 @@ class PropertyPricingController extends Controller
         $propertyId = $this->getPropertyId($request);
         $property = Property::findOrFail($propertyId);
         return response()->json([
-            'base_one_adult' => $property->base_one_adult,
-            'base_two_adults' => $property->base_two_adults,
-            'additional_adult' => $property->additional_adult,
-            'child_price' => $property->child_price,
-            'infant_max_age' => $property->infant_max_age,
-            'child_max_age' => $property->child_max_age,
-            'child_factor' => $property->child_factor,
+            'base_one_adult' => $this->normalizeNumber($property->base_one_adult),
+            'base_two_adults' => $this->normalizeNumber($property->base_two_adults),
+            'additional_adult' => $this->normalizeNumber($property->additional_adult),
+            'child_price' => $this->normalizeNumber($property->child_price),
+            'infant_max_age' => $this->normalizeNumber($property->infant_max_age),
+            'child_max_age' => $this->normalizeNumber($property->child_max_age),
+            'child_factor' => $this->normalizeNumber($property->child_factor),
         ]);
     }
 
@@ -39,15 +39,35 @@ class PropertyPricingController extends Controller
         ]);
 
         $property->update($data);
-
         return response()->json([
-            'base_one_adult' => $property->base_one_adult,
-            'base_two_adults' => $property->base_two_adults,
-            'additional_adult' => $property->additional_adult,
-            'child_price' => $property->child_price,
-            'infant_max_age' => $property->infant_max_age,
-            'child_max_age' => $property->child_max_age,
-            'child_factor' => $property->child_factor,
+            'base_one_adult' => $this->normalizeNumber($property->base_one_adult),
+            'base_two_adults' => $this->normalizeNumber($property->base_two_adults),
+            'additional_adult' => $this->normalizeNumber($property->additional_adult),
+            'child_price' => $this->normalizeNumber($property->child_price),
+            'infant_max_age' => $this->normalizeNumber($property->infant_max_age),
+            'child_max_age' => $this->normalizeNumber($property->child_max_age),
+            'child_factor' => $this->normalizeNumber($property->child_factor),
         ]);
+    }
+
+    /**
+     * Normalize numeric values stored as decimals/strings into int or float for JSON responses.
+     * If the value is null, return null.
+     */
+    private function normalizeNumber($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        // Convert string/decimal to float
+        $float = (float) $value;
+
+        // If it's a whole number, return as int to match existing tests
+        if (floor($float) == $float) {
+            return (int) $float;
+        }
+
+        return $float;
     }
 }
