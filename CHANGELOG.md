@@ -22,3 +22,15 @@ All notable changes to this project will be documented in this file.
 - CI: removed temporary `--legacy-peer-deps` flag from frontend workflow and ensured `npm ci` runs deterministically. Changes are covered by PRs #13, #18 and #20.
 - Misc: small accessibility and modal improvements and added Vitest accessibility/keyboard tests for `ReservationModal`.
 
+
+## 2026-02-08 - Sprint 1 MVP
+
+- Sprint 1 MVP delivered:
+  - Reservations: create/update/list endpoints and detailed price calculation.
+  - Invoices/Payments: payment endpoints and invoice generation from reservations (feature-flagged).
+  - Partners: partner CRUD and association to reservations.
+  - Frontend: `ReservationForm`, invoice generation flow (flagged), partners UI, accessibility tests and Vitest coverage.
+
+- Notes:
+  - Feature flag `invoices.create_from_reservation` should remain OFF in production until manual validation on staging.
+
