@@ -1,0 +1,197 @@
+# Arquivo de OpenAPI (stub)
+
+Este stub foi criado temporariamente para o Sprint 1 MVP. A especificação canônica foi copiada
+de `backend/src/public/openapi.yaml` para `public/openapi.yaml`.
+
+Por favor, mantenha `public/openapi.yaml` como a fonte única para documentação pública da API.
+
+Se precisar recuperar o stub original, consulte o histórico do Git ou a branch onde foi criado.
+        - name: property_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Opcional; se omitido, usa `property_id` do JWT
+      responses:
+        '200':
+          description: Lista de reservas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+  /invoices/preview:
+    post:
+      summary: Gera preview de invoice a partir de reservas/partner/periodo (opcional)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                partner_id:
+                  type: string
+                  format: uuid
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Preview do invoice
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    items:
+                      type: object
+                  total:
+                    type: number
+  /invoices:
+    post:
+      summary: Cria invoice definitivo (depois de preview)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceCreate'
+      responses:
+        '201':
+          description: Invoice criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+  /payments:
+    post:
+      summary: Registra pagamento ligado a uma invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCreate'
+      responses:
+        '201':
+          description: Pagamento registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+  /properties:
+    get:
+      summary: Lista propriedades do usuário (para seleção/escopo)
+      responses:
+        '200':
+          description: Lista de propriedades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+components:
+  schemas:
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        property_id:
+          type: string
+          format: uuid
+        room_id:
+          type: string
+          format: uuid
+        guest_name:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        status:
+          type: string
+        total_price:
+          type: number
+          format: float
+    InvoiceCreate:
+      type: object
+      required: [property_id, partner_id, lines]
+      properties:
+        property_id:
+          type: string
+          format: uuid
+        partner_id:
+          type: string
+          format: uuid
+        lines:
+          type: array
+          items:
+            type: object
+            properties:
+              reservation_id:
+                type: string
+                format: uuid
+              description:
+                type: string
+              amount:
+                type: number
+    Invoice:
+      allOf:
+        - $ref: '#/components/schemas/InvoiceCreate'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            amount:
+              type: number
+              format: float
+            issued_at:
+              type: string
+              format: date-time
+    PaymentCreate:
+      type: object
+      required: [invoice_id, amount]
+      properties:
+        invoice_id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+        provider:
+          type: string
+    Payment:
+      allOf:
+        - $ref: '#/components/schemas/PaymentCreate'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            status:
+              type: string
+    Property:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        timezone:
+          type: string
+

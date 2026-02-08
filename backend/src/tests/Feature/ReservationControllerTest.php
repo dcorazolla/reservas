@@ -268,4 +268,57 @@ class ReservationControllerTest extends TestCase
             'adults_count' => 2,
         ]);
     }
+
+    public function test_index_lists_reservations_for_property_and_date_range()
+    {
+        $property = Property::create([
+            'name' => 'Index Property',
+            'timezone' => 'UTC',
+            'infant_max_age' => 2,
+            'child_max_age' => 12,
+            'child_factor' => 50,
+            'base_one_adult' => 100,
+            'base_two_adults' => 150,
+            'additional_adult' => 30,
+            'child_price' => 25,
+        ]);
+
+        $room = Room::create([
+            'property_id' => $property->id,
+            'room_category_id' => null,
+            'number' => '501',
+            'name' => 'Room 501',
+            'beds' => 1,
+            'capacity' => 2,
+            'active' => true,
+        ]);
+
+        $reservation = Reservation::create([
+            'room_id' => $room->id,
+            'guest_name' => 'Index Guest',
+            'adults_count' => 1,
+            'children_count' => 0,
+            'infants_count' => 0,
+            'email' => 'index@example.com',
+            'phone' => '000',
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(2)->toDateString(),
+            'status' => 'confirmed',
+            'total_value' => 150,
+        ]);
+
+        $user = User::factory()->create();
+        $login = $this->postJson('/api/auth/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])->assertStatus(200);
+
+        $token = $login->json('access_token');
+
+        // Request with a matching date range
+        $this->withHeader('Authorization', 'Bearer ' . $token)
+            ->getJson('/api/reservations?start_date=' . now()->toDateString() . '&end_date=' . now()->addDays(3)->toDateString())
+            ->assertStatus(200)
+            ->assertJsonFragment(['guest_name' => 'Index Guest']);
+    }
 }

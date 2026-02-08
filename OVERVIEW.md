@@ -20,9 +20,19 @@ Fluxos principais
 - Pagamento da invoice → marcação como paga + auditoria financeira
 
 Estado atual do código
-- Branch atual de trabalho: `chore/frontend-a11y` (documentação e testes accessibility)
-- PR importante aberto: a11y / testes frontend (veja PR #24)
+- Branch atual de trabalho: `feature/mvp-frontend-fixes` (frontend fixes para o MVP)
+- PRs importantes: revisar PRs abertos relacionados a a11y e frontend (ver histórico de PRs).
 - Testes: backend PHPUnit configurado; frontend Vitest + testes a11y adicionados
+
+## MVP Sprint 1 — status
+- Frontend: calendar navigation, `ReservationsListPage` e `PartnerForm` atualizados — concluído (ver arquivos abaixo).
+- Backend: endpoints mínimos (`/api/reservations`, `/api/invoices`, `/api/payments`) pendentes — prioridade alta.
+
+Arquivos frontend relevantes
+- `frontend/src/pages/CalendarPage.tsx`
+- `frontend/src/components/Calendar/CalendarGrid.tsx`
+- `frontend/src/pages/ReservationsListPage.tsx`
+- `frontend/src/components/PartnerForm.tsx`
 
 Onde procurar mais (resumo)
 - Backend: `backend/src/` (controllers, services, migrations)

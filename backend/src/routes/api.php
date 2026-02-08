@@ -43,6 +43,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/calendar', [CalendarController::class, 'index']);
 
     // Reservas
+    Route::get('/reservations', [ReservationController::class, 'index']);
     Route::post('/reservations', [ReservationController::class, 'store']);
     Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
     Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);

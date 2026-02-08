@@ -144,4 +144,36 @@ class ReservationController extends BaseApiController
 
         return $this->ok(new ReservationResource($reservation));
     }
+
+    public function index(Request $request)
+    {
+        $propertyId = $this->getPropertyId($request);
+
+        $data = $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+
+        try {
+            $start = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
+        } catch (\Throwable $e) {
+            $start = \Carbon\Carbon::parse($data['start_date'])->startOfDay();
+        }
+
+        try {
+            $end = \Carbon\Carbon::createFromFormat('Y-m-d', $data['end_date'])->endOfDay();
+        } catch (\Throwable $e) {
+            $end = \Carbon\Carbon::parse($data['end_date'])->endOfDay();
+        }
+
+        $reservations = Reservation::whereHas('room', function ($q) use ($propertyId) {
+            $q->where('property_id', $propertyId);
+        })
+        ->where('start_date', '<', $end->toDateString())
+        ->where('end_date', '>', $start->toDateString())
+        ->with('partner')
+        ->get();
+
+        return $this->ok(ReservationResource::collection($reservations));
+    }
 }

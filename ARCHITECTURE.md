@@ -38,6 +38,24 @@ Hotspots & Workplan (resumo do relatório de auditoria)
   - Falta de análise estática e linting automatizado (PHPStan / Pint).
 
 - Plano incremental sugerido:
+    5. Incluir helpers de teste e coverage para scoping e falhas previamente intermitentes.
+    6. Incluir ferramentas de análise (PHPStan) e formatação (Pint) e integrar na CI.
+
+  ## Sprint 1 MVP: alterações arquiteturais e requisitos
+
+  - Endpoints mínimos a serem expostos (OpenAPI stub):
+    - `GET /api/reservations` — listar reservas por `property_id` e intervalo.
+    - `POST /api/invoices` — criar invoice (deve gerar linhas, totals e registrar audit log).
+    - `POST /api/payments` — registrar pagamento de invoice.
+    - `GET /api/properties` — listar propriedades do usuário.
+
+  - Regras importantes:
+    - Todos os endpoints que retornam/alteram dados ligados a uma propriedade devem validar o claim `property_id` no JWT e aplicar scoping por `property_id`.
+    - Fluxos que alteram valores (invoices, payments) devem gravar entradas em `financial_audit_logs` como append-only e ter testes que verifiquem imutabilidade básica do log.
+
+  - Observações operacionais:
+    - Ao implementar `POST /api/invoices`, garantir que a operação seja transacional: criação de invoice + linhas + audit log devem ocorrer dentro de uma única transação ou com compensação em caso de falha.
+    - Atualize `public/openapi.yaml` imediatamente ao alterar contratos da API e gere/atualize a coleção Bruno (`docs/collections/reservas`).
   1. Implementar scoped route-model binding no `RouteServiceProvider` para modelos sensíveis ao `property_id`.
   2. Tornar controllers finos (ex.: `InvoiceController`) usando `FormRequest` e `Services` para regras de negócio.
   3. Extrair persistência para `Repositories` (ex.: `InvoiceRepository`) e injetar nos `Services`.

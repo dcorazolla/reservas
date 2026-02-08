@@ -6,6 +6,9 @@ Visão geral
 - Propósito: gerenciar propriedades, quartos, tarifas e reservas; no roadmap: parceiros e faturamento com auditoria completa.
 - Público: operadores de hospedagem e equipe administrativa.
 
+Preferência de idioma
+- Todas as comunicações e instruções no repositório devem ser em Português (pt-BR) por padrão. Se for necessário outro idioma, solicite explicitamente.
+
 Arquitetura
 - Backend: Laravel (PHP) — controllers, services, form requests, Eloquent models.
 - Banco: PostgreSQL (UUIDs como PKs). Requer extensão `pgcrypto` para geração de UUIDs.
