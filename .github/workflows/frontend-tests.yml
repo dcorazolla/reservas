@@ -60,10 +60,11 @@ jobs:
         # spurious failures while keeping explicit runs when tests exist.
         run: |
           set -euo pipefail
-          shopt -s nullglob || true
-          files=(src/__tests__/*.a11y.test.tsx)
-          if [ "${#files[@]}" -eq 0 ]; then
+          # Use ls to check for files (avoids shell globbing/nullglob edge cases).
+          if ls src/__tests__/**/*.a11y.test.tsx 1> /dev/null 2>&1; then
+            echo "Found a11y test files; running accessibility checks"
+            npm test -- --run "src/__tests__/**/*.a11y.test.tsx"
+          else
             echo "No a11y test files found; skipping a11y checks"
             exit 0
           fi
-          npm test -- --run "src/__tests__/**/*.a11y.test.tsx"
