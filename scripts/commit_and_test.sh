@@ -38,6 +38,10 @@ fi
 
 if [ "$BACKEND_CHANGED" -eq 1 ]; then
   echo "Detected staged backend changes. Verifying API docs / collection updates..."
+  # Ensure public copy of OpenAPI is synced from canonical backend spec so checks are consistent.
+  if [ -f "$ROOT_DIR/scripts/sync_openapi.sh" ]; then
+    bash "$ROOT_DIR/scripts/sync_openapi.sh" || true
+  fi
   if echo "$STAGED" | grep -Eq '^backend/src/public/openapi.yaml$|^docs/collections/reservas/'; then
     echo "API documentation or Bruno collection included in staged changes. Good."
   else
