@@ -21,6 +21,14 @@ jobs:
           # Sonar requests SCM info (blame/author). Disable shallow clone so sonarcloud gets proper SCM metadata.
           fetch-depth: 0
 
+      - name: Sync OpenAPI to public
+        run: |
+          if [ -x scripts/sync_openapi.sh ]; then
+            bash scripts/sync_openapi.sh
+          else
+            echo "scripts/sync_openapi.sh not found or not executable; skipping sync"
+          fi
+
       - name: Setup PHP
         uses: shivammathur/setup-php@d59004228537ca90c8dca680592a08a675bf52b6
         with:

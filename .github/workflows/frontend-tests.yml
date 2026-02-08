@@ -16,6 +16,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Sync OpenAPI to public
+        run: |
+          if [ -x scripts/sync_openapi.sh ]; then
+            bash scripts/sync_openapi.sh
+          else
+            echo "scripts/sync_openapi.sh not found or not executable; skipping sync"
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
