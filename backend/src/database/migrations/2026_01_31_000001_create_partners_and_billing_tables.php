@@ -39,7 +39,7 @@ return new class extends Migration {
                 } else {
                     $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
                 }
-                $table->uuid('partner_id');
+                $table->uuid('partner_id')->nullable();
                 $table->uuid('property_id')->nullable();
                 $table->string('number')->nullable();
                 $table->date('issued_at')->nullable();

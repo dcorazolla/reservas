@@ -46,6 +46,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/reservations', [ReservationController::class, 'index']);
     Route::post('/reservations', [ReservationController::class, 'store']);
     Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
+    Route::post('/reservations/{reservation}/checkin', [ReservationController::class, 'checkin']);
+    Route::post('/reservations/{reservation}/checkout', [ReservationController::class, 'checkout']);
     Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
     Route::post('/reservations/calculate', [ReservationPriceController::class, 'calculate']);
     Route::post('/reservations/calculate-detailed', [ReservationPriceController::class, 'calculateDetailed']);
@@ -65,9 +67,15 @@ Route::middleware(['auth:api'])->group(function () {
     // Partners & billing
     Route::apiResource('partners', PartnerController::class);
 
+    // Minibar consumptions (housekeeping / front desk)
+    Route::get('/minibar-consumptions', [\App\Http\Controllers\Api\MinibarConsumptionController::class, 'index']);
+    Route::post('/minibar-consumptions', [\App\Http\Controllers\Api\MinibarConsumptionController::class, 'store']);
+    Route::delete('/minibar-consumptions/{minibarConsumption}', [\App\Http\Controllers\Api\MinibarConsumptionController::class, 'destroy']);
+
     // Invoices & payments
     Route::get('/invoices', [InvoiceController::class, 'index']);
     Route::post('/invoices', [InvoiceController::class, 'store']);
+    Route::post('/invoices/from-reservations', [InvoiceController::class, 'createFromReservations']);
     Route::get('/invoices/{invoice}', [InvoiceController::class, 'show']);
     Route::put('/invoices/{invoice}', [InvoiceController::class, 'update']);
     Route::post('/invoices/{invoice}/cancel', [InvoiceController::class, 'cancel']);

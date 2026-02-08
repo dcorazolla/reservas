@@ -39,3 +39,19 @@ export async function apiFetch<T>(
 
   return res.json();
 }
+
+export function get<T>(path: string): Promise<T> {
+  return apiFetch<T>(path, { method: 'GET' });
+}
+
+export function post<T>(path: string, body?: any): Promise<T> {
+  return apiFetch<T>(path, { method: 'POST', body: JSON.stringify(body) });
+}
+
+export function put<T>(path: string, body?: any): Promise<T> {
+  return apiFetch<T>(path, { method: 'PUT', body: JSON.stringify(body) });
+}
+
+export function del<T>(path: string): Promise<T> {
+  return apiFetch<T>(path, { method: 'DELETE' });
+}

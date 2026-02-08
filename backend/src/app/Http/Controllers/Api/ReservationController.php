@@ -8,11 +8,13 @@ use App\Http\Resources\ReservationResource;
 use App\Services\CreateReservationService;
 use App\Services\ReservationPriceCalculator;
 use App\Services\ReservationService;
+use App\Services\InvoiceService;
+use App\Models\FinancialAuditLog;
 use Illuminate\Http\Request;
 
 class ReservationController extends BaseApiController
 {
-    public function store(Request $request, CreateReservationService $service)
+    public function store(Request $request, CreateReservationService $service, ?InvoiceService $invoices = null)
     {
 
         $data = $request->validate([
@@ -27,6 +29,7 @@ class ReservationController extends BaseApiController
             'start_date'     => 'required|date',
             'end_date'       => 'required|date',
             'notes'          => 'nullable|string',
+            'price_override' => 'sometimes|nullable|numeric|min:0',
         ]);
 
         // Manually enforce end_date > start_date using a safe parse to avoid
@@ -52,6 +55,47 @@ class ReservationController extends BaseApiController
 
         $reservation = $service->create($data);
 
+        // If a manual price override was provided, persist it and create an invoice
+        if (array_key_exists('price_override', $data) && $data['price_override'] !== null) {
+            $old = $reservation->total_value;
+            $reservation->total_value = $data['price_override'];
+            $reservation->save();
+
+            // Create a simple invoice representing this reservation override
+            try {
+                $invoices = $invoices ?? app(InvoiceService::class);
+                $invoice = $invoices->createInvoice([
+                        'partner_id' => $reservation->partner_id,
+                        'lines' => [
+                            [
+                                'description' => sprintf('Reserva %s', $reservation->id),
+                                'quantity' => 1,
+                                'unit_price' => (float) $reservation->total_value,
+                            ],
+                        ],
+                        'status' => 'draft',
+                    ]);
+                    if (isset($invoice) && $invoice && $invoice->id) {
+                        $reservation->invoice_id = $invoice->id;
+                        $reservation->save();
+                    }
+            } catch (\Throwable $e) {
+                FinancialAuditLog::create([
+                    'event_type' => 'reservation.invoice_creation_failed',
+                    'payload' => ['reservation_id' => $reservation->id, 'error' => $e->getMessage()],
+                    'resource_type' => 'reservation',
+                    'resource_id' => $reservation->id,
+                ]);
+            }
+
+            FinancialAuditLog::create([
+                'event_type' => 'reservation.price_overridden',
+                'payload' => ['reservation_id' => $reservation->id, 'old' => (float)$old, 'new' => (float)$reservation->total_value],
+                'resource_type' => 'reservation',
+                'resource_id' => $reservation->id,
+            ]);
+        }
+
         return $this->created(new ReservationResource($reservation));
     }
 
@@ -59,7 +103,8 @@ class ReservationController extends BaseApiController
         Request $request,
         Reservation $reservation,
         ReservationPriceCalculator $calculator,
-        ReservationService $service
+        ReservationService $service,
+        ?InvoiceService $invoices = null
     ) {
         $data = $request->validate([
             'guest_name'     => 'sometimes|required|string|max:255',
@@ -74,6 +119,7 @@ class ReservationController extends BaseApiController
             'end_date'       => 'sometimes|date',
             'status'         => 'sometimes|string',
             'notes'          => 'sometimes|nullable|string',
+            'price_override' => 'sometimes|nullable|numeric|min:0',
         ]);
 
         // If both dates are provided, validate ordering similarly to store().
@@ -133,7 +179,49 @@ class ReservationController extends BaseApiController
             'total_value'    => $calc['total'],
         ];
 
+        // Apply price override if present
+        if (array_key_exists('price_override', $data) && $data['price_override'] !== null) {
+            $update['total_value'] = $data['price_override'];
+        }
+
         $updated = $service->update($reservation, $update);
+
+        // If there was a price override, create/update an invoice and write an audit entry
+        if (array_key_exists('price_override', $data) && $data['price_override'] !== null) {
+            $old = $reservation->total_value;
+            try {
+                $invoices = $invoices ?? app(InvoiceService::class);
+                $invoice = $invoices->createInvoice([
+                    'partner_id' => $updated->partner_id,
+                    'lines' => [
+                        [
+                            'description' => sprintf('Reserva %s (ajuste)', $updated->id),
+                            'quantity' => 1,
+                            'unit_price' => (float) $updated->total_value,
+                        ],
+                    ],
+                    'status' => 'draft',
+                ]);
+                    if (isset($invoice) && $invoice && $invoice->id) {
+                        $updated->invoice_id = $invoice->id;
+                        $updated->save();
+                    }
+            } catch (\Throwable $e) {
+                FinancialAuditLog::create([
+                    'event_type' => 'reservation.invoice_creation_failed',
+                    'payload' => ['reservation_id' => $updated->id, 'error' => $e->getMessage()],
+                    'resource_type' => 'reservation',
+                    'resource_id' => $updated->id,
+                ]);
+            }
+
+            FinancialAuditLog::create([
+                'event_type' => 'reservation.price_overridden',
+                'payload' => ['reservation_id' => $updated->id, 'old' => (float)$old, 'new' => (float)$updated->total_value],
+                'resource_type' => 'reservation',
+                'resource_id' => $updated->id,
+            ]);
+        }
 
         return $this->ok(new ReservationResource($updated));
     }
@@ -178,14 +266,142 @@ class ReservationController extends BaseApiController
             $end = \Carbon\Carbon::parse($endParam)->endOfDay();
         }
 
-        $reservations = Reservation::whereHas('room', function ($q) use ($propertyId) {
+        $query = Reservation::whereHas('room', function ($q) use ($propertyId) {
             $q->where('property_id', $propertyId);
-        })
-        ->where('start_date', '<', $end->toDateString())
-        ->where('end_date', '>', $start->toDateString())
-        ->with('partner')
-        ->get();
+        });
+
+        // Apply date overlap filter
+        $query->where('start_date', '<', $end->toDateString())
+              ->where('end_date', '>', $start->toDateString());
+
+        // Optional: filter only billable reservations (checked-out)
+        if ($request->query('billable') !== null) {
+            $billable = filter_var($request->query('billable'), FILTER_VALIDATE_BOOLEAN);
+            if ($billable) {
+                $query->where('status', 'checked_out');
+            }
+        }
+
+        $reservations = $query->with('partner')->get();
 
         return $this->ok(ReservationResource::collection($reservations));
+    }
+
+    public function checkin(Request $request, Reservation $reservation)
+    {
+        $reservation->status = 'checked_in';
+        $reservation->save();
+
+        FinancialAuditLog::create([
+            'event_type' => 'reservation.checkin',
+            'payload' => ['reservation_id' => $reservation->id, 'user_id' => $request->user()?->id ?? null],
+            'resource_type' => 'reservation',
+            'resource_id' => $reservation->id,
+        ]);
+
+        return $this->ok(new ReservationResource($reservation));
+    }
+
+    public function checkout(Request $request, Reservation $reservation, InvoiceService $invoices)
+    {
+        // Sum minibar consumptions for this reservation
+        $minibarTotal = \App\Models\MinibarConsumption::where('reservation_id', $reservation->id)->sum('total');
+
+        // Compute lodging unpaid amount based on linked invoice (if exists)
+        $lodgingUnpaid = 0;
+        if ($reservation->invoice_id) {
+            $invoice = \App\Models\Invoice::find($reservation->invoice_id);
+            if ($invoice) {
+                $paid = (float) \App\Models\InvoiceLinePayment::whereIn('invoice_line_id', $invoice->lines()->pluck('id'))->sum('amount');
+                $lodgingUnpaid = max(0, (float)$invoice->total - $paid);
+            } else {
+                // No invoice found but reservation points to one: treat as unpaid
+                $lodgingUnpaid = (float)$reservation->total_value;
+            }
+        } else {
+            // No invoice linked: assume lodging unpaid unless partner pays
+            $lodgingUnpaid = (float)$reservation->total_value;
+        }
+
+        // If reservation has a partner, treat lodging as partner responsibility (do not block checkout for lodging unpaid)
+        $partnerPays = (bool) $reservation->partner_id;
+
+        $guestDue = 0.0;
+        if (!$partnerPays) {
+            // guest is responsible for lodging and minibar
+            $guestDue += $lodgingUnpaid;
+            $guestDue += (float)$minibarTotal;
+        } else {
+            // partner pays lodging; allow checkout to proceed and handle minibar invoicing separately
+            $guestDue = 0.0;
+        }
+
+        // Allow forcing checkout with `force=1` param if user has permission `force_checkout`
+        $force = filter_var($request->query('force', false), FILTER_VALIDATE_BOOLEAN);
+        $user = $request->user();
+        $canForce = $user && $user->can('force_checkout');
+
+        if ($guestDue > 0 && !($force && $canForce)) {
+            return response()->json([
+                'message' => 'Checkout bloqueado: existem valores pendentes',
+                'details' => [
+                    'lodging_unpaid' => $lodgingUnpaid,
+                    'minibar_total' => $minibarTotal,
+                ],
+            ], 422);
+        }
+
+        // Create minibar invoice for guest if there are consumptions
+        if ((float)$minibarTotal > 0) {
+            try {
+                $invoice = $invoices->createInvoice([
+                    'partner_id' => null,
+                    'lines' => \App\Models\MinibarConsumption::where('reservation_id', $reservation->id)->get()->map(function ($c) {
+                        return [
+                            'description' => $c->description ?? sprintf('Frigobar - %s', $c->product_id ?? $c->id),
+                            'quantity' => (int)$c->quantity,
+                            'unit_price' => (float)$c->unit_price,
+                        ];
+                    })->toArray(),
+                    'status' => 'draft',
+                ]);
+
+                FinancialAuditLog::create([
+                    'event_type' => 'reservation.minibar_invoice_created',
+                    'payload' => ['reservation_id' => $reservation->id, 'invoice_id' => $invoice->id ?? null],
+                    'resource_type' => 'reservation',
+                    'resource_id' => $reservation->id,
+                ]);
+            } catch (\Throwable $e) {
+                FinancialAuditLog::create([
+                    'event_type' => 'reservation.minibar_invoice_failed',
+                    'payload' => ['reservation_id' => $reservation->id, 'error' => $e->getMessage()],
+                    'resource_type' => 'reservation',
+                    'resource_id' => $reservation->id,
+                ]);
+            }
+        }
+
+        // Mark checked out
+        $reservation->status = 'checked_out';
+        $reservation->save();
+
+        FinancialAuditLog::create([
+            'event_type' => 'reservation.checkout',
+            'payload' => ['reservation_id' => $reservation->id, 'user_id' => $user?->id ?? null, 'forced' => $force && $canForce],
+            'resource_type' => 'reservation',
+            'resource_id' => $reservation->id,
+        ]);
+
+        if ($force && $canForce && $guestDue > 0) {
+            FinancialAuditLog::create([
+                'event_type' => 'reservation.checkout_forced',
+                'payload' => ['reservation_id' => $reservation->id, 'user_id' => $user?->id ?? null, 'reason' => $request->input('reason') ?? null],
+                'resource_type' => 'reservation',
+                'resource_id' => $reservation->id,
+            ]);
+        }
+
+        return $this->ok(new ReservationResource($reservation));
     }
 }
