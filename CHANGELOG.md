@@ -8,6 +8,15 @@ All notable changes to this project will be documented in this file.
 - Fix: make database migrations SQLite-friendly for test runs while preserving PostgreSQL defaults in production.
 - CI: add GitHub Actions workflow, `docker-compose.ci.yml`, `Makefile` and align `backend/docker/php/Dockerfile` to ensure local parity with CI.
 
+### Pending (Unreleased) - 2026-02-08
+
+- Feature: add minibar consumptions and checkout integration. Reservations now record minibar consumptions and the checkout flow attempts to create minibar invoices for consumptions; partner-paid reservations will have lodging billed to the partner while minibar/consumptions are charged separately.
+- Backend: `minibar_consumptions` migration, `MinibarConsumption` model, `MinibarService`, and API endpoints `GET/POST/DELETE /api/minibar-consumptions`.
+- Backend: `ReservationController::checkout` updated to sum minibar consumption, create minibar invoice drafts, and write `financial_audit_logs` entries for created/failed minibar invoice attempts (see PR #63).
+- Tests: added feature tests `MinibarCheckoutTest`, `ReservationPriceOverrideTest`, and `ReservationInvoiceLinkTest`.
+
+Note: This release includes DB migrations; run `php artisan migrate` when deploying.
+
 ### Notes
 - PHPUnit reported 13 deprecations during the verification run; these will be addressed in a follow-up PR.
 

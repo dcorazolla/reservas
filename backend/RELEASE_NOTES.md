@@ -24,3 +24,15 @@ Fluxo para nova release:
   - Habilitar feature-flag `invoices.create_from_reservation` em staging para validação manual.
   - Revisar pequenas deprecações do PHPUnit em follow-up.
 
+## 0.1.1 - Patch (2026-02-08)
+
+- Bump patch release for backend: `0.1.1`.
+- Feature: Add minibar consumptions and checkout integration (see PR #63).
+  - New migration: `2026_02_08_030000_create_minibar_consumptions_table.php`.
+  - New model/service: `MinibarConsumption`, `MinibarService` and minibar API endpoints.
+  - Reservation checkout now attempts minibar invoice creation and writes audit logs on success/failure.
+
+Deployment notes:
+- Run `php artisan migrate --force` to apply migrations.
+- Verify `APP_KEY` and `JWT_SECRET` are set in the environment for production/staging to avoid runtime errors when creating invoices.
+
