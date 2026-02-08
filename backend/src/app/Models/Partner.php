@@ -15,11 +15,12 @@ class Partner extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id', 'property_id', 'name', 'email', 'phone', 'tax_id', 'address', 'notes'
+        'id', 'property_id', 'name', 'email', 'phone', 'tax_id', 'address', 'notes', 'billing_rule', 'partner_discount_percent'
     ];
 
     protected $casts = [
         'id' => 'string',
+        'partner_discount_percent' => 'float',
     ];
 
     public function invoices()
