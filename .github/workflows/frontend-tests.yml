@@ -56,6 +56,14 @@ jobs:
       - name: Run accessibility tests (axe)
         working-directory: frontend
         # Run only the a11y tests to make failures explicit and quick to diagnose.
-        # If no a11y tests are present the command exits with code 1; allow
-        # that case so the workflow doesn't fail spuriously.
-        run: npm test -- --run "src/__tests__/**/*.a11y.test.tsx" || true
+        # If no matching test files exist, skip the step (exit 0). This avoids
+        # spurious failures while keeping explicit runs when tests exist.
+        run: |
+          set -euo pipefail
+          shopt -s nullglob || true
+          files=(src/__tests__/*.a11y.test.tsx)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No a11y test files found; skipping a11y checks"
+            exit 0
+          fi
+          npm test -- --run "src/__tests__/**/*.a11y.test.tsx"
