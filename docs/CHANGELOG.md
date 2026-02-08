@@ -34,13 +34,6 @@ All notable changes to this project will be documented in this file.
 - Notes:
   - Feature flag `invoices.create_from_reservation` should remain OFF in production until manual validation on staging.
 
-## 2026-02-08 — audit-logs (PR #62)
-
-- Feature: Add append-only `financial_audit_logs` table and Eloquent model to persist invoice/payment lifecycle events.
-- Tests: Integration test `InvoicePaymentAuditTest` verifies audit entries are created transactionally when invoices and payments are processed.
-- Migration: `backend/src/database/migrations/2026_02_08_010000_create_financial_audit_logs.php` (ensure `pgcrypto` enabled on Postgres for `gen_random_uuid()` in production).
-
-
 ## 2026-02-08 — v1.0.0-sprint1
 
 - Release: Sprint 1 MVP snapshot. Tag: `v1.0.0-sprint1`.

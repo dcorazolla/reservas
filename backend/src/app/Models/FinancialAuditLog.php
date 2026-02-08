@@ -2,23 +2,41 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Traits\HasUuidPrimary;
+use Illuminate\Support\Str;
 
 class FinancialAuditLog extends Model
 {
-    use HasFactory;
-    use HasUuidPrimary;
+    protected $table = 'financial_audit_logs';
 
     public $incrementing = false;
+
     protected $keyType = 'string';
 
-    protected $fillable = ['id','event_type','payload','actor_type','actor_id','resource_type','resource_id','hash'];
+    protected $fillable = [
+        'id',
+        'event_type',
+        'resource_type',
+        'resource_id',
+        'payload',
+        'user_id',
+    ];
 
     protected $casts = [
         'payload' => 'array',
     ];
 
-    // UUID generation handled by HasUuidPrimary trait
+    public $timestamps = true;
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->{$model->getKeyName()})) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
 }
+

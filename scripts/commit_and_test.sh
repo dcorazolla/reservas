@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Simple commit-and-test helper for local development and CI.
 # - Runs PHPUnit tests
-# - Ensures that when backend files are changed, API docs (`public/openapi.yaml`) or
+# - Ensures that when backend files are changed, API docs (`backend/src/public/openapi.yaml`) or
 #   the Bruno collection (`docs/collections/reservas`) are included in the commit.
 
 ROOT_DIR=$(cd "$(dirname "$0")/.." && pwd)
@@ -38,11 +38,15 @@ fi
 
 if [ "$BACKEND_CHANGED" -eq 1 ]; then
   echo "Detected staged backend changes. Verifying API docs / collection updates..."
-  if echo "$STAGED" | grep -Eq '^public/openapi.yaml$|^docs/collections/reservas/'; then
+  # Ensure public copy of OpenAPI is synced from canonical backend spec so checks are consistent.
+  if [ -f "$ROOT_DIR/scripts/sync_openapi.sh" ]; then
+    bash "$ROOT_DIR/scripts/sync_openapi.sh" || true
+  fi
+  if echo "$STAGED" | grep -Eq '^backend/src/public/openapi.yaml$|^docs/collections/reservas/'; then
     echo "API documentation or Bruno collection included in staged changes. Good."
   else
     echo "ERROR: You changed backend files but did not include API docs or Bruno collection updates in this commit." >&2
-    echo "Please update `public/openapi.yaml` (OpenAPI) and/or `docs/collections/reservas` (Bruno collection) and stage them before committing." >&2
+    echo "Please update `backend/src/public/openapi.yaml` (OpenAPI) and/or `docs/collections/reservas` (Bruno collection) and stage them before committing." >&2
     exit 2
   fi
 else

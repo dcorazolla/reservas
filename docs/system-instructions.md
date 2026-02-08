@@ -48,7 +48,7 @@ Regras de testes e commits automáticos
 
 Onde procurar contexto rápido
 - ADRs: `docs/adr/` — decisões arquiteturais.
-- Esquemas e coleção de API: `docs/` (OpenAPI em `public/openapi.yaml`) e coleção Bruno em `docs/collections/reservas`.
+- Esquemas e coleção de API: `docs/` (OpenAPI em `backend/src/public/openapi.yaml`) e coleção Bruno em `docs/collections/reservas`.
 - Código backend: `backend/src/app`.
 - Código frontend: `frontend/src`.
 

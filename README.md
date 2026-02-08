@@ -107,6 +107,13 @@ Próximos passos (planejados)
 - Implementar domínio de parceiros/faturamento: partners, invoices, payments, PDF/CSV, email e UI administrativa.
 - Melhorar navegação do calendário (prev/next/jump e, futuramente, infinite scroll).
 
+MVP Status
+----------
+
+- Sprint 1 MVP delivered: reservations, partner billing basics, invoices & payments flows, and initial audit logging (see PR #62).
+- Current branch: `feature/compat-reservations-params` contains the audit logs, migration and tests; PR #62 open for review and CI verification.
+
+
 Licença
 - Código interno do projeto — seguir políticas da organização.
 

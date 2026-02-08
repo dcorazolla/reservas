@@ -11,7 +11,7 @@ Este arquivo lista tarefas e informação mínima para iniciar o backend (Larave
   - Executar testes: `vendor/bin/phpunit` ou `composer test`
 
 - Tarefas imediatas:
-  - [ ] Validar rotas da API e atualizar `public/openapi.yaml` se necessário
+  - [ ] Validar rotas da API e atualizar `backend/src/public/openapi.yaml` se necessário
   - [ ] Garantir que `phpunit.xml` define timezone (`UTC`) em CI
   - [ ] Documentar variáveis de ambiente necessárias no `README.md`
 
@@ -56,7 +56,7 @@ Sempre mantenha este arquivo sincronizado com o `manage_todo_list` do repositór
   - [ ] Criar migration `user_properties` (pivot), implementar relations e endpoint `POST /api/auth/switch-property` que retorna JWT com claim `property_id`.
 
 - **OpenAPI / documentação de API**
-  - [ ] Atualizar `openapi/openapi.yaml` (ou `public/openapi.yaml`) com novos endpoints: partners, invoices, payments, audit logs.
+  - [ ] Atualizar `openapi/openapi.yaml` (ou `backend/src/public/openapi.yaml`) com novos endpoints: partners, invoices, payments, audit logs.
 
 - **Regras de testes e cobertura (backend)**
   - [ ] Implementar suíte de testes backend em batches (services, models, controllers, requests) visando cobertura alta (ver política: >=95% em áreas alteradas).

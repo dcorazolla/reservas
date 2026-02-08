@@ -13,6 +13,8 @@ Diretórios de documentação
 - `docs/adr/` — ADRs (decisões arquiteturais) numeradas.
 - `docs/collections/` — coleções Bruno/Postman (exemplos de requisições).
 - `docs/process/` — processos operacionais e guias.
+ - `docs/epics/` — backlog, epics e tarefas priorizadas.
+ - `docs/sprints/` — notas e checklists de sprint (sprints entregues e em andamento).
 
 Agent context
 - `AGENT_CONTEXT/CONTEXT_SUMMARY.md` — resumo de negócio e prioridades.
