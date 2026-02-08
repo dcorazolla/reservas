@@ -149,21 +149,33 @@ class ReservationController extends BaseApiController
     {
         $propertyId = $this->getPropertyId($request);
 
+        // Accept either `start_date`/`end_date` or `from`/`to` for compatibility
         $data = $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'start_date' => 'sometimes|date',
+            'end_date' => 'sometimes|date',
+            'from' => 'sometimes|date',
+            'to' => 'sometimes|date',
         ]);
 
-        try {
-            $start = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date'])->startOfDay();
-        } catch (\Throwable $e) {
-            $start = \Carbon\Carbon::parse($data['start_date'])->startOfDay();
+        $startParam = $data['start_date'] ?? $data['from'] ?? $request->query('start_date') ?? $request->query('from');
+        $endParam = $data['end_date'] ?? $data['to'] ?? $request->query('end_date') ?? $request->query('to');
+
+        if (!$startParam || !$endParam) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'start_date' => ['start_date (or from) and end_date (or to) are required'],
+            ]);
         }
 
         try {
-            $end = \Carbon\Carbon::createFromFormat('Y-m-d', $data['end_date'])->endOfDay();
+            $start = \Carbon\Carbon::createFromFormat('Y-m-d', $startParam)->startOfDay();
         } catch (\Throwable $e) {
-            $end = \Carbon\Carbon::parse($data['end_date'])->endOfDay();
+            $start = \Carbon\Carbon::parse($startParam)->startOfDay();
+        }
+
+        try {
+            $end = \Carbon\Carbon::createFromFormat('Y-m-d', $endParam)->endOfDay();
+        } catch (\Throwable $e) {
+            $end = \Carbon\Carbon::parse($endParam)->endOfDay();
         }
 
         $reservations = Reservation::whereHas('room', function ($q) use ($propertyId) {
