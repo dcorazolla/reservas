@@ -8,6 +8,7 @@ import PeriodTariffsPage from "../pages/config/tarifario/PeriodTariffsPage";
 
 import CalendarPage from "../pages/CalendarPage";
 import ReservationsPage from "../pages/ReservationsPage";
+import ReservationsListPage from "../pages/ReservationsListPage";
 import InvoicesPage from "../pages/InvoicesPage";
 import InvoiceDetailPage from "../pages/InvoiceDetailPage";
 import RoomsPage from "../pages/config/RoomsPage";
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <CalendarPage /> },
       { path: "/reservas", element: <ReservationsPage /> },
+      { path: "/reservas/list", element: <ReservationsListPage /> },
       { path: "/invoices", element: <InvoicesPage /> },
       { path: "/invoices/:id", element: <InvoiceDetailPage /> },
       { path: "/config/quartos", element: <RoomsPage /> },

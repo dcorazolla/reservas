@@ -1,4 +1,6 @@
 export function isFeatureEnabled(key: string): boolean {
+  // For Sprint 1 MVP, enable invoice generation from reservation by default
+  if (key === 'invoices.create_from_reservation') return true;
   // 1) runtime global flags (useful for demos): window.__APP_FLAGS__ = { key: true }
   try {
     if (typeof window !== 'undefined') {
