@@ -14,5 +14,10 @@ Use esta checklist ao abrir um PR ou preparar uma release. Itens obrigatórios p
 - [ ] Atualizar `RELEASE_NOTES.md` no subprojeto correspondente (frontend/backend)
 - [ ] Caso sensível (pagamentos/auditoria), incluir referência a `financial_audit_logs` e validações adicionais
 
+- [ ] Atualizar collections e exemplos (Postman/Insomnia) em `docs/collections/reservas/` quando endpoints ou payloads mudarem
+- [ ] Executar cobertura de testes e garantir que alterações têm testes unitários e/ou feature; busque cobertura mínima na área alterada conforme política do projeto
+- [ ] Push do branch remoto: `git push origin <branch>` e abrir PR com descrição clara das mudanças e links para docs e issues
+- [ ] Não realizar merge manual: aguardar CI (pipeline) passar — quando o pipeline estiver verde, realizar merge via interface e marcar `merged` no PR; se a pipeline falhar, resolver antes de mesclar
+
 Rationale
 - Esta checklist consolida orientações pré-existentes em `docs/process` e em guidelines internas. Ela é requerida antes de aceitar merges no `main`.

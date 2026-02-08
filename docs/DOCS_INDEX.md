@@ -17,6 +17,7 @@ Diretórios de documentação
  - `docs/sprints/` — notas e checklists de sprint (sprints entregues e em andamento).
 
 - `docs/requirements/` — detailed feature requirements and UI/UX specs (reservations, payments, minibar, check-in flows).
+	- `docs/requirements/ui-payments-checkin-invoices.md` — UI and payments/check-in/invoices requirements (2026-02-08).
 
 Agent context
 - `AGENT_CONTEXT/CONTEXT_SUMMARY.md` — resumo de negócio e prioridades.

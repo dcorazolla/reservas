@@ -49,3 +49,11 @@ export function listReservations(opts: ReservationListOpts = {}) {
   if (opts.partner_id) qs.set('partner_id', opts.partner_id);
   return apiFetch(`/reservations${qs.toString() ? `?${qs.toString()}` : ''}`);
 }
+
+export function checkinReservation(id: string) {
+  return apiFetch(`/reservations/${id}/checkin`, { method: 'POST' });
+}
+
+export function checkoutReservation(id: string) {
+  return apiFetch(`/reservations/${id}/checkout`, { method: 'POST' });
+}

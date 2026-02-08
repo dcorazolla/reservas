@@ -102,7 +102,7 @@ export default function ReservationsPage() {
   return (
     <div className="page">
       <div className="page-header">
-        <h2>Reservas</h2>
+        <h2>Motor de busca</h2>
       </div>
 
       <section className="card" style={{ marginBottom: 16 }}>

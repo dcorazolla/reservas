@@ -99,4 +99,77 @@ class InvoiceController extends Controller
 
         return response()->json($updated);
     }
+
+    public function createFromReservations(Request $request)
+    {
+        $data = $request->validate([
+            'partner_id' => 'required|uuid',
+            'reservation_ids' => 'required|array',
+            'reservation_ids.*' => 'required|uuid',
+            'property_id' => 'nullable|uuid',
+            'issued_at' => 'nullable|date',
+            'due_at' => 'nullable|date',
+        ]);
+
+        $reservationIds = $data['reservation_ids'];
+
+        $reservations = \App\Models\Reservation::whereIn('id', $reservationIds)->get();
+
+        // Ensure all reservations exist
+        if ($reservations->count() !== count($reservationIds)) {
+            return response()->json(['error' => 'Algumas reservas não foram encontradas.'], 422);
+        }
+
+        // Ensure reservations belong to the partner (safety) - if not, reject
+        $mismatch = $reservations->first(fn($r) => ($r->partner_id ?? null) !== $data['partner_id']);
+        if ($mismatch) {
+            return response()->json(['error' => 'Todas as reservas devem pertencer ao parceiro informado.'], 422);
+        }
+
+        // Build invoice lines from reservations
+        $lines = $reservations->map(function ($r) {
+            $roomName = $r->room?->name ?? $r->room_id;
+            $desc = sprintf('Reserva %s - %s (Quarto %s)', $r->start_date->toDateString(), $r->end_date->toDateString(), $roomName);
+            return [
+                'description' => $desc,
+                'quantity' => 1,
+                'unit_price' => (float) $r->total_value,
+            ];
+        })->all();
+
+        // Create invoice via service
+        try {
+            $invoice = $this->service->createInvoice([
+                'partner_id' => $data['partner_id'],
+                'property_id' => $data['property_id'] ?? $this->getPropertyId($request),
+                'issued_at' => $data['issued_at'] ?? now(),
+                'due_at' => $data['due_at'] ?? null,
+                'lines' => $lines,
+                'status' => 'issued',
+            ]);
+        } catch (\Throwable $e) {
+            \App\Models\FinancialAuditLog::create([
+                'event_type' => 'invoice.creation_failed',
+                'payload' => ['error' => $e->getMessage(), 'reservation_ids' => $reservationIds],
+                'resource_type' => 'reservation_batch',
+                'resource_id' => null,
+            ]);
+            return response()->json(['error' => 'Falha ao criar fatura: ' . $e->getMessage()], 500);
+        }
+
+        // Link reservations to invoice
+        foreach ($reservations as $r) {
+            $r->invoice_id = $invoice->id;
+            $r->save();
+
+            \App\Models\FinancialAuditLog::create([
+                'event_type' => 'reservation.invoiced',
+                'payload' => ['reservation_id' => $r->id, 'invoice_id' => $invoice->id],
+                'resource_type' => 'reservation',
+                'resource_id' => $r->id,
+            ]);
+        }
+
+        return response()->json($invoice, 201);
+    }
 }

@@ -3,6 +3,7 @@ import type { Reservation, ReservationStatus } from "../types/calendar";
 import type { Partner } from "../types/partner";
 import { createReservation, updateReservation, calculateReservationPriceDetailed } from "../api/reservations";
 import { listPartners } from "../api/partners";
+import { listRooms } from "../api/rooms";
 import Modal from "./Modal/Modal";
 import "./ReservationModal.css";
 import { formatMoney } from "../utils/money";
@@ -29,6 +30,8 @@ export default function ReservationModal({
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
+  const [rooms, setRooms] = useState<Array<any>>([]);
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(roomId ?? null);
   const [startDate, setStartDate] = useState(date ?? "");
   const [endDate, setEndDate] = useState("");
   const [status, setStatus] = useState<ReservationStatus>("pre-reserva");
@@ -37,6 +40,7 @@ export default function ReservationModal({
   const [partnerId, setPartnerId] = useState<string | null>(null);
   const [calcTotal, setCalcTotal] = useState<number>(0);
   const [days, setDays] = useState<Array<{ date: string; price: number }>>([]);
+  const [priceOverride, setPriceOverride] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [fieldError, setFieldError] = useState("");
 
@@ -47,6 +51,7 @@ export default function ReservationModal({
 
   useEffect(() => {
     if (reservation) {
+      setSelectedRoomId(reservation.room_id ?? selectedRoomId);
       setGuestName(reservation.guest_name);
       setAdults(reservation.adults_count || reservation.people_count || 1);
       setChildren(reservation.children_count || 0);
@@ -56,6 +61,10 @@ export default function ReservationModal({
       setStatus(reservation.status);
       setNotes(reservation.notes ?? "");
       setPartnerId(reservation.partner_id ?? null);
+      // If total_value differs from calculated total, expose it as a manual override
+      if (reservation.total_value) {
+        setPriceOverride(String(reservation.total_value));
+      }
     }
   }, [reservation]);
 
@@ -137,7 +146,7 @@ export default function ReservationModal({
   }, [roomId, reservation, startDate, endDate, adults, children, infants, fieldError]);
 
   useEffect(() => {
-    async function loadPartners() {
+    async function loadPartnersAndRooms() {
       try {
         const p: any = await listPartners();
         setPartners(p || []);
@@ -145,8 +154,18 @@ export default function ReservationModal({
       } catch (e) {
         console.warn('Não foi possível carregar parceiros', e);
       }
+      try {
+        const r: any = await listRooms();
+        setRooms(r || []);
+        // If modal opened with a roomId prop (from calendar grid), preselect it
+        if (roomId && r && r.length) {
+          setSelectedRoomId(roomId as string);
+        }
+      } catch (e) {
+        console.warn('Não foi possível carregar quartos', e);
+      }
     }
-    loadPartners();
+    loadPartnersAndRooms();
   }, []);
 
 
@@ -162,27 +181,40 @@ export default function ReservationModal({
           <input id="guestName" ref={firstFieldRef} value={guestName} onChange={e => setGuestName(e.target.value)} />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="adults">Adultos</label>
-          <input id="adults" type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />
+        <div className="form-row">
+          <div className="form-group" style={{ flex: 1 }}>
+            <label htmlFor="adults">Adultos</label>
+            <input id="adults" type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />
+          </div>
+          <div className="form-group" style={{ width: 140 }}>
+            <label htmlFor="children">Crianças</label>
+            <input id="children" type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />
+          </div>
+          <div className="form-group" style={{ width: 140 }}>
+            <label htmlFor="infants">Bebês</label>
+            <input id="infants" type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="children">Crianças</label>
-          <input id="children" type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="infants">Bebês</label>
-          <input id="infants" type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />
+
+        <div className="form-row">
+          <div className="form-group" style={{ flex: 1 }}>
+            <label htmlFor="startDate">Entrada</label>
+            <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+          </div>
+          <div className="form-group" style={{ marginLeft: 12 }}>
+            <label htmlFor="endDate">Saída</label>
+            <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+          </div>
         </div>
 
         <div className="form-group">
-          <label htmlFor="startDate">Entrada</label>
-          <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="endDate">Saída</label>
-          <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+          <label htmlFor="room">Quarto</label>
+          <select id="room" value={selectedRoomId ?? ''} onChange={e => setSelectedRoomId(e.target.value || null)}>
+            <option value="">(Selecione um quarto)</option>
+            {rooms.map(r => (
+              <option key={r.id} value={r.id}>{r.name || r.number || r.id}</option>
+            ))}
+          </select>
         </div>
 
         {editing && (
@@ -211,6 +243,11 @@ export default function ReservationModal({
         </div>
 
         <div className="form-group">
+          <label htmlFor="priceOverride">Preço manual (opcional)</label>
+          <input id="priceOverride" type="number" step="0.01" value={priceOverride ?? ""} onChange={e => setPriceOverride(e.target.value || null)} placeholder={String(calcTotal)} />
+        </div>
+
+        <div className="form-group">
           <label htmlFor="notes">Observações</label>
           <textarea id="notes" value={notes} onChange={e => setNotes(e.target.value)} />
         </div>
@@ -227,10 +264,14 @@ export default function ReservationModal({
 
         <div className="form-actions">
           <button type="button" className="secondary" onClick={onClose}>Cancelar</button>
-          <button type="button" className="primary" disabled={!!fieldError} onClick={async () => {
+            <button type="button" className="primary" disabled={!!fieldError} onClick={async () => {
             try {
+              const payloadRoomId = selectedRoomId ?? roomId ?? reservation?.room_id ?? null;
+              if (!payloadRoomId) throw new Error('Escolha um quarto antes de salvar.');
+
               if (reservation) {
                 await updateReservation(reservation.id, {
+                    price_override: priceOverride ? parseFloat(priceOverride) : null,
                     partner_id: partnerId,
                   guest_name: guestName,
                   adults_count: adults,
@@ -240,10 +281,12 @@ export default function ReservationModal({
                   end_date: endDate,
                   status,
                   notes,
+                  room_id: payloadRoomId,
                 });
               } else {
                 await createReservation({
-                  room_id: roomId,
+                  price_override: priceOverride ? parseFloat(priceOverride) : null,
+                  room_id: payloadRoomId,
                     partner_id: partnerId,
                   guest_name: guestName,
                   adults_count: adults,

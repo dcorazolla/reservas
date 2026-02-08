@@ -13,7 +13,7 @@ export default function Menu() {
       </NavLink>
 
       <NavLink to="/reservas" className="menu-link">
-        Reservas
+        Motor de busca
       </NavLink>
       <NavLink to="/reservas/list" className="menu-link" style={{ marginLeft: 6 }}>
         Lista de Reservas

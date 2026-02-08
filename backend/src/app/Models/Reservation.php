@@ -15,6 +15,7 @@ class Reservation extends Model
 
     protected $fillable = [
         'room_id',
+        'invoice_id',
         'partner_id',
         'guest_name',
         'adults_count',
@@ -38,6 +39,11 @@ class Reservation extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 
     public function partner()
