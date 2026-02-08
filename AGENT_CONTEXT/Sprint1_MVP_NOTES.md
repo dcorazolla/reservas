@@ -8,6 +8,8 @@
 - [x] Testes: ajustes em Vitest / a11y (mecanismo para pular job quando não há testes) e testes locais validados.
 - [ ] Backend: endpoints de suporte (ver lista abaixo).
 - [ ] CI: job `a11y` integrado e verde no pipeline.
+- [x] Backend: `GET /api/reservations` implementado e disponível (filtra por property + intervalo).
+- [x] CI: job `a11y` adicionado ao pipeline; validar em PRs remotos.
 
 ## Endpoints backend necessários (prioridade)
 1. `GET /api/reservations` — listar reservas por `property_id` e intervalo de datas.
@@ -43,6 +45,16 @@
 2. Implementar `GET /api/reservations` no backend (mínimo) e testar com frontend local (feature branch `feature/mvp-frontend-fixes`).
 3. Adicionar job `a11y` ao CI e garantir que os testes a11y existentes sejam executados.
 4. Garantir que fluxos de geração de invoice gravem entradas em `financial_audit_logs` e tenham testes de regressão.
+
+--
+Sprint 1 status:
+- Sprint fechado em: 2026-02-08
+- Principais merges: PR #61 (features de parceiros e calendário) — mudanças mescladas em `main`.
+- PR em conflito fechado: PR #58 (redundante) — fechado em 2026-02-08.
+
+Tag sugerida para release: `v1.0.0-sprint1` (criada e empurrada para o repositório).
+
+Parabéns — itens essenciais do MVP da Sprint 1 foram entregues. Mantenha a atenção nas pendências de auditoria financeira e nos jobs de CI para o próximo ciclo.
 
 --
 Essas notas servem como checklist operacional para a Sprint 1. Atualize status quando um item for concluído ou bloqueado.

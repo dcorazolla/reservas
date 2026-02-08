@@ -34,3 +34,9 @@ All notable changes to this project will be documented in this file.
 - Notes:
   - Feature flag `invoices.create_from_reservation` should remain OFF in production until manual validation on staging.
 
+## 2026-02-08 — v1.0.0-sprint1
+
+- Release: Sprint 1 MVP snapshot. Tag: `v1.0.0-sprint1`.
+- Summary: consolidation of partner billing, reservation listing, calendar UX, invoice preview flow (feature-flagged), and test coverage additions.
+
+
