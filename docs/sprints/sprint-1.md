@@ -34,7 +34,7 @@
 ## Riscos conhecidos
 - Auditoria financeira não implementada → faturamento em produção deve ser bloqueado até que `financial_audit_logs` esteja ativo e testado.
 - Falta de escopo por `property_id` em endpoints públicos pode causar leaks entre propriedades; sempre validar `property_id` vs claim do JWT.
-- Mudanças em contratos de API exigem atualização imediata do OpenAPI (`public/openapi.yaml`) e coleção de requests (`docs/collections/reservas`).
+- Mudanças em contratos de API exigem atualização imediata do OpenAPI (`backend/src/public/openapi.yaml`) e coleção de requests (`docs/collections/reservas`).
 
 ## Próximos passos (curto prazo)
 1. Criar OpenAPI stub com os endpoints listados e revisar com backend.

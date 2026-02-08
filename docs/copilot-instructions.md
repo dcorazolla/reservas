@@ -17,7 +17,7 @@ Arquivos e lugares para checar primeiro
 - `backend/src/app` — código Laravel (controllers, services, models).
 - `frontend/src` — React + TypeScript.
 - `docs/collections/reservas` — coleção Bruno / exemplos de requests.
-- `public/openapi.yaml` — OpenAPI spec (documentar novos endpoints quando criar).
+- `backend/src/public/openapi.yaml` — OpenAPI spec (documentar novos endpoints quando criar).
 
 Convenções importantes (não altere sem confirmação)
 - IDs: UUID strings; backend e frontend tratam IDs como strings.
@@ -55,7 +55,7 @@ Commits automáticos e mensagens
 	- Garantir cobertura adequada: não commitar mudanças que reduzam cobertura em áreas alteradas; preferir cobertura >=80% em código novo/alterado (meta de projeto é próxima de 100% para domínio crítico).
 	- Apenas depois dos testes passarem e da cobertura ser validada, executar o `git commit` e `git push`.
 	- Garantir que novas alterações tenham testes cobrindo a funcionalidade.
-	- Atualizar documentação relevante (`docs/`, `README.md`, `public/openapi.yaml`) e coleção Bruno (`docs/collections/reservas`).
+	- Atualizar documentação relevante (`docs/`, `README.md`, `backend/src/public/openapi.yaml`) e coleção Bruno (`docs/collections/reservas`).
 	- Gerar mensagem de commit concisa descrevendo o que foi alterado (feature/resumo + arquivos principais).
 
 ## Fluxo Git (Trunk-Based Development)
@@ -106,7 +106,7 @@ Conflitos e rebase
 	- `docs/system-instructions.md`
 	- todos os arquivos em `docs/adr/`
 	- `TODO.md` (na raiz do projeto)
-	- `public/openapi.yaml` e a coleção em `docs/collections/reservas` quando a mudança afetar APIs
+	- `backend/src/public/openapi.yaml` e a coleção em `docs/collections/reservas` quando a mudança afetar APIs
 
 - Atualize `TODO.md` (arquivo humano) e o `manage_todo_list` (ferramenta) para refletir progresso e mudanças de status. O `manage_todo_list` é a fonte canônica para a automação; `TODO.md` é um snapshot persistido para leitura e retomada humana.
 
@@ -124,13 +124,13 @@ Regras de testes e cobertura
 	- Testes de integração para fluxos que envolvem DB, jobs e integração entre camadas.
 - Evitar mocks sempre que possível. Use dados reais em DB de teste (transaction rollbacks ou refresh database between tests).
 - Dados de teste não podem poluir o banco principal: use a configuração de ambiente de testes (`phpunit.xml`, DB_TEST) ou containers separados.
-- Ao alterar contratos de API, atualizar imediatamente os testes de integração, OpenAPI (`public/openapi.yaml`) e a coleção Bruno.
+- Ao alterar contratos de API, atualizar imediatamente os testes de integração, OpenAPI (`backend/src/public/openapi.yaml`) e a coleção Bruno.
 
 
 Uso do script de commit/teste
 - Há um script auxiliar em `scripts/commit_and_test.sh`. Ele é o padrão para commits automatizados ou manuais e executa os seguintes passos:
 	- Executa a suíte de testes backend (PHPUnit). Se os testes falharem, o commit é abortado.
-	- Verifica que, se houve alterações no backend (`backend/src/` ou `backend/`), o commit também inclua atualizações na especificação OpenAPI (`public/openapi.yaml`) ou na coleção Bruno (`docs/collections/reservas/`). Caso contrário, o commit é abortado para evitar divergência entre API e documentação.
+	- Verifica que, se houve alterações no backend (`backend/src/` ou `backend/`), o commit também inclua atualizações na especificação OpenAPI (`backend/src/public/openapi.yaml`) ou na coleção Bruno (`docs/collections/reservas/`). Caso contrário, o commit é abortado para evitar divergência entre API e documentação.
 - Existe um template de `pre-commit` em `scripts/hooks/pre-commit` que invoca `scripts/commit_and_test.sh`. Para ativar localmente, crie um link em `.git/hooks/pre-commit` apontando para esse arquivo:
 
 ```bash
@@ -146,7 +146,7 @@ Essas regras aumentam a disciplina: nenhuma mudança de backend deve ser comitad
   - `docs/system-instructions.md`
   - todos os arquivos em `docs/adr/`
   - `TODO.md` (na raiz do projeto)
-  - `public/openapi.yaml` e a coleção em `docs/collections/reservas` quando a mudança afetar APIs
+  - `backend/src/public/openapi.yaml` e a coleção em `docs/collections/reservas` quando a mudança afetar APIs
 
 - Atualize `TODO.md` (arquivo humano) e o `manage_todo_list` (ferramenta) para refletir progresso e mudanças de status. O `manage_todo_list` é a fonte canônica para a automação; `TODO.md` é um snapshot persistido para leitura e retomada humana.
 
@@ -168,7 +168,7 @@ Arquivos e lugares para checar primeiro
 - `backend/src/app` — código Laravel (controllers, services, models).
 - `frontend/src` — React + TypeScript.
 - `docs/collections/reservas` — coleção Bruno / exemplos de requests.
-- `public/openapi.yaml` — OpenAPI spec (documentar novos endpoints quando criar).
+- `backend/src/public/openapi.yaml` — OpenAPI spec (documentar novos endpoints quando criar).
 
 Convenções importantes (não altere sem confirmação)
 - IDs: UUID strings; backend e frontend tratam IDs como strings.
@@ -204,7 +204,7 @@ Commits automáticos e mensagens
 - Antes de commitar automaticamente, o Copilot deve:
 	- Executar a suíte de testes (backend e frontend).
 	- Garantir que novas alterações tenham testes cobrindo a funcionalidade.
-	- Atualizar documentação relevante (`docs/`, `README.md`, `public/openapi.yaml`) e coleção Bruno (`docs/collections/reservas`).
+	- Atualizar documentação relevante (`docs/`, `README.md`, `backend/src/public/openapi.yaml`) e coleção Bruno (`docs/collections/reservas`).
 	- Gerar mensagem de commit concisa descrevendo o que foi alterado (feature/resumo + arquivos principais).
 
 Regra de nomenclatura para testes
@@ -221,7 +221,7 @@ Regras de testes e cobertura
 	- Testes de integração para fluxos que envolvem DB, jobs e integração entre camadas.
 - Evitar mocks sempre que possível. Use dados reais em DB de teste (transaction rollbacks ou refresh database between tests).
 - Dados de teste não podem poluir o banco principal: use a configuração de ambiente de testes (`phpunit.xml`, DB_TEST) ou containers separados.
-- Ao alterar contratos de API, atualizar imediatamente os testes de integração, OpenAPI (`public/openapi.yaml`) e a coleção Bruno.
+- Ao alterar contratos de API, atualizar imediatamente os testes de integração, OpenAPI (`backend/src/public/openapi.yaml`) e a coleção Bruno.
 
 Uso do script de commit/teste
 - Há um script auxiliar proposto em `scripts/commit_and_test.sh`. O Copilot deve executá-lo antes de commitar mudanças automaticamente. O script executa testes, valida e cria commit com a mensagem fornecida.

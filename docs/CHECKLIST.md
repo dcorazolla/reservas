@@ -6,7 +6,7 @@ Use esta checklist ao abrir um PR ou preparar uma release. Itens obrigatórios p
 - [ ] Cobertura alvo: proteção mínima de cobertura >= **95%** nas áreas modificadas
 - [ ] Testes adicionados/atualizados para novas funcionalidades ou correções (arquivos e paths listados no PR)
 - [ ] Documentação atualizada: `OVERVIEW.md`, `SETUP.md`, `ARCHITECTURE.md`, `frontend/TODO.md`, `backend/TODO.md`, `RELEASE_NOTES.md` quando aplicável
-- [ ] OpenAPI atualizada (`openapi/openapi.yaml` ou `public/openapi.yaml`) se houver mudanças de API
+- [ ] OpenAPI atualizada (`backend/src/public/openapi.yaml` ou `backend/src/public/openapi.yaml`) se houver mudanças de API
 - [ ] ADRs criadas/atualizadas para decisões arquiteturais relevantes (`docs/adr/`)
 - [ ] Bruno / Postman collection atualizada (`docs/collections/reservas/`) quando aplicável
 - [ ] Migrations e seeders incluídos para mudanças em DB

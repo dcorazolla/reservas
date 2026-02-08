@@ -55,7 +55,7 @@ Hotspots & Workplan (resumo do relatório de auditoria)
 
   - Observações operacionais:
     - Ao implementar `POST /api/invoices`, garantir que a operação seja transacional: criação de invoice + linhas + audit log devem ocorrer dentro de uma única transação ou com compensação em caso de falha.
-    - Atualize `public/openapi.yaml` imediatamente ao alterar contratos da API e gere/atualize a coleção Bruno (`docs/collections/reservas`).
+    - Atualize `backend/src/public/openapi.yaml` imediatamente ao alterar contratos da API e gere/atualize a coleção Bruno (`docs/collections/reservas`).
   1. Implementar scoped route-model binding no `RouteServiceProvider` para modelos sensíveis ao `property_id`.
   2. Tornar controllers finos (ex.: `InvoiceController`) usando `FormRequest` e `Services` para regras de negócio.
   3. Extrair persistência para `Repositories` (ex.: `InvoiceRepository`) e injetar nos `Services`.
