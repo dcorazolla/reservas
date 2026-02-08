@@ -16,6 +16,8 @@ Diretórios de documentação
  - `docs/epics/` — backlog, epics e tarefas priorizadas.
  - `docs/sprints/` — notas e checklists de sprint (sprints entregues e em andamento).
 
+- `docs/requirements/` — detailed feature requirements and UI/UX specs (reservations, payments, minibar, check-in flows).
+
 Agent context
 - `AGENT_CONTEXT/CONTEXT_SUMMARY.md` — resumo de negócio e prioridades.
 - `AGENT_CONTEXT/DEVELOPMENT_STATE.md` — estado atual do repositório e comandos.
