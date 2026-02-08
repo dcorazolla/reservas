@@ -39,3 +39,13 @@ export function calculateReservationPriceDetailed(data: {
     body: JSON.stringify(data),
   });
 }
+
+export type ReservationListOpts = { from?: string; to?: string; partner_id?: string };
+
+export function listReservations(opts: ReservationListOpts = {}) {
+  const qs = new URLSearchParams();
+  if (opts.from) qs.set('from', opts.from);
+  if (opts.to) qs.set('to', opts.to);
+  if (opts.partner_id) qs.set('partner_id', opts.partner_id);
+  return apiFetch(`/reservations${qs.toString() ? `?${qs.toString()}` : ''}`);
+}

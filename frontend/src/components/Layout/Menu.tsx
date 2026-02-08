@@ -15,6 +15,9 @@ export default function Menu() {
       <NavLink to="/reservas" className="menu-link">
         Reservas
       </NavLink>
+      <NavLink to="/reservas/list" className="menu-link" style={{ marginLeft: 6 }}>
+        Lista de Reservas
+      </NavLink>
 
       <div
         className="menu-entry"

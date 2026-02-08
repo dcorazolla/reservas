@@ -18,6 +18,8 @@ export default function PartnerForm({ partner, onSaved, onClose }: Props) {
     tax_id: '',
     address: '',
     notes: '',
+    billing_rule: 'none',
+    partner_discount_percent: null,
   });
   const [error, setError] = useState<string>('');
 
@@ -73,6 +75,20 @@ export default function PartnerForm({ partner, onSaved, onClose }: Props) {
         <div className="form-group" style={{ gridColumn: '1 / -1' }}>
           <label htmlFor={`${id}-notes`}>Notas</label>
           <textarea id={`${id}-notes`} value={form.notes || ''} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor={`${id}-billing`}>Regra de Cobrança</label>
+          <select id={`${id}-billing`} value={form.billing_rule || 'none'} onChange={(e) => setForm({ ...form, billing_rule: e.target.value as any })}>
+            <option value="none">Nenhuma (padrão)</option>
+            <option value="charge_partner">Cobrar parceiro</option>
+            <option value="charge_guest">Cobrar hóspede</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor={`${id}-discount`}>Desconto parceiro (%)</label>
+          <input id={`${id}-discount`} type="number" min={0} max={100} value={form.partner_discount_percent ?? ''} onChange={(e) => setForm({ ...form, partner_discount_percent: e.target.value === '' ? null : Number(e.target.value) })} />
         </div>
       </div>
 

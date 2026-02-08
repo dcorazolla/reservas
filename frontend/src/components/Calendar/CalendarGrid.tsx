@@ -5,19 +5,20 @@ import "./calendar.css";
 
 type Props = {
   rooms: Room[];
+  startDate: string;
+  days: number;
   onEmptyCellClick: (roomId: string, date: string) => void;
   onReservationClick: (reservation: any) => void;
 };
 
-const START_DATE = "2026-01-01";
-const DAYS = 20;
-
 export default function CalendarGrid({
   rooms,
+  startDate,
+  days,
   onEmptyCellClick,
   onReservationClick,
 }: Props) {
-  const dates = generateDateRange(START_DATE, DAYS);
+  const dates = generateDateRange(startDate, days);
 
   return (
     <div className="calendar-wrapper">

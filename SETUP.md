@@ -47,6 +47,22 @@ cd frontend && npm test
 cd backend/src && composer test
 ```
 
+Rodando somente os testes de acessibilidade (a11y) localmente
+
+```bash
+cd frontend
+npm ci
+# executa testes que seguem o padrão de arquivo *.a11y.test.tsx
+npx vitest run "src/**/__tests__/*.a11y.test.*"
+```
+
+Se preferir executar todos os testes do frontend com reporter em linha:
+
+```bash
+cd frontend
+npx vitest
+```
+
 Observações sobre `docker-compose.yml`
 - O arquivo de compose foi atualizado para usar serviços com nomes `reservas_*` (ex.: `reservas_app`, `reservas_pg`). Ajuste o acesso/nomes se você usa scripts externos que referenciam nomes antigos.
 
