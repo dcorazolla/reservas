@@ -40,6 +40,32 @@ if (typeof globalThis.fetch === 'undefined') {
 			return jsonResponse([])
 		}
 
+		if (url.includes('/calendar')) {
+			return jsonResponse({ start: '2026-02-01', end: '2026-03-02', rooms: [
+				{ id: 'r1', name: 'Room 1', capacity: 2, reservations: [] }
+			] })
+		}
+
+		if (url.includes('/room-blocks')) {
+			// GET -> return empty list; POST -> return created block
+			if (typeof input === 'string' || !input) {
+				// If method unspecified, assume GET
+				return jsonResponse([])
+			}
+			const method = input?.method || 'GET'
+			if (method.toUpperCase() === 'GET') return jsonResponse([])
+			if (method.toUpperCase() === 'POST') {
+				// parse body if available
+				try {
+					const body = typeof input === 'object' && input.body ? JSON.parse(input.body) : {};
+					return jsonResponse({ id: 'generated-block', ...body })
+				} catch {
+					return jsonResponse({ id: 'generated-block' })
+				}
+			}
+			return jsonResponse([])
+		}
+
 		// Default: return 404-like response
 		return {
 			ok: false,
