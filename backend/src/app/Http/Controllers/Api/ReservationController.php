@@ -10,6 +10,8 @@ use App\Services\ReservationPriceCalculator;
 use App\Services\ReservationService;
 use App\Services\InvoiceService;
 use App\Models\FinancialAuditLog;
+use App\Models\Invoice;
+use App\Models\InvoiceLine;
 use Illuminate\Http\Request;
 
 class ReservationController extends BaseApiController
@@ -64,7 +66,34 @@ class ReservationController extends BaseApiController
             // Create a simple invoice representing this reservation override
             try {
                 $invoices = $invoices ?? app(InvoiceService::class);
-                $invoice = $invoices->createInvoice([
+
+                // If reservation already has an invoice in draft, update it instead
+                $existing = null;
+                if ($reservation->invoice_id) {
+                    $existing = Invoice::find($reservation->invoice_id);
+                }
+
+                if ($existing && $existing->status === 'draft') {
+                    // Replace invoice lines and totals to reflect override
+                    $existing->lines()->delete();
+                    $line = InvoiceLine::create([
+                        'invoice_id' => $existing->id,
+                        'description' => sprintf('Reserva %s', $reservation->id),
+                        'quantity' => 1,
+                        'unit_price' => (float) $reservation->total_value,
+                        'line_total' => (float) $reservation->total_value,
+                    ]);
+                    $existing->total = (float) $line->line_total;
+                    $existing->save();
+                    $invoice = $existing;
+                    FinancialAuditLog::create([
+                        'event_type' => 'invoice.updated_from_reservation_override',
+                        'payload' => ['reservation_id' => $reservation->id, 'invoice_id' => $invoice->id],
+                        'resource_type' => 'reservation',
+                        'resource_id' => $reservation->id,
+                    ]);
+                } else {
+                    $invoice = $invoices->createInvoice([
                         'partner_id' => $reservation->partner_id,
                         'lines' => [
                             [
@@ -79,6 +108,7 @@ class ReservationController extends BaseApiController
                         $reservation->invoice_id = $invoice->id;
                         $reservation->save();
                     }
+                }
             } catch (\Throwable $e) {
                 FinancialAuditLog::create([
                     'event_type' => 'reservation.invoice_creation_failed',
@@ -191,21 +221,48 @@ class ReservationController extends BaseApiController
             $old = $reservation->total_value;
             try {
                 $invoices = $invoices ?? app(InvoiceService::class);
-                $invoice = $invoices->createInvoice([
-                    'partner_id' => $updated->partner_id,
-                    'lines' => [
-                        [
-                            'description' => sprintf('Reserva %s (ajuste)', $updated->id),
-                            'quantity' => 1,
-                            'unit_price' => (float) $updated->total_value,
+
+                // Avoid creating duplicate invoices: update existing draft invoice if present
+                $existing = null;
+                if ($updated->invoice_id) {
+                    $existing = Invoice::find($updated->invoice_id);
+                }
+
+                if ($existing && $existing->status === 'draft') {
+                    $existing->lines()->delete();
+                    $line = InvoiceLine::create([
+                        'invoice_id' => $existing->id,
+                        'description' => sprintf('Reserva %s (ajuste)', $updated->id),
+                        'quantity' => 1,
+                        'unit_price' => (float) $updated->total_value,
+                        'line_total' => (float) $updated->total_value,
+                    ]);
+                    $existing->total = (float) $line->line_total;
+                    $existing->save();
+                    $invoice = $existing;
+                    FinancialAuditLog::create([
+                        'event_type' => 'invoice.updated_from_reservation_override',
+                        'payload' => ['reservation_id' => $updated->id, 'invoice_id' => $invoice->id],
+                        'resource_type' => 'reservation',
+                        'resource_id' => $updated->id,
+                    ]);
+                } else {
+                    $invoice = $invoices->createInvoice([
+                        'partner_id' => $updated->partner_id,
+                        'lines' => [
+                            [
+                                'description' => sprintf('Reserva %s (ajuste)', $updated->id),
+                                'quantity' => 1,
+                                'unit_price' => (float) $updated->total_value,
+                            ],
                         ],
-                    ],
-                    'status' => 'draft',
-                ]);
+                        'status' => 'draft',
+                    ]);
                     if (isset($invoice) && $invoice && $invoice->id) {
                         $updated->invoice_id = $invoice->id;
                         $updated->save();
                     }
+                }
             } catch (\Throwable $e) {
                 FinancialAuditLog::create([
                     'event_type' => 'reservation.invoice_creation_failed',
