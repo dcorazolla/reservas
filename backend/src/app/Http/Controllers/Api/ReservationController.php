@@ -305,10 +305,13 @@ class ReservationController extends BaseApiController
         $startParam = $data['start_date'] ?? $data['from'] ?? $request->query('start_date') ?? $request->query('from');
         $endParam = $data['end_date'] ?? $data['to'] ?? $request->query('end_date') ?? $request->query('to');
 
+        // If the caller didn't provide a date range, default to the current month
+        // (from the 1st to the last day) so the reservations list page can load
+        // a full month view by default.
         if (!$startParam || !$endParam) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'start_date' => ['start_date (or from) and end_date (or to) are required'],
-            ]);
+            $now = \Carbon\Carbon::now();
+            $startParam = $startParam ?? $now->copy()->startOfMonth()->toDateString();
+            $endParam = $endParam ?? $now->copy()->endOfMonth()->toDateString();
         }
 
         try {
