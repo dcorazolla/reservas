@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             RoomCategoryRatePeriodSeeder::class,
             RoomRateSeeder::class,
             RoomRatePeriodSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }
