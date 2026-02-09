@@ -11,11 +11,11 @@
 }
 
 .calendar-scroll-wrapper {
-  /* area que realmente rola verticalmente quando há muitos quartos */
-  /* leave enough room for top nav and page chrome; increase so last rows are visible */
-  max-height: calc(100vh - 160px);
-  /* handle both horizontal and vertical scrolling so header table and calendar table stay aligned */
-  overflow: auto;
+  /* No longer a separate scroll container — let the whole page scroll.
+     This makes the calendar behave like other pages where the browser
+     scrollbar scrolls header, menu and page content together. */
+  max-height: none;
+  overflow: visible;
 }
 
 @media (max-width: 900px) {
@@ -46,10 +46,8 @@
 
 /* Header / controles do calendário fixos no topo da área rolável */
 .page-header {
-  position: sticky;
-  top: 0;
-  /* ensure header sits above the table thead */
-  z-index: 10;
+  /* match other pages: header scrolls with the page (not sticky) */
+  position: static;
   background: #ffffff;
   display: flex;
   justify-content: space-between;
@@ -92,11 +90,10 @@
 
 /* torna a linha dos dias sticky logo abaixo do page-header */
 .calendar-table thead {
-  position: sticky;
-  /* top: var(--calendar-header-height); */
-  z-index: 10;
+  /* day header row should scroll with the page as well */
+  position: static;
+  z-index: 1;
   background: #f3f4f6;
-  box-shadow: 0 2px 6px rgba(15,23,42,0.04);
 }
 
 .calendar-table thead th {
