@@ -3,21 +3,49 @@
 // Some jsdom versions have a getContext implementation that throws "Not implemented".
 // Override it with a safe wrapper that returns null on errors.
 if (typeof HTMLCanvasElement !== 'undefined') {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const originalGetContext = (HTMLCanvasElement.prototype as any).getContext
+	// Ensure getContext never throws in jsdom — return null unconditionally.
+	// This avoids axe-core causing test failures when jsdom's implementation
+	// throws "Not implemented" in some runner environments.
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	;(HTMLCanvasElement.prototype as any).getContext = function (..._args: any[]) {
-		try {
-			if (typeof originalGetContext === 'function') {
-				return originalGetContext.apply(this, _args)
-			}
-			return null
-		} catch (e) {
-			return null
-		}
+		return null
 	}
 }
 
 import '@testing-library/jest-dom';
 
 // You can add other global test setup here if needed.
+
+// Provide a minimal global fetch mock for tests so components that call
+// the API (listRooms, listPartners, etc.) do not attempt real network
+// requests during CI. Tests that need specific responses should still
+// mock the API module directly via `vi.mock(...)`.
+if (typeof globalThis.fetch === 'undefined') {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	;(globalThis as any).fetch = async (input: any, _init?: any) => {
+		const url = typeof input === 'string' ? input : input?.url || ''
+		const jsonResponse = (data: any) => ({
+			ok: true,
+			status: 200,
+			json: async () => data,
+			text: async () => JSON.stringify(data),
+		})
+
+		if (url.includes('/rooms')) {
+			return jsonResponse([
+				{ id: 'r1', name: 'Room 1', capacity: 2 },
+			])
+		}
+		if (url.includes('/partners')) {
+			return jsonResponse([])
+		}
+
+		// Default: return 404-like response
+		return {
+			ok: false,
+			status: 404,
+			json: async () => ({ message: 'Not found' }),
+			text: async () => 'Not found',
+		}
+	}
+}
