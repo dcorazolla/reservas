@@ -71,3 +71,18 @@ export default defineConfig([
   },
 ])
 ```
+
+## Developer workflow
+
+- **Never push to `main` directly.** Create a feature branch and open a Pull Request. Wait for CI to pass before merging.
+- Local test and build commands:
+
+```bash
+npm ci
+npm run dev       # local development with HMR
+npm run build     # production build
+npm run test -- --run  # run vitest tests
+```
+
+Follow the same release process as backend: bump `package.json` version, update `frontend/RELEASE_NOTES.md`, open PR, merge on green, create annotated tag `frontend/vX.Y.Z`.
+

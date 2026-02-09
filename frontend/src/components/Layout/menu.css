@@ -1,5 +1,6 @@
 .app-menu {
-  height: 48px;
+  --app-menu-height: 48px;
+  height: var(--app-menu-height);
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
@@ -7,13 +8,15 @@
   gap: 24px;
   padding: 0 24px;
   position: sticky;
-  top: 64px; /* below sticky header */
-  z-index: 9;
+  top: var(--app-header-height, 64px); /* below sticky header */
+  /* raise z-index so submenu dropdowns can overlay other sticky content (calendar headers) */
+  z-index: 80;
+  /* no animation: menu should compress/expand immediately together with header */
 }
 
 /* PRIMEIRO NÍVEL — TODOS IGUAIS */
 .menu-link {
-  height: 48px;
+  height: var(--app-menu-height);
   display: flex;
   align-items: center;
   font-size: 14px;
@@ -30,10 +33,19 @@
 /* ITEM COM SUBMENU */
 .menu-entry {
   position: relative;
-  height: 48px;
+  height: var(--app-menu-height);
   display: flex;
   align-items: center;
 }
+
+/* When header is small, shrink the menu slightly to match the compact header */
+.app-header.header--small + .app-menu {
+  --app-menu-height: 36px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.app-header.header--small + .app-menu .menu-link { font-size: 13px; }
 
 /* LINK ATIVO */
 .menu-link.active {
@@ -45,7 +57,7 @@
 /* SUBMENU */
 .submenu {
   position: absolute;
-  top: 48px;
+  top: var(--app-menu-height, 48px);
   left: 0;
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -54,6 +66,15 @@
   padding: 8px 0;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   z-index: 50;
+}
+
+/* Nested submenu (second level) should float to the right of its parent */
+.submenu .submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 8px;
+  min-width: 180px;
 }
 
 .submenu a,

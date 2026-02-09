@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller as BaseController;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 
 abstract class BaseApiController extends BaseController
 {
+    use AuthorizesRequests;
     protected function ok($data, int $status = 200, array $headers = []): JsonResponse
     {
         return response()->json($data, $status, $headers);

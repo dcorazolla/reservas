@@ -16,6 +16,7 @@ import RoomsPage from "../pages/config/RoomsPage";
 import RoomCategoriesPage from "../pages/config/RoomCategoriesPage";
 import PropertiesPage from "../pages/config/PropertiesPage";
 import PartnersPage from "../pages/config/PartnersPage";
+import RoomBlocksSettingsPage from "../pages/config/RoomBlocksSettingsPage";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       { path: "/config/categorias-quartos", element: <RoomCategoriesPage /> },
       { path: "/config/propriedade", element: <PropertiesPage /> },
       { path: "/config/parceiros", element: <PartnersPage /> },
+      { path: "/config/bloqueios", element: <RoomBlocksSettingsPage /> },
       { path: "/config/tarifario/base", element: <BaseTariffsPage /> },
       { path: "/config/tarifario/quartos", element: <RoomTariffsPage /> },
       { path: "/config/tarifario/periodos", element: <PeriodTariffsPage /> },

@@ -4,6 +4,19 @@
   gap: 12px;
 }
 
+.reservation-modal .form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.reservation-modal .form-row.two-cols > .form-group {
+  flex: 1 1 50%;
+}
+
+.reservation-modal .form-row.three-cols > .form-group {
+  flex: 1 1 33.3333%;
+}
+
 .reservation-modal .form-group {
   display: flex;
   flex-direction: column;

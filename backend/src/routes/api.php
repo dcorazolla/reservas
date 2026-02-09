@@ -72,6 +72,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/minibar-consumptions', [\App\Http\Controllers\Api\MinibarConsumptionController::class, 'store']);
     Route::delete('/minibar-consumptions/{minibarConsumption}', [\App\Http\Controllers\Api\MinibarConsumptionController::class, 'destroy']);
 
+    // Room blocks (maintenance / partner blocks)
+    Route::get('/room-blocks', [\App\Http\Controllers\Api\RoomBlockController::class, 'index']);
+    Route::post('/room-blocks', [\App\Http\Controllers\Api\RoomBlockController::class, 'store']);
+    Route::put('/room-blocks/{roomBlock}', [\App\Http\Controllers\Api\RoomBlockController::class, 'update']);
+    Route::delete('/room-blocks/{roomBlock}', [\App\Http\Controllers\Api\RoomBlockController::class, 'destroy']);
+
     // Invoices & payments
     Route::get('/invoices', [InvoiceController::class, 'index']);
     Route::post('/invoices', [InvoiceController::class, 'store']);

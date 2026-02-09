@@ -22,3 +22,22 @@ Instruções para lançar nova versão:
 
 Deployment notes:
 - Run `npm ci` and build assets (`npm run build`) for production.
+
+**Developer workflow (frontend)**
+
+- Never push directly to `main`. Create a feature branch `feature/<short-desc>` and open a Pull Request to `main`.
+- Update `frontend/RELEASE_NOTES.md` with the changes, bump `package.json` semver if required.
+- Run tests locally: `npm ci` then `npm run test` (or `npm run test -- --run`).
+- When CI is green, merge the PR and create an annotated tag `frontend/vX.Y.Z`.
+
+Example commands:
+
+```
+git checkout -b feature/frontend-room-block-ui
+# implement changes
+git add . && git commit -m "feat(frontend): add room block UI"
+git push origin feature/frontend-room-block-ui
+# open PR, wait for CI, merge on green
+git tag -a frontend/v0.1.2 -m "frontend v0.1.2"
+git push origin frontend/v0.1.2
+```

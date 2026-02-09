@@ -1,12 +1,29 @@
 .page {
-  padding: 24px;
+  padding: 5px;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
+}
+
+/* When the page header would be covered by the top menu, make it stick under the menu and compress immediately.
+   A spacer is added by the JS hook to avoid layout jumps. */
+/* Page header styling (no automatic sticky behavior) */
+.page-header {
+  /* keep default layout; when a sticky behavior is needed it can be added explicitly */
+}
+
+@media (max-width: 720px) {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .page-header > div:first-child { display: flex; gap: 8px; flex-wrap: wrap; }
+  .page-header button { width: auto; }
 }
 
 .table {

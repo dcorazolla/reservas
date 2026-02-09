@@ -6,6 +6,7 @@ use App\Models\Reservation;
 use App\Services\ReservationPriceCalculator;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
+use Illuminate\Validation\ValidationException;
 
 class CreateReservationService
 {
@@ -16,6 +17,15 @@ class CreateReservationService
     public function create(array $data): Reservation
     {
         return DB::transaction(function () use ($data) {
+            // Check for room blocks that overlap the requested dates
+            $blockExists = \App\Models\RoomBlock::where('room_id', $data['room_id'])
+                ->where('start_date', '<', $data['end_date'])
+                ->where('end_date', '>', $data['start_date'])
+                ->exists();
+
+            if ($blockExists) {
+                throw ValidationException::withMessages(['room_id' => ['Room is blocked for the requested dates.']]);
+            }
             $room = \App\Models\Room::findOrFail($data['room_id']);
 
             // Capacity check (infants do not count)
