@@ -305,10 +305,13 @@ class ReservationController extends BaseApiController
         $startParam = $data['start_date'] ?? $data['from'] ?? $request->query('start_date') ?? $request->query('from');
         $endParam = $data['end_date'] ?? $data['to'] ?? $request->query('end_date') ?? $request->query('to');
 
+        // If the caller didn't provide a date range, default to the current month
+        // (from the 1st to the last day) so the reservations list page can load
+        // a full month view by default.
         if (!$startParam || !$endParam) {
-            throw \Illuminate\Validation\ValidationException::withMessages([
-                'start_date' => ['start_date (or from) and end_date (or to) are required'],
-            ]);
+            $now = \Carbon\Carbon::now();
+            $startParam = $startParam ?? $now->copy()->startOfMonth()->toDateString();
+            $endParam = $endParam ?? $now->copy()->endOfMonth()->toDateString();
         }
 
         try {
@@ -410,32 +413,48 @@ class ReservationController extends BaseApiController
 
         // Create minibar invoice for guest if there are consumptions
         if ((float)$minibarTotal > 0) {
-            try {
-                $invoice = $invoices->createInvoice([
-                    'partner_id' => null,
-                    'lines' => \App\Models\MinibarConsumption::where('reservation_id', $reservation->id)->get()->map(function ($c) {
-                        return [
-                            'description' => $c->description ?? sprintf('Frigobar - %s', $c->product_id ?? $c->id),
-                            'quantity' => (int)$c->quantity,
-                            'unit_price' => (float)$c->unit_price,
-                        ];
-                    })->toArray(),
-                    'status' => 'draft',
-                ]);
+            // Idempotency: check if a minibar invoice was already created for this reservation
+            $already = \App\Models\FinancialAuditLog::where('event_type', 'reservation.minibar_invoice_created')
+                ->where('resource_type', 'reservation')
+                ->where('resource_id', $reservation->id)
+                ->exists();
 
+            if ($already) {
+                // Already created — write an audit note and skip creating a duplicate invoice
                 FinancialAuditLog::create([
-                    'event_type' => 'reservation.minibar_invoice_created',
-                    'payload' => ['reservation_id' => $reservation->id, 'invoice_id' => $invoice->id ?? null],
+                    'event_type' => 'reservation.minibar_invoice_skipped_duplicate',
+                    'payload' => ['reservation_id' => $reservation->id],
                     'resource_type' => 'reservation',
                     'resource_id' => $reservation->id,
                 ]);
-            } catch (\Throwable $e) {
-                FinancialAuditLog::create([
-                    'event_type' => 'reservation.minibar_invoice_failed',
-                    'payload' => ['reservation_id' => $reservation->id, 'error' => $e->getMessage()],
-                    'resource_type' => 'reservation',
-                    'resource_id' => $reservation->id,
-                ]);
+            } else {
+                try {
+                    $invoice = $invoices->createInvoice([
+                        'partner_id' => null,
+                        'lines' => \App\Models\MinibarConsumption::where('reservation_id', $reservation->id)->get()->map(function ($c) {
+                            return [
+                                'description' => $c->description ?? sprintf('Frigobar - %s', $c->product_id ?? $c->id),
+                                'quantity' => (int)$c->quantity,
+                                'unit_price' => (float)$c->unit_price,
+                            ];
+                        })->toArray(),
+                        'status' => 'draft',
+                    ]);
+
+                    FinancialAuditLog::create([
+                        'event_type' => 'reservation.minibar_invoice_created',
+                        'payload' => ['reservation_id' => $reservation->id, 'invoice_id' => $invoice->id ?? null],
+                        'resource_type' => 'reservation',
+                        'resource_id' => $reservation->id,
+                    ]);
+                } catch (\Throwable $e) {
+                    FinancialAuditLog::create([
+                        'event_type' => 'reservation.minibar_invoice_failed',
+                        'payload' => ['reservation_id' => $reservation->id, 'error' => $e->getMessage()],
+                        'resource_type' => 'reservation',
+                        'resource_id' => $reservation->id,
+                    ]);
+                }
             }
         }
 
