@@ -37,11 +37,21 @@ class RoomBlockController extends BaseApiController
         $this->authorize('create', RoomBlock::class);
         $data = $request->validate([
             'room_id' => 'required|exists:rooms,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
+            // Validate as date string in Y-m-d format to avoid timezone parsing issues
+            'start_date' => 'required|date_format:Y-m-d',
+            'end_date' => 'required|date_format:Y-m-d',
             'reason' => 'sometimes|nullable|string',
             'partner_id' => 'sometimes|nullable|uuid|exists:partners,id',
         ]);
+
+        // Manual date order validation to avoid Carbon parsing inside the validator
+        if (isset($data['start_date'], $data['end_date'])) {
+            $start = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date']);
+            $end = \Carbon\Carbon::createFromFormat('Y-m-d', $data['end_date']);
+            if ($end->lte($start)) {
+                return $this->validationError(['end_date' => ['The end_date must be a date after start_date.']]);
+            }
+        }
 
         $data['created_by'] = $request->user()?->id ?? null;
 
@@ -55,11 +65,19 @@ class RoomBlockController extends BaseApiController
         $this->authorize('update', $roomBlock);
 
         $data = $request->validate([
-            'start_date' => 'sometimes|date',
-            'end_date' => 'sometimes|date|after:start_date',
+            'start_date' => 'sometimes|date_format:Y-m-d',
+            'end_date' => 'sometimes|date_format:Y-m-d',
             'reason' => 'sometimes|nullable|string',
             'partner_id' => 'sometimes|nullable|uuid|exists:partners,id',
         ]);
+
+        if (isset($data['start_date'], $data['end_date'])) {
+            $start = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date']);
+            $end = \Carbon\Carbon::createFromFormat('Y-m-d', $data['end_date']);
+            if ($end->lte($start)) {
+                return $this->validationError(['end_date' => ['The end_date must be a date after start_date.']]);
+            }
+        }
 
         $roomBlock->fill($data);
         $roomBlock->save();

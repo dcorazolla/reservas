@@ -194,12 +194,41 @@
   background: #fbbf24;
 }
 
-.status-reservado {
+/* Reserved (Portuguese + English) */
+.status-reservado,
+.status-reserved {
   background: #10b981;
+  color: #ffffff;
 }
 
-.status-cancelado {
+/* Confirmed (variations: confirmed / confirmado / confimado) */
+.status-confirmed,
+.status-confirmado,
+.status-confimado {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+/* Cancelled (Portuguese + English) */
+.status-cancelado,
+.status-canceled {
   background: #9ca3af;
+  color: #ffffff;
+}
+
+/* Checked in: guest has arrived */
+.status-checked_in,
+.status-checked-in {
+  background: #06b6d4; /* cyan */
+  color: #ffffff;
+}
+
+/* Checked out: guest has left; show light background and dark text */
+.status-checked_out,
+.status-checked-out {
+  background: #f3f4f6;
+  color: #000000;
+  border: 1px solid #e5e7eb;
 }
 
 /* Room block visuals */
