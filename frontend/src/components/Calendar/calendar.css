@@ -3,6 +3,30 @@
   overflow-x: auto;
 }
 
+/* Área que envolve o header + calendário; controla o scroll vertical do calendário */
+.calendar-area {
+  /* increase header offset to accommodate wrapping controls and avoid .thead overlapping first rows */
+  --calendar-header-height: 80px;
+  display: block;
+}
+
+.calendar-scroll-wrapper {
+  /* area que realmente rola verticalmente quando há muitos quartos */
+  /* leave enough room for top nav and page chrome; increase so last rows are visible */
+  max-height: calc(100vh - 160px);
+  /* handle both horizontal and vertical scrolling so header table and calendar table stay aligned */
+  overflow: auto;
+}
+
+@media (max-width: 900px) {
+  .calendar-wrapper { overflow-x: auto; }
+  .calendar-table { width: 100%; }
+  .room-col { width: 90px; }
+  .day-header .day-label { font-size: 0.9em; }
+  .day-header .month-label { font-size: 0.6em; }
+  .reservation-cell, .room-block-cell { font-size: 11px; }
+}
+
 .calendar-table {
   width: 95%;
   margin: 0 auto;
@@ -17,6 +41,30 @@
   padding: 0;
 }
 
+/* header table that lives inside the page header area (not sticky) */
+/* removed separate calendar-header-table — header renders inside the main table */
+
+/* Header / controles do calendário fixos no topo da área rolável */
+.page-header {
+  position: sticky;
+  top: 0;
+  /* ensure header sits above the table thead */
+  z-index: 10;
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 12px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e5e7eb;
+  height: var(--calendar-header-height);
+}
+
+.page-header {
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+
 /* COLUNA QUARTO */
 .room-col {
   width: 120px;
@@ -29,6 +77,10 @@
   font-weight: 500;
 }
 
+@media (max-width: 600px) {
+  .room-col { position: static; width: auto; }
+}
+
 /* HEADER DIA */
 .day-header {
   text-align: center;
@@ -37,6 +89,39 @@
   border-left: none;
   border-right: none;
 }
+
+/* torna a linha dos dias sticky logo abaixo do page-header */
+.calendar-table thead {
+  position: sticky;
+  /* top: var(--calendar-header-height); */
+  z-index: 10;
+  background: #f3f4f6;
+  box-shadow: 0 2px 6px rgba(15,23,42,0.04);
+}
+
+.calendar-table thead th {
+  background: #f3f4f6;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.calendar-table tbody {
+  position: relative;
+  z-index: 1;
+}
+
+/* garante que a coluna do quarto (esquerda) continue sticky à esquerda */
+.calendar-table thead .room-col,
+.calendar-table tbody .room-col {
+  position: sticky;
+  left: 0;
+  background: #f9fafb;
+  box-sizing: border-box;
+}
+
+/* o room-col dentro do thead deve sobrepor a linha dos dias quando necessário */
+
+/* o room-col no tbody fica abaixo do header/thead em z-order */
+.calendar-table tbody .room-col { z-index: 7; }
 
 .day-header-inner {
   display: flex;
@@ -83,6 +168,10 @@
   cursor: pointer;
 }
 
+.half-cell:hover {
+  background: rgba(37, 99, 235, 0.06);
+}
+
 .half-cell.checkout {
   border-right: none;
 }
@@ -96,7 +185,7 @@
   color: white;
   font-size: 12px;
   border-radius: 4px;
-  padding: 0 8px;
+  padding: 0 5px !important;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
@@ -118,20 +207,42 @@
 
 /* Room block visuals */
 .room-block-cell {
-  background: linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02));
-  color: #374151;
+  /* kept for backward compatibility; prefer .room-block */
+  background: #000;
+  color: #ffffff;
+}
+
+.room-block-cell {
+  background: #000;
+  color: #ffffff;
+}
+
+.room-block {
+  background: transparent;
+  color: #ffffff;
   font-size: 12px;
   padding: 0 8px;
   display: flex;
   align-items: center;
   gap: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.room-block-cell .block-label {
+.room-block .block-label {
   font-size: 14px;
+  color: #ffffff;
+  margin-right: 6px;
 }
 
-.room-block-cell .block-reason {
+.room-block .block-reason {
   font-size: 12px;
-  opacity: 0.9;
+  opacity: 0.95;
+  color: #ffffff;
 }

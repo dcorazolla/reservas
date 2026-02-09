@@ -1,5 +1,5 @@
 import "./header.css";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../auth/useCurrentUser";
 import { logout } from "../../api/auth";
@@ -25,6 +25,8 @@ export default function Header({ innName }: Props) {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
+  useShrinkHeader(headerRef);
 
   const initials = useMemo(() => initialsFrom(user?.name, user?.email), [user]);
 
@@ -37,7 +39,7 @@ export default function Header({ innName }: Props) {
   }
 
   return (
-    <header className="app-header">
+    <header className="app-header" ref={headerRef}>
       <div className="header-content">
         <h1 className="inn-name">{innName}</h1>
         <span className="subtitle">Gestão de Reservas</span>
@@ -66,4 +68,37 @@ export default function Header({ innName }: Props) {
       </div>
     </header>
   );
+}
+
+// Setup scroll listener to toggle compact header class
+export function useShrinkHeader(headerRef: React.RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const header = headerRef?.current;
+    // set initial CSS variable for header height based on current position
+    const initialSmall = window.scrollY > 0;
+    if (initialSmall) {
+      header?.classList.add('header--small');
+      document.documentElement.style.setProperty('--app-header-height', '40px');
+    } else {
+      header?.classList.remove('header--small');
+      document.documentElement.style.setProperty('--app-header-height', '64px');
+    }
+
+    if (!header) return;
+
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      if (currentY > 0) {
+        header.classList.add('header--small');
+        document.documentElement.style.setProperty('--app-header-height', '40px');
+      } else {
+        // only restore when at the very top
+        header.classList.remove('header--small');
+        document.documentElement.style.setProperty('--app-header-height', '64px');
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll as EventListener);
+  }, [headerRef]);
 }

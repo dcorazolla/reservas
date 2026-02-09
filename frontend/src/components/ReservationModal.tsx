@@ -33,7 +33,17 @@ export default function ReservationModal({
   const [rooms, setRooms] = useState<Array<any>>([]);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(roomId ?? null);
   const [startDate, setStartDate] = useState(date ?? "");
-  const [endDate, setEndDate] = useState("");
+  const [endDate, setEndDate] = useState(() => {
+    // If editing, we'll load from reservation in effect below.
+    if (reservation && reservation.end_date) return reservation.end_date;
+    // When opened from calendar (date provided) default end date to start + 1 day
+    if (!reservation && date) {
+      const d = new Date(date.length > 10 ? date : `${date}T00:00:00`);
+      d.setDate(d.getDate() + 1);
+      return d.toISOString().slice(0, 10);
+    }
+    return "";
+  });
   const [status, setStatus] = useState<ReservationStatus>("pre-reserva");
   const [notes, setNotes] = useState("");
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -170,7 +180,7 @@ export default function ReservationModal({
 
 
   return (
-    <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose}>
+    <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose} closeOnBackdrop={false}>
       <div className="form reservation-modal">
         {(error || fieldError) && (
           <div className="form-error" aria-live="assertive">{error}</div>
@@ -181,27 +191,27 @@ export default function ReservationModal({
           <input id="guestName" ref={firstFieldRef} value={guestName} onChange={e => setGuestName(e.target.value)} />
         </div>
 
-        <div className="form-row">
-          <div className="form-group" style={{ flex: 1 }}>
+        <div className="form-row three-cols">
+          <div className="form-group">
             <label htmlFor="adults">Adultos</label>
             <input id="adults" type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />
           </div>
-          <div className="form-group" style={{ width: 140 }}>
+          <div className="form-group">
             <label htmlFor="children">Crianças</label>
             <input id="children" type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />
           </div>
-          <div className="form-group" style={{ width: 140 }}>
+          <div className="form-group">
             <label htmlFor="infants">Bebês</label>
             <input id="infants" type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />
           </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group" style={{ flex: 1 }}>
+        <div className="form-row two-cols">
+          <div className="form-group">
             <label htmlFor="startDate">Entrada</label>
             <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
           </div>
-          <div className="form-group" style={{ marginLeft: 12 }}>
+          <div className="form-group">
             <label htmlFor="endDate">Saída</label>
             <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
           </div>

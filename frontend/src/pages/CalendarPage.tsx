@@ -41,6 +41,7 @@ export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
   const [showBlockModal, setShowBlockModal] = useState(false);
+  const [selectedBlock, setSelectedBlock] = useState<any | null>(null);
   const selectedRoom = selectedRoomId ? rooms.find((r) => r.id === selectedRoomId) : null;
   const selectedCapacity =
     selectedRoom?.capacity || (selectedReservation ? rooms.find((r) => r.id === selectedReservation.room_id)?.capacity : undefined);
@@ -71,60 +72,70 @@ export default function CalendarPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
-        <button onClick={() => {
-          // Advance by number of days window (allows sliding window behavior)
-          setStartDate(addDaysToIsoDate(startDate, -days));
-        }}>Anterior</button>
-        <button onClick={() => {
-          // Advance forward by the visible window length
-          setStartDate(addDaysToIsoDate(startDate, +days));
-        }}>Próximo</button>
+      <div className="calendar-area">
+        <div className="calendar-scroll-wrapper">
+          <div className="page-header">
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button type="button" className="secondary" onClick={() => {
+                // Move back by number of days window
+                setStartDate(addDaysToIsoDate(startDate, -days));
+              }}>Anterior</button>
+              <button type="button" className="secondary" onClick={() => {
+                // Move forward by the visible window length
+                setStartDate(addDaysToIsoDate(startDate, +days));
+              }}>Próximo</button>
 
-        <label style={{ marginLeft: 8 }}>
-          Mês:
-          <input type="month" value={startDate.slice(0,7)} onChange={(e) => {
-            const [y, m] = e.target.value.split('-');
-            setStartDate(`${y}-${m.padStart(2,'0')}-01`);
-          }} />
-        </label>
+              <label style={{ marginLeft: 8 }}>
+                Mês:
+                <input type="month" value={startDate.slice(0,7)} onChange={(e) => {
+                  const [y, m] = e.target.value.split('-');
+                  setStartDate(`${y}-${m.padStart(2,'0')}-01`);
+                }} />
+              </label>
 
-        <label style={{ marginLeft: 12 }}>
-          Dias:
-          <input type="number" value={String(days)} min={7} max={90} onChange={(e)=>setDays(Number(e.target.value))} style={{ width: 80, marginLeft: 6 }} />
-        </label>
+              <label style={{ marginLeft: 12 }}>
+                Dias:
+                <input type="number" value={String(days)} min={7} max={90} onChange={(e)=>setDays(Number(e.target.value))} style={{ width: 80, marginLeft: 6 }} />
+              </label>
+            </div>
 
-        <div style={{ marginLeft: 'auto' }}><strong>Período:</strong> {formatDate(startDate)} → {formatDate(new Date(new Date(startDate).setDate(new Date(startDate).getDate() + days - 1)).toISOString().slice(0,10))}</div>
-      </div>
-      {loading ? <p>Carregando calendário...</p> : null}
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              <div><strong>Período:</strong> {formatDate(startDate)} → {formatDate(new Date(new Date(startDate).setDate(new Date(startDate).getDate() + days - 1)).toISOString().slice(0,10))}</div>
+              <button type="button" className="primary" onClick={() => { setSelectedBlock(null); setShowBlockModal(true); }}>Criar bloqueio de quarto</button>
+            </div>
+          </div>
 
-      <CalendarGrid
-        rooms={rooms}
-        startDate={startDate}
-        days={days}
-        onEmptyCellClick={(roomId, date) => {
-          // do not allow creating reservations in blocked cells; the grid will not produce empty cells for blocked ranges
-          setSelectedRoomId(roomId);
-          setSelectedDate(date);
-          setSelectedReservation(null);
-        }}
-        onReservationClick={(reservation) => {
-          setSelectedReservation(reservation);
-          setSelectedRoomId(null);
-          setSelectedDate(null);
-        }}
-      />
+          {loading ? <p>Carregando calendário...</p> : null}
 
-      {/* Room block modal trigger */}
-      <div style={{ marginTop: 10 }}>
-        <button onClick={() => setShowBlockModal(true)}>Criar bloqueio de quarto</button>
+          <CalendarGrid
+            rooms={rooms}
+            startDate={startDate}
+            days={days}
+            onEmptyCellClick={(roomId, date) => {
+              // do not allow creating reservations in blocked cells; the grid will not produce empty cells for blocked ranges
+              setSelectedRoomId(roomId);
+              setSelectedDate(date);
+              setSelectedReservation(null);
+            }}
+            onReservationClick={(reservation) => {
+              setSelectedReservation(reservation);
+              setSelectedRoomId(null);
+              setSelectedDate(null);
+            }}
+            onBlockClick={(b) => {
+              setSelectedBlock(b);
+              setShowBlockModal(true);
+            }}
+          />
+        </div>
       </div>
 
       {showBlockModal && (
         <RoomBlockModal
           open={showBlockModal}
-          onClose={() => setShowBlockModal(false)}
-          onSaved={() => { setShowBlockModal(false); load(); }}
+          block={selectedBlock}
+          onClose={() => { setSelectedBlock(null); setShowBlockModal(false); }}
+          onSaved={() => { setSelectedBlock(null); setShowBlockModal(false); load(); }}
         />
       )}
 
