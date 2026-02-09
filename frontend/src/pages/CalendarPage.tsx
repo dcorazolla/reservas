@@ -71,7 +71,7 @@ export default function CalendarPage() {
   }, [startDate, days]);
 
   return (
-    <>
+    <div className="page">
       <div className="calendar-area">
         <div className="calendar-scroll-wrapper">
           <div className="page-header">
@@ -155,6 +155,6 @@ export default function CalendarPage() {
           }}
         />
       )}
-    </>
+    </div>
   );
 }
