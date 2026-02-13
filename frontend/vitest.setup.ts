@@ -20,10 +20,18 @@ import '@testing-library/jest-dom';
 // the API (listRooms, listPartners, etc.) do not attempt real network
 // requests during CI. Tests that need specific responses should still
 // mock the API module directly via `vi.mock(...)`.
-if (typeof globalThis.fetch === 'undefined') {
+// Override global fetch during Vitest runs so tests never perform real network
+// requests in CI. We only replace fetch when running under Vitest (process.env.VITEST).
+// Preserve the original fetch so tests can restore it if needed.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const _originalFetch = (globalThis as any).fetch
+if (process.env.VITEST) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	;(globalThis as any).fetch = async (input: any, _init?: any) => {
+	;(globalThis as any).fetch = async (input: any, init?: any) => {
 		const url = typeof input === 'string' ? input : input?.url || ''
+		const method = (init && init.method) || (typeof input === 'object' && input.method) || 'GET'
+		const bodyRaw = (init && init.body) || (typeof input === 'object' && input.body)
+
 		const jsonResponse = (data: any) => ({
 			ok: true,
 			status: 200,
@@ -47,18 +55,11 @@ if (typeof globalThis.fetch === 'undefined') {
 		}
 
 		if (url.includes('/room-blocks')) {
-			// GET -> return empty list; POST -> return created block
-			if (typeof input === 'string' || !input) {
-				// If method unspecified, assume GET
-				return jsonResponse([])
-			}
-			const method = input?.method || 'GET'
 			if (method.toUpperCase() === 'GET') return jsonResponse([])
 			if (method.toUpperCase() === 'POST') {
-				// parse body if available
 				try {
-					const body = typeof input === 'object' && input.body ? JSON.parse(input.body) : {};
-					return jsonResponse({ id: 'generated-block', ...body })
+					const parsed = bodyRaw ? JSON.parse(bodyRaw) : {}
+					return jsonResponse({ id: 'generated-block', ...parsed })
 				} catch {
 					return jsonResponse({ id: 'generated-block' })
 				}
@@ -66,7 +67,6 @@ if (typeof globalThis.fetch === 'undefined') {
 			return jsonResponse([])
 		}
 
-		// Default: return 404-like response
 		return {
 			ok: false,
 			status: 404,
