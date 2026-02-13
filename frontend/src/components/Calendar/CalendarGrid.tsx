@@ -23,6 +23,29 @@ export default function CalendarGrid({
 }: Props) {
   const dates = generateDateRange(startDate, days);
 
+  const canonicalStatus = (s: any) => {
+    if (!s) return 'reserved';
+    const key = String(s).toLowerCase().trim();
+    const map: Record<string, string> = {
+      'reservado': 'reserved',
+      'reserved': 'reserved',
+      'pre-reserva': 'pre-reserva',
+      'pre_reserva': 'pre-reserva',
+      'confirmed': 'confirmed',
+      'confirmado': 'confirmed',
+      'confimado': 'confirmed',
+      'cancelado': 'canceled',
+      'canceled': 'canceled',
+      'checked_in': 'checked_in',
+      'checked-in': 'checked_in',
+      'checkedout': 'checked_out',
+      'checked_out': 'checked_out',
+      'checked-out': 'checked_out',
+    };
+
+    return map[key] ?? key.replace(/\s+/g, '-');
+  };
+
   return (
     <div className="calendar-wrapper">
       <table className="calendar-table">

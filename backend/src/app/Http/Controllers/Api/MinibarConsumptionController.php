@@ -35,9 +35,21 @@ class MinibarConsumptionController extends BaseApiController
 
         $data['created_by'] = $request->user()?->id ?? null;
 
-        $item = $service->createConsumption($data);
-
-        return $this->created($item);
+        try {
+            $item = $service->createConsumption($data);
+            return $this->created($item);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Throwable $e) {
+            // Unexpected errors: log an audit entry and return 500
+            \App\Models\FinancialAuditLog::create([
+                'event_type' => 'minibar.consumption_failed_unexpected',
+                'payload' => ['error' => $e->getMessage(), 'data' => $data],
+                'resource_type' => 'minibar',
+                'resource_id' => null,
+            ]);
+            return response()->json(['error' => 'Falha ao criar consumo de frigobar.'], 500);
+        }
     }
 
     public function destroy(Request $request, MinibarConsumption $minibarConsumption)
