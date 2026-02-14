@@ -7,7 +7,7 @@ import { listRooms } from "../api/rooms";
 import Modal from "./Modal/Modal";
 import "./ReservationModal.css";
 import { formatMoney } from "../utils/money";
-import Skeleton from "./Skeleton";
+import Skeleton from "./Skeleton/Skeleton";
 
 
 type Props = {
@@ -230,30 +230,31 @@ export default function ReservationModal({
           </div>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="room">Quarto</label>
-          {initialLoading ? (
-            <Skeleton variant="text" style={{ width: '100%', height: 36 }} />
-          ) : (
-            <select id="room" value={selectedRoomId ?? ''} onChange={e => setSelectedRoomId(e.target.value || null)}>
-              <option value="">(Selecione um quarto)</option>
-              {rooms.map(r => (
-                <option key={r.id} value={r.id}>{r.name || r.number || r.id}</option>
-              ))}
-            </select>
+        <div className="form-row two-cols">
+          <div className="form-group">
+            <label htmlFor="room">Quarto</label>
+            {initialLoading ? (
+              <Skeleton variant="text" style={{ width: '100%', height: 36 }} />
+            ) : (
+              <select id="room" value={selectedRoomId ?? ''} onChange={e => setSelectedRoomId(e.target.value || null)}>
+                <option value="">(Selecione um quarto)</option>
+                {rooms.map(r => (
+                  <option key={r.id} value={r.id}>{r.name || r.number || r.id}</option>
+                ))}
+              </select>
+            )}
+          </div>
+          {editing && (
+            <div className="form-group">
+              <label>Status</label>
+              <select value={status} onChange={e => setStatus(e.target.value as ReservationStatus)}>
+                <option value="pre-reserva">Pré-reserva</option>
+                <option value="reservado">Reservado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
           )}
         </div>
-
-        {editing && (
-          <div className="form-group">
-            <label>Status</label>
-            <select value={status} onChange={e => setStatus(e.target.value as ReservationStatus)}>
-              <option value="pre-reserva">Pré-reserva</option>
-              <option value="reservado">Reservado</option>
-              <option value="cancelado">Cancelado</option>
-            </select>
-          </div>
-        )}
 
         <div className="form-group">
           <label>Resumo</label>
@@ -267,22 +268,28 @@ export default function ReservationModal({
               </div>
             ) : (
               <>
-                <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                  <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
+                  <div style={{ minWidth: 140, textAlign: 'right' }}>
+                    {initialLoading ? (
+                      <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
+                    ) : (
+                      <div>
+                        <label htmlFor="priceOverride" style={{ display: 'none' }}>Preço manual</label>
+                        <input id="priceOverride" type="number" step="0.01" value={priceOverride ?? ""} onChange={e => setPriceOverride(e.target.value || null)} placeholder={String(calcTotal)} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 {days.length > 0 && (
-                  <div>
-                    {days.map((d: any) => (
-                      <div key={d.date}>{d.date}: {formatMoney(d.price)}</div>
-                    ))}
+                  <div style={{ marginTop: 8, color: '#555', fontSize: 13 }}>
+                    {days.map((d: any) => `${d.date}: ${formatMoney(d.price)}`).join(' | ')}
                   </div>
                 )}
               </>
             )}
           </div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="priceOverride">Preço manual (opcional)</label>
-          {initialLoading ? <Skeleton variant="text" style={{ width: 160, height: 32 }} /> : <input id="priceOverride" type="number" step="0.01" value={priceOverride ?? ""} onChange={e => setPriceOverride(e.target.value || null)} placeholder={String(calcTotal)} />}
         </div>
 
         <div className="form-group">
