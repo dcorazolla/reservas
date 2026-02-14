@@ -75,7 +75,17 @@ export default function ReservationModal({
       setInfants(reservation.infants_count || 0);
       setStartDate(reservation.start_date);
       setEndDate(reservation.end_date);
-      setStatus(reservation.status);
+      // Map backend status variants to the small set of frontend statuses
+      const mapStatus = (s: any) => {
+        if (!s) return 'pre-reserva';
+        const low = String(s).toLowerCase();
+        if (['pre-reserva', 'pre_reserva', 'pre-reserva'].includes(low)) return 'pre-reserva';
+        if (['reservado', 'reserved', 'checked_in', 'checked-in', 'checkedin', 'confirmed'].includes(low)) return 'reservado';
+        if (['cancelado', 'canceled', 'cancelled'].includes(low)) return 'cancelado';
+        return 'pre-reserva';
+      };
+
+      setStatus(mapStatus(reservation.status));
       setNotes(reservation.notes ?? "");
       setPartnerId(reservation.partner_id ?? null);
       // Prefer explicit price_override (new column). Only show manual input
