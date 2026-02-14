@@ -191,44 +191,77 @@
 
 /* STATUS */
 .status-pre-reserva {
-  background: #fbbf24;
-}
-
-/* Reserved (Portuguese + English) */
-.status-reservado,
-.status-reserved {
-  background: #10b981;
+  background: #F59E0B; /* amber-500 */
   color: #ffffff;
 }
 
-/* Confirmed (variations: confirmed / confirmado / confimado) */
+/* Reserved */
+.status-reservado,
+.status-reserved {
+  background: #3B82F6; /* blue-500 */
+  color: #ffffff;
+}
+
+/* Confirmed */
 .status-confirmed,
 .status-confirmado,
 .status-confimado {
-  background: #3b82f6;
+  background: #10B981; /* green-500 */
   color: #ffffff;
 }
 
-/* Cancelled (Portuguese + English) */
+/* No-show / guest did not arrive */
+.status-no_show,
+.status-no-show,
+.status-noshow {
+  background: #EF4444; /* red-500 */
+  color: #ffffff;
+}
+
+/* Cancelled (less prominent) */
 .status-cancelado,
 .status-canceled {
-  background: #9ca3af;
+  background: #6B7280; /* gray-500 */
   color: #ffffff;
 }
 
-/* Checked in: guest has arrived */
+/* Checked in: guest has arrived (in-house) */
 .status-checked_in,
 .status-checked-in {
-  background: #06b6d4; /* cyan */
+  background: #06B6D4; /* cyan-500 */
   color: #ffffff;
 }
 
 /* Checked out: guest has left; show light background and dark text */
 .status-checked_out,
 .status-checked-out {
-  background: #f3f4f6;
-  color: #000000;
-  border: 1px solid #e5e7eb;
+  background: #F3F4F6;
+  color: #111827;
+  border: 1px solid #E5E7EB;
+}
+
+/* Blocked / maintenance */
+.status-blocked,
+.status-block {
+  background: #8B5CF6; /* violet-500 */
+  color: #ffffff;
+}
+
+/* Reusable pill for modal / labels */
+.status-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.modal-status-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
 }
 
 /* Room block visuals */

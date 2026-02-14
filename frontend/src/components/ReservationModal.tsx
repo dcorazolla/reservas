@@ -75,17 +75,22 @@ export default function ReservationModal({
       setInfants(reservation.infants_count || 0);
       setStartDate(reservation.start_date);
       setEndDate(reservation.end_date);
-      // Map backend status variants to the small set of frontend statuses
+      // Map backend status variants to the frontend canonical statuses
       const mapStatus = (s: any) => {
         if (!s) return 'pre-reserva';
-        const low = String(s).toLowerCase();
-        if (['pre-reserva', 'pre_reserva', 'pre-reserva'].includes(low)) return 'pre-reserva';
-        if (['reservado', 'reserved', 'checked_in', 'checked-in', 'checkedin', 'confirmed'].includes(low)) return 'reservado';
+        const low = String(s).toLowerCase().trim();
+        if (['pre-reserva', 'pre_reserva', 'tentative', 'tentativa'].includes(low)) return 'pre-reserva';
+        if (['reservado', 'reserved', 'booked'].includes(low)) return 'reservado';
+        if (['confirmed', 'confirmado', 'guaranteed'].includes(low)) return 'confirmado';
+        if (['checked_in', 'checked-in', 'checkin', 'in-house', 'in_house', 'inhospedado'].includes(low)) return 'checked_in';
+        if (['checked_out', 'checked-out', 'checkout', 'departed'].includes(low)) return 'checked_out';
+        if (['no_show', 'no-show', 'noshow', 'no show'].includes(low)) return 'no_show';
         if (['cancelado', 'canceled', 'cancelled'].includes(low)) return 'cancelado';
-        return 'pre-reserva';
+        if (['blocked', 'block', 'bloqueado', 'manutencao', 'manutenção'].includes(low)) return 'blocked';
+        return low.replace(/\s+/g, '-');
       };
 
-      setStatus(mapStatus(reservation.status));
+      setStatus(mapStatus(reservation.status) as ReservationStatus);
       setNotes(reservation.notes ?? "");
       setPartnerId(reservation.partner_id ?? null);
       // Prefer explicit price_override (new column). Only show manual input
@@ -131,7 +136,12 @@ export default function ReservationModal({
   // Accessibility: manage focus when modal opens and handle ESC to close
   useEffect(() => {
     previousActive.current = document.activeElement as HTMLElement | null;
-    // focus first input when modal mounts
+    // focus first input when modal mounts (try immediate focus and a fallback)
+    try {
+      firstFieldRef.current?.focus();
+    } catch (_) {
+      // ignore
+    }
     const timer = setTimeout(() => {
       firstFieldRef.current?.focus();
     }, 0);
@@ -235,6 +245,18 @@ export default function ReservationModal({
   return (
     <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose} closeOnBackdrop={false}>
       <div className="form reservation-modal" aria-busy={initialLoading || calcLoading}>
+        <div className="modal-status-row">
+          <span className={`status-pill status-${status}`}>{
+            status === 'pre-reserva' ? 'Pré-reserva' :
+            status === 'reservado' ? 'Reservado' :
+            status === 'confirmado' ? 'Confirmado' :
+            status === 'checked_in' ? 'Check-in' :
+            status === 'checked_out' ? 'Check-out' :
+            status === 'no_show' ? 'No-show' :
+            status === 'cancelado' ? 'Cancelado' :
+            status === 'blocked' ? 'Bloqueado' : status
+          }</span>
+        </div>
         {(error || fieldError) && (
           <div className="form-error" aria-live="assertive">{error}</div>
         )}
@@ -294,7 +316,12 @@ export default function ReservationModal({
               <select value={status} onChange={e => setStatus(e.target.value as ReservationStatus)}>
                 <option value="pre-reserva">Pré-reserva</option>
                 <option value="reservado">Reservado</option>
+                <option value="confirmado">Confirmado</option>
+                <option value="checked_in">Check-in</option>
+                <option value="checked_out">Check-out</option>
+                <option value="no_show">No-show</option>
                 <option value="cancelado">Cancelado</option>
+                <option value="blocked">Bloqueado</option>
               </select>
             </div>
           )}

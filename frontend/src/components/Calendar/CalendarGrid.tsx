@@ -27,20 +27,25 @@ export default function CalendarGrid({
     if (!s) return 'reserved';
     const key = String(s).toLowerCase().trim();
     const map: Record<string, string> = {
-      'reservado': 'reserved',
-      'reserved': 'reserved',
+      'reservado': 'reservado',
+      'reserved': 'reservado',
       'pre-reserva': 'pre-reserva',
       'pre_reserva': 'pre-reserva',
-      'confirmed': 'confirmed',
-      'confirmado': 'confirmed',
-      'confimado': 'confirmed',
-      'cancelado': 'canceled',
-      'canceled': 'canceled',
+      'confirmed': 'confirmado',
+      'confirmado': 'confirmado',
+      'confimado': 'confirmado',
+      'cancelado': 'cancelado',
+      'canceled': 'cancelado',
       'checked_in': 'checked_in',
       'checked-in': 'checked_in',
       'checkedout': 'checked_out',
       'checked_out': 'checked_out',
       'checked-out': 'checked_out',
+      'no_show': 'no_show',
+      'no-show': 'no_show',
+      'noshow': 'no_show',
+      'blocked': 'blocked',
+      'bloqueado': 'blocked',
     };
 
     return map[key] ?? key.replace(/\s+/g, '-');
@@ -124,12 +129,13 @@ export default function CalendarGrid({
               // reserva começa aqui
               if (reservationMap[col]) {
                 const r = reservationMap[col];
+                const statusKey = canonicalStatus(r.status);
 
                 cells.push(
                   <td
                     key={`res-${r.id}`}
                     colSpan={r.span}
-                    className={`reservation-cell status-${r.status} ${r.partner_id || (r.partner && r.partner.id) ? 'has-partner' : ''}`}
+                    className={`reservation-cell status-${statusKey} ${r.partner_id || (r.partner && r.partner.id) ? 'has-partner' : ''}`}
                     onClick={() => onReservationClick(r)}
                   >
                     <Popover content={<div><strong>{r.guest_name}</strong><div>{formatDate(r.start_date)} → {formatDate(r.end_date)}</div></div>}>
