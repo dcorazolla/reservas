@@ -307,7 +307,7 @@ export default function ReservationModal({
                     </div>
 
                   <div style={{ minWidth: 140, textAlign: 'right' }}>
-                    {showManualInput || priceOverride ? (
+                    {(showManualInput || (priceOverride !== null && priceOverride !== "")) ? (
                       initialLoading ? (
                         <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
                       ) : (
@@ -322,7 +322,7 @@ export default function ReservationModal({
                               // removed manual override — recompute from server
                               computeCalcFromServer();
                             }
-                          }} placeholder={String(calcTotal)} style={{ width: 120 }} />
+                          }} placeholder={priceOverride ? String(priceOverride) : String(calcTotal)} style={{ width: 120 }} />
                           {priceOverride ? (
                             <button type="button" className="secondary" onClick={() => {
                               // clear manual price
