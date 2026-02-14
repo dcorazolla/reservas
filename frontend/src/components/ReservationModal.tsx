@@ -7,6 +7,7 @@ import { listRooms } from "../api/rooms";
 import Modal from "./Modal/Modal";
 import "./ReservationModal.css";
 import { formatMoney } from "../utils/money";
+import Skeleton from "./Skeleton";
 
 
 type Props = {
@@ -53,6 +54,8 @@ export default function ReservationModal({
   const [priceOverride, setPriceOverride] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [fieldError, setFieldError] = useState("");
+  const [initialLoading, setInitialLoading] = useState<boolean>(true);
+  const [calcLoading, setCalcLoading] = useState<boolean>(false);
 
   const editing = !!reservation;
 
@@ -99,6 +102,7 @@ export default function ReservationModal({
     return () => {
       document.removeEventListener("keydown", onKey);
       if (previousActive.current) previousActive.current.focus();
+          setCalcLoading(true);
       clearTimeout(timer);
     };
   }, [onClose]);
@@ -121,6 +125,7 @@ export default function ReservationModal({
       setFieldError(`Número de pessoas excede a capacidade (${roomCapacity}).`);
       return;
     }
+          setCalcLoading(false);
     if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
       setFieldError('Saída deve ser maior que a entrada.');
       return;
@@ -160,9 +165,9 @@ export default function ReservationModal({
   useEffect(() => {
     async function loadPartnersAndRooms() {
       try {
+        setInitialLoading(true);
         const p: any = await listPartners();
         setPartners(p || []);
-        // Do not preselect a partner automatically; leave selection to the user
       } catch (e) {
         console.warn('Não foi possível carregar parceiros', e);
       }
@@ -175,6 +180,8 @@ export default function ReservationModal({
         }
       } catch (e) {
         console.warn('Não foi possível carregar quartos', e);
+      } finally {
+        setInitialLoading(false);
       }
     }
     loadPartnersAndRooms();
@@ -183,50 +190,58 @@ export default function ReservationModal({
 
   return (
     <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose} closeOnBackdrop={false}>
-      <div className="form reservation-modal">
+      <div className="form reservation-modal" aria-busy={initialLoading || calcLoading}>
         {(error || fieldError) && (
           <div className="form-error" aria-live="assertive">{error}</div>
         )}
 
         <div className="form-group">
           <label htmlFor="guestName">Hóspede</label>
-          <input id="guestName" ref={firstFieldRef} value={guestName} onChange={e => setGuestName(e.target.value)} />
+          {initialLoading ? (
+            <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
+          ) : (
+            <input id="guestName" ref={firstFieldRef} value={guestName} onChange={e => setGuestName(e.target.value)} />
+          )}
         </div>
 
         <div className="form-row three-cols">
           <div className="form-group">
             <label htmlFor="adults">Adultos</label>
-            <input id="adults" type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />
+            {initialLoading ? <Skeleton variant="text" style={{ width: 120, height: 32 }} /> : <input id="adults" type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />}
           </div>
           <div className="form-group">
             <label htmlFor="children">Crianças</label>
-            <input id="children" type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />
+            {initialLoading ? <Skeleton variant="text" style={{ width: 120, height: 32 }} /> : <input id="children" type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />}
           </div>
           <div className="form-group">
             <label htmlFor="infants">Bebês</label>
-            <input id="infants" type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />
+            {initialLoading ? <Skeleton variant="text" style={{ width: 120, height: 32 }} /> : <input id="infants" type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />}
           </div>
         </div>
 
         <div className="form-row two-cols">
           <div className="form-group">
             <label htmlFor="startDate">Entrada</label>
-            <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+            {initialLoading ? <Skeleton variant="text" style={{ width: 180, height: 32 }} /> : <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />}
           </div>
           <div className="form-group">
             <label htmlFor="endDate">Saída</label>
-            <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
+            {initialLoading ? <Skeleton variant="text" style={{ width: 180, height: 32 }} /> : <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />}
           </div>
         </div>
 
         <div className="form-group">
           <label htmlFor="room">Quarto</label>
-          <select id="room" value={selectedRoomId ?? ''} onChange={e => setSelectedRoomId(e.target.value || null)}>
-            <option value="">(Selecione um quarto)</option>
-            {rooms.map(r => (
-              <option key={r.id} value={r.id}>{r.name || r.number || r.id}</option>
-            ))}
-          </select>
+          {initialLoading ? (
+            <Skeleton variant="text" style={{ width: '100%', height: 36 }} />
+          ) : (
+            <select id="room" value={selectedRoomId ?? ''} onChange={e => setSelectedRoomId(e.target.value || null)}>
+              <option value="">(Selecione um quarto)</option>
+              {rooms.map(r => (
+                <option key={r.id} value={r.id}>{r.name || r.number || r.id}</option>
+              ))}
+            </select>
+          )}
         </div>
 
         {editing && (
@@ -243,20 +258,31 @@ export default function ReservationModal({
         <div className="form-group">
           <label>Resumo</label>
           <div className="summary">
-            <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
-            {days.length > 0 && (
+            {calcLoading ? (
               <div>
-                {days.map((d: any) => (
-                  <div key={d.date}>{d.date}: {formatMoney(d.price)}</div>
-                ))}
+                <Skeleton variant="text" style={{ width: 140, height: 20 }} />
+                <div style={{ marginTop: 8 }}>
+                  <Skeleton variant="rect" style={{ width: '100%', height: 48 }} />
+                </div>
               </div>
+            ) : (
+              <>
+                <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
+                {days.length > 0 && (
+                  <div>
+                    {days.map((d: any) => (
+                      <div key={d.date}>{d.date}: {formatMoney(d.price)}</div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
 
         <div className="form-group">
           <label htmlFor="priceOverride">Preço manual (opcional)</label>
-          <input id="priceOverride" type="number" step="0.01" value={priceOverride ?? ""} onChange={e => setPriceOverride(e.target.value || null)} placeholder={String(calcTotal)} />
+          {initialLoading ? <Skeleton variant="text" style={{ width: 160, height: 32 }} /> : <input id="priceOverride" type="number" step="0.01" value={priceOverride ?? ""} onChange={e => setPriceOverride(e.target.value || null)} placeholder={String(calcTotal)} />}
         </div>
 
         <div className="form-group">
@@ -266,26 +292,39 @@ export default function ReservationModal({
 
         <div className="form-group">
           <label htmlFor="partner">Parceiro</label>
-          <select id="partner" value={partnerId ?? ""} onChange={e => setPartnerId(e.target.value || null)}>
-            <option value="">(Nenhum)</option>
-            {partners.map(p => (
-              <option key={p.id} value={p.id}>{p.name}</option>
-            ))}
-          </select>
+          {initialLoading ? (
+            <Skeleton variant="text" style={{ width: '100%', height: 36 }} />
+          ) : (
+            <select id="partner" value={partnerId ?? ""} onChange={e => setPartnerId(e.target.value || null)}>
+              <option value="">(Nenhum)</option>
+              {partners.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+          )}
         </div>
 
         <div className="form-actions">
-          <button type="button" className="secondary" onClick={onClose}>Cancelar</button>
-          {editing && (
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => { window.location.href = `/minibar?reservation_id=${reservation?.id}`; }}
-            >
-              Frigobar
-            </button>
+          {initialLoading ? (
+            <>
+              <Skeleton variant="text" style={{ width: 100, height: 36 }} />
+              <Skeleton variant="text" style={{ width: 120, height: 36, marginLeft: 8 }} />
+            </>
+          ) : (
+            <>
+              <button type="button" className="secondary" onClick={onClose}>Cancelar</button>
+              {editing && (
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => { window.location.href = `/minibar?reservation_id=${reservation?.id}`; }}
+                >
+                  Frigobar
+                </button>
+              )}
+            </>
           )}
-            <button type="button" className="primary" disabled={!!fieldError} onClick={async () => {
+            <button type="button" className="primary" disabled={!!fieldError || initialLoading || calcLoading} onClick={async () => {
             try {
               const payloadRoomId = selectedRoomId ?? roomId ?? reservation?.room_id ?? null;
               if (!payloadRoomId) throw new Error('Escolha um quarto antes de salvar.');
