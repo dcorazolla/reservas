@@ -78,10 +78,15 @@ export default function ReservationModal({
       setStatus(reservation.status);
       setNotes(reservation.notes ?? "");
       setPartnerId(reservation.partner_id ?? null);
-      // If total_value differs from calculated total, expose it as a manual override
-      if (reservation.total_value) {
-        setPriceOverride(String(reservation.total_value));
+      // Prefer explicit price_override (new column). Only show manual input
+      // when an explicit override exists. Do NOT treat total_value as an
+      // implicit manual override to avoid exposing the field for legacy data.
+      if (reservation.price_override != null) {
+        setPriceOverride(String(reservation.price_override));
         setShowManualInput(true);
+      } else {
+        setPriceOverride(null);
+        setShowManualInput(false);
       }
     }
   }, [reservation]);
@@ -132,7 +137,6 @@ export default function ReservationModal({
     return () => {
       document.removeEventListener("keydown", onKey);
       if (previousActive.current) previousActive.current.focus();
-          setCalcLoading(true);
       clearTimeout(timer);
     };
   }, [onClose]);
