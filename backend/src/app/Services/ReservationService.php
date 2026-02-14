@@ -35,10 +35,17 @@ class ReservationService
 
     public function update(Reservation $reservation, array $data): Reservation
     {
+        // Use the room being set in the update payload if present, otherwise
+        // fall back to the reservation's existing room. Also ensure start/end
+        // are provided (caller should supply them) and normalize values.
+        $roomId = $data['room_id'] ?? $reservation->room_id;
+        $start = $data['start_date'] ?? $reservation->start_date->toDateString();
+        $end = $data['end_date'] ?? $reservation->end_date->toDateString();
+
         $this->assertNoDateConflict(
-            $reservation->room_id,
-            $data['start_date'],
-            $data['end_date'],
+            $roomId,
+            $start,
+            $end,
             $reservation->id
         );
 
