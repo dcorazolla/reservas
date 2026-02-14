@@ -7,6 +7,7 @@ import { listRooms } from "../api/rooms";
 import Modal from "./Modal/Modal";
 import "./ReservationModal.css";
 import { formatMoney } from "../utils/money";
+import { formatDate } from "../utils/dates";
 import Skeleton from "./Skeleton/Skeleton";
 
 
@@ -52,6 +53,7 @@ export default function ReservationModal({
   const [calcTotal, setCalcTotal] = useState<number>(0);
   const [days, setDays] = useState<Array<{ date: string; price: number }>>([]);
   const [priceOverride, setPriceOverride] = useState<string | null>(null);
+  const [showManualInput, setShowManualInput] = useState<boolean>(false);
   const [error, setError] = useState("");
   const [fieldError, setFieldError] = useState("");
   const [initialLoading, setInitialLoading] = useState<boolean>(true);
@@ -79,9 +81,37 @@ export default function ReservationModal({
       // If total_value differs from calculated total, expose it as a manual override
       if (reservation.total_value) {
         setPriceOverride(String(reservation.total_value));
+        setShowManualInput(true);
       }
     }
   }, [reservation]);
+
+  // helper to (re)compute calcTotal/days from server
+  async function computeCalcFromServer() {
+    try {
+      setCalcLoading(true);
+      const rid = reservation ? reservation.room_id : (roomId as string);
+      if (!rid || !startDate || !endDate || !adults) return;
+      const calc: any = await calculateReservationPriceDetailed({
+        room_id: rid,
+        start_date: startDate,
+        end_date: endDate,
+        adults_count: adults,
+        children_count: children,
+        infants_count: infants,
+      });
+      setCalcTotal(calc.total || 0);
+      setDays(calc.days || []);
+      setError("");
+    } catch (e: any) {
+      console.error('Falha ao calcular preço:', e);
+      setCalcTotal(0);
+      setDays([]);
+      setError(e?.message || 'Falha ao calcular preço');
+    } finally {
+      setCalcLoading(false);
+    }
+  }
 
   // Accessibility: manage focus when modal opens and handle ESC to close
   useEffect(() => {
@@ -269,22 +299,49 @@ export default function ReservationModal({
             ) : (
               <>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
-                  <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
+                    <button type="button" className="secondary" onClick={() => setShowManualInput(true)} style={{ padding: '4px 8px' }}>Editar</button>
+                  </div>
+
                   <div style={{ minWidth: 140, textAlign: 'right' }}>
-                    {initialLoading ? (
-                      <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
+                    {showManualInput || priceOverride ? (
+                      initialLoading ? (
+                        <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
+                      ) : (
+                        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', alignItems: 'center' }}>
+                          <input id="priceOverride" type="number" step="0.01" value={priceOverride ?? ""} onChange={e => {
+                            const v = e.target.value || null;
+                            setPriceOverride(v);
+                            if (v) {
+                              const n = parseFloat(v as string);
+                              if (!Number.isNaN(n)) setCalcTotal(n);
+                            } else {
+                              // removed manual override — recompute from server
+                              computeCalcFromServer();
+                            }
+                          }} placeholder={String(calcTotal)} style={{ width: 120 }} />
+                          {priceOverride ? (
+                            <button type="button" className="secondary" onClick={() => {
+                              // clear manual price
+                              setPriceOverride(null);
+                              setShowManualInput(false);
+                              computeCalcFromServer();
+                            }}>Apagar</button>
+                          ) : (
+                            <button type="button" className="secondary" onClick={() => { setPriceOverride(null); setShowManualInput(false); }}>Fechar</button>
+                          )}
+                        </div>
+                      )
                     ) : (
-                      <div>
-                        <label htmlFor="priceOverride" style={{ display: 'none' }}>Preço manual</label>
-                        <input id="priceOverride" type="number" step="0.01" value={priceOverride ?? ""} onChange={e => setPriceOverride(e.target.value || null)} placeholder={String(calcTotal)} />
-                      </div>
+                      <div style={{ color: '#666' }}>(Preço manual não definido)</div>
                     )}
                   </div>
                 </div>
 
                 {days.length > 0 && (
-                  <div style={{ marginTop: 8, color: '#555', fontSize: 13 }}>
-                    {days.map((d: any) => `${d.date}: ${formatMoney(d.price)}`).join(' | ')}
+                  <div style={{ marginTop: 8, color: '#555', fontSize: 15 }}>
+                    {days.map((d: any) => `${formatDate(d.date)}: ${formatMoney(d.price)}`).join(' | ')}
                   </div>
                 )}
               </>
