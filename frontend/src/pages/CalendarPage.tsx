@@ -5,6 +5,7 @@ import type { Room, Reservation } from "../types/calendar";
 import CalendarGrid from "../components/Calendar/CalendarGrid";
 import ReservationModal from "../components/ReservationModal";
 import RoomBlockModal from "../components/RoomBlockModal";
+import Skeleton from "../components/Skeleton";
 import { formatDate } from "../utils/dates";
 
 function monthStart(date: Date) {
@@ -105,7 +106,30 @@ export default function CalendarPage() {
             </div>
           </div>
 
-          {loading ? <p>Carregando calendário...</p> : null}
+          {loading ? (
+            <div className="calendar-wrapper">
+              <table className="calendar-table">
+                <thead>
+                  <tr>
+                    <th className="room-col"><Skeleton variant="text" style={{ width: 140, height: 20 }} /></th>
+                    {Array.from({ length: 7 }).map((_, i) => (
+                      <th key={i}><Skeleton variant="text" style={{ width: 100, height: 20 }} /></th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: 6 }).map((_, r) => (
+                    <tr key={r}>
+                      <td className="room-col"><Skeleton variant="text" style={{ width: 120, height: 16 }} /></td>
+                      {Array.from({ length: 7 }).map((__, c) => (
+                        <td key={c}><div style={{ padding: 6 }}><Skeleton variant="rect" style={{ height: 36 }} /></div></td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
 
           <CalendarGrid
             rooms={rooms}
