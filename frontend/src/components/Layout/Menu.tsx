@@ -50,6 +50,7 @@ export default function Menu() {
           <div className="submenu">
             <NavLink to="/config/propriedade">Propriedade</NavLink>
             <NavLink to="/config/parceiros">Parceiros</NavLink>
+                <NavLink to="/minibar">Frigobar</NavLink>
             <NavLink to="/config/bloqueios">Bloqueios de Quarto</NavLink>
             <NavLink to="/config/quartos">Quartos</NavLink>
             <NavLink to="/config/categorias-quartos">Categorias de Quartos</NavLink>

@@ -25,52 +25,68 @@ class MinibarService
 
         // If a product_id was provided, try to decrement stock safely inside a transaction.
         if (!empty($data['product_id'])) {
-            return DB::transaction(function () use ($data, $quantity, $unitPrice, $total) {
-                $product = Product::where('id', $data['product_id'])->lockForUpdate()->first();
+            try {
+                return DB::transaction(function () use ($data, $quantity, $unitPrice, $total) {
+                    $product = Product::where('id', $data['product_id'])->lockForUpdate()->first();
 
-                if (!$product) {
-                    throw ValidationException::withMessages(['product_id' => ['Produto informado não encontrado.']]);
-                }
+                    if (!$product) {
+                        throw ValidationException::withMessages(['product_id' => ['Produto informado não encontrado.']]);
+                    }
 
-                if (!$product->active) {
-                    throw ValidationException::withMessages(['product_id' => ['Produto está desativado.']]);
-                }
+                    if (!$product->active) {
+                        throw ValidationException::withMessages(['product_id' => ['Produto está desativado.']]);
+                    }
 
-                if ($product->stock < $quantity) {
+                    if ($product->stock < $quantity) {
+                        // throw to be handled by outer catch so we can persist audit outside
+                        throw ValidationException::withMessages(['quantity' => ['Quantidade solicitada maior que o stock disponível.']]);
+                    }
+
+                    // Decrement stock and save
+                    $product->stock = max(0, $product->stock - $quantity);
+                    $product->save();
+
                     FinancialAuditLog::create([
-                        'event_type' => 'minibar.consumption_failed_insufficient_stock',
-                        'payload' => ['product_id' => $product->id, 'requested' => $quantity, 'available' => $product->stock],
+                        'event_type' => 'minibar.stock_decremented',
+                        'payload' => ['product_id' => $product->id, 'decrement' => $quantity, 'remaining' => $product->stock],
                         'resource_type' => 'product',
                         'resource_id' => $product->id,
                     ]);
-                    throw ValidationException::withMessages(['quantity' => ['Quantidade solicitada maior que o stock disponível.']]);
+
+                    $cons = MinibarConsumption::create([
+                        'id' => (string) Str::uuid(),
+                        'reservation_id' => $data['reservation_id'] ?? null,
+                        'room_id' => $data['room_id'] ?? null,
+                        'product_id' => $product->id,
+                        'description' => $data['description'] ?? $product->name ?? null,
+                        'quantity' => $quantity,
+                        'unit_price' => $unitPrice,
+                        'total' => $total,
+                        'created_by' => $data['created_by'] ?? null,
+                    ]);
+
+                    return $cons;
+                });
+            } catch (ValidationException $e) {
+                // If the failure was due to insufficient stock, persist an audit
+                // log outside the transaction so it isn't rolled back.
+                $errors = $e->errors();
+                if (isset($errors['quantity'])) {
+                    $product = Product::find($data['product_id']);
+                    $logId = (string) Str::uuid();
+                    DB::table('financial_audit_logs')->insert([
+                        'id' => $logId,
+                        'event_type' => 'minibar.consumption_failed_insufficient_stock',
+                        'payload' => json_encode(['product_id' => $product?->id, 'requested' => $quantity, 'available' => $product?->stock]),
+                        'resource_type' => 'product',
+                        'resource_id' => $product?->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
                 }
 
-                // Decrement stock and save
-                $product->stock = max(0, $product->stock - $quantity);
-                $product->save();
-
-                FinancialAuditLog::create([
-                    'event_type' => 'minibar.stock_decremented',
-                    'payload' => ['product_id' => $product->id, 'decrement' => $quantity, 'remaining' => $product->stock],
-                    'resource_type' => 'product',
-                    'resource_id' => $product->id,
-                ]);
-
-                $cons = MinibarConsumption::create([
-                    'id' => (string) Str::uuid(),
-                    'reservation_id' => $data['reservation_id'] ?? null,
-                    'room_id' => $data['room_id'] ?? null,
-                    'product_id' => $product->id,
-                    'description' => $data['description'] ?? $product->name ?? null,
-                    'quantity' => $quantity,
-                    'unit_price' => $unitPrice,
-                    'total' => $total,
-                    'created_by' => $data['created_by'] ?? null,
-                ]);
-
-                return $cons;
-            });
+                throw $e;
+            }
         }
 
         // No product linked: create consumption without stock checks

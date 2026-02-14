@@ -91,6 +91,7 @@ Commands:
 - Create branch: `git checkout -b feature/xxx`.
 - Run tests (backend): `./backend/src/vendor/bin/phpunit`.
 - Run frontend tests: `pnpm test`.
+ - Run frontend tests: `cd frontend && npm ci && npm test`.
 
 See `docs/copilot-instructions.md` for detailed agent automation and branching rules.
 
@@ -122,7 +123,17 @@ Local test helper
 - Run all tests locally (backend + frontend):
 
 ```bash
+# Run backend + frontend tests locally (recommended before pushing)
 ./scripts/test-all.sh
+```
+
+Pre-push recommendation
+
+- Always run the full test suite locally before pushing or opening a PR. You can use the helper script below which runs backend PHPUnit and frontend Vitest locally and will fail the push if tests fail:
+
+```bash
+# Run backend and frontend tests, then commit
+./scripts/commit_and_test.sh "<commit message>"
 ```
 
 Git hooks

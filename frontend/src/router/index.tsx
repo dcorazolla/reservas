@@ -5,6 +5,7 @@ import LoginPage from "../pages/LoginPage";
 import BaseTariffsPage from "../pages/config/tarifario/BaseTariffsPage";
 import RoomTariffsPage from "../pages/config/tarifario/RoomTariffsPage";
 import PeriodTariffsPage from "../pages/config/tarifario/PeriodTariffsPage";
+import MinibarPage from "../pages/MinibarPage";
 
 import CalendarPage from "../pages/CalendarPage";
 import ReservationsPage from "../pages/ReservationsPage";
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
       { path: "/config/tarifario/base", element: <BaseTariffsPage /> },
       { path: "/config/tarifario/quartos", element: <RoomTariffsPage /> },
       { path: "/config/tarifario/periodos", element: <PeriodTariffsPage /> },
+      { path: "/minibar", element: <MinibarPage /> },
     ],
   },
 ]);

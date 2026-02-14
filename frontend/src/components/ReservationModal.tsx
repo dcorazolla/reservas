@@ -58,6 +58,8 @@ export default function ReservationModal({
 
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
   const previousActive = useRef<HTMLElement | null>(null);
+  // Use a simple window navigation instead of useNavigate to keep tests
+  // working outside of a Router context.
 
   useEffect(() => {
     if (reservation) {
@@ -274,6 +276,15 @@ export default function ReservationModal({
 
         <div className="form-actions">
           <button type="button" className="secondary" onClick={onClose}>Cancelar</button>
+          {editing && (
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => { window.location.href = `/minibar?reservation_id=${reservation?.id}`; }}
+            >
+              Frigobar
+            </button>
+          )}
             <button type="button" className="primary" disabled={!!fieldError} onClick={async () => {
             try {
               const payloadRoomId = selectedRoomId ?? roomId ?? reservation?.room_id ?? null;
