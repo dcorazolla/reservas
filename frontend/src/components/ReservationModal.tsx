@@ -256,6 +256,11 @@ export default function ReservationModal({
             status === 'cancelado' ? 'Cancelado' :
             status === 'blocked' ? 'Bloqueado' : status
           }</span>
+          {reservation && (reservation.guarantee_type || reservation.payment_status) ? (
+            <span className="guarantee-pill" title={reservation.guarantee_type || reservation.payment_status}>
+              {reservation.guarantee_type ? reservation.guarantee_type : reservation.payment_status}
+            </span>
+          ) : null}
         </div>
         {(error || fieldError) && (
           <div className="form-error" aria-live="assertive">{error}</div>

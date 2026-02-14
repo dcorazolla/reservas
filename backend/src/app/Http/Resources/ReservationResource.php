@@ -23,6 +23,9 @@ class ReservationResource extends JsonResource
             'status' => $this->status,
             'total_value' => $this->total_value,
             'price_override' => $this->price_override,
+            'guarantee_type' => $this->guarantee_type,
+            'payment_status' => $this->payment_status,
+            'guarantee_at' => optional($this->guarantee_at)->toDateTimeString(),
             'notes' => $this->notes,
             'partner_id' => $this->partner_id,
             'partner' => $this->whenLoaded('partner', function () {

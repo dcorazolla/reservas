@@ -21,6 +21,9 @@ export type Reservation = {
   status: "pre-reserva" | "reservado" | "confirmado" | "checked_in" | "checked_out" | "no_show" | "cancelado" | "blocked";
   total_value?: number;
   notes?: string;
+  guarantee_type?: string | null;
+  payment_status?: string | null;
+  guarantee_at?: string | null;
   partner_id?: string | null;
   partner_name?: string | null;
   price_override?: number | null;
