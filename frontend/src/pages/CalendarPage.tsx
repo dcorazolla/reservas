@@ -131,11 +131,12 @@ export default function CalendarPage() {
             </div>
           ) : null}
 
-          <CalendarGrid
-            rooms={rooms}
-            startDate={startDate}
-            days={days}
-            onEmptyCellClick={(roomId, date) => {
+          {!loading && (
+            <CalendarGrid
+              rooms={rooms}
+              startDate={startDate}
+              days={days}
+              onEmptyCellClick={(roomId, date) => {
               // do not allow creating reservations in blocked cells; the grid will not produce empty cells for blocked ranges
               setSelectedRoomId(roomId);
               setSelectedDate(date);
@@ -151,6 +152,7 @@ export default function CalendarPage() {
               setShowBlockModal(true);
             }}
           />
+          )}
         </div>
       </div>
 
