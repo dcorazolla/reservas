@@ -27,6 +27,7 @@ class Reservation extends Model
         'end_date',
         'status',
         'total_value',
+        'price_override',
         'notes',
     ];
 
@@ -34,6 +35,7 @@ class Reservation extends Model
         'start_date' => 'date',
         'end_date'   => 'date',
         'total_value'=> 'decimal:2',
+        'price_override' => 'decimal:2',
     ];
 
     public function room()

@@ -53,6 +53,10 @@ class PartnerReservationsSeeder extends Seeder
             $basePerNight = 50.00;
             $total = $basePerNight * $length;
 
+            // Occasionally create a manual override in seeded data to exercise UI
+            $maybeOverride = (rand(1, 100) <= 25); // ~25% chance
+            $overrideValue = $maybeOverride ? round($total * (0.8 + (rand(0,20)/100)), 2) : null;
+
             $reservation = Reservation::create([
                 'id' => (string) Str::uuid(),
                 'room_id' => $room->id,
@@ -66,7 +70,8 @@ class PartnerReservationsSeeder extends Seeder
                 'start_date' => $start->toDateString(),
                 'end_date' => $end->toDateString(),
                 'status' => $statuses[array_rand($statuses)],
-                'total_value' => $total,
+                'total_value' => $overrideValue ?? $total,
+                'price_override' => $overrideValue,
                 'notes' => 'Seeded reservation',
             ]);
 
