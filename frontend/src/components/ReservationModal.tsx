@@ -318,16 +318,57 @@ export default function ReservationModal({
           {editing && (
             <div className="form-group">
               <label>Status</label>
-              <select value={status} onChange={e => setStatus(e.target.value as ReservationStatus)}>
-                <option value="pre-reserva">Pré-reserva</option>
-                <option value="reservado">Reservado</option>
-                <option value="confirmado">Confirmado</option>
-                <option value="checked_in">Check-in</option>
-                <option value="checked_out">Check-out</option>
-                <option value="no_show">No-show</option>
-                <option value="cancelado">Cancelado</option>
-                <option value="blocked">Bloqueado</option>
-              </select>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                {/* Action buttons: show contextual actions depending on current status */}
+                {status === 'pre-reserva' && (
+                  <>
+                    <button type="button" className="secondary" onClick={async () => {
+                      try {
+                        // Mark as reservado (update)
+                        await updateReservation(reservation!.id, { status: 'reservado' });
+                        if (onSaved) onSaved();
+                        onClose();
+                      } catch (e: any) { setError(e?.message || 'Falha ao reservar'); }
+                    }}>Reservar</button>
+                    <button type="button" className="secondary" onClick={async () => {
+                      try {
+                        const g = window.prompt('Tipo de garantia (card/prepay) — deixe vazio para sem garantia');
+                        await confirmReservation(reservation!.id, g ? { guarantee_type: g } : {});
+                        if (onSaved) onSaved();
+                        onClose();
+                      } catch (e: any) { setError(e?.message || 'Falha ao confirmar'); }
+                    }}>Confirmar</button>
+                  </>
+                )}
+
+                {status === 'reservado' && (
+                  <>
+                    <button type="button" className="secondary" onClick={async () => {
+                      try { await confirmReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao confirmar'); }
+                    }}>Confirmar</button>
+                    <button type="button" className="secondary" onClick={async () => {
+                      try { await checkinReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao check-in'); }
+                    }}>Check-in</button>
+                    <button type="button" className="secondary" onClick={async () => {
+                      try { await cancelReservation(reservation!.id, { reason: window.prompt('Motivo do cancelamento') }); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao cancelar'); }
+                    }}>Cancelar</button>
+                  </>
+                )}
+
+                {status === 'checked_in' && (
+                  <button type="button" className="primary" onClick={async () => { try { await checkoutReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao check-out'); } }}>Check-out</button>
+                )}
+
+                {status === 'checked_out' && (
+                  <>
+                    <button type="button" className="primary" onClick={async () => { try { await finalizeReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao encerrar'); } }}>Encerrar</button>
+                    <button type="button" className="secondary" onClick={async () => { try { await cancelReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao cancelar'); } }}>Cancelar</button>
+                  </>
+                )}
+
+                {/* fallback: show current status text */}
+                <span style={{ marginLeft: 8, color: '#666' }}>{status}</span>
+              </div>
             </div>
           )}
         </div>

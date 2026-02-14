@@ -362,6 +362,134 @@ class ReservationController extends BaseApiController
         return $this->ok(new ReservationResource($reservation));
     }
 
+    public function confirm(Request $request, Reservation $reservation)
+    {
+        $property = $reservation->room->property ?? null;
+        $settings = $property && $property->settings ? json_decode($property->settings, true) : [];
+
+        $requireGuarantee = $settings['confirm_requires_guarantee'] ?? true;
+
+        $data = $request->validate([
+            'guarantee_type' => 'sometimes|string|nullable',
+            'payment_status' => 'sometimes|string|nullable',
+        ]);
+
+        if ($requireGuarantee && empty($data['guarantee_type']) && empty($reservation->guarantee_type)) {
+            return response()->json(['message' => 'Confirm blocked: guarantee required for this property'], 422);
+        }
+
+        // Apply guarantee info if provided
+        if (!empty($data['guarantee_type'])) {
+            $reservation->guarantee_type = $data['guarantee_type'];
+            $reservation->guarantee_at = now();
+            if (!empty($data['payment_status'])) $reservation->payment_status = $data['payment_status'];
+        }
+
+        $from = $reservation->status;
+        $reservation->status = 'confirmado';
+        $reservation->save();
+
+        \Illuminate\Support\Facades\DB::table('reservation_state_changes')->insert([
+            'id' => (string) (\Illuminate\Support\Str::uuid()),
+            'reservation_id' => $reservation->id,
+            'from_status' => $from,
+            'to_status' => 'confirmado',
+            'user_id' => $request->user()?->id ?? null,
+            'context' => json_encode(['guarantee' => $reservation->guarantee_type ?? null]),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        FinancialAuditLog::create([
+            'event_type' => 'reservation.confirmed',
+            'payload' => ['reservation_id' => $reservation->id, 'guarantee' => $reservation->guarantee_type ?? null],
+            'resource_type' => 'reservation',
+            'resource_id' => $reservation->id,
+        ]);
+
+        return $this->ok(new ReservationResource($reservation));
+    }
+
+    public function cancel(Request $request, Reservation $reservation)
+    {
+        $data = $request->validate([
+            'reason' => 'sometimes|string|nullable',
+            'apply_penalty' => 'sometimes|boolean',
+        ]);
+
+        $from = $reservation->status;
+        $reservation->status = 'cancelado';
+        $reservation->save();
+
+        \Illuminate\Support\Facades\DB::table('reservation_state_changes')->insert([
+            'id' => (string) (\Illuminate\Support\Str::uuid()),
+            'reservation_id' => $reservation->id,
+            'from_status' => $from,
+            'to_status' => 'cancelado',
+            'user_id' => $request->user()?->id ?? null,
+            'context' => json_encode(['reason' => $data['reason'] ?? null, 'apply_penalty' => $data['apply_penalty'] ?? false]),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        FinancialAuditLog::create([
+            'event_type' => 'reservation.cancelled',
+            'payload' => ['reservation_id' => $reservation->id, 'reason' => $data['reason'] ?? null],
+            'resource_type' => 'reservation',
+            'resource_id' => $reservation->id,
+        ]);
+
+        return $this->ok(new ReservationResource($reservation));
+    }
+
+    public function finalize(Request $request, Reservation $reservation)
+    {
+        // Ensure no unpaid amounts unless partner covers
+        $minibarTotal = \App\Models\MinibarConsumption::where('reservation_id', $reservation->id)->sum('total');
+        $lodgingUnpaid = 0;
+        if ($reservation->invoice_id) {
+            $invoice = \App\Models\Invoice::find($reservation->invoice_id);
+            if ($invoice) {
+                $paid = (float) \App\Models\InvoiceLinePayment::whereIn('invoice_line_id', $invoice->lines()->pluck('id'))->sum('amount');
+                $lodgingUnpaid = max(0, (float)$invoice->total - $paid);
+            } else {
+                $lodgingUnpaid = (float)$reservation->total_value;
+            }
+        } else {
+            $lodgingUnpaid = (float)$reservation->total_value;
+        }
+
+        $partnerPays = (bool) $reservation->partner_id;
+
+        if (!$partnerPays && ($lodgingUnpaid + $minibarTotal) > 0) {
+            return response()->json(['message' => 'Finalize blocked: outstanding amounts must be settled'], 422);
+        }
+
+        $from = $reservation->status;
+        $reservation->status = 'encerrado';
+        $reservation->save();
+
+        \Illuminate\Support\Facades\DB::table('reservation_state_changes')->insert([
+            'id' => (string) (\Illuminate\Support\Str::uuid()),
+            'reservation_id' => $reservation->id,
+            'from_status' => $from,
+            'to_status' => 'encerrado',
+            'user_id' => $request->user()?->id ?? null,
+            'context' => json_encode([]),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        FinancialAuditLog::create([
+            'event_type' => 'reservation.finalized',
+            'payload' => ['reservation_id' => $reservation->id],
+            'resource_type' => 'reservation',
+            'resource_id' => $reservation->id,
+        ]);
+
+        return $this->ok(new ReservationResource($reservation));
+    }
+
     public function checkout(Request $request, Reservation $reservation, InvoiceService $invoices)
     {
         // Sum minibar consumptions for this reservation

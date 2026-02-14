@@ -57,6 +57,7 @@ export default function ReservationsListPage() {
           <table className="table" style={{ marginTop: 12 }}>
             <thead>
               <tr>
+                  <th></th>
                   <th>Hóspede</th>
                   <th>Quarto</th>
                   <th>Entrada</th>
@@ -69,6 +70,7 @@ export default function ReservationsListPage() {
             <tbody>
               {items.map((r: any) => (
                 <tr key={r.id}>
+                  <td style={{ width: 24 }}><span style={{ display: 'inline-block', width: 14, height: 14, borderRadius: 3 }} className={`status-${r.status}`} title={r.status}></span></td>
                   <td>{r.guest_name}</td>
                   <td>{r.room_name || r.room_id}</td>
                   <td>{formatDate(r.start_date)}</td>
