@@ -300,9 +300,11 @@ export default function ReservationModal({
               <>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
-                    <button type="button" className="secondary" onClick={() => setShowManualInput(true)} style={{ padding: '4px 8px' }}>Editar</button>
-                  </div>
+                      <div className="summary-total">Total: {formatMoney(calcTotal)}</div>
+                      {!priceOverride && !showManualInput && (
+                        <button type="button" className="secondary" onClick={() => setShowManualInput(true)} style={{ padding: '4px 8px' }}>Editar</button>
+                      )}
+                    </div>
 
                   <div style={{ minWidth: 140, textAlign: 'right' }}>
                     {showManualInput || priceOverride ? (
