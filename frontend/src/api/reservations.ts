@@ -57,3 +57,15 @@ export function checkinReservation(id: string) {
 export function checkoutReservation(id: string) {
   return apiFetch(`/reservations/${id}/checkout`, { method: 'POST' });
 }
+
+export function confirmReservation(id: string, data: any = {}) {
+  return apiFetch(`/reservations/${id}/confirm`, { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function cancelReservation(id: string, data: any = {}) {
+  return apiFetch(`/reservations/${id}/cancel`, { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function finalizeReservation(id: string, data: any = {}) {
+  return apiFetch(`/reservations/${id}/finalize`, { method: 'POST', body: JSON.stringify(data) });
+}

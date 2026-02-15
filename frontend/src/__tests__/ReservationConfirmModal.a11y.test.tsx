@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 
-import ReservationConfirmModal from '../components/ReservationConfirmModal'
+import { ReservationConfirmModal } from '../components/Reservation'
 
 const sampleItem = {
   room_name: 'Suite A',

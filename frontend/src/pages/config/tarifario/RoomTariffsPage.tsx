@@ -7,8 +7,7 @@ import { listRoomRates, createRoomRate, deleteRoomRate, updateRoomRate } from ".
 import { listCategoryRates, createCategoryRate, deleteCategoryRate, updateCategoryRate } from "../../../api/rates";
 import type { RoomRate, RoomCategoryRate } from "../../../types/rate";
 import { formatMoney, formatMoneyNullable } from "../../../utils/money";
-import RateModal from "../../../components/rates/RateModal";
-import CategoryRateModal from "../../../components/rates/CategoryRateModal";
+import { RateModal, CategoryRateModal } from "../../../components/rates";
 
 export default function RoomTariffsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -141,7 +140,7 @@ export default function RoomTariffsPage() {
                 return (
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td colSpan={4} style={{ color: '#666' }}>Sem tarifa cadastrada</td>
+                    <td colSpan={4} style={{ color: 'var(--color-muted)' }}>Sem tarifa cadastrada</td>
                     <td className="table-actions">
                       <button className="link" onClick={() => { setCategoryId(c.id); setOpenCategoryRate(true); }}>Adicionar</button>
                     </td>

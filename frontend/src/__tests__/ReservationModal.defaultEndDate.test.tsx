@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import ReservationModal from '../components/ReservationModal';
+import { ReservationModal } from '../components/Reservation';
 
 // Mock APIs used by the modal to keep the test focused
 vi.mock('../api/partners', () => ({ listPartners: async () => [] }));

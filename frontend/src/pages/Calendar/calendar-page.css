@@ -1,0 +1,16 @@
+.calendar-controls-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.calendar-controls-right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.control-label--ml8 { margin-left: 8px; }
+.control-label--ml12 { margin-left: 12px; }
+.input-days { width: 80px; margin-left: 6px; }
+.skeleton-cell { padding: 6px; }

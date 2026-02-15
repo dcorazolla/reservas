@@ -20,11 +20,11 @@ function defaultTitle(type: DialogType): string {
 
 function Icon({ type }: { type: DialogType }) {
   const style: React.CSSProperties = { width: 28, height: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', color: '#fff' };
-  const map: Record<DialogType, { bg: string; char: string }> = {
-    error: { bg: '#ef4444', char: '!' },
-    success: { bg: '#10b981', char: '✓' },
-    info: { bg: '#3b82f6', char: 'i' },
-    question: { bg: '#f59e0b', char: '?' },
+    const map: Record<DialogType, { bg: string; char: string }> = {
+      error: { bg: 'var(--color-danger)', char: '!' },
+      success: { bg: 'var(--color-success)', char: '✓' },
+      info: { bg: 'var(--color-primary-400)', char: 'i' },
+      question: { bg: 'var(--color-warning)', char: '?' },
   };
   const { bg, char } = map[type];
   return <span className={`dialog-icon ${type}`} style={{ ...style, background: bg }}>{char}</span>;

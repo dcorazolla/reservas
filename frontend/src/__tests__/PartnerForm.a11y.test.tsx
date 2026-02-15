@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 
-import PartnerForm from '../components/PartnerForm'
+import { PartnerForm } from '../components/forms'
 
 describe('PartnerForm accessibility', () => {
   test('has no detectable a11y violations', async () => {

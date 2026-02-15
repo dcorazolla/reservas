@@ -1,7 +1,12 @@
 export type ReservationStatus =
   | "pre-reserva"
   | "reservado"
-  | "cancelado";
+  | "confirmado"
+  | "checked_in"
+  | "checked_out"
+  | "no_show"
+  | "cancelado"
+  | "blocked";
 
 export type Reservation = {
   id: string;
@@ -13,9 +18,15 @@ export type Reservation = {
   infants_count?: number;
   start_date: string;
   end_date: string;
-  status: "pre-reserva" | "reservado" | "cancelado";
+  status: "pre-reserva" | "reservado" | "confirmado" | "checked_in" | "checked_out" | "no_show" | "cancelado" | "blocked";
   total_value?: number;
   notes?: string;
+  guarantee_type?: string | null;
+  payment_status?: string | null;
+  guarantee_at?: string | null;
+  partner_id?: string | null;
+  partner_name?: string | null;
+  price_override?: number | null;
 };
 
 export type Room = {

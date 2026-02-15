@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getPropertyPricing, updatePropertyPricing } from "../../../api/pricing";
 import type { PropertyPricing } from "../../../types/rate";
-import PropertyPricingModal from "../../../components/rates/PropertyPricingModal";
+import { PropertyPricingModal } from "../../../components/rates";
 import { formatMoneyNullable } from "../../../utils/money";
 
 export default function BaseTariffsPage() {

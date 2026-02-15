@@ -1,4 +1,5 @@
-import "./modal.css";
+import React from 'react';
+import './modal.css';
 import { useId } from 'react';
 
 type Props = {

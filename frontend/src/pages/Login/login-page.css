@@ -1,0 +1,11 @@
+.login-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+.login-form {
+  width: 320px;
+  display: grid;
+  gap: 12px;
+}
+.login-error { color: var(--color-danger); }

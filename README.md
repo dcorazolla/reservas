@@ -91,6 +91,7 @@ Commands:
 - Create branch: `git checkout -b feature/xxx`.
 - Run tests (backend): `./backend/src/vendor/bin/phpunit`.
 - Run frontend tests: `pnpm test`.
+ - Run frontend tests: `cd frontend && npm ci && npm test`.
 
 See `docs/copilot-instructions.md` for detailed agent automation and branching rules.
 
@@ -122,7 +123,34 @@ Local test helper
 - Run all tests locally (backend + frontend):
 
 ```bash
+# Run backend + frontend tests locally (recommended before pushing)
 ./scripts/test-all.sh
+```
+
+## Frontend component structure (convenção)
+
+O frontend segue uma convenção simples para organização de componentes e estilos:
+
+- Cada componente principal vive em sua própria pasta em `frontend/src/components/<NomeDoComponente>/`.
+- Dentro da pasta do componente coloque:
+	- O(s) arquivo(s) do componente em `PascalCase` (ex.: `MyComponent.tsx`).
+	- O arquivo de estilos em kebab-case: `my-component.css` (ex.: `reservation-modal.css`).
+	- Os testes relacionados ao componente ao lado: `MyComponent.test.tsx`.
+	- Um `index.ts` que re-exporta os componentes do diretório, facilitando imports do tipo `import { X } from 'components/Reservation'`.
+
+Boas práticas adotadas:
+- Preferir `className` + arquivos CSS em vez de `style=` inline, exceto quando o estilo é dinamicamente calculado (ex.: `left/top` de um popover`).
+- Agrupar componentes por domínio (ex.: `rates/`, `Reservation/`, `Minibar/`) quando fizer sentido para manter pastas menores e com responsabilidade definida.
+- Mantemos tokens e variáveis globais em `frontend/src/styles/variables.css` para facilitar theming (incluído recentemente no projeto).
+
+
+Pre-push recommendation
+
+- Always run the full test suite locally before pushing or opening a PR. You can use the helper script below which runs backend PHPUnit and frontend Vitest locally and will fail the push if tests fail:
+
+```bash
+# Run backend and frontend tests, then commit
+./scripts/commit_and_test.sh "<commit message>"
 ```
 
 Git hooks

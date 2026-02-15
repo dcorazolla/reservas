@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 
-import RoomForm from '../components/RoomForm'
+import { RoomForm } from '../components/forms'
 
 const categories = [{ id: '1', name: 'Standard' }]
 

@@ -1,0 +1,6 @@
+.create-invoice-row { display: flex; gap: 8px; align-items: center; }
+.create-invoice-message { margin-top: 8px; }
+.create-invoice-empty { margin-top: 12px; }
+.create-invoice-table { margin-top: 12px; }
+.create-invoice-actions { margin-top: 12px; display: flex; gap: 8px; }
+.checkbox-label { display: flex; align-items: center; gap: 6px; }

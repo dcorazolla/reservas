@@ -8,8 +8,7 @@ import { listCategoryRatePeriods, createCategoryRatePeriod, deleteCategoryRatePe
 import type { RoomRatePeriod, RoomCategoryRatePeriod } from "../../../types/rate";
 import { formatMoney, formatMoneyNullable } from "../../../utils/money";
 import { formatDate } from "../../../utils/dates";
-import RatePeriodModal from "../../../components/rates/RatePeriodModal";
-import CategoryRatePeriodModal from "../../../components/rates/CategoryRatePeriodModal";
+import { RatePeriodModal, CategoryRatePeriodModal } from "../../../components/rates";
 
 export default function PeriodTariffsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -144,7 +143,7 @@ export default function PeriodTariffsPage() {
                 return [(
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td colSpan={6} style={{ color: '#666' }}>Sem período cadastrado</td>
+                    <td colSpan={6} style={{ color: 'var(--color-muted)' }}>Sem período cadastrado</td>
                     <td className="table-actions">
                       <button className="link" onClick={() => { setCategoryId(c.id); setOpenCategoryPeriod(true); }}>Adicionar</button>
                     </td>
