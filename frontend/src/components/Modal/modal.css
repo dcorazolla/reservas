@@ -10,11 +10,12 @@
 
 .modal {
   background: var(--color-surface);
-  width: min(800px, 90vw);
+  /* Increase default modal width to give ReservationModal more room on large screens */
+  width: min(1100px, 96vw);
   border-radius: 10px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.2);
   overflow: hidden;
-  max-height: 85vh;
+  max-height: 92vh;
   display: flex;
   flex-direction: column;
 }
