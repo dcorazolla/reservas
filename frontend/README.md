@@ -33,11 +33,21 @@ Estrutura sugerida
 
 Padrões e convenções
 
-- Mobile-first: breakpoints e design pensados primeira para telas pequenas.
-- Acessibilidade: todos os componentes devem seguir boas práticas de `aria-` e passar checagens básicas de `axe`.
-- Skeletons: páginas que fazem fetch devem mostrar `Skeleton` ou `SkeletonText` até que os dados carreguem.
-- Testes colocated: `*.test.tsx` ao lado do componente/página testada.
-- Internacionalização: usar namespaces simples (ex: `common`) e fornecer mecanismo fácil para adicionar novos idiomas (adicionar arquivo JSON em `public/locales/<lang>/` e registrar se necessário).
+- Arquivos de teste: os arquivos de teste devem sempre ficar na mesma pasta do arquivo que está sendo testado (tests colocated). Ex.: `src/components/MeuComponente/MeuComponente.tsx` e `src/components/MeuComponente/MeuComponente.test.tsx`.
+- Cobertura obrigatória: todas as páginas e componentes devem ter testes cobrindo 100% dos componentes e fluxos possíveis (unidades + interações críticas). Testes devem incluir caminhos de sucesso, falha e casos extremos.
+- CSS e estilos:
+	- É proibido usar CSS inline. Todos os estilos devem residir em arquivos CSS/SCSS separados no mesmo nível do componente/página, seguindo o padrão `meu-componente.css` (ou `meu-componente.module.css` se preferir CSS Modules).
+	- Valores padrão (cores, tamanhos, fontes, espaçamentos, etc.) devem ser configurados como variáveis CSS globais (ex.: `:root { --brand-500: #123456; --space-4: 1rem; }`) e consumidos pelos arquivos CSS específicos de páginas/componentes.
+	- Prefira classes CSS a estilos inline; componentes podem usar utility props do design system quando apropriado, mas não devem injetar estilos inline que prejudiquem reutilização.
+- Mobile first: o front é mobile-first — comece o CSS para telas pequenas e adicione breakpoints progressivamente para tablet/desktop.
+- Internacionalização (i18n): o front é internacionalizado; todas as strings visíveis ao usuário devem vir de `i18n` (ex.: `useTranslation('common')`). Não hardcodear strings.
+- Acessibilidade: o front é acessível — siga práticas ARIA, labels explícitos, foco visível, navegação por teclado e inclua checagens de `axe` nos testes críticos.
+- Responsividade e compatibilidade:
+	- O front deve funcionar bem em celular, tablet e computador (layout e touch targets apropriados).
+	- O front deve funcionar corretamente nos navegadores usados no mercado (Chrome, Firefox, Safari, Edge). Testes E2E ou verificações manuais precisam validar os navegadores alvo definidos pela equipe.
+- Reutilização: prefira sempre usar componentes já existentes do design system ou componentes compartilhados a reinventar a roda. Crie novos componentes apenas quando necessário e documente-os.
+- Cargas assíncronas: todos os componentes/páginas que fazem carga assíncrona devem usar `Skeleton` (ou equivalente) para placeholders de carregamento, garantindo layout estável e experiência consistente.
+- Temas: o front deve suportar os temas `normal`, `escuro` (dark) e `alto contraste` (high-contrast). As variáveis CSS e tokens de tema devem ser a fonte da verdade para cores e contrastes.
 
 Comandos úteis
 
