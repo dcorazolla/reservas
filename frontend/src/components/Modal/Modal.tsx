@@ -12,7 +12,7 @@ type Props = {
   className?: string;
 };
 
-export default function Modal({ open, title, children, onClose, titleId, closeOnBackdrop = true }: Props) {
+export default function Modal({ open, title, children, onClose, titleId, closeOnBackdrop = true, className }: Props) {
   if (!open) return null;
 
   const autoId = useId();
