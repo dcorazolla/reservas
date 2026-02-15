@@ -23,6 +23,22 @@ export function listProducts(): Promise<Product[]> {
   return get<Product[]>("/products");
 }
 
+export function getProduct(id: string): Promise<Product> {
+  return get<Product>(`/products/${id}`);
+}
+
+export function createProduct(payload: Partial<Product>): Promise<Product> {
+  return post<Product>(`/products`, payload);
+}
+
+export function updateProduct(id: string, payload: Partial<Product>): Promise<Product> {
+  return put<Product>(`/products/${id}`, payload);
+}
+
+export function deleteProduct(id: string): Promise<void> {
+  return del<void>(`/products/${id}`);
+}
+
 export function createConsumption(payload: CreateConsumptionPayload) {
   return post<any>('/minibar-consumptions', payload);
 }

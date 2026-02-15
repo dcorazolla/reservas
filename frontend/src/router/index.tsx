@@ -18,6 +18,7 @@ import RoomCategoriesPage from "../pages/config/RoomCategoriesPage";
 import PropertiesPage from "../pages/config/PropertiesPage";
 import PartnersPage from "../pages/config/PartnersPage";
 import RoomBlocksSettingsPage from "../pages/config/RoomBlocksSettingsPage";
+import MinibarProductsPage from "../pages/config/MinibarProductsPage";
 
 export const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
@@ -42,6 +43,7 @@ export const router = createBrowserRouter([
       { path: "/config/tarifario/base", element: <BaseTariffsPage /> },
       { path: "/config/tarifario/quartos", element: <RoomTariffsPage /> },
       { path: "/config/tarifario/periodos", element: <PeriodTariffsPage /> },
+      { path: "/config/minibar/products", element: <MinibarProductsPage /> },
       { path: "/minibar", element: <MinibarPage /> },
     ],
   },
