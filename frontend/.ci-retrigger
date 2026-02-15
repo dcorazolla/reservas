@@ -1,0 +1,4 @@
+ci-retrigger: feature/frigobar-stock
+created-by: copilot
+date: 2026-02-14
+reason: retrigger frontend CI after test script fix
