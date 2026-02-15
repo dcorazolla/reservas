@@ -146,3 +146,16 @@ Se quiser, eu executo os comandos `npm install` para adicionar as dependências 
 	]
 }
 ```
+
+**Processo de atualização de TODOs**
+
+- A lista de TODOs (incluindo `AGENT_TODO_JSON`) deve ser atualizada ao final de cada ciclo de trabalho (sprint/iteração). Ao encerrar um ciclo, o responsável deve:
+  - marcar os itens concluídos com o status apropriado,
+  - adicionar novos itens que surgirem durante o ciclo,
+  - NÃO apagar itens históricos — o histórico deve ser preservado para auditoria e rastreabilidade.
+
+- Regras:
+  - Itens só podem ser removidos por acordo explícito documentado (issue/PR) com a justificativa; por padrão, marque como `completed` ou `deprecated` e adicione um comentário explicando por quê.
+  - Agentes automatizados que consumirem `AGENT_TODO_JSON` devem respeitar essas regras: atualizem status, adicionem tarefas novas, e se precisarem apagar itens ou pushar para branches remotas sem permissão, parem e solicitem credenciais/humana intervenção.
+
+```
