@@ -1,0 +1,10 @@
+{
+  "title": "Réservations",
+  "login": {
+    "title": "Se connecter",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "error": "Échec de l'authentification"
+  }
+}

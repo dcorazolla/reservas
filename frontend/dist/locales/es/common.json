@@ -1,0 +1,10 @@
+{
+  "title": "Reservas",
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Entrar",
+    "error": "Error al autenticar"
+  }
+}

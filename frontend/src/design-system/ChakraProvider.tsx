@@ -1,15 +1,23 @@
 import React from 'react'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 
-const theme = extendTheme({
-  config: {
-    initialColorMode: 'system',
-    useSystemColorMode: true,
-  },
-})
-
-export const AppChakraProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return <ChakraProvider theme={theme}>{children}</ChakraProvider>
+const config = {
+  initialColorMode: 'light',
+  useSystemColorMode: false,
 }
 
-export default AppChakraProvider
+const theme = {
+  // keep a minimal theme object for reference; v3 expects a system value.
+  config,
+}
+
+export default function AppChakraProvider({ children }: { children: React.ReactNode }) {
+  // v3 Chakra uses a `value` prop (the system). For now use the provided defaultSystem
+  // so provider internals find `_config` and global styles. We keep `theme` variable
+  // in the file for future merge with `mergeConfigs` if we want custom tokens.
+  return (
+    <ChakraProvider value={defaultSystem}>
+      {children}
+    </ChakraProvider>
+  )
+}

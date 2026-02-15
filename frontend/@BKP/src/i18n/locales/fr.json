@@ -1,0 +1,38 @@
+{
+  "login": {
+    "title": "Se connecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "loggingIn": "Connexion...",
+    "forgotPassword": "Mot de passe oublié",
+    "or": "ou",
+    "google": "Se connecter avec Google",
+    "sso": "Se connecter avec SSO",
+    "failed": "Échec de la connexion"
+  }
+  ,
+  "layout": {
+    "subtitle": "Gestion des réservations",
+    "logout": "Se déconnecter"
+  },
+  "menu": {
+    "calendar": "Calendrier",
+    "reservations": "Liste des réservations",
+    "financial": "Financier",
+    "invoices": "Factures",
+    "settings": "Paramètres",
+    "property": "Propriété",
+    "partners": "Partenaires",
+    "minibar": "Minibar",
+    "products": "Produits (Minibar)",
+    "blocks": "Bloquages de chambre",
+    "rooms": "Chambres",
+    "roomCategories": "Catégories de chambres",
+    "tariffs": "Tarifs",
+    "baseRates": "Tarifs de base",
+    "roomRates": "Tarifs par chambre",
+    "periodRates": "Tarifs par période",
+    "search": "Recherche"
+  }
+}

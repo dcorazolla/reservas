@@ -1,4 +1,0 @@
-.room-block-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-.room-block-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.room-block-error { color: var(--color-danger); }
-.room-block-conflicts { background: var(--color-warning-100); border: 1px solid var(--color-warning-300); padding: 12px; }

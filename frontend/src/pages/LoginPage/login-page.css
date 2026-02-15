@@ -1,0 +1,9 @@
+/* Styles specific to the LoginPage component.
+   Keep visual adjustments here when Chakra style props are insufficient.
+   This file is intentionally minimal as Chakra handles most layout.
+*/
+
+.login-page-footer {
+  text-align: center;
+  margin-top: 0.5rem;
+}

@@ -149,6 +149,43 @@ Se quiser, eu executo os comandos `npm install` para adicionar as dependências 
 
 **Processo de atualização de TODOs**
 
+## **Descobertas & Perguntas**
+
+- **Erro runtime em `<ChakraProvider>`**: ao abrir a app recebíamos `TypeError: Cannot read properties of undefined (reading '_config')`. Causa: incompatibilidade entre a forma como eu estava construindo/passando o tema e a API do `@chakra-ui/react` instalada (v3).
+	- Ação tomada: atualizei `src/design-system/ChakraProvider.tsx` para usar o `defaultSystem` e passá‑lo como `value` para `<ChakraProvider>` (API v3). Isso resolveu o crash.
+	- Nota: versões mais novas do Chakra exportam utilitários diferentes (`extendTheme` etc.). Se quisermos migrar para uma API mais nova, atualizar `@chakra-ui/react` e adaptar o provider será necessário.
+
+- **Import/Export não encontrado**: após tentar usar `extendTheme` houve um erro `does not provide an export named 'extendTheme'`. Causa: a versão instalada não exporta esse helper no entrypoint. Solução: usar as APIs compatíveis com a versão instalada ou atualizar a dependência.
+
+- **Servidor dev e porta**: Vite pode trocar a porta se 5173 já estiver em uso (ex.: iniciou em 5174). Sempre abra a URL indicada no terminal (ex.: `http://localhost:5173/` ou `http://localhost:5174/`).
+
+- **Páginas em branco no browser**: sintomas comuns são erros de runtime no console (ex.: erro no provider). Quando isso ocorrer:
+	- Verifique o console do navegador para a primeira stack trace.
+	- Pare o dev server e limpe cache do Vite: `rm -rf node_modules/.vite` e reinicie com `npm run dev`.
+	- Se persistir, reinstale dependências: `rm -rf node_modules package-lock.json && npm install`.
+
+- **Testes: ambiente e mocks**:
+	- Problemas encontrados: testes falhavam com `describe is not defined` (vitest globals), ou `document is not defined` (jsdom ausente), e falhas por diferenças entre a API do Chakra em runtime quando tentamos usar o real provider em testes.
+	- Ações tomadas:
+		- Instalado `jsdom` e executei Vitest com `--environment jsdom` para permitir testes DOM.
+		- Para isolar o componente `LoginPage` evitei depender do provider real nos testes e criei mocks leves para os componentes Chakra usados. Ajustes importantes nos mocks:
+			- `Input` precisa encaminhar `ref` para funcionar com `react-hook-form`.
+			- Containers que eram usados como `as="form"` (ex.: `VStack`) precisam renderizar o elemento correto para que `onSubmit` funcione nos testes.
+		- Troquei a asserção `toHaveTextContent` (jest-dom matcher) por uma verificação simples em `textContent` para evitar dependência de configuração global de jest-dom no Vitest.
+	- Próximo passo recomendado: adicionar um arquivo de setup do Vitest que importe `@testing-library/jest-dom` ou padronizar asserções sem jest-dom; e adicionar handlers MSW para mocks HTTP mais realistas.
+
+- **Logs de aviso do React durante testes**: ao mockar Chakra alguns props não padronizados (`isInvalid`, `colorScheme`) aparecem como atributos DOM e geram warnings. Podemos refinar os mocks para filtrar esses props e reduzir ruído.
+
+- **Decisão de curto prazo**: mantive a correção minimal que estabiliza dev e testes (usar `defaultSystem` no provider, instalar `jsdom`, ajustar testes). A preparação de um tema completo e migração para APIs mais novas do Chakra ficam para uma etapa posterior.
+
+## **Próximos passos recomendados**
+
+- **Concluir setup de testes**: adicionar `vitest` setup file, `msw` handlers e `axe` checks em testes críticos. (Status: in‑progress)
+- **Consolidar tema Chakra**: decidir entre atualizar `@chakra-ui/react` para uma versão mais recente (e usar `extendTheme`) ou manter v3 e construir tokens via `mergeConfigs`/`createSystem`. (Status: pending decision)
+- **Remover ruído de warnings em testes**: melhorar mocks ou criar um adaptador de teste para Chakra que filtre props não padronizados.
+- **Documentar dev server**: adicionar nota no README sobre a porta fallback do Vite e como limpar cache se necessário.
+
+Se quiser, implemento automaticamente os itens acima (tests setup + MSW + vitest setup) — diga qual deseja priorizar.
 - A lista de TODOs (incluindo `AGENT_TODO_JSON`) deve ser atualizada ao final de cada ciclo de trabalho (sprint/iteração). Ao encerrar um ciclo, o responsável deve:
   - marcar os itens concluídos com o status apropriado,
   - adicionar novos itens que surgirem durante o ciclo,

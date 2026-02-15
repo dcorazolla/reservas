@@ -1,0 +1,1 @@
+import{j as i}from"./index-kUQB2VJ6.js";import{H as e,T as s}from"./index-CHsWuwBx.js";function n(){return i.jsxs("div",{children:[i.jsx(e,{as:"h1",size:"lg",mb:4,children:"Bem-vindo"}),i.jsx(s,{children:"Esta é a página inicial (placeholder)."})]})}export{n as default};
