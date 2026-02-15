@@ -19,7 +19,7 @@ function defaultTitle(type: DialogType): string {
 }
 
 function Icon({ type }: { type: DialogType }) {
-  const style: React.CSSProperties = { width: 28, height: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', color: '#fff' };
+  const style: React.CSSProperties = { width: 28, height: 28, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', color: 'var(--text-on-dark)' };
     const map: Record<DialogType, { bg: string; char: string }> = {
       error: { bg: 'var(--color-danger)', char: '!' },
       success: { bg: 'var(--color-success)', char: '✓' },

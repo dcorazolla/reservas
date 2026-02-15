@@ -10,8 +10,8 @@
   /* we'll position via inline styles (left/top) from the portal */
   min-width: 160px;
   max-width: 320px;
-  background: var(--color-black);
-  color: var(--color-white);
+  background: var(--color-surface);
+  color: var(--text-default);
   padding: 8px 10px;
   border-radius: 6px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.35);
@@ -27,7 +27,7 @@
   transform: translateX(-50%);
   border-width: 6px;
   border-style: solid;
-  border-color: var(--color-black) transparent transparent transparent;
+  border-color: var(--color-surface) transparent transparent transparent;
 }
 
 @media (max-width: 600px) {
