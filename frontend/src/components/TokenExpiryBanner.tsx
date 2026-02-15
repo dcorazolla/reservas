@@ -21,10 +21,10 @@ export default function TokenExpiryBanner() {
   return (
     <div
       style={{
-        background: "#fff3cd",
-        color: "#664d03",
+        background: "var(--color-warning-100)",
+        color: "var(--color-warning-700)",
         padding: "6px 10px",
-        borderBottom: "1px solid #ffecb5",
+        borderBottom: "1px solid var(--color-warning-300)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -46,7 +46,7 @@ export default function TokenExpiryBanner() {
       </button>
       <button
         onClick={dismiss}
-        style={{ padding: "4px 8px", cursor: "pointer", background: "transparent", border: "none", color: "#664d03" }}
+        style={{ padding: "4px 8px", cursor: "pointer", background: "transparent", border: "none", color: "var(--color-warning-700)" }}
         aria-label="Ignorar aviso de sessão"
       >
         Fechar

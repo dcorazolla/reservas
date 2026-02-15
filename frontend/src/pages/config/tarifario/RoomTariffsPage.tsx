@@ -141,7 +141,7 @@ export default function RoomTariffsPage() {
                 return (
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td colSpan={4} style={{ color: '#666' }}>Sem tarifa cadastrada</td>
+                    <td colSpan={4} style={{ color: 'var(--color-muted)' }}>Sem tarifa cadastrada</td>
                     <td className="table-actions">
                       <button className="link" onClick={() => { setCategoryId(c.id); setOpenCategoryRate(true); }}>Adicionar</button>
                     </td>

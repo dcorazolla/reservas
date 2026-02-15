@@ -28,7 +28,7 @@ export default function LoginPage() {
       <form onSubmit={onSubmit} style={{ width: 320, display: "grid", gap: 12 }}>
         <h1>Entrar</h1>
         {error && (
-          <div style={{ color: "#b00020" }}>{error}</div>
+          <div style={{ color: "var(--color-danger)" }}>{error}</div>
         )}
         <label>
           <div>Email</div>

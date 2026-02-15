@@ -302,18 +302,18 @@
 /* Room block visuals */
 .room-block-cell {
   /* kept for backward compatibility; prefer .room-block */
-  background: #000;
-  color: #ffffff;
+  background: var(--color-black);
+  color: var(--color-white);
 }
 
 .room-block-cell {
-  background: #000;
-  color: #ffffff;
+  background: var(--color-black);
+  color: var(--color-white);
 }
 
 .room-block {
   background: transparent;
-  color: #ffffff;
+  color: var(--color-white);
   font-size: 12px;
   padding: 0 8px;
   display: flex;

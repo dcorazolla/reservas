@@ -144,7 +144,7 @@ export default function PeriodTariffsPage() {
                 return [(
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td colSpan={6} style={{ color: '#666' }}>Sem período cadastrado</td>
+                    <td colSpan={6} style={{ color: 'var(--color-muted)' }}>Sem período cadastrado</td>
                     <td className="table-actions">
                       <button className="link" onClick={() => { setCategoryId(c.id); setOpenCategoryPeriod(true); }}>Adicionar</button>
                     </td>

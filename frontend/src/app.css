@@ -152,9 +152,9 @@
 }
 
 .form-error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+  background: var(--color-danger-100);
+  color: var(--color-danger-700);
+  border: 1px solid rgba(248, 113, 113, 0.2);
   padding: 10px 12px;
   border-radius: var(--radius-md);
   margin-bottom: 12px;

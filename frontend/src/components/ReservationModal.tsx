@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import type { Reservation, ReservationStatus } from "../types/calendar";
 import type { Partner } from "../types/partner";
-import { createReservation, updateReservation, calculateReservationPriceDetailed } from "../api/reservations";
+import { createReservation, updateReservation, calculateReservationPriceDetailed, checkinReservation, checkoutReservation, confirmReservation, cancelReservation, finalizeReservation } from "../api/reservations";
 import { listPartners } from "../api/partners";
 import { listRooms } from "../api/rooms";
 import Modal from "./Modal/Modal";
@@ -246,21 +246,69 @@ export default function ReservationModal({
     <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose} closeOnBackdrop={false}>
       <div className="form reservation-modal" aria-busy={initialLoading || calcLoading}>
         <div className="modal-status-row">
-          <span className={`status-pill status-${status}`}>{
-            status === 'pre-reserva' ? 'Pré-reserva' :
-            status === 'reservado' ? 'Reservado' :
-            status === 'confirmado' ? 'Confirmado' :
-            status === 'checked_in' ? 'Check-in' :
-            status === 'checked_out' ? 'Check-out' :
-            status === 'no_show' ? 'No-show' :
-            status === 'cancelado' ? 'Cancelado' :
-            status === 'blocked' ? 'Bloqueado' : status
-          }</span>
-          {reservation && (reservation.guarantee_type || reservation.payment_status) ? (
-            <span className="guarantee-pill" title={reservation.guarantee_type || reservation.payment_status}>
-              {reservation.guarantee_type ? reservation.guarantee_type : reservation.payment_status}
-            </span>
-          ) : null}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className={`status-pill status-${status}`}>{
+              status === 'pre-reserva' ? 'Pré-reserva' :
+              status === 'reservado' ? 'Reservado' :
+              status === 'confirmado' ? 'Confirmado' :
+              status === 'checked_in' ? 'Check-in' :
+              status === 'checked_out' ? 'Check-out' :
+              status === 'no_show' ? 'No-show' :
+              status === 'cancelado' ? 'Cancelado' :
+              status === 'blocked' ? 'Bloqueado' : status
+            }</span>
+            {reservation && (reservation.guarantee_type || reservation.payment_status) ? (
+              <span className="guarantee-pill" title={reservation.guarantee_type || reservation.payment_status}>
+                {reservation.guarantee_type ? reservation.guarantee_type : reservation.payment_status}
+              </span>
+            ) : null}
+          </div>
+
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            {editing && (
+              <button type="button" className={`status-btn status-${status} secondary`} onClick={() => { window.location.href = `/minibar?reservation_id=${reservation?.id}`; }}>Frigobar</button>
+            )}
+
+            {/* Action buttons: show contextual actions depending on current status */}
+                {editing && status === 'pre-reserva' && (
+              <>
+                <button type="button" className={`status-btn status-reservado`} onClick={async () => {
+                  try {
+                    await updateReservation(reservation!.id, { status: 'reservado' });
+                    if (onSaved) onSaved();
+                    onClose();
+                  } catch (e: any) { setError(e?.message || 'Falha ao reservar'); }
+                }}>Reservar</button>
+                <button type="button" className={`status-btn status-confirmado`} onClick={async () => {
+                  try {
+                    const g = window.prompt('Tipo de garantia (card/prepay) — deixe vazio para sem garantia');
+                    await confirmReservation(reservation!.id, g ? { guarantee_type: g } : {});
+                    if (onSaved) onSaved();
+                    onClose();
+                  } catch (e: any) { setError(e?.message || 'Falha ao confirmar'); }
+                }}>Confirmar</button>
+              </>
+            )}
+
+            {editing && status === 'reservado' && (
+              <>
+                <button type="button" className={`status-btn status-confirmado`} onClick={async () => { try { await confirmReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao confirmar'); } }}>Confirmar</button>
+                <button type="button" className={`status-btn status-checked_in`} onClick={async () => { try { await checkinReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao check-in'); } }}>Check-in</button>
+                <button type="button" className={`status-btn status-cancelado`} onClick={async () => { try { await cancelReservation(reservation!.id, { reason: window.prompt('Motivo do cancelamento') }); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao cancelar'); } }}>Cancelar</button>
+              </>
+            )}
+
+            {editing && status === 'checked_in' && (
+              <button type="button" className={`status-btn status-checked_out`} onClick={async () => { try { await checkoutReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao check-out'); } }}>Check-out</button>
+            )}
+
+            {editing && status === 'checked_out' && (
+              <>
+                <button type="button" className={`status-btn status-encerrado`} onClick={async () => { try { await finalizeReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao encerrar'); } }}>Encerrar</button>
+                <button type="button" className={`status-btn status-cancelado`} onClick={async () => { try { await cancelReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao cancelar'); } }}>Cancelar</button>
+              </>
+            )}
+          </div>
         </div>
         {(error || fieldError) && (
           <div className="form-error" aria-live="assertive">{error}</div>
@@ -271,7 +319,7 @@ export default function ReservationModal({
           {initialLoading ? (
             <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
           ) : (
-            <input id="guestName" ref={firstFieldRef} value={guestName} onChange={e => setGuestName(e.target.value)} />
+            <input id="guestName" ref={firstFieldRef} autoFocus value={guestName} onChange={e => setGuestName(e.target.value)} />
           )}
         </div>
 
@@ -315,62 +363,7 @@ export default function ReservationModal({
               </select>
             )}
           </div>
-          {editing && (
-            <div className="form-group">
-              <label>Status</label>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                {/* Action buttons: show contextual actions depending on current status */}
-                {status === 'pre-reserva' && (
-                  <>
-                    <button type="button" className="secondary" onClick={async () => {
-                      try {
-                        // Mark as reservado (update)
-                        await updateReservation(reservation!.id, { status: 'reservado' });
-                        if (onSaved) onSaved();
-                        onClose();
-                      } catch (e: any) { setError(e?.message || 'Falha ao reservar'); }
-                    }}>Reservar</button>
-                    <button type="button" className="secondary" onClick={async () => {
-                      try {
-                        const g = window.prompt('Tipo de garantia (card/prepay) — deixe vazio para sem garantia');
-                        await confirmReservation(reservation!.id, g ? { guarantee_type: g } : {});
-                        if (onSaved) onSaved();
-                        onClose();
-                      } catch (e: any) { setError(e?.message || 'Falha ao confirmar'); }
-                    }}>Confirmar</button>
-                  </>
-                )}
-
-                {status === 'reservado' && (
-                  <>
-                    <button type="button" className="secondary" onClick={async () => {
-                      try { await confirmReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao confirmar'); }
-                    }}>Confirmar</button>
-                    <button type="button" className="secondary" onClick={async () => {
-                      try { await checkinReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao check-in'); }
-                    }}>Check-in</button>
-                    <button type="button" className="secondary" onClick={async () => {
-                      try { await cancelReservation(reservation!.id, { reason: window.prompt('Motivo do cancelamento') }); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao cancelar'); }
-                    }}>Cancelar</button>
-                  </>
-                )}
-
-                {status === 'checked_in' && (
-                  <button type="button" className="primary" onClick={async () => { try { await checkoutReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao check-out'); } }}>Check-out</button>
-                )}
-
-                {status === 'checked_out' && (
-                  <>
-                    <button type="button" className="primary" onClick={async () => { try { await finalizeReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao encerrar'); } }}>Encerrar</button>
-                    <button type="button" className="secondary" onClick={async () => { try { await cancelReservation(reservation!.id); if (onSaved) onSaved(); onClose(); } catch (e: any) { setError(e?.message || 'Falha ao cancelar'); } }}>Cancelar</button>
-                  </>
-                )}
-
-                {/* fallback: show current status text */}
-                <span style={{ marginLeft: 8, color: '#666' }}>{status}</span>
-              </div>
-            </div>
-          )}
+          
         </div>
 
         <div className="form-group">
@@ -423,13 +416,13 @@ export default function ReservationModal({
                         </div>
                       )
                     ) : (
-                      <div style={{ color: '#666' }}>(Preço manual não definido)</div>
+                      <div style={{ color: 'var(--color-muted)' }}>(Preço manual não definido)</div>
                     )}
                   </div>
                 </div>
 
                 {days.length > 0 && (
-                  <div style={{ marginTop: 8, color: '#555', fontSize: 15 }}>
+                  <div style={{ marginTop: 8, color: 'var(--color-gray-600)', fontSize: 15 }}>
                     {days.map((d: any) => `${formatDate(d.date)}: ${formatMoney(d.price)}`).join(' | ')}
                   </div>
                 )}
@@ -466,15 +459,6 @@ export default function ReservationModal({
           ) : (
             <>
               <button type="button" className="secondary" onClick={onClose}>Cancelar</button>
-              {editing && (
-                <button
-                  type="button"
-                  className="secondary"
-                  onClick={() => { window.location.href = `/minibar?reservation_id=${reservation?.id}`; }}
-                >
-                  Frigobar
-                </button>
-              )}
             </>
           )}
             <button type="button" className="primary" disabled={!!fieldError || initialLoading || calcLoading} onClick={async () => {

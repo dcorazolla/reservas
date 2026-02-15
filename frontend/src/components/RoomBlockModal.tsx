@@ -5,7 +5,7 @@ import { listRooms } from '../api/rooms';
 import { fetchRoomBlocks } from '../api/roomBlocks';
 import { formatDate } from '../utils/dates';
 import { createRoomBlock, updateRoomBlock, deleteRoomBlock } from '../api/roomBlocks';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from './Common/ConfirmDialog';
 import ErrorDialog from './Common/ErrorDialog';
 
 type RoomBlock = {
@@ -179,7 +179,7 @@ export default function RoomBlockModal({ open, onClose, onSaved, block }: Props)
           {error ? <div style={{ color: 'red' }}>{error}</div> : null}
 
           {conflicts.length > 0 ? (
-            <div className="form-group" style={{ background: '#fff7ed', border: '1px solid #fbd38d', padding: 12 }}>
+            <div className="form-group" style={{ background: 'var(--color-warning-100)', border: '1px solid var(--color-warning-300)', padding: 12 }}>
               <strong>Bloqueio(s) ativo(s) no período:</strong>
               <ul>
                 {conflicts.map((c) => {
