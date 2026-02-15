@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { listProducts, type Product, createProduct, updateProduct, deleteProduct } from '../../api/minibar';
+import { formatMoneyNullable } from '../../utils/money';
 import './minibar-products-page.css';
 
 function ProductForm({ initial, onCancel, onSave }: { initial?: Partial<Product>, onCancel: () => void, onSave: (p: Partial<Product>) => void }) {
@@ -98,7 +99,7 @@ export default function MinibarProductsPage() {
               <tr key={p.id}>
                 <td>{p.name}</td>
                 <td>{p.sku}</td>
-                <td>{p.price?.toFixed(2)}</td>
+                <td>{formatMoneyNullable(p.price)}</td>
                 <td>{p.stock}</td>
                 <td>{p.active ? '✓' : '—'}</td>
                 <td className="actions-cell">
