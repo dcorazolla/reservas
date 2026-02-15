@@ -36,7 +36,7 @@
 
 .calendar-table th,
 .calendar-table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-gray-200);
   height: 40px;
   padding: 0;
 }
@@ -48,14 +48,14 @@
 .page-header {
   /* match other pages: header scrolls with the page (not sticky) */
   position: static;
-  background: #ffffff;
+  background: var(--color-surface);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
   gap: 12px;
   box-sizing: border-box;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-gray-200);
   height: var(--calendar-header-height);
 }
 
@@ -66,7 +66,7 @@
 /* COLUNA QUARTO */
 .room-col {
   width: 120px;
-  background: #f9fafb;
+  background: var(--color-gray-50);
   position: sticky;
   left: 0;
   z-index: 3;
@@ -82,7 +82,7 @@
 /* HEADER DIA */
 .day-header {
   text-align: center;
-  background: #f3f4f6;
+  background: var(--color-gray-100);
   font-weight: 600;
   border-left: none;
   border-right: none;
@@ -93,12 +93,12 @@
   /* day header row should scroll with the page as well */
   position: static;
   z-index: 1;
-  background: #f3f4f6;
+  background: var(--color-gray-100);
 }
 
 .calendar-table thead th {
-  background: #f3f4f6;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--color-gray-100);
+  border-bottom: 1px solid var(--color-gray-200);
 }
 
 .calendar-table tbody {
@@ -111,7 +111,7 @@
 .calendar-table tbody .room-col {
   position: sticky;
   left: 0;
-  background: #f9fafb;
+  background: var(--color-gray-50);
   box-sizing: border-box;
 }
 
@@ -129,7 +129,7 @@
 
 .day-header .month-label {
   font-size: 0.65em;
-  color: #6b7280;
+  color: var(--color-muted);
   line-height: 1;
   margin-bottom: 2px;
 }
@@ -143,9 +143,9 @@
 /* Partner indicator inside reservation cell */
 .reservation-cell.has-partner {
   position: relative;
-  box-shadow: inset 4px 0 0 0 rgba(37,99,235,0.12);
-  border-left: 4px solid rgba(37,99,235,0.24);
-  background-image: linear-gradient(90deg, rgba(37,99,235,0.02), transparent);
+  box-shadow: inset 4px 0 0 0 rgba(59,130,246,0.12);
+  border-left: 4px solid rgba(59,130,246,0.24);
+  background-image: linear-gradient(90deg, rgba(59,130,246,0.02), transparent);
 }
 
 .partner-badge {
@@ -166,7 +166,7 @@
 }
 
 .half-cell:hover {
-  background: rgba(37, 99, 235, 0.06);
+  background: rgba(59,130,246,0.06);
 }
 
 .half-cell.checkout {
@@ -179,9 +179,9 @@
 
 /* RESERVA */
 .reservation-cell {
-  color: white;
+  color: var(--color-white);
   font-size: 12px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   padding: 0 5px !important;
   cursor: pointer;
   white-space: nowrap;
@@ -191,60 +191,67 @@
 
 /* STATUS */
 .status-pre-reserva {
-  background: #F59E0B; /* amber-500 */
-  color: #ffffff;
+  background: var(--status-pre-reserva);
+  color: var(--color-white);
 }
 
 /* Reserved */
 .status-reservado,
 .status-reserved {
-  background: #3B82F6; /* blue-500 */
-  color: #ffffff;
+  background: var(--status-reservado);
+  color: var(--color-white);
 }
 
 /* Confirmed */
 .status-confirmed,
 .status-confirmado,
 .status-confimado {
-  background: #10B981; /* green-500 */
-  color: #ffffff;
+  background: var(--status-confirmado);
+  color: var(--color-white);
 }
 
 /* No-show / guest did not arrive */
 .status-no_show,
 .status-no-show,
 .status-noshow {
-  background: #EF4444; /* red-500 */
-  color: #ffffff;
+  background: var(--status-no-show);
+  color: var(--color-white);
 }
 
 /* Cancelled (less prominent) */
 .status-cancelado,
 .status-canceled {
-  background: #6B7280; /* gray-500 */
-  color: #ffffff;
+  background: var(--status-cancelado);
+  color: var(--color-white);
 }
 
 /* Checked in: guest has arrived (in-house) */
 .status-checked_in,
 .status-checked-in {
-  background: #06B6D4; /* cyan-500 */
-  color: #ffffff;
+  background: var(--status-checked-in);
+  color: var(--color-white);
 }
 
 /* Checked out: guest has left; show light background and dark text */
 .status-checked_out,
 .status-checked-out {
-  background: #F3F4F6;
-  color: #111827;
-  border: 1px solid #E5E7EB;
+  background: var(--status-checked-out);
+  color: var(--color-black);
+  border: 1px solid var(--color-gray-200);
+}
+
+/* Encerrado - final state after finalize action (visual parity with checked_out) */
+.status-encerrado {
+  background: var(--status-checked-out);
+  color: var(--color-black);
+  border: 1px solid var(--color-gray-200);
 }
 
 /* Blocked / maintenance */
 .status-blocked,
 .status-block {
-  background: #8B5CF6; /* violet-500 */
-  color: #ffffff;
+  background: var(--status-blocked);
+  color: var(--color-white);
 }
 
 /* Reusable pill for modal / labels */
@@ -260,9 +267,24 @@
 
 .modal-status-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
 }
+
+/* Buttons that take the status color */
+.status-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.status-btn.secondary { background: transparent; border: 1px solid rgba(0,0,0,0.08); }
+
 
 .guarantee-pill {
   display: inline-block;
@@ -274,7 +296,7 @@
   vertical-align: middle;
   margin-left: 8px;
   background: rgba(0,0,0,0.06);
-  color: #111827;
+  color: var(--color-black);
 }
 
 /* Room block visuals */
