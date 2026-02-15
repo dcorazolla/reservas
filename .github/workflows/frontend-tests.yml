@@ -37,7 +37,7 @@ jobs:
 
       - name: Run frontend tests
         working-directory: frontend
-        run: npm test -- --run
+        run: npm test
 
   a11y:
     name: a11y checks
