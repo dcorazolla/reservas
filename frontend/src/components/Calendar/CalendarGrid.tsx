@@ -1,6 +1,6 @@
 import React from "react";
 import type { Room } from "../../types/calendar";
-import Popover from "../../components/Popover/Popover";
+import Popover from "../../components/Popover";
 import { generateDateRange, formatDate } from "../../utils/dates";
 type RoomBlock = { id: string; room_id: string; start_date: string; end_date: string; reason?: string };
 import "./calendar.css";
@@ -139,7 +139,7 @@ export default function CalendarGrid({
                     onClick={() => onReservationClick(r)}
                   >
                     <Popover content={<div><strong>{r.guest_name}</strong><div>{formatDate(r.start_date)} → {formatDate(r.end_date)}</div></div>}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div className="reservation-info">
                         { (r.partner && r.partner.name) || r.partner_name ? (
                           <span className="partner-badge" aria-label={(r.partner && r.partner.name) || r.partner_name}>🤝</span>
                         ) : null}

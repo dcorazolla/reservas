@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { listReservations, checkinReservation, checkoutReservation } from '../api/reservations';
 import { formatDate } from '../utils/dates';
 import { formatMoney } from '../utils/money';
-import ReservationModal from '../components/ReservationModal';
+import { ReservationModal } from '../components/Reservation';
 
 export default function ReservationsListPage() {
   const today = new Date().toISOString().slice(0,10);

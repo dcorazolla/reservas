@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Property } from "../../types/property";
 import { listProperties, deleteProperty } from "../../api/properties";
-import Modal from "../../components/Modal/Modal";
-import ConfirmDialog from "../../components/ConfirmDialog";
-import ErrorDialog from "../../components/Common/ErrorDialog";
-import PropertyForm from "../../components/PropertyForm";
+import Modal from "../../components/Modal";
+import { ConfirmDialog, ErrorDialog } from "../../components/Common";
+import { PropertyForm } from "../../components/forms";
 
 export default function PropertiesPage() {
   const [items, setItems] = useState<Property[]>([]);

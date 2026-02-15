@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 
-import CalendarPage from '../pages/CalendarPage'
+import CalendarPage from '../pages/Calendar/CalendarPage'
 
 // Mock fetchCalendar used by CalendarPage
 vi.mock('../api/calendar', () => ({

@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from 'vitest-axe'
-import ReservationModal from '../components/ReservationModal'
+import { ReservationModal } from '../components/Reservation'
 
 
 

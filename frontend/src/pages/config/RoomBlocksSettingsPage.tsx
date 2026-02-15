@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRoomBlocks, deleteRoomBlock } from '../../api/roomBlocks';
 import { listRooms } from '../../api/rooms';
-import RoomBlockModal from '../../components/RoomBlockModal';
-import ConfirmDialog from '../../components/ConfirmDialog';
-import ErrorDialog from '../../components/Common/ErrorDialog';
+import RoomBlockModal from '../../components/RoomBlock';
+import { ConfirmDialog, ErrorDialog } from '../../components/Common';
 import { formatDate } from '../../utils/dates';
 
 export default function RoomBlocksSettingsPage() {

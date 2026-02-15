@@ -10,7 +10,7 @@ vi.mock('react-router-dom', () => ({
   useNavigate: () => vi.fn()
 }))
 
-import Header from '../components/Layout/Header'
+import { Header } from '../components/Layout'
 
 describe('Header accessibility', () => {
   test('has no detectable a11y violations', async () => {

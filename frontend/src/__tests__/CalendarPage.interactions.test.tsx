@@ -18,7 +18,7 @@ vi.mock('../api/calendar', () => ({
   })),
 }))
 
-vi.mock('../components/ReservationModal', () => ({
+vi.mock('../components/Reservation/ReservationModal', () => ({
   default: ({ roomId, date, reservation }: any) => (
     <div data-testid="reservation-modal" data-roomid={roomId} data-date={date}>
       {reservation ? 'reservation' : 'new'}
@@ -26,7 +26,7 @@ vi.mock('../components/ReservationModal', () => ({
   ),
 }))
 
-import CalendarPage from '../pages/CalendarPage'
+import CalendarPage from '../pages/Calendar/CalendarPage'
 import { fetchCalendar } from '../api/calendar'
 
 describe('CalendarPage interactions', () => {

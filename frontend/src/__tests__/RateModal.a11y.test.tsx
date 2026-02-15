@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 
-import RateModal from '../components/rates/RateModal'
+import { RateModal } from '../components/rates'
 
 describe('RateModal accessibility', () => {
   test('has no detectable a11y violations when open', async () => {

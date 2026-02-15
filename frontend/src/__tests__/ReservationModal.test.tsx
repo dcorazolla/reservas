@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ReservationModal from '../components/ReservationModal';
+import { ReservationModal } from '../components/Reservation';
 
 // Mock partners API
 vi.mock('../api/partners', () => ({

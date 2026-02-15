@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import TokenExpiryBanner from '../components/TokenExpiryBanner'
+import { TokenExpiryBanner } from '../components/Common'
 
 // Basic smoke test: render component without errors
 test('TokenExpiryBanner renders without crashing', () => {

@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import type { Partner } from '../../types/partner';
 import { listPartners, deletePartner } from '../../api/partners';
-import Modal from '../../components/Modal/Modal';
-import ConfirmDialog from '../../components/ConfirmDialog';
-import ErrorDialog from '../../components/Common/ErrorDialog';
-import PartnerForm from '../../components/PartnerForm';
+import Modal from '../../components/Modal';
+import { ConfirmDialog, ErrorDialog } from '../../components/Common';
+import { PartnerForm } from '../../components/forms';
 
 export default function PartnersPage() {
   const [items, setItems] = useState<Partner[]>([]);

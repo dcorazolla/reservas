@@ -7,8 +7,7 @@ import { listRoomRates, createRoomRate, deleteRoomRate, updateRoomRate } from ".
 import { listCategoryRates, createCategoryRate, deleteCategoryRate, updateCategoryRate } from "../../../api/rates";
 import type { RoomRate, RoomCategoryRate } from "../../../types/rate";
 import { formatMoney, formatMoneyNullable } from "../../../utils/money";
-import RateModal from "../../../components/rates/RateModal";
-import CategoryRateModal from "../../../components/rates/CategoryRateModal";
+import { RateModal, CategoryRateModal } from "../../../components/rates";
 
 export default function RoomTariffsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);

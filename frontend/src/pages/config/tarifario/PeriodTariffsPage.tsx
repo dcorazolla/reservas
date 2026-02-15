@@ -8,8 +8,7 @@ import { listCategoryRatePeriods, createCategoryRatePeriod, deleteCategoryRatePe
 import type { RoomRatePeriod, RoomCategoryRatePeriod } from "../../../types/rate";
 import { formatMoney, formatMoneyNullable } from "../../../utils/money";
 import { formatDate } from "../../../utils/dates";
-import RatePeriodModal from "../../../components/rates/RatePeriodModal";
-import CategoryRatePeriodModal from "../../../components/rates/CategoryRatePeriodModal";
+import { RatePeriodModal, CategoryRatePeriodModal } from "../../../components/rates";
 
 export default function PeriodTariffsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);

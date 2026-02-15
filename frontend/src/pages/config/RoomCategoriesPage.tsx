@@ -4,10 +4,9 @@ import {
   deleteRoomCategory,
 } from "../../api/roomCategories";
 import type { RoomCategory } from "../../types/roomCategory";
-import RoomCategoryForm from "../../components/RoomCategoryForm";
-import Modal from "../../components/Modal/Modal";
-import ConfirmDialog from "../../components/ConfirmDialog";
-import ErrorDialog from "../../components/Common/ErrorDialog";
+import { RoomCategoryForm } from "../../components/forms";
+import Modal from "../../components/Modal";
+import { ConfirmDialog, ErrorDialog } from "../../components/Common";
 
 export default function RoomCategoriesPage() {
   const [categories, setCategories] = useState<RoomCategory[]>([]);

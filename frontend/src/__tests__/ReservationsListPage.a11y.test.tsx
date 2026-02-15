@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 
-import ReservationsListPage from '../pages/ReservationsListPage'
+import ReservationsListPage from '../pages/ReservationsPage'
 
 vi.mock('../api/reservations', () => ({
   listReservations: async (opts: any) => ([

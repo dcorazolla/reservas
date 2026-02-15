@@ -48,6 +48,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::put('/reservations/{reservation}', [ReservationController::class, 'update']);
     Route::post('/reservations/{reservation}/checkin', [ReservationController::class, 'checkin']);
     Route::post('/reservations/{reservation}/checkout', [ReservationController::class, 'checkout']);
+    Route::post('/reservations/{reservation}/confirm', [ReservationController::class, 'confirm']);
+    Route::post('/reservations/{reservation}/cancel', [ReservationController::class, 'cancel']);
+    Route::post('/reservations/{reservation}/finalize', [ReservationController::class, 'finalize']);
     Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
     Route::post('/reservations/calculate', [ReservationPriceController::class, 'calculate']);
     Route::post('/reservations/calculate-detailed', [ReservationPriceController::class, 'calculateDetailed']);

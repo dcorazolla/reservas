@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import ReservationForm from "../components/ReservationForm";
+import { ReservationForm } from "../components/forms";
 import * as reservationsApi from "../api/reservations";
 import * as invoicesApi from "../api/invoices";
 

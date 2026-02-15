@@ -340,3 +340,10 @@
   opacity: 0.95;
   color: #ffffff;
 }
+
+/* Reservation info layout inside reservation cell */
+.reservation-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

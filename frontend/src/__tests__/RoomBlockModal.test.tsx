@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import RoomBlockModal from '../components/RoomBlockModal';
+import RoomBlockModal from '../components/RoomBlock';
 import * as api from '../api/roomBlocks';
 import * as calendarApi from '../api/calendar';
 

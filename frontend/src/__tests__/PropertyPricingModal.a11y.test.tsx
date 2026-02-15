@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 
-import PropertyPricingModal from '../components/rates/PropertyPricingModal'
+import { PropertyPricingModal } from '../components/rates'
 
 const sampleInitial = {
   base_one_adult: 100,

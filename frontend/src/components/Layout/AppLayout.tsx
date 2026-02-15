@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Header from "./Header";
-import Menu from "./Menu";
+import Header from "./header/Header";
+import Menu from "./menu/Menu";
 import "./layout.css";
 
 type Props = {
