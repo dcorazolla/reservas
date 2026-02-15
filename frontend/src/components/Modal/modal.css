@@ -20,6 +20,11 @@
   flex-direction: column;
 }
 
+/* Wide variant for large dialogs (ReservationModal uses this) */
+.modal.modal--wide {
+  width: min(1300px, 98vw);
+}
+
 .modal-header {
   padding: 16px 20px;
   border-bottom: 1px solid var(--color-gray-200);

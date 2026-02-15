@@ -9,6 +9,7 @@ type Props = {
   onClose: () => void;
   titleId?: string;
   closeOnBackdrop?: boolean;
+  className?: string;
 };
 
 export default function Modal({ open, title, children, onClose, titleId, closeOnBackdrop = true }: Props) {
@@ -20,7 +21,7 @@ export default function Modal({ open, title, children, onClose, titleId, closeOn
   return (
     <div className="modal-backdrop" onClick={closeOnBackdrop ? onClose : undefined}>
       <div
-        className="modal"
+        className={`modal ${className ?? ''}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleElId}

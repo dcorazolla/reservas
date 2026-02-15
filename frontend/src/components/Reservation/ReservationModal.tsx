@@ -264,7 +264,7 @@ export default function ReservationModal({
 
 
   return (
-    <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose} closeOnBackdrop={false}>
+    <Modal open={true} title={reservation ? "Editar Reserva" : "Nova Reserva"} titleId="reservation-title" onClose={onClose} closeOnBackdrop={false} className="modal--wide">
       <div className="form reservation-modal" aria-busy={initialLoading || calcLoading}>
         {/* Quick minibar panel shown prominently above guest name when toggled */}
         {showMinibarPanel && (
