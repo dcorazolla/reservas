@@ -19,11 +19,10 @@ Diretórios de documentação
 - `docs/requirements/` — detailed feature requirements and UI/UX specs (reservations, payments, minibar, check-in flows).
 	- `docs/requirements/ui-payments-checkin-invoices.md` — UI and payments/check-in/invoices requirements (2026-02-08).
 
-Agent context
-- `AGENT_CONTEXT/CONTEXT_SUMMARY.md` — resumo de negócio e prioridades.
-- `AGENT_CONTEXT/DEVELOPMENT_STATE.md` — estado atual do repositório e comandos.
-- `AGENT_CONTEXT/TASKS.md` — backlog e tarefas prioritárias.
-- `AGENT_CONTEXT/SAMPLE_PROMPTS.md` — prompts exemplares para um agente IA.
+Agent context (consolidado)
+- `docs/CONSOLIDATED_REQUIREMENTS.md` — Regras de negócio, requisitos funcionais e não-funcionais (canônico).
+- `.github/copilot-instructions.md` — Instruções operacionais para agentes/assistentes automáticos (canônico).
+- Arquivos históricos foram movidos para `docs/archived_docs/` (ver `docs/archived_docs/AGENT_CONTEXT-RULES_AND_REQUIREMENTS.md`).
 
 Frontend
 - `frontend/README.md` (se existir) — instruções específicas do frontend.

@@ -127,7 +127,7 @@ Commands:
 - Run frontend tests: `pnpm test`.
  - Run frontend tests: `cd frontend && npm ci && npm test`.
 
-See `docs/copilot-instructions.md` for detailed agent automation and branching rules.
+See `.github/copilot-instructions.md` for detailed agent automation and branching rules.
 
 Arquivos importantes
 - `backend/src` — código Laravel.

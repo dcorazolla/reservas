@@ -1,18 +1,9 @@
-# Arquivado — Regras e Requisitos
+```markdown
+# Regras de Negócio e Requisitos (consolidação) — ARQUIVO ARQUIVADO
 
-Este arquivo foi arquivado e substituído por material consolidado.
+Este é um snapshot arquivado do arquivo `docs/AGENT_CONTEXT/RULES_AND_REQUIREMENTS.md` antes da consolidação.
 
-Consulte a versão canônica em:
-
-- `docs/CONSOLIDATED_REQUIREMENTS.md` — Regras de negócio e requisitos (funcionais e não-funcionais).
-- `.github/copilot-instructions.md` — Instruções operacionais para agentes/assistentes automáticos.
-
-O conteúdo original foi preservado em `docs/archived_docs/AGENT_CONTEXT-RULES_AND_REQUIREMENTS.md`.
-
-Se precisar restaurar seções específicas, copie do arquivo arquivado.
-# Regras de Negócio e Requisitos (consolidação)
-
-Este arquivo consolida as regras de negócio, requisitos funcionais e não-funcionais e orientações para agentes e desenvolvedores humanos, extraídos dos ADRs e da documentação principal.
+Conteúdo original (preservado para histórico):
 
 1) Resumo do domínio
 - O sistema gerencia propriedades, quartos, reservas, parceiros (partners), invoices e pagamentos.
@@ -70,3 +61,5 @@ Este arquivo consolida as regras de negócio, requisitos funcionais e não-funci
 
 ---
 Gerado a partir de: `docs/adr/*`, `docs/partners-invoicing.md`, `docs/copilot-instructions.md`, `AGENT_CONTEXT/*`, `backend/TODO.md`, `frontend/TODO.md`, `CHECKLIST.md`.
+
+```

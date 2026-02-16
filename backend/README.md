@@ -13,3 +13,7 @@ cd backend/src
 composer install
 ./vendor/bin/phpunit -c phpunit.xml
 ```
+
+Observações e documentação adicional
+- Instruções do assistente e políticas de automação estão consolidadas em `.github/copilot-instructions.md`.
+- Regras de negócio e requisitos em `docs/CONSOLIDATED_REQUIREMENTS.md`.
