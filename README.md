@@ -2,6 +2,40 @@
 
 Aplicação de reservas para propriedades (hotel/pousada) — backend em Laravel (PHP) e frontend em React + Vite.
 
+<!-- Versioning & Release Notes (front) -->
+## Frontend Versioning and Release Notes
+
+- The frontend package (`frontend`) follows semantic versioning (semver). The current version lives in `frontend/package.json` in the `version` field.
+- To bump the frontend version and create a release commit/tag, use the npm scripts in the `frontend` folder:
+
+```bash
+# bump patch (recommended for small fixes)
+cd frontend && npm run bump:patch
+
+# bump minor (new features, backward-compatible)
+cd frontend && npm run bump:minor
+
+# bump major (breaking changes)
+cd frontend && npm run bump:major
+```
+
+- After bumping the version, you can generate a simple `frontend/RELEASE_NOTES.md` by running:
+
+```bash
+cd frontend && npm run release-notes
+```
+
+- The `release-notes` script generates `frontend/RELEASE_NOTES.md` from recent git commits. Keep that file up-to-date and include it in the PR that contains the version bump.
+
+- Workflow suggestion for releases (frontend):
+	1. Create a short-lived branch for the release work or bump: `git checkout -b release/<version>`.
+ 2. Run `npm run bump:patch|minor|major` and push the commit and tag created by `npm version`.
+ 3. Run `npm run release-notes` and commit the updated `RELEASE_NOTES.md`.
+ 4. Open a PR to `main`, verify CI (tests), then merge.
+
+These instructions should be followed for every new frontend release.
+
+
 Visão geral
 - Propósito: gerenciar propriedades, quartos, tarifas e reservas; no roadmap: parceiros e faturamento com auditoria completa.
 - Público: operadores de hospedagem e equipe administrativa.
