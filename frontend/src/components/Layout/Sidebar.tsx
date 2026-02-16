@@ -7,7 +7,7 @@ import {
   useDisclosure,
   Button,
 } from '@chakra-ui/react'
-import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock } from 'react-icons/fi'
+import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiBox, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock } from 'react-icons/fi'
 import { MdMeetingRoom } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
