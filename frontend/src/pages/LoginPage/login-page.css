@@ -47,3 +47,9 @@
   color: rgba(0,0,0,0.6);
   margin: 0.5rem 0;
 }
+
+.remember-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

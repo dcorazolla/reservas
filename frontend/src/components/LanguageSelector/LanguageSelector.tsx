@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Box, Button, VStack, HStack, Text } from '@chakra-ui/react'
+import './language-selector.css'
 import { useTranslation } from 'react-i18next'
 
 type Props = {
@@ -16,7 +17,7 @@ const LANGS: { code: string; key: string; defaultLabel: string; country: string 
 
 function FlagIcon({ country }: { country: string }) {
   // `flag-icons` exposes class names like `fi fi-br` for Brazil
-  return <i className={`fi fi-${country}`} aria-hidden style={{ width: 20 }} />
+  return <i className={`fi fi-${country} flag-icon`} aria-hidden />
 }
 
 export default function LanguageSelector({ size = 'sm', className }: Props) {

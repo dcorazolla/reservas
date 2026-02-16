@@ -7,6 +7,61 @@
     "user_fallback": "User",
     "logout": "Logout"
   },
+  "menu": {
+    "calendar": "Calendar",
+    "reservations": "Reservations",
+    "navigation": "Navigation",
+    "open": "Open menu",
+    "toggle": "Toggle submenu",
+    "settings": {
+      "label": "Settings",
+      "properties": "Properties",
+      "rooms": "Rooms",
+      "users": "Users",
+      "partners": "Partners",
+      "rates": {
+        "label": "Rates",
+        "base": "Base rate",
+        "room": "Room rate",
+        "period": "Period rate"
+      }
+    }
+  },
+  "properties": {
+    "form": {
+      "name": "Name",
+      "timezone": "Timezone",
+      "infant_max_age": "Infant max age",
+      "child_max_age": "Child max age",
+      "child_factor": "Child factor",
+      "base_one_adult": "Base one adult",
+      "base_two_adults": "Base two adults",
+      "additional_adult": "Additional adult",
+      "child_price": "Child price",
+      "cancel": "Cancel",
+      "save": "Save",
+      "new": "New property",
+      "edit": "Edit property",
+      "base_rates_title": "Base Rate",
+      "show_base_rates": "Show tariffs",
+      "hide_base_rates": "Hide tariffs",
+      "error_required": "Required field"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Remove"
+    },
+    "loading": "Loading...",
+    "page": {
+      "title": "Properties"
+    },
+    "confirm": {
+      "delete_title": "Delete confirmation",
+      "delete_message_prefix": "Are you sure you want to remove",
+      "delete_message_suffix": "This action cannot be undone.",
+      "delete_confirm": "Remove"
+    }
+  },
   "login": {
     "title": "Sign in",
     "subtitle": "Sign in to your account to continue",

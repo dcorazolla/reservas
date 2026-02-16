@@ -7,6 +7,61 @@
     "user_fallback": "Utilisateur",
     "logout": "Se déconnecter"
   },
+  "menu": {
+    "calendar": "Calendrier",
+    "reservations": "Réservations",
+    "navigation": "Navigation",
+    "open": "Ouvrir le menu",
+    "toggle": "Basculer le sous-menu",
+    "settings": {
+      "label": "Paramètres",
+      "properties": "Propriétés",
+      "rooms": "Chambres",
+      "users": "Utilisateurs",
+      "partners": "Partenaires",
+      "rates": {
+        "label": "Tarifs",
+        "base": "Tarif de base",
+        "room": "Tarif par chambre",
+        "period": "Tarif par période"
+      }
+    }
+  },
+  "properties": {
+    "form": {
+      "name": "Nom",
+      "timezone": "Fuseau horaire",
+      "infant_max_age": "Âge max (bébés)",
+      "child_max_age": "Âge max (enfants)",
+      "child_factor": "Facteur enfant",
+      "base_one_adult": "Base 1 adulte",
+      "base_two_adults": "Base 2 adultes",
+      "additional_adult": "Adulte supplémentaire",
+      "child_price": "Prix enfant",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "new": "Nouvelle propriété",
+      "edit": "Modifier la propriété",
+      "base_rates_title": "Tarif de base",
+      "show_base_rates": "Afficher les tarifs",
+      "hide_base_rates": "Masquer les tarifs",
+      "error_required": "Champ obligatoire"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "loading": "Chargement...",
+    "page": {
+      "title": "Propriétés"
+    },
+    "confirm": {
+      "delete_title": "Confirmation de suppression",
+      "delete_message_prefix": "Êtes-vous sûr de vouloir supprimer",
+      "delete_message_suffix": "Cette action ne peut pas être annulée.",
+      "delete_confirm": "Supprimer"
+    }
+  },
   "login": {
     "title": "Se connecter",
     "subtitle": "Connectez-vous à votre compte pour continuer",

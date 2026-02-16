@@ -37,6 +37,18 @@ export default function AppRoutes() {
               </RequireAuth>
             }
           />
+          <Route
+            path="/settings/properties"
+            element={
+              <RequireAuth>
+                <PageShell>
+                  <Suspense fallback={<div />}>
+                    <Properties />
+                  </Suspense>
+                </PageShell>
+              </RequireAuth>
+            }
+          />
           <Route path="/logout" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>
