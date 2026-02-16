@@ -19,7 +19,7 @@ vi.mock('@chakra-ui/react', async () => {
 // Mock react-router Link to avoid providing Router
 vi.mock('react-router-dom', () => ({ Link: (props: any) => React.createElement('a', props, props.children) }))
 
-import Sidebar from '../Sidebar'
+import Sidebar from './Sidebar'
 
 vi.mock('react-i18next', () => ({
 	useTranslation: () => ({ t: (k: string) => k }),
