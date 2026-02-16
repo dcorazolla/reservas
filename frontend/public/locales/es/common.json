@@ -7,6 +7,61 @@
     "user_fallback": "Usuario",
     "logout": "Salir"
   },
+  "menu": {
+    "calendar": "Calendario",
+    "reservations": "Reservas",
+    "navigation": "Navegación",
+    "open": "Abrir menú",
+    "toggle": "Alternar submenú",
+    "settings": {
+      "label": "Configuración",
+      "properties": "Propiedades",
+      "rooms": "Habitaciones",
+      "users": "Usuarios",
+      "partners": "Socios",
+      "rates": {
+        "label": "Tarifas",
+        "base": "Tarifa base",
+        "room": "Tarifa por habitación",
+        "period": "Tarifa por periodo"
+      }
+    }
+  },
+  "properties": {
+    "form": {
+      "name": "Nombre",
+      "timezone": "Zona horaria",
+      "infant_max_age": "Edad máxima (infantes)",
+      "child_max_age": "Edad máxima (niños)",
+      "child_factor": "Factor niño",
+      "base_one_adult": "Base 1 adulto",
+      "base_two_adults": "Base 2 adultos",
+      "additional_adult": "Adulto adicional",
+      "child_price": "Precio niño",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "new": "Nueva propiedad",
+      "edit": "Editar propiedad",
+      "base_rates_title": "Tarifa Base",
+      "show_base_rates": "Mostrar tarifas",
+      "hide_base_rates": "Ocultar tarifas",
+      "error_required": "Campo obligatorio"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "loading": "Cargando...",
+    "page": {
+      "title": "Propiedades"
+    },
+    "confirm": {
+      "delete_title": "Confirmación de eliminación",
+      "delete_message_prefix": "¿Estás seguro de que deseas eliminar",
+      "delete_message_suffix": "Esta acción no se puede deshacer.",
+      "delete_confirm": "Eliminar"
+    }
+  },
   "login": {
     "title": "Iniciar sesión",
     "subtitle": "Inicia sesión en tu cuenta para continuar",

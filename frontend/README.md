@@ -45,6 +45,10 @@ Padrões e convenções
 	- Prefira classes CSS a estilos inline; componentes podem usar utility props do design system quando apropriado, mas não devem injetar estilos inline que prejudiquem reutilização.
 - Mobile first: o front é mobile-first — comece o CSS para telas pequenas e adicione breakpoints progressivamente para tablet/desktop.
 - Internacionalização (i18n): o front é internacionalizado; todas as strings visíveis ao usuário devem vir de `i18n` (ex.: `useTranslation('common')`). Não hardcodear strings.
+	- **Regra de obrigatoriedade:** todas as **novas páginas e componentes** devem ser criados já internacionalizados. Isso significa:
+		- Usar `useTranslation()` para todas as strings visíveis ao usuário.
+		- Adicionar as chaves correspondentes em todos os arquivos de locale relevantes em `public/locales/{pt-BR,es,fr,en}` antes do merge do PR.
+		- Atualizar os testes para usar as traduções (ou mocks de i18n) para evitar dependência de strings hard-coded.
 - Acessibilidade: o front é acessível — siga práticas ARIA, labels explícitos, foco visível, navegação por teclado e inclua checagens de `axe` nos testes críticos.
 - Responsividade e compatibilidade:
 	- O front deve funcionar bem em celular, tablet e computador (layout e touch targets apropriados).
@@ -280,5 +284,33 @@ Se quiser, implemento automaticamente os itens acima (tests setup + MSW + vitest
 - Regras:
   - Itens só podem ser removidos por acordo explícito documentado (issue/PR) com a justificativa; por padrão, marque como `completed` ou `deprecated` e adicione um comentário explicando por quê.
   - Agentes automatizados que consumirem `AGENT_TODO_JSON` devem respeitar essas regras: atualizem status, adicionem tarefas novas, e se precisarem apagar itens ou pushar para branches remotas sem permissão, parem e solicitem credenciais/humana intervenção.
+ - Agentes automatizados que consumirem `AGENT_TODO_JSON` devem respeitar essas regras: atualizem status, adicionem tarefas novas, e se precisarem apagar itens ou pushar para branches remotas sem permissão, parem e solicitem credenciais/humana intervenção.
+
+## **Propriedades (Properties) — Resumo da implementação nesta branch**
+
+- **Objetivo:** implementar CRUD de Propriedades com modal de criação/edição, timezone, grupo de tarifas, validação completa de formulário e internacionalização.
+- **Principais mudanças:**
+	- `src/pages/Properties/PropertiesPage.tsx` — listagem, abrir modal para criar/editar, handlers de salvar/excluir.
+	- `src/components/Properties/EditPropertyModal.tsx` — formulário com select de timezone, grupo colapsável `Tarifa Base`, validação (todos os campos obrigatórios), mensagens de erro por campo, reset de erros ao (re)abrir o modal.
+	- `src/components/Properties/property-modal.css` — estilos e `.field-error`.
+	- `src/components/Properties/ConfirmDeleteModal.tsx` — mensagens i18n na confirmação.
+	- `public/locales/{pt-BR,en,es,fr}/common.json` — novas chaves `properties.form.*`, `properties.actions.*`, `properties.confirm.*`, `properties.loading` e `properties.form.error_required`.
+
+- **Status atual:**
+	- Implementação funcional de listagem, criação, edição e exclusão (frontend).
+	- Modal com grupo `Tarifa Base` e toggle implementado.
+	- Validação frontend (todos os campos obrigatórios) implementada e mensagens de erro mostradas por campo.
+	- Traduções adicionadas para `pt-BR`, `en`, `es`, `fr`.
+	- Testes unitários da suíte passaram (`npm test -- --run`) — suíte atual: 7/7.
+	- Nota: os fluxos completos do modal (abrir -> validar -> fechar -> editar -> salvar) ainda precisam de testes end-to-end/unitários específicos; hoje existe um teste da página que valida título e lista, mas **os testes de fluxo do modal não foram adicionados ainda**.
+
+- **Próximos passos recomendados (prioridade):**
+	1. Escrever testes de fluxo para `EditPropertyModal` (criar com erros, fechar, editar sem erros, salvar e confirmar chamadas ao serviço mockado).
+	2. Adicionar um setup global de testes (Vitest) que forneça um mock i18n e um wrapper ChakraProvider para reduzir repetição e warnings.
+	3. Revisar mocks do Chakra para eliminar avisos de props DOM não reconhecidos durante testes.
+
+Se aprovar, eu posso agora:
+- Escrever os testes do modal e, depois, criar o commit, push e abrir um PR para `main`.
+- Ou, se preferir, eu crio o commit+PR imediatamente com o código atual e adiciono os testes em um PR separado. Indique qual fluxo prefere.
 
 ```

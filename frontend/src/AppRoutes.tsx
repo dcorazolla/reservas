@@ -1,10 +1,11 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import PageShell from '@components/PageShell'
+import PageShell from '@components/PageShell/PageShell'
 import { LoginPage } from '@pages/LoginPage'
 import { AuthProvider, useAuth } from '@contexts/AuthContext'
 
 const Home = React.lazy(() => import('./pages/Home'))
+const Properties = React.lazy(() => import('./pages/Properties'))
 
 export default function AppRoutes() {
   return (
@@ -24,6 +25,30 @@ export default function AppRoutes() {
             }
           />
           <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/properties"
+            element={
+              <RequireAuth>
+                <PageShell>
+                  <Suspense fallback={<div />}>
+                    <Properties />
+                  </Suspense>
+                </PageShell>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/settings/properties"
+            element={
+              <RequireAuth>
+                <PageShell>
+                  <Suspense fallback={<div />}>
+                    <Properties />
+                  </Suspense>
+                </PageShell>
+              </RequireAuth>
+            }
+          />
           <Route path="/logout" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>

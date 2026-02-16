@@ -1,13 +1,17 @@
 {
   "name": "reservas-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "bump:patch": "npm version patch -m \"chore(release): %s\"",
+    "bump:minor": "npm version minor -m \"chore(release): %s\"",
+    "bump:major": "npm version major -m \"chore(release): %s\"",
+    "release-notes": "sh ./scripts/generate_release_notes.sh"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
@@ -46,6 +50,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/react-icons": "^2.2.7",
     "@vitejs/plugin-react": "^5.1.4",
+    "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",

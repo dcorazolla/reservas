@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react'
+import './header.css'
 import { Flex, IconButton, HStack, Box, Text, VStack, Button } from '@chakra-ui/react'
 import { FiMenu } from 'react-icons/fi'
 import { useTranslation } from 'react-i18next'
-import LanguageSelector from '@components/LanguageSelector'
-import DateTimeClock from '@components/DateTimeClock'
+import { LanguageSelector } from '@components/LanguageSelector'
+import { DateTimeClock}  from '@components/DateTimeClock'
 import { useAuth } from '@contexts/AuthContext'
 import { decodeJwtPayload } from '@utils/jwt'
 
@@ -76,10 +77,10 @@ export default function Header({ onOpenMenu }: Props) {
                 setMenuOpen((s) => !s)
               }
             }}
-              onMouseEnter={() => setMenuOpen(true)}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: 6, borderRadius: 8 }}
+            onMouseEnter={() => setMenuOpen(true)}
+            className="header-user-button"
           >
-            <Box width="36px" height="36px" borderRadius="full" bg="gray.200" display="flex" alignItems="center" justifyContent="center" color="gray.700" fontWeight={600} fontSize="sm" aria-hidden>
+            <Box className="header-user-avatar" bg="gray.200" color="gray.700" fontWeight={600} fontSize="sm" aria-hidden>
               {userName ? String(userName).split(' ').map((s) => s[0]).slice(0, 2).join('').toUpperCase() : 'U'}
             </Box>
           </Box>
