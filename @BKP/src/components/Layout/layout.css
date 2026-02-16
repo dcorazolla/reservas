@@ -1,0 +1,29 @@
+.app-layout {
+  min-height: 100vh;
+  background: var(--color-page-bg);
+}
+
+/* CONTEÚDO */
+.app-content {
+  padding: 10px;
+}
+
+/* MENU HORIZONTAL */
+.menu-horizontal .app-content {
+  margin-top: 8px;
+}
+
+/* MENU VERTICAL */
+.menu-vertical {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+}
+
+.menu-vertical .app-menu {
+  grid-row: 2 / span 1;
+}
+
+.menu-vertical .app-content {
+  grid-column: 2;
+  padding: 24px;
+}

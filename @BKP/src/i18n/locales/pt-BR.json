@@ -1,0 +1,38 @@
+{
+  "login": {
+    "title": "Entrar",
+    "email": "Email",
+    "password": "Senha",
+    "login": "Entrar",
+    "loggingIn": "Entrando...",
+    "forgotPassword": "Esqueci minha senha",
+    "or": "ou",
+    "google": "Entrar com Google",
+    "sso": "Entrar com SSO",
+    "failed": "Falha no login"
+  }
+  ,
+  "layout": {
+    "subtitle": "Gestão de Reservas",
+    "logout": "Sair"
+  },
+  "menu": {
+    "calendar": "Calendário",
+    "reservations": "Lista de Reservas",
+    "financial": "Financeiro",
+    "invoices": "Faturas",
+    "settings": "Configurações",
+    "property": "Propriedade",
+    "partners": "Parceiros",
+    "minibar": "Frigobar",
+    "products": "Produtos (Frigobar)",
+    "blocks": "Bloqueios de Quarto",
+    "rooms": "Quartos",
+    "roomCategories": "Categorias de Quartos",
+    "tariffs": "Tarifário",
+    "baseRates": "Tarifas base",
+    "roomRates": "Tarifas de Quartos",
+    "periodRates": "Tarifas de Período",
+    "search": "Motor de busca"
+  }
+}
