@@ -1,47 +1,14 @@
 ```instructions
 # Instruções para o GitHub Copilot / Assistente
 
-Propósito
-- Este arquivo contém instruções explícitas para o Copilot (ou qualquer assistente) sobre como operar no repositório `reservas`. Deve fornecer contexto suficiente para que, ao iniciar uma nova sessão, o assistente entenda convenções, prioridades e limites sem que você repita tudo.
+Este arquivo foi consolidado: as instruções do assistente e regras operacionais foram movidas para `.github/copilot-instructions.md` e `docs/CONSOLIDATED_REQUIREMENTS.md`.
 
-Comportamento esperado (persona)
-- Aja como um par-programador conciso e seguro.
-- Responda sempre em português (pt-BR), salvo pedido explícito em outro idioma.
-- Antes de modificar arquivos, leia `docs/system-instructions.md` e ADRs em `docs/adr/`.
-- Use o `TODO` (gerenciado em `manage_todo_list`) para planejar tarefas multi-step.
-- Sempre prefira mudanças pequenas, testáveis e reversíveis.
+Por favor, consulte:
 
-Arquivos e lugares para checar primeiro
-- `docs/system-instructions.md` — visão geral e convenções.
-- `docs/adr/` — decisões arquiteturais (ex.: auditoria financeira).
-- `backend/src/app` — código Laravel (controllers, services, models).
-- `frontend/src` — React + TypeScript.
-- `docs/collections/reservas` — coleção Bruno / exemplos de requests.
-- `backend/src/public/openapi.yaml` — OpenAPI spec (documentar novos endpoints quando criar).
+- `.github/copilot-instructions.md` — instruções do assistente e políticas de automação.
+- `docs/CONSOLIDATED_REQUIREMENTS.md` — regras de negócio, requisitos funcionais e não-funcionais.
 
-Convenções importantes (não altere sem confirmação)
-- IDs: UUID strings; backend e frontend tratam IDs como strings.
-- `property_id` é o escopo ativo e vem no JWT. Serviços e controllers devem usar esse claim.
-- Usuários podem ter múltiplas propriedades; há fluxo de troca de propriedade que emite novo JWT.
-- Auditoria financeira: tudo que altera valores deve ser registrado em `financial_audit_logs` (append-only). Evite mudanças que violem esse princípio.
-
-Regras de desenvolvimento
-- Use `app/Services/*` para lógica de negócio e mantenha controllers finos.
-- Ao criar migrations, adicione seeders mínimos para dados necessários em desenvolvimento (ex.: properties/admin user association).
-- Escreva testes (PHPUnit) para lógica crítica, especialmente financeira.
-- Atualize OpenAPI e a coleção Bruno quando adicionar/alterar endpoints.
-
-Segurança / produção
-- Nunca comitar credenciais. Use `.env` e documente variáveis necessárias no `README.md`.
-- Jobs e operações assíncronas que alteram estado importante (envio de e‑mail, geração de PDF, gravação de logs) devem usar filas e serem idempotentes quando possível.
-
-Como lidar com pedidos do usuário
-- Se o pedido for multi-step (várias alterações no backend e frontend), registre passos no TODO e peça confirmação antes de aplicar grandes migrações.
-- Para mudanças sensíveis (auditoria, pagamentos, numeração), proponha um ADR e espere aprovação.
-
-Exemplos de prompts úteis para retomar contexto
-- "Leia `docs/system-instructions.md` e `docs/adr/0001-auditoria-financeira.md`. Me dê um plano em 5 passos para implementar a tabela `financial_audit_logs`."
-- "Implemente a migration `user_properties` pivot e o endpoint `POST /api/auth/switch-property`, garantindo emissão de novo JWT com claim `property_id`." 
+Se precisar modificar a orientação do agente, atualize `.github/copilot-instructions.md` e registre as mudanças no `README.md`.
 
 Observações finais
 - Este arquivo deve ser mantido curto, atualizado e referenciado no início de qualquer nova sessão com o Copilot.

@@ -1,45 +1,37 @@
 # Frontend - Reservas
-````markdown
 # Frontend - Reservas
 
-Visão geral
+Resumo rápido
 
-Este diretório contém o frontend da aplicação "Reservas". O frontend é um aplicativo React com TypeScript, pensado desde o início para ser mobile-first, acessível, e fácil de internacionalizar.
+Este diretório contém o frontend da aplicação `Reservas` — um aplicativo React + TypeScript com Vite. O README a seguir foi simplificado: instruções operacionais e regras para agentes foram consolidadas em `.github/copilot-instructions.md` e `docs/CONSOLIDATED_REQUIREMENTS.md`.
 
-Decisões e stack
+Principais comandos
 
-- Framework: React + TypeScript
-- Bundler / scaffold: Vite (projeto inicial baseado em `react-ts` template)
-- Design System / UI: Chakra UI (`@chakra-ui/react`) — seleção por ser acessível, mobile-first e facilmente customizável. Usaremos `Skeleton` para estados de carregamento em todas as páginas que fazem fetch.
-- Routing: `react-router-dom`
-- Data fetching / cache: `@tanstack/react-query` (para isLoading, cache e gerenciamento de fetch)
-- HTTP client: `axios` (encapsulado em `src/services/api` quando necessário)
-- Internacionalização: `react-i18next`, `i18next` com suporte a `pt-BR`, `es`, `fr`, `en`. Traduções armazenadas em `public/locales/{pt-BR,es,fr,en}`.
-- Flags (ícones): escolhemos `flag-icons` para exibir bandeiras no `LanguageSelector`.
-	- Por que: é uma dependência leve, evita manter SVGs manualmente e fornece classes CSS simples (`fi fi-xx`).
-	- Instalação: `npm install flag-icons` (já adicionada como dependência opcional no `package.json`).
-	- Uso: importamos `flag-icons/css/flag-icons.min.css` em `src/main.tsx` e mapeamos locales para códigos de país (`pt-BR -> br`, `en -> us`, `es -> es`, `fr -> fr`).
-- Testes: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `msw` para mocks HTTP em testes.
-- Lint & format: `eslint` + `eslint-plugin-react` + `eslint-plugin-jsx-a11y` + `prettier`.
-- Acessibilidade: integrar `eslint-plugin-jsx-a11y`, usar `axe` em testes críticos.
-- Git hooks: opcionalmente `husky` + `lint-staged` para garantir qualidade pré-commit.
+- Instalar dependências: `cd frontend && npm ci`
+- Rodar dev: `npm run dev`
+- Build produção: `npm run build`
+- Testes: `npm test` (Vitest)
 
-Estrutura sugerida
+Onde encontrar documentação relevante
 
-- `public/locales/{pt-BR,es,fr,en}/common.json` - arquivos de tradução
-- `src/main.tsx` - entrypoint, providers (ChakraProvider, QueryClientProvider, I18nextProvider)
-- `src/i18n.ts` - configuração do i18n
-- `src/theme/` - tema do Chakra (tokens mobile-first)
-- `src/pages/` - páginas, cada uma com `index.tsx` e `index.test.tsx` colocados lado a lado
-- `src/components/` - componentes reutilizáveis e atômicos
-- `src/services/` - `api.ts` (axios client) e clients específicos
-- `src/hooks/` - hooks compartilhados
+- Instruções do agente e políticas: `.github/copilot-instructions.md`
+- Regras de negócio e requisitos consolidados: `docs/CONSOLIDATED_REQUIREMENTS.md`
+- Guia rápido de setup e arquitetura geral: `docs/SETUP.md` e `docs/OVERVIEW.md`
 
-Padrões e convenções
+Estrutura e convenções (resumo)
 
-- Arquivos de teste: os arquivos de teste devem sempre ficar na mesma pasta do arquivo que está sendo testado (tests colocated). Ex.: `src/components/MeuComponente/MeuComponente.tsx` e `src/components/MeuComponente/MeuComponente.test.tsx`.
-- Cobertura obrigatória: todas as páginas e componentes devem ter testes cobrindo 100% dos componentes e fluxos possíveis (unidades + interações críticas). Testes devem incluir caminhos de sucesso, falha e casos extremos.
-- CSS e estilos:
+- `public/locales/{pt-BR,es,fr,en}` — traduções (i18n)
+- `src/components/` — componentes colocated com seus testes
+- `src/pages/` — páginas e fluxos
+- `src/services/` — clients axios e wrappers
+
+Boas práticas resumidas
+
+- Internacionalização: todas strings visíveis devem vir de i18n.
+- Acessibilidade: siga ARIA, foco visível e testes com `axe` em fluxos críticos.
+- Testes: adicione testes colocados (unit + flows) antes do PR.
+
+Para detalhes operacionais, consultas de agente ou regras de commit, consulte `.github/copilot-instructions.md`.
 	- É proibido usar CSS inline. Todos os estilos devem residir em arquivos CSS/SCSS separados no mesmo nível do componente/página, seguindo o padrão `meu-componente.css` (ou `meu-componente.module.css` se preferir CSS Modules).
 	- Valores padrão (cores, tamanhos, fontes, espaçamentos, etc.) devem ser configurados como variáveis CSS globais (ex.: `:root { --brand-500: #123456; --space-4: 1rem; }`) e consumidos pelos arquivos CSS específicos de páginas/componentes.
 	- Prefira classes CSS a estilos inline; componentes podem usar utility props do design system quando apropriado, mas não devem injetar estilos inline que prejudiquem reutilização.
