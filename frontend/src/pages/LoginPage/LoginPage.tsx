@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -15,9 +15,7 @@ import {
   Heading,
   HStack,
   Link,
-  Alert,
   VisuallyHidden,
-  Divider,
   Text,
   Flex,
 } from '@chakra-ui/react'
@@ -29,7 +27,7 @@ import { decodeTokenPayload } from '@services/auth'
 import './login-page.css'
 import { FaGoogle, FaFacebookF } from 'react-icons/fa'
 import { AiOutlineWarning } from 'react-icons/ai'
-import LanguageSelector from '@components/LanguageSelector'
+import { LanguageSelector } from '@components/LanguageSelector'
 
 const schema = z.object({
   email: z.string().email('login.email_error' as any),
@@ -181,7 +179,7 @@ export function LoginPage() {
           </FieldRoot>
 
           <Flex align="center" justify="space-between">
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <label className="remember-label">
               <input type="checkbox" {...register('remember')} />
               <span>{t('login.remember_me', 'Lembrar-me')}</span>
             </label>
