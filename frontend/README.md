@@ -82,6 +82,27 @@ npm test
 npm run test -- src/pages/Login/LoginPage.test.tsx -t "shows error on failed login"
 ```
 
+Fluxo de Git (CLI recomendado)
+
+- **Use a CLI `gh` em vez do GitKraken**: este repositório adota o uso da GitHub CLI (`gh`) para operações remotas (abrir PRs, criar rascunhos, fazer review). Evite usar clientes GUI que alterem branches ou façam pushes automáticos sem revisão.
+- **Criar branch e abrir PR** (exemplo):
+
+```bash
+cd frontend
+git checkout -b feat/properties-page
+git add <arquivos-alterados>
+git commit -m "feat(frontend): add properties CRUD page (início)"
+git push --set-upstream origin feat/properties-page
+# criar PR com título e descrição a partir da branch
+gh pr create --fill
+```
+
+- **Dicas**:
+	- Use `gh pr view --web` para abrir o PR no browser.
+	- Use `gh auth login` se precisar autenticar a CLI.
+	- Prefira criar PRs pequenos e descreva o escopo e testes realizados.
+
+
 Como adicionar um novo idioma
 
 1. Adicione a pasta `public/locales/<novo-idioma>/` e um arquivo `common.json` com as chaves traduzidas.
