@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 
+ 
 // Service mocks will be created inside the factory and exposed via `__mocks`.
 
 // Mock Chakra UI used by the page/modal
@@ -95,10 +96,10 @@ describe('PropertiesPage flows', () => {
     expect(await screen.findByText('Pousada Sol')).toBeInTheDocument()
 
     // open create modal
-    userEvent.click(screen.getByText('Nova propriedade'))
+    await userEvent.click(await screen.findByText('Nova propriedade'))
 
     // click save without filling should show validation errors (inputs are required)
-    userEvent.click(await screen.findByText('Salvar'))
+    await userEvent.click(await screen.findByText('Salvar'))
 
     // expect error text appears
     expect(await screen.findAllByText('Campo obrigatório')).toHaveLength(8)
@@ -142,7 +143,7 @@ describe('PropertiesPage flows', () => {
     expect(await screen.findByText('Pousada Sol')).toBeInTheDocument()
 
     // open edit for first row
-    userEvent.click(screen.getAllByText('Editar')[0])
+    await userEvent.click(screen.getAllByText('Editar')[0])
 
     // modal should show name input prefilled
     const nameInput = await screen.findByRole('textbox')
@@ -160,7 +161,7 @@ describe('PropertiesPage flows', () => {
       await userEvent.type(ni, '1')
     }
 
-    await userEvent.click(screen.getByText('Salvar'))
+    await userEvent.click(await screen.findByText('Salvar'))
 
     await waitFor(async () => {
       const svcAssert = await import('@services/properties')

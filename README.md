@@ -177,6 +177,35 @@ Boas práticas adotadas:
 - Agrupar componentes por domínio (ex.: `rates/`, `Reservation/`, `Minibar/`) quando fizer sentido para manter pastas menores e com responsabilidade definida.
 - Mantemos tokens e variáveis globais em `frontend/src/styles/variables.css` para facilitar theming (incluído recentemente no projeto).
 
+**Room Categories feature (new)**
+- Files added/updated:
+	- `frontend/src/pages/RoomCategories/RoomCategoriesPage.tsx` — listing, create/edit modal integration, delete flow.
+	- `frontend/src/components/RoomCategories/EditRoomCategoryModal.tsx` — modal UI with optional "Category rates" toggle and fields.
+	- `frontend/src/components/RoomCategories/room-category-modal.css` — modal styles (grid layout and responsive rules).
+	- `frontend/src/pages/RoomCategories/room-categories.css` — list styles.
+	- `frontend/src/services/roomCategoryRates.ts` — service for listing/creating/updating/deleting category rates.
+	- `frontend/src/services/roomCategoryRates.test.ts` — unit tests for the rates service.
+	- `frontend/src/components/RoomCategories/EditRoomCategoryModal.test.tsx` — unit test for the modal.
+	- `frontend/src/pages/RoomCategories/RoomCategoriesPage.flow.test.tsx` — flow tests for create/delete flows.
+
+Notes:
+- The modal includes a toggle to show/hide a "Category rates" panel that contains numeric inputs for `base_one_adult`, `base_two_adults`, `additional_adult`, and `child_price`.
+- When saving, if the rates panel is open, the modal includes `_rates` in the payload which the page persists via the `roomCategoryRates` service.
+- i18n keys for the modal/toggle were added to `frontend/public/locales/*/common.json`.
+
+How to run the frontend tests and coverage:
+```bash
+cd frontend
+npm ci
+npm test -- --coverage
+```
+
+Goal: tests covering the new files should reach 100% for those modules — if any gaps remain, run the tests above and inspect the generated coverage report (`coverage/` or the output shown by Vitest).
+
+Release & versioning (frontend)
+- Use the existing npm scripts in `frontend/package.json` to bump version and generate `RELEASE_NOTES.md` as documented earlier. Commit the version bump and release notes, open a PR to `main`, and merge when CI passes.
+
+
 
 Pre-push recommendation
 
