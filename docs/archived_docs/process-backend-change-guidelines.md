@@ -1,16 +1,9 @@
-# Arquivado — Backend Change Guidelines
+```markdown
+# Backend Change Guidelines — ARQUIVO ARQUIVADO
 
-Este arquivo foi arquivado. Consulte a documentação consolidada e o checklist principal:
+Snapshot histórico de `docs/process/backend-change-guidelines.md` preservado antes da consolidação.
 
-- `docs/CONSOLIDATED_REQUIREMENTS.md`
-- `docs/CHECKLIST.md`
-
-O conteúdo original foi preservado em `docs/archived_docs/process-backend-change-guidelines.md`.
-<!-- Restored from archive: guidance snapshot -->
-
-# Backend Change Guidelines (historical snapshot)
-
-Este arquivo é uma cópia das diretrizes históricas para mudanças no backend: requisitos de testes, atualização de documentação, atualização de coleções e checklist de PR.
+Conteúdo original:
 
 - Testes: qualquer alteração em controllers e modelos deve vir acompanhada de testes Unit/Feature relevantes.
 - Migration: adicionar migration quando for alterar schema; run `php artisan migrate` em ambiente de CI ou `php artisan migrate --env=testing` em local.
@@ -18,3 +11,5 @@ Este arquivo é uma cópia das diretrizes históricas para mudanças no backend:
 - Checklist de PR: descrição, passos para reproduzir, comandos de testes locais, screenshots quando aplicável.
 
 Nota: conteúdo consolidado e sincronizado com `CHECKLIST.md` e `AGENT_CONTEXT/DEVELOPMENT_STATE.md`.
+
+```
