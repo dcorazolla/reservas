@@ -1,0 +1,46 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--backdrop-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--color-surface);
+  /* Increase default modal width to give ReservationModal more room on large screens */
+  width: min(1100px, 96vw);
+  border-radius: 10px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  overflow: hidden;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Wide variant for large dialogs (ReservationModal uses this) */
+.modal.modal--wide {
+  width: min(1300px, 98vw);
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}

@@ -1,0 +1,33 @@
+{
+  "title": "Reservas",
+  "header": {
+    "open_menu": "Abrir menú",
+    "subtitle": "gestión de reservas",
+    "user_menu_button": "Menú de usuario",
+    "user_fallback": "Usuario",
+    "logout": "Salir"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "subtitle": "Inicia sesión en tu cuenta para continuar",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Entrar",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "create_account": "Crear cuenta",
+    "no_account": "¿No tienes una cuenta?",
+    "remember_me": "Recuérdame",
+    "social_google": "Entrar con Google",
+    "social_facebook": "Entrar con Facebook",
+    "social_google_notice": "Inicio con Google no habilitado en este prototipo",
+    "social_facebook_notice": "Inicio con Facebook no habilitado en este prototipo",
+    "or": "o",
+    "email_placeholder": "tu@correo.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "La funcionalidad de inicio de sesión no está implementada en este prototipo.",
+    "accessible_help": "Rellena el formulario para iniciar sesión",
+    "email_error": "Proporciona un correo electrónico válido",
+    "password_error": "La contraseña debe tener al menos 6 caracteres",
+    "error": "Error al autenticar"
+  }
+}

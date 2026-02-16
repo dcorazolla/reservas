@@ -1,0 +1,204 @@
+frontend/src/styles/variables.css:4:  --color-white: #ffffff;
+frontend/src/styles/variables.css:5:  --color-black: #111827;
+frontend/src/styles/variables.css:6:  --color-page-bg: #f9fafb;
+frontend/src/styles/variables.css:7:  --color-surface: #ffffff;
+frontend/src/styles/variables.css:8:  --color-muted: #6b7280; /* gray-500 */
+frontend/src/styles/variables.css:9:  --color-gray-50: #f9fafb;
+frontend/src/styles/variables.css:10:  --color-gray-100: #f3f4f6;
+frontend/src/styles/variables.css:11:  --color-gray-200: #e5e7eb;
+frontend/src/styles/variables.css:12:  --color-gray-300: #d1d5db;
+frontend/src/styles/variables.css:13:  --color-gray-400: #9ca3af;
+frontend/src/styles/variables.css:14:  --color-gray-600: #374151;
+frontend/src/styles/variables.css:17:  --color-primary-500: #2563eb; /* blue-600 */
+frontend/src/styles/variables.css:18:  --color-primary-400: #3b82f6; /* blue-500 */
+frontend/src/styles/variables.css:19:  --color-primary-600: #1d4ed8; /* blue-700 */
+frontend/src/styles/variables.css:22:  --color-success: #10b981; /* green-500 */
+frontend/src/styles/variables.css:23:  --color-danger: #ef4444; /* red-500 */
+frontend/src/styles/variables.css:24:  --color-warning: #f59e0b; /* amber-500 */
+frontend/src/styles/variables.css:25:  --color-info: #06b6d4; /* cyan-500 */
+frontend/src/styles/variables.css:26:  --color-violet: #8b5cf6; /* violet-500 */
+frontend/src/styles/variables.css:29:  --status-pre-reserva: #f59e0b;
+frontend/src/styles/variables.css:30:  --status-reservado: #3b82f6;
+frontend/src/styles/variables.css:31:  --status-confirmado: #10b981;
+frontend/src/styles/variables.css:32:  --status-no-show: #ef4444;
+frontend/src/styles/variables.css:33:  --status-cancelado: #6b7280;
+frontend/src/styles/variables.css:34:  --status-checked-in: #06b6d4;
+frontend/src/styles/variables.css:35:  --status-checked-out: #f3f4f6;
+frontend/src/styles/variables.css:36:  --status-blocked: #8b5cf6;
+frontend/src/styles/variables.css:39:  --text-on-dark: rgba(255,255,255,0.87);
+frontend/src/styles/variables.css:40:  --text-default: #213547;
+frontend/src/styles/variables.css:43:  --shadow-1: 0 1px 3px rgba(0,0,0,0.10);
+frontend/src/styles/variables.css:44:  --shadow-2: 0 4px 12px rgba(0,0,0,0.08);
+frontend/src/styles/variables.css:45:  --backdrop-strong: rgba(0,0,0,0.45);
+frontend/src/styles/variables.css:46:  --backdrop-medium: rgba(0,0,0,0.35);
+frontend/src/styles/variables.css:54:  --focus-ring: 0 0 0 3px rgba(59,130,246,0.15);
+frontend/src/styles/variables.css:59:    --text-default: #213547;
+frontend/src/styles/variables.css:60:    --text-on-dark: rgba(0,0,0,0.87);
+frontend/src/styles/variables.css:61:    --color-page-bg: #ffffff;
+frontend/src/styles/variables.css:62:    --color-surface: #ffffff;
+frontend/src/styles/variables.css:68:  --color-warning-100: #fff7ed;
+frontend/src/styles/variables.css:69:  --color-warning-300: #fbd38d;
+frontend/src/styles/variables.css:70:  --color-warning-700: #92400e;
+frontend/src/styles/variables.css:71:  --color-danger-100: #fee2e2;
+frontend/src/styles/variables.css:72:  --color-danger-700: #991b1b;
+frontend/src/styles/variables.css:77:  --color-white: #0b1220; /* swapped semantics: surface becomes dark */
+frontend/src/styles/variables.css:78:  --color-black: #ffffff;
+frontend/src/styles/variables.css:79:  --color-page-bg: #071025;
+frontend/src/styles/variables.css:80:  --color-surface: #0f1724;
+frontend/src/styles/variables.css:81:  --color-muted: #9ca3af;
+frontend/src/styles/variables.css:82:  --color-gray-50: #0b1220;
+frontend/src/styles/variables.css:83:  --color-gray-100: #0f1724;
+frontend/src/styles/variables.css:84:  --color-gray-200: #1f2937;
+frontend/src/styles/variables.css:85:  --color-gray-300: #374151;
+frontend/src/styles/variables.css:86:  --color-gray-400: #4b5563;
+frontend/src/styles/variables.css:87:  --color-gray-600: #cbd5e1;
+frontend/src/styles/variables.css:89:  --color-primary-500: #3b82f6;
+frontend/src/styles/variables.css:90:  --color-primary-400: #60a5fa;
+frontend/src/styles/variables.css:91:  --color-primary-600: #2563eb;
+frontend/src/styles/variables.css:93:  --color-success: #34d399;
+frontend/src/styles/variables.css:94:  --color-danger: #f87171;
+frontend/src/styles/variables.css:95:  --color-warning: #f59e0b;
+frontend/src/styles/variables.css:96:  --color-info: #06b6d4;
+frontend/src/styles/variables.css:97:  --color-violet: #a78bfa;
+frontend/src/styles/variables.css:99:  --status-pre-reserva: #f59e0b;
+frontend/src/styles/variables.css:100:  --status-reservado: #3b82f6;
+frontend/src/styles/variables.css:101:  --status-confirmado: #10b981;
+frontend/src/styles/variables.css:102:  --status-no-show: #ef4444;
+frontend/src/styles/variables.css:103:  --status-cancelado: #9ca3af;
+frontend/src/styles/variables.css:104:  --status-checked-in: #06b6d4;
+frontend/src/styles/variables.css:105:  --status-checked-out: #0f1724;
+frontend/src/styles/variables.css:106:  --status-blocked: #8b5cf6;
+frontend/src/styles/variables.css:108:  --text-on-dark: rgba(255,255,255,0.9);
+frontend/src/styles/variables.css:109:  --text-default: #e6eef9;
+frontend/src/styles/variables.css:111:  --backdrop-strong: rgba(0,0,0,0.6);
+frontend/src/assets/react.svg:1:<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+frontend/src/components/forms/PartnerForm.tsx:49:      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/forms/PartnerForm.tsx:70:        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+frontend/src/components/forms/PartnerForm.tsx:75:        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+frontend/src/components/forms/ReservationForm.tsx:137:          <button type="button" onClick={generateInvoice} disabled={loading} style={{ marginLeft: 8 }}>
+frontend/src/components/forms/RoomForm.tsx:65:      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/forms/RoomForm.tsx:137:        <div style={{ display: 'grid', gap: 16 }}>
+frontend/src/components/forms/PropertyForm.tsx:87:      <div style={{ marginBottom: 12 }}>
+frontend/src/components/forms/PropertyForm.tsx:89:        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/forms/PropertyForm.tsx:128:          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/forms/PropertyForm.tsx:170:          <h4 style={{ marginTop: 16 }}>Regras de Idade e Crianças</h4>
+frontend/src/components/forms/PropertyForm.tsx:171:          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/forms/ProductForm.tsx:74:      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/forms/ProductForm.tsx:98:      <div style={{ display: 'grid', gap: 8 }}>
+frontend/src/components/Skeleton/skeleton.css:3:  background: linear-gradient(90deg, rgba(236,236,236,1) 25%, rgba(245,245,245,1) 37%, rgba(236,236,236,1) 63%);
+frontend/src/components/Skeleton/Skeleton.tsx:21:  return <div className={`skeleton skeleton--${variant} ${className ?? ""}`} style={inlineStyle} aria-hidden="true" />;
+frontend/src/components/Layout/menu/menu.css:67:  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+frontend/src/components/Layout/menu/menu.css:99:  border-top: 1px solid #e5e7eb;
+frontend/src/components/Layout/menu/Menu.tsx:16:      <NavLink to="/reservas/list" end className="menu-link" style={{ marginLeft: 6 }}>
+frontend/src/components/Layout/header/Header.tsx:47:        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+frontend/src/components/Layout/header/Header.tsx:94:      style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid var(--color-gray-200)', background: 'transparent', cursor: 'pointer' }}
+frontend/src/components/Reservation/ReservationModal.tsx:281:          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+frontend/src/components/Reservation/ReservationModal.tsx:299:          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+frontend/src/components/Reservation/ReservationModal.tsx:354:            <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:363:            {initialLoading ? <Skeleton variant="text" style={{ width: 120, height: 32 }} /> : <input id="adults" type="number" min={1} value={adults} onChange={e => setAdults(+e.target.value)} />}
+frontend/src/components/Reservation/ReservationModal.tsx:367:            {initialLoading ? <Skeleton variant="text" style={{ width: 120, height: 32 }} /> : <input id="children" type="number" min={0} value={children} onChange={e => setChildren(+e.target.value)} />}
+frontend/src/components/Reservation/ReservationModal.tsx:371:            {initialLoading ? <Skeleton variant="text" style={{ width: 120, height: 32 }} /> : <input id="infants" type="number" min={0} value={infants} onChange={e => setInfants(+e.target.value)} />}
+frontend/src/components/Reservation/ReservationModal.tsx:378:            {initialLoading ? <Skeleton variant="text" style={{ width: 180, height: 32 }} /> : <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />}
+frontend/src/components/Reservation/ReservationModal.tsx:382:            {initialLoading ? <Skeleton variant="text" style={{ width: 180, height: 32 }} /> : <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />}
+frontend/src/components/Reservation/ReservationModal.tsx:390:              <Skeleton variant="text" style={{ width: '100%', height: 36 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:408:                <Skeleton variant="text" style={{ width: 140, height: 20 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:409:                <div style={{ marginTop: 8 }}>
+frontend/src/components/Reservation/ReservationModal.tsx:410:                  <Skeleton variant="rect" style={{ width: '100%', height: 48 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:415:                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+frontend/src/components/Reservation/ReservationModal.tsx:416:                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+frontend/src/components/Reservation/ReservationModal.tsx:419:                        <button type="button" className="secondary" onClick={() => setShowManualInput(true)} style={{ padding: '4px 8px' }}>Editar</button>
+frontend/src/components/Reservation/ReservationModal.tsx:423:                  <div style={{ minWidth: 140, textAlign: 'right' }}>
+frontend/src/components/Reservation/ReservationModal.tsx:426:                        <Skeleton variant="text" style={{ width: '100%', height: 32 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:428:                        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', alignItems: 'center' }}>
+frontend/src/components/Reservation/ReservationModal.tsx:439:                          }} placeholder={priceOverride ? String(priceOverride) : String(calcTotal)} style={{ width: 120 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:453:                      <div style={{ color: 'var(--color-muted)' }}>(Preço manual não definido)</div>
+frontend/src/components/Reservation/ReservationModal.tsx:459:                  <div style={{ marginTop: 8, color: 'var(--color-gray-600)', fontSize: 15 }}>
+frontend/src/components/Reservation/ReservationModal.tsx:476:            <Skeleton variant="text" style={{ width: '100%', height: 36 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:490:              <Skeleton variant="text" style={{ width: 100, height: 36 }} />
+frontend/src/components/Reservation/ReservationModal.tsx:491:              <Skeleton variant="text" style={{ width: 120, height: 36, marginLeft: 8 }} />
+frontend/src/components/Reservation/ReservationConfirmModal.tsx:50:        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/Reservation/ReservationConfirmModal.tsx:83:        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/components/Reservation/reservation-modal.css:53:  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+frontend/src/components/Popover/popover.css:17:  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+frontend/src/components/Popover/Popover.tsx:92:          style={{ left: pos.left, top: pos.top }}
+frontend/src/components/rates/RoomRatePeriodsEditor.tsx:67:      <div className="form" style={{ marginBottom: 8 }}>
+frontend/src/components/rates/RoomRatePeriodsEditor.tsx:68:        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 8 }}>
+frontend/src/components/rates/RoomRatePeriodsEditor.tsx:105:            <th style={{ width: 120 }}></th>
+frontend/src/components/rates/RoomRatesEditor.tsx:62:      <div className="form" style={{ marginBottom: 8 }}>
+frontend/src/components/rates/RoomRatesEditor.tsx:63:        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 8 }}>
+frontend/src/components/rates/RoomRatesEditor.tsx:85:            <th style={{ width: 120 }}></th>
+frontend/src/components/Common/ConfirmDialog.tsx:25:        <p style={{ marginTop: 8 }}>{message}</p>
+frontend/src/components/Common/TokenExpiryBanner.tsx:23:      style={{
+frontend/src/components/Common/TokenExpiryBanner.tsx:43:        style={{ padding: "4px 8px", cursor: "pointer" }}
+frontend/src/components/Common/TokenExpiryBanner.tsx:49:        style={{ padding: "4px 8px", cursor: "pointer", background: "transparent", border: "none", color: "var(--color-warning-700)" }}
+frontend/src/components/Common/ErrorDialog.tsx:30:  return <span className={`dialog-icon ${type}`} style={{ ...style, background: bg }}>{char}</span>;
+frontend/src/components/Common/ErrorDialog.tsx:43:        <p style={{ whiteSpace: 'pre-wrap', marginTop: 8 }}>{message}</p>
+frontend/src/components/Minibar/minibar.css:46:  background: rgba(0,0,0,0.3);
+frontend/src/components/Minibar/minibar.css:58:  box-shadow: 0 6px 18px rgba(2,6,23,0.08);
+frontend/src/components/Modal/modal.css:16:  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+frontend/src/components/Calendar/calendar.css:63:  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+frontend/src/components/Calendar/calendar.css:146:  box-shadow: inset 4px 0 0 0 rgba(59,130,246,0.12);
+frontend/src/components/Calendar/calendar.css:147:  border-left: 4px solid rgba(59,130,246,0.24);
+frontend/src/components/Calendar/calendar.css:148:  background-image: linear-gradient(90deg, rgba(59,130,246,0.02), transparent);
+frontend/src/components/Calendar/calendar.css:155:  background: rgba(255,255,255,0.9);
+frontend/src/components/Calendar/calendar.css:169:  background: rgba(59,130,246,0.06);
+frontend/src/components/Calendar/calendar.css:286:.status-btn.secondary { background: transparent; border: 1px solid rgba(0,0,0,0.08); }
+frontend/src/components/Calendar/calendar.css:298:  background: rgba(0,0,0,0.06);
+frontend/src/components/Calendar/calendar.css:334:  color: #ffffff;
+frontend/src/components/Calendar/calendar.css:341:  color: #ffffff;
+frontend/src/pages/ReservationsPage.tsx:35:      <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+frontend/src/pages/ReservationsPage.tsx:37:        <div style={{ marginLeft: 'auto' }}>
+frontend/src/pages/ReservationsPage.tsx:44:          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+frontend/src/pages/ReservationsPage.tsx:48:            <div style={{ marginLeft: 'auto' }}>{loading ? 'Carregando…' : `${items.length} reservas`}</div>
+frontend/src/pages/ReservationsPage.tsx:52:        {error && <div role="alert" style={{ color: 'red', marginTop: 8 }}>{error}</div>}
+frontend/src/pages/ReservationsPage.tsx:54:        {!loading && items.length === 0 && <p style={{ marginTop: 12 }}>Nenhuma reserva encontrada para o período selecionado.</p>}
+frontend/src/pages/ReservationsPage.tsx:57:          <table className="table" style={{ marginTop: 12 }}>
+frontend/src/pages/ReservationsPage.tsx:73:                  <td style={{ width: 24 }}><span style={{ display: 'inline-block', width: 14, height: 14, borderRadius: 3 }} className={`status-${r.status}`} title={r.status}></span></td>
+frontend/src/pages/ReservationsPage.tsx:81:                  <td style={{ whiteSpace: 'nowrap' }}>
+frontend/src/pages/ReservationsPage.tsx:94:                      <button style={{ marginLeft: 8 }} className="primary" onClick={async () => {
+frontend/src/pages/config/PropertiesPage.tsx:43:            <th style={{ width: 160 }}></th>
+frontend/src/pages/config/RoomCategoriesPage.tsx:46:            <th style={{ width: 120 }}></th>
+frontend/src/pages/config/PartnersPage.tsx:38:            <th style={{ width: 160 }}></th>
+frontend/src/pages/config/MinibarProductsPage.tsx:53:              <th style={{ width: 160 }}></th>
+frontend/src/pages/config/tarifario/BaseTariffsPage.tsx:44:        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+frontend/src/pages/config/tarifario/RoomTariffsPage.tsx:110:      <section className="card" style={{ marginBottom: 16 }}>
+frontend/src/pages/config/tarifario/RoomTariffsPage.tsx:133:              <th style={{ width: 160 }}></th>
+frontend/src/pages/config/tarifario/RoomTariffsPage.tsx:143:                    <td colSpan={4} style={{ color: 'var(--color-muted)' }}>Sem tarifa cadastrada</td>
+frontend/src/pages/config/tarifario/RoomTariffsPage.tsx:191:                <th style={{ width: 160 }}></th>
+frontend/src/pages/config/tarifario/PeriodTariffsPage.tsx:111:      <section className="card" style={{ marginBottom: 16 }}>
+frontend/src/pages/config/tarifario/PeriodTariffsPage.tsx:136:              <th style={{ width: 160 }}></th>
+frontend/src/pages/config/tarifario/PeriodTariffsPage.tsx:146:                    <td colSpan={6} style={{ color: 'var(--color-muted)' }}>Sem período cadastrado</td>
+frontend/src/pages/config/tarifario/PeriodTariffsPage.tsx:198:                <th style={{ width: 160 }}></th>
+frontend/src/pages/config/RoomBlocksSettingsPage.tsx:58:              <th style={{ width: 160 }}></th>
+frontend/src/pages/config/RatesPage.tsx:107:      <section className="card" style={{ marginBottom: 16 }}>
+frontend/src/pages/config/RatesPage.tsx:158:          <div style={{ display: 'grid', gap: 16, marginTop: 12 }}>
+frontend/src/pages/config/RatesPage.tsx:169:                    <th style={{ width: 120 }}></th>
+frontend/src/pages/config/RatesPage.tsx:198:                    <th style={{ width: 120 }}></th>
+frontend/src/pages/config/minibar-products-page.css:12:  border: 1px solid #e6e6e6;
+frontend/src/pages/config/minibar-products-page.css:22:  background: rgba(0,0,0,0.4);
+frontend/src/pages/config/minibar-products-page.css:36:.danger { background: #f44336; color: white; border: none; padding: 6px 10px; }
+frontend/src/pages/config/minibar-products-page.css:37:.secondary { background: #eee; border: none; padding: 6px 10px; }
+frontend/src/pages/config/RoomsPage.tsx:50:            <th style={{ width: 160 }}></th>
+frontend/src/pages/SearchPage.tsx:108:      <section className="card" style={{ marginBottom: 16 }}>
+frontend/src/pages/SearchPage.tsx:113:          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+frontend/src/pages/SearchPage.tsx:152:                <th style={{ textAlign: 'left' }}>Quarto</th>
+frontend/src/pages/SearchPage.tsx:153:                <th style={{ textAlign: 'left' }}>Capacidade</th>
+frontend/src/pages/SearchPage.tsx:154:                <th style={{ textAlign: 'left' }}>Origem Tarifário</th>
+frontend/src/pages/SearchPage.tsx:155:                <th style={{ textAlign: 'left' }}>Total</th>
+frontend/src/pages/SearchPage.tsx:156:                <th style={{ textAlign: 'left' }}>Diário</th>
+frontend/src/pages/SearchPage.tsx:157:                <th style={{ textAlign: 'left' }}>Resumo</th>
+frontend/src/pages/SearchPage.tsx:190:      <section className="card" style={{ marginTop: 16 }}>
+frontend/src/pages/SearchPage.tsx:195:          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 12 }}>
+frontend/src/app.css:79:  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+frontend/src/app.css:107:  color: #fff;
+frontend/src/app.css:157:  border: 1px solid rgba(248, 113, 113, 0.2);
+frontend/public/vite.svg:1:<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
+\n\n=== INLINE STYLE ATTRIBUTES (JSX) ===\n
+\n\nGit status (uncommitted):
+ M frontend/package.json
+ M frontend/src/api/minibar.ts
+ M frontend/src/components/Reservation/ReservationModal.tsx
+ M frontend/src/components/forms/index.ts
+ M frontend/src/pages/config/MinibarProductsPage.tsx
+?? frontend/design-system-audit/
+?? frontend/src/components/forms/ProductForm.tsx

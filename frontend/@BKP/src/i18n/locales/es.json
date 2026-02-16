@@ -1,0 +1,38 @@
+{
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "login": "Iniciar sesión",
+    "loggingIn": "Iniciando sesión...",
+    "forgotPassword": "Olvidé mi contraseña",
+    "or": "o",
+    "google": "Iniciar con Google",
+    "sso": "Iniciar con SSO",
+    "failed": "Error en el inicio de sesión"
+  }
+  ,
+  "layout": {
+    "subtitle": "Gestión de Reservas",
+    "logout": "Cerrar sesión"
+  },
+  "menu": {
+    "calendar": "Calendario",
+    "reservations": "Lista de Reservas",
+    "financial": "Financiero",
+    "invoices": "Facturas",
+    "settings": "Configuración",
+    "property": "Propiedad",
+    "partners": "Socios",
+    "minibar": "Minibar",
+    "products": "Productos (Minibar)",
+    "blocks": "Bloqueos de Habitación",
+    "rooms": "Habitaciones",
+    "roomCategories": "Categorías de Habitaciones",
+    "tariffs": "Tarifas",
+    "baseRates": "Tarifas base",
+    "roomRates": "Tarifas de Habitaciones",
+    "periodRates": "Tarifas por Período",
+    "search": "Buscador"
+  }
+}

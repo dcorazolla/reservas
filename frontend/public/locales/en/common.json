@@ -1,0 +1,33 @@
+{
+  "title": "Reservations",
+  "header": {
+    "open_menu": "Open menu",
+    "subtitle": "reservation management",
+    "user_menu_button": "User menu",
+    "user_fallback": "User",
+    "logout": "Logout"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Sign in to your account to continue",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "forgot": "Forgot password?",
+    "create_account": "Create account",
+    "no_account": "Don't have an account?",
+    "remember_me": "Remember me",
+    "social_google": "Sign in with Google",
+    "social_facebook": "Sign in with Facebook",
+    "social_google_notice": "Google sign-in is not enabled in this prototype",
+    "social_facebook_notice": "Facebook sign-in is not enabled in this prototype",
+    "or": "or",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "Login functionality is not implemented in this prototype.",
+    "accessible_help": "Fill the form to sign in",
+    "email_error": "Provide a valid email",
+    "password_error": "Password must be at least 6 characters",
+    "error": "Failed to authenticate"
+  }
+}

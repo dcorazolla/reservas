@@ -1,0 +1,38 @@
+{
+  "login": {
+    "title": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "login": "Sign in",
+    "loggingIn": "Signing in...",
+    "forgotPassword": "Forgot password",
+    "or": "or",
+    "google": "Sign in with Google",
+    "sso": "Sign in with SSO",
+    "failed": "Login failed"
+  }
+  ,
+  "layout": {
+    "subtitle": "Reservation Management",
+    "logout": "Logout"
+  },
+  "menu": {
+    "calendar": "Calendar",
+    "reservations": "Reservations List",
+    "financial": "Financial",
+    "invoices": "Invoices",
+    "settings": "Settings",
+    "property": "Property",
+    "partners": "Partners",
+    "minibar": "Minibar",
+    "products": "Products (Minibar)",
+    "blocks": "Room Blocks",
+    "rooms": "Rooms",
+    "roomCategories": "Room Categories",
+    "tariffs": "Tariffs",
+    "baseRates": "Base Rates",
+    "roomRates": "Room Rates",
+    "periodRates": "Period Rates",
+    "search": "Search"
+  }
+}
