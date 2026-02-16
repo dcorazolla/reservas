@@ -7,6 +7,34 @@
     "user_fallback": "Usuário",
     "logout": "Sair"
   },
+  "roomCategories": {
+    "form": {
+      "name": "Nome",
+      "description": "Descrição",
+      "rate_group_title": "Tarifários da categoria",
+      "show_rates": "Mostrar tarifas",
+      "hide_rates": "Ocultar tarifas",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "new": "Nova categoria",
+      "create": "Criar categoria",
+      "edit": "Editar categoria",
+      "error_required": "Campo obrigatório"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Remover"
+    },
+    "page": {
+      "title": "Categorias de quarto"
+    },
+    "confirm": {
+      "delete_title": "Confirmação de exclusão",
+      "delete_message_prefix": "Tem certeza que deseja remover",
+      "delete_message_suffix": "Esta ação não pode ser desfeita.",
+      "delete_confirm": "Remover"
+    }
+  },
   "menu": {
     "calendar": "Calendário",
     "reservations": "Reservas",
@@ -16,6 +44,7 @@
     "settings": {
       "label": "Configurações",
       "properties": "Propriedades",
+      "roomCategories": "Categorias de quarto",
       "rooms": "Quartos",
       "users": "Usuários",
       "partners": "Parceiros",
