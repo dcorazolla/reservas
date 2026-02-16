@@ -36,11 +36,9 @@ describe('EditRoomCategoryModal', () => {
     // wait for rate to be loaded and visible
     await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalledWith('rc-1'))
 
-    // open rates toggle
-    const toggle = screen.getByRole('button', { name: /Show rates|roomCategories.form.show_rates|/i, hidden: true }) || screen.getByText('Show rates', { exact: false })
-    if (toggle) {
-      await userEvent.click(toggle)
-    }
+    // open rates toggle (use exact i18n key string)
+    const toggle = screen.getByText('roomCategories.form.show_rates')
+    await userEvent.click(toggle)
 
     // change a rate input
     const inputs = screen.getAllByRole('spinbutton')
@@ -50,11 +48,125 @@ describe('EditRoomCategoryModal', () => {
     }
 
     // click save
-    const saveBtn = screen.getByText(/roomCategories.form.save|Save|Salvar|/i)
+    const saveBtn = screen.getByText('roomCategories.form.save')
     await userEvent.click(saveBtn)
 
     await waitFor(() => expect(onSave).toHaveBeenCalled())
     const payload = onSave.mock.calls[0][0]
     expect(payload).toHaveProperty('_rates')
+  })
+
+  it('shows loading state while fetching rates', async () => {
+    const svc = await import('@services/roomCategoryRates')
+    // simulate delayed response
+    svc.__mocks.listRates.mockImplementationOnce(() => new Promise((resolve) => setTimeout(() => resolve([{ id: 'rate-1', base_one_adult: 10 }]), 50)))
+
+    const onSave = vi.fn()
+    const onClose = vi.fn()
+
+    render(<EditRoomCategoryModal isOpen={true} category={{ id: 'rc-1', name: 'Cat A', description: 'Desc' }} onClose={onClose} onSave={onSave} />)
+
+    // while the rates promise is pending, the loading placeholder should be visible
+    expect(screen.getByText('Loading...')).toBeInTheDocument()
+
+    // after resolution, listRates should have been called
+    await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalled())
+  })
+
+  it('returns _rates with null fields when creating and no rates present', async () => {
+    const onSave = vi.fn()
+    const onClose = vi.fn()
+
+    render(<EditRoomCategoryModal isOpen={true} category={null} onClose={onClose} onSave={onSave} />)
+
+    // open rates group
+    const toggle = screen.getByText('roomCategories.form.show_rates')
+    await userEvent.click(toggle)
+
+    // save without entering numbers
+    const saveBtn = screen.getByText('roomCategories.form.save')
+    await userEvent.click(saveBtn)
+
+    await waitFor(() => expect(onSave).toHaveBeenCalled())
+    const payload = onSave.mock.calls[0][0]
+    expect(payload).toHaveProperty('_rates')
+    expect(payload._rates.base_one_adult).toBeNull()
+    expect(payload._rates.base_two_adults).toBeNull()
+    expect(payload._rates.additional_adult).toBeNull()
+    expect(payload._rates.child_price).toBeNull()
+  })
+
+  it('fills all numeric rate fields and saves with numeric values', async () => {
+    const svc = await import('@services/roomCategoryRates')
+    svc.__mocks.listRates.mockResolvedValueOnce([{ id: 'rate-1', base_one_adult: 1, base_two_adults: 2, additional_adult: 3, child_price: 4 }])
+
+    const onSave = vi.fn()
+    const onClose = vi.fn()
+
+    render(<EditRoomCategoryModal isOpen={true} category={{ id: 'rc-1', name: 'Cat A', description: 'Desc' }} onClose={onClose} onSave={onSave} />)
+
+    // wait for rates to be loaded
+    await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalled())
+
+    // open rates
+    const toggle = screen.getByText('roomCategories.form.show_rates')
+    await userEvent.click(toggle)
+
+    const numberInputs = screen.getAllByRole('spinbutton')
+    // fill each numeric input
+    for (let i = 0; i < numberInputs.length; i++) {
+      await userEvent.clear(numberInputs[i])
+      await userEvent.type(numberInputs[i], String((i + 1) * 10))
+    }
+
+    await userEvent.click(screen.getByText('roomCategories.form.save'))
+
+    await waitFor(() => expect(onSave).toHaveBeenCalled())
+    const payload = onSave.mock.calls[0][0]
+    expect(payload._rates.base_one_adult).toBe(10)
+    expect(payload._rates.base_two_adults).toBe(20)
+    expect(payload._rates.additional_adult).toBe(30)
+    expect(payload._rates.child_price).toBe(40)
+  })
+
+  it('handles listRates rejection gracefully and logs error', async () => {
+    const svc = await import('@services/roomCategoryRates')
+    svc.__mocks.listRates.mockRejectedValueOnce(new Error('list fail'))
+
+    const onSave = vi.fn()
+    const onClose = vi.fn()
+
+    const spy = vi.spyOn(console, 'error')
+
+    render(<EditRoomCategoryModal isOpen={true} category={{ id: 'rc-1', name: 'Cat A', description: 'Desc' }} onClose={onClose} onSave={onSave} />)
+
+    await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalled())
+    expect(spy).toHaveBeenCalled()
+    spy.mockRestore()
+  })
+
+  it('toggles rates display, edits description and cancels', async () => {
+    const onSave = vi.fn()
+    const onClose = vi.fn()
+
+    render(<EditRoomCategoryModal isOpen={true} category={null} onClose={onClose} onSave={onSave} />)
+
+    // toggle open rates, then close
+    const toggle = screen.getByText('roomCategories.form.show_rates')
+    await userEvent.click(toggle)
+    // now it should show hide label
+    expect(screen.getByText('roomCategories.form.hide_rates')).toBeInTheDocument()
+
+    // change description (second textbox is the textarea)
+    const textboxes = screen.getAllByRole('textbox')
+    const textarea = textboxes[1]
+    await userEvent.clear(textarea)
+    await userEvent.type(textarea, 'My desc')
+
+    // cancel should call onClose and not call onSave
+    const cancelBtn = screen.getByText('roomCategories.form.cancel')
+    await userEvent.click(cancelBtn)
+    expect(onClose).toHaveBeenCalled()
+    expect(onSave).not.toHaveBeenCalled()
   })
 })

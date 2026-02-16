@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 
+ 
 vi.mock('@chakra-ui/react', async () => {
   const React = await import('react')
   return {
@@ -17,7 +18,32 @@ vi.mock('@chakra-ui/react', async () => {
   }
 })
 
-vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (k: string) => k }) }))
+vi.mock('react-i18next', () => {
+  return {
+    useTranslation: () => ({
+      t: (k: string) => {
+        const map: Record<string, string> = {
+          'roomCategories.page.title': 'Categorias de quarto',
+          'roomCategories.form.new': 'Nova categoria',
+          'roomCategories.form.name': 'Nome',
+          'roomCategories.form.description': 'Descrição',
+          'roomCategories.form.save': 'Salvar',
+          'roomCategories.form.cancel': 'Cancelar',
+          'roomCategories.actions.edit': 'Editar',
+          'roomCategories.actions.delete': 'Remover',
+          'roomCategories.form.show_rates': 'Mostrar tarifas',
+          // confirm modal strings come from shared keys used across pages
+          'properties.confirm.delete_title': 'Confirmação de exclusão',
+          'properties.confirm.delete_confirm': 'Remover',
+          'confirm.cancel': 'Cancelar',
+          'properties.confirm.delete_message_prefix': 'Deseja remover ',
+          'properties.confirm.delete_message_suffix': '?',
+        }
+        return map[k] ?? k
+      },
+    }),
+  }
+})
 
 vi.mock('@services/roomCategories', () => {
   const listMock = vi.fn()
@@ -62,22 +88,22 @@ describe('RoomCategoriesPage flows', () => {
     expect(await screen.findByText('Category A')).toBeInTheDocument()
 
     // open create modal
-    userEvent.click(screen.getByText('roomCategories.form.new'))
+    await userEvent.click(await screen.findByText('Nova categoria'))
 
     // fill name
-    const nameInput = await screen.findByRole('textbox')
+    const nameInput = (await screen.findAllByRole('textbox'))[0]
     await userEvent.type(nameInput, 'New Cat')
 
     // open rates
-    const showRatesBtn = screen.getByText(/Show rates|roomCategories.form.show_rates|/i) || screen.getByRole('button', { name: /Show rates/i })
-    if (showRatesBtn) await userEvent.click(showRatesBtn)
+    const showRatesBtn = await screen.findByText('Mostrar tarifas')
+    await userEvent.click(showRatesBtn)
 
     // fill a rate numeric input
     const numberInputs = screen.getAllByRole('spinbutton')
     if (numberInputs.length) await userEvent.type(numberInputs[0], '12')
 
     // save
-    await userEvent.click(screen.getByText(/roomCategories.form.save|Save|/i))
+    await userEvent.click(await screen.findByText('Salvar'))
 
     await waitFor(async () => {
       const svcAssert = await import('@services/roomCategories')
@@ -93,15 +119,190 @@ describe('RoomCategoriesPage flows', () => {
 
     expect(await screen.findByText('Category A')).toBeInTheDocument()
 
-    await userEvent.click(screen.getAllByText('roomCategories.actions.delete')[0] || screen.getAllByText('Remove')[0])
+    await userEvent.click(screen.getAllByText('Remover')[0])
 
     // confirm by clicking the last Remove button
-    const removerButtons = await screen.findAllByText(/roomCategories.confirm.delete_confirm|Remover|Remove/i)
+    const removerButtons = await screen.findAllByText('Remover')
     await userEvent.click(removerButtons[removerButtons.length - 1])
 
     await waitFor(async () => {
       const svcAssert = await import('@services/roomCategories')
       expect(svcAssert.__mocks.deleteMock).toHaveBeenCalled()
     })
+  })
+
+  it('edits existing category and updates rates via updateRate', async () => {
+    const svcUpdate = await import('@services/roomCategories')
+    svcUpdate.__mocks.updateMock.mockResolvedValueOnce({ id: 'rc-1', name: 'Category A', description: 'Desc A' })
+
+    const rateSvc = await import('@services/roomCategoryRates')
+    rateSvc.__mocks.listRates.mockResolvedValueOnce([{ id: 'rate-1', base_one_adult: 10 }])
+    rateSvc.__mocks.updateRate.mockResolvedValueOnce({ id: 'rate-1', base_one_adult: 12 })
+
+    render(<RoomCategoriesPage />)
+
+    expect(await screen.findByText('Category A')).toBeInTheDocument()
+
+    // open edit modal for first item
+    await userEvent.click(screen.getAllByText('Editar')[0])
+
+    // wait modal and toggle rates
+    const toggle = await screen.findByText('Mostrar tarifas')
+    await userEvent.click(toggle)
+
+    // change numeric input
+    const numberInputs = await screen.findAllByRole('spinbutton')
+    if (numberInputs.length) {
+      await userEvent.clear(numberInputs[0])
+      await userEvent.type(numberInputs[0], '15')
+    }
+
+    // save
+    await userEvent.click(await screen.findByText('Salvar'))
+
+    await waitFor(async () => {
+      const svcAssert = await import('@services/roomCategories')
+      expect(svcAssert.__mocks.updateMock).toHaveBeenCalled()
+      const rsvc = await import('@services/roomCategoryRates')
+      expect(rsvc.__mocks.updateRate).toHaveBeenCalled()
+    })
+  })
+
+  it('shows loading skeleton while fetching list', async () => {
+    const svc = await import('@services/roomCategories')
+    // simulate delayed list resolution
+    svc.__mocks.listMock.mockImplementationOnce(
+      () => new Promise((resolve) => setTimeout(() => resolve([{ id: 'rc-1', name: 'Category A', description: 'Desc A' }]), 50))
+    )
+
+    render(<RoomCategoriesPage />)
+
+    // while loading, the category should not yet be in the document
+    expect(screen.queryByText('Category A')).not.toBeInTheDocument()
+
+    // after the list resolves, the item should appear
+    expect(await screen.findByText('Category A')).toBeInTheDocument()
+  })
+
+  it('shows error when list fails', async () => {
+    const svc = await import('@services/roomCategories')
+    svc.__mocks.listMock.mockImplementationOnce(() => Promise.reject(new Error('Boom')))
+
+    render(<RoomCategoriesPage />)
+
+    // after error, the error message should be shown
+    expect(await screen.findByText('Boom')).toBeInTheDocument()
+  })
+
+  it('edits existing category and creates rates when rate has no id', async () => {
+    const svcUpdate = await import('@services/roomCategories')
+    svcUpdate.__mocks.updateMock.mockResolvedValueOnce({ id: 'rc-1', name: 'Category A', description: 'Desc A' })
+
+    const rateSvc = await import('@services/roomCategoryRates')
+    // listRates returns a rate without id to force createRate path
+    rateSvc.__mocks.listRates.mockResolvedValueOnce([{ base_one_adult: 10 }])
+    rateSvc.__mocks.createRate.mockResolvedValueOnce({ id: 'rate-new', base_one_adult: 10 })
+
+    render(<RoomCategoriesPage />)
+
+    expect(await screen.findByText('Category A')).toBeInTheDocument()
+
+    // open edit modal for first item
+    await userEvent.click(screen.getAllByText('Editar')[0])
+
+    const toggle = await screen.findByText('Mostrar tarifas')
+    await userEvent.click(toggle)
+
+    await userEvent.click(await screen.findByText('Salvar'))
+
+    await waitFor(async () => {
+      const svcAssert = await import('@services/roomCategories')
+      expect(svcAssert.__mocks.updateMock).toHaveBeenCalled()
+      const rsvc = await import('@services/roomCategoryRates')
+      expect(rsvc.__mocks.createRate).toHaveBeenCalled()
+    })
+  })
+
+  it('creates new category but ignores rate creation errors', async () => {
+    const svcCreate = await import('@services/roomCategories')
+    svcCreate.__mocks.createMock.mockResolvedValueOnce({ id: 'rc-new', name: 'New Cat', description: 'Desc' })
+
+    const rateSvc = await import('@services/roomCategoryRates')
+    rateSvc.__mocks.createRate.mockRejectedValueOnce(new Error('rate fail'))
+
+    render(<RoomCategoriesPage />)
+
+    expect(await screen.findByText('Category A')).toBeInTheDocument()
+
+    // open create modal
+    await userEvent.click(await screen.findByText('Nova categoria'))
+
+    const nameInput = (await screen.findAllByRole('textbox'))[0]
+    await userEvent.type(nameInput, 'New Cat')
+
+    await userEvent.click(await screen.findByText('Mostrar tarifas'))
+    const numberInputs = screen.getAllByRole('spinbutton')
+    if (numberInputs.length) await userEvent.type(numberInputs[0], '12')
+
+    await userEvent.click(await screen.findByText('Salvar'))
+
+    await waitFor(async () => {
+      const svcAssert = await import('@services/roomCategories')
+      expect(svcAssert.__mocks.createMock).toHaveBeenCalled()
+    })
+  })
+
+  it('updates category but ignores rate update errors', async () => {
+    const svcUpdate = await import('@services/roomCategories')
+    svcUpdate.__mocks.updateMock.mockResolvedValueOnce({ id: 'rc-1', name: 'Category A', description: 'Desc A' })
+
+    const rateSvc = await import('@services/roomCategoryRates')
+    rateSvc.__mocks.listRates.mockResolvedValueOnce([{ id: 'rate-1', base_one_adult: 10 }])
+    rateSvc.__mocks.updateRate.mockRejectedValueOnce(new Error('update fail'))
+
+    render(<RoomCategoriesPage />)
+
+    expect(await screen.findByText('Category A')).toBeInTheDocument()
+
+    await userEvent.click(screen.getAllByText('Editar')[0])
+    const toggle = await screen.findByText('Mostrar tarifas')
+    await userEvent.click(toggle)
+    await userEvent.click(await screen.findByText('Salvar'))
+
+    await waitFor(async () => {
+      const svcAssert = await import('@services/roomCategories')
+      expect(svcAssert.__mocks.updateMock).toHaveBeenCalled()
+    })
+  })
+
+  it('shows error when save fails', async () => {
+    const svcCreate = await import('@services/roomCategories')
+    svcCreate.__mocks.createMock.mockRejectedValueOnce(new Error('save fail'))
+
+    render(<RoomCategoriesPage />)
+
+    // open create modal
+    await userEvent.click(await screen.findByText('Nova categoria'))
+    const nameInput = (await screen.findAllByRole('textbox'))[0]
+    await userEvent.type(nameInput, 'New Cat')
+    await userEvent.click(await screen.findByText('Salvar'))
+
+    // error should be displayed
+    expect(await screen.findByText('save fail')).toBeInTheDocument()
+  })
+
+  it('shows error when delete fails', async () => {
+    const svcDelete = await import('@services/roomCategories')
+    svcDelete.__mocks.deleteMock.mockRejectedValueOnce(new Error('delete fail'))
+
+    render(<RoomCategoriesPage />)
+
+    expect(await screen.findByText('Category A')).toBeInTheDocument()
+    await userEvent.click(screen.getAllByText('Remover')[0])
+    // click confirm in modal
+    const removerButtons = await screen.findAllByText('Remover')
+    await userEvent.click(removerButtons[removerButtons.length - 1])
+
+    expect(await screen.findByText('delete fail')).toBeInTheDocument()
   })
 })
