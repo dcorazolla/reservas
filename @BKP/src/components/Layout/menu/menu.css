@@ -1,0 +1,295 @@
+.app-menu {
+  --app-menu-height: 48px;
+  height: var(--app-menu-height);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-gray-200);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 24px;
+  position: sticky;
+  top: var(--app-header-height, 64px); /* below sticky header */
+  /* raise z-index so submenu dropdowns can overlay other sticky content (calendar headers) */
+  z-index: 80;
+  /* no animation: menu should compress/expand immediately together with header */
+}
+
+/* PRIMEIRO NÍVEL — TODOS IGUAIS */
+.menu-link {
+  height: var(--app-menu-height);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--color-gray-600);
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu-link:hover {
+  color: var(--color-black);
+}
+
+/* ITEM COM SUBMENU */
+.menu-entry {
+  position: relative;
+  height: var(--app-menu-height);
+  display: flex;
+  align-items: center;
+}
+
+/* When header is small, shrink the menu slightly to match the compact header */
+.app-header.header--small + .app-menu {
+  --app-menu-height: 36px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.app-header.header--small + .app-menu .menu-link { font-size: 13px; }
+
+/* LINK ATIVO */
+.menu-link.active {
+  font-weight: 600;
+  color: var(--color-black);
+  border-bottom: 2px solid var(--color-black);
+}
+
+/* SUBMENU */
+.submenu {
+  position: absolute;
+  top: var(--app-menu-height, 48px);
+  left: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 6px;
+  min-width: 160px;
+  padding: 8px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 50;
+}
+
+/* Nested submenu (second level) should float to the right of its parent */
+.submenu .submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 8px;
+  min-width: 180px;
+}
+
+/* entry inside a submenu that can open a nested submenu to its right */
+.submenu .submenu-entry {
+  position: relative;
+}
+
+.nested-submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 8px;
+  min-width: 180px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-gray-200);
+  border-radius: 6px;
+  padding: 8px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 60;
+}
+
+/* Make the submenu row that opens nested menus look like a menu item */
+.submenu .submenu-entry .submenu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: var(--color-gray-600);
+}
+
+.submenu .submenu-entry .submenu-link:focus {
+  outline: 2px solid var(--color-gray-300);
+  outline-offset: 2px;
+}
+
+/* ensure nested links inside nested-submenu have same padding */
+.nested-submenu a {
+  display: block;
+  padding: 8px 16px;
+}
+
+/* Mobile: make submenus stack and become touch-friendly blocks */
+@media (max-width: 640px) {
+  .app-menu {
+    overflow: visible;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .menu-link {
+    padding: 8px 12px;
+  }
+
+  .submenu {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    top: calc(var(--app-header-height,64px) + var(--app-menu-height,48px) + 8px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    border-radius: 8px;
+    border: 1px solid var(--color-gray-200);
+    padding: 8px 0;
+    display: block;
+    background: var(--color-surface);
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .submenu a,
+  .submenu span,
+  .submenu .submenu-link {
+    padding: 12px 16px;
+    display: block;
+    white-space: normal;
+  }
+
+  .nested-submenu {
+    position: static;
+    margin-left: 0;
+    box-shadow: none;
+    border: none;
+    padding-left: 8px;
+    max-height: none;
+  }
+}
+
+/* mobile drawer styles */
+.mobile-hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .mobile-hamburger { display: inline-flex; margin-right: 8px; }
+  .app-menu.horizontal .menu-link, .app-menu.horizontal .menu-entry { display: none; }
+}
+
+.mobile-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 120;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mobile-drawer {
+  width: 320px;
+  max-width: 100%;
+  background: var(--color-surface);
+  height: 100%;
+  box-shadow: -8px 0 32px rgba(0,0,0,0.16);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-drawer-header { display:flex; justify-content: flex-end; }
+.mobile-drawer-close { background: transparent; border: none; font-size: 20px; cursor: pointer; }
+.mobile-drawer-body { overflow-y: auto; padding: 8px 4px; }
+.mobile-drawer-body { -webkit-overflow-scrolling: touch; }
+
+.drawer-section-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.mobile-drawer-sublist {
+  display: none;
+  padding-left: 8px;
+}
+
+.mobile-drawer-sublist[aria-hidden="false"] {
+  display: block;
+}
+
+.mobile-drawer-sublist a {
+  display: block;
+  padding: 10px 8px;
+  color: var(--color-gray-600);
+  text-decoration: none;
+}
+
+.drawer-section-toggle:focus {
+  outline: 2px solid var(--color-gray-300);
+  outline-offset: 2px;
+}
+.mobile-drawer-body nav a { display:block; padding: 12px 8px; color: var(--color-gray-600); text-decoration:none; }
+.mobile-drawer-section { margin-top: 8px; border-top: 1px solid var(--color-gray-100); padding-top: 8px; }
+.mobile-drawer-section-title { font-weight:600; padding: 8px; }
+.mobile-drawer-subsection { padding-left: 8px; }
+.mobile-drawer-subsection-title { font-weight:600; padding: 6px 8px; }
+
+.submenu a,
+.submenu span {
+  display: block;
+  padding: 8px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.submenu a {
+  color: var(--color-gray-600);
+  text-decoration: none;
+}
+
+.submenu a:hover {
+  background: var(--color-gray-100);
+  color: var(--color-black);
+}
+
+.submenu-group {
+  border-top: 1px solid #e5e7eb;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.submenu-title {
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.menu-disabled {
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+.with-chevron {
+  gap: 6px;
+}
+
+.chevron {
+  font-size: 10px;
+  margin-top: 2px;
+  transition: transform 0.15s ease;
+}
+
+/* ROTACIONA QUANDO ABERTO */
+.with-chevron.open .chevron {
+  transform: rotate(180deg);
+}
+
+/* focus style for button-like menu links (keyboard users) */
+.menu-link[role="button"]:focus {
+  outline: 2px solid var(--color-gray-300);
+  outline-offset: 2px;
+}

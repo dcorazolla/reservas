@@ -1,0 +1,78 @@
+@import './styles/variables.css';
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--text-on-dark);
+  background-color: var(--color-black);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--color-primary-400);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--color-primary-600);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--color-primary-500);
+  color: var(--color-white);
+}
+
+button.secondary {
+  background: var(--color-gray-100);
+  color: var(--color-black);
+}
+
+button.danger {
+  background: var(--color-danger);
+  color: var(--color-white);
+}
+
+button.link {
+  background: none;
+  color: var(--color-primary-500);
+  padding: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: var(--text-default);
+    background-color: var(--color-page-bg);
+  }
+  a:hover {
+    color: var(--color-primary-600);
+  }
+  button {
+    background-color: var(--color-gray-50);
+  }
+}

@@ -1,0 +1,349 @@
+.calendar-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Área que envolve o header + calendário; controla o scroll vertical do calendário */
+.calendar-area {
+  /* increase header offset to accommodate wrapping controls and avoid .thead overlapping first rows */
+  --calendar-header-height: 80px;
+  display: block;
+}
+
+.calendar-scroll-wrapper {
+  /* No longer a separate scroll container — let the whole page scroll.
+     This makes the calendar behave like other pages where the browser
+     scrollbar scrolls header, menu and page content together. */
+  max-height: none;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .calendar-wrapper { overflow-x: auto; }
+  .calendar-table { width: 100%; }
+  .room-col { width: 90px; }
+  .day-header .day-label { font-size: 0.9em; }
+  .day-header .month-label { font-size: 0.6em; }
+  .reservation-cell, .room-block-cell { font-size: 11px; }
+}
+
+.calendar-table {
+  width: 95%;
+  margin: 0 auto;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+  border: 1px solid var(--color-gray-200);
+  height: 40px;
+  padding: 0;
+}
+
+/* header table that lives inside the page header area (not sticky) */
+/* removed separate calendar-header-table — header renders inside the main table */
+
+/* Header / controles do calendário fixos no topo da área rolável */
+.page-header {
+  /* match other pages: header scrolls with the page (not sticky) */
+  position: static;
+  background: var(--color-surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 12px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--color-gray-200);
+  height: var(--calendar-header-height);
+}
+
+.page-header {
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+
+/* COLUNA QUARTO */
+.room-col {
+  width: 120px;
+  background: var(--color-gray-50);
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  text-align: left;
+  padding: 0 8px;
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .room-col { position: static; width: auto; }
+}
+
+/* HEADER DIA */
+.day-header {
+  text-align: center;
+  background: var(--color-gray-100);
+  font-weight: 600;
+  border-left: none;
+  border-right: none;
+}
+
+/* torna a linha dos dias sticky logo abaixo do page-header */
+.calendar-table thead {
+  /* day header row should scroll with the page as well */
+  position: static;
+  z-index: 1;
+  background: var(--color-gray-100);
+}
+
+.calendar-table thead th {
+  background: var(--color-gray-100);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.calendar-table tbody {
+  position: relative;
+  z-index: 1;
+}
+
+/* garante que a coluna do quarto (esquerda) continue sticky à esquerda */
+.calendar-table thead .room-col,
+.calendar-table tbody .room-col {
+  position: sticky;
+  left: 0;
+  background: var(--color-gray-50);
+  box-sizing: border-box;
+}
+
+/* o room-col dentro do thead deve sobrepor a linha dos dias quando necessário */
+
+/* o room-col no tbody fica abaixo do header/thead em z-order */
+.calendar-table tbody .room-col { z-index: 7; }
+
+.day-header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.day-header .month-label {
+  font-size: 0.65em;
+  color: var(--color-muted);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.day-header .day-label {
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Partner indicator inside reservation cell */
+.reservation-cell.has-partner {
+  position: relative;
+  box-shadow: inset 4px 0 0 0 rgba(59,130,246,0.12);
+  border-left: 4px solid rgba(59,130,246,0.24);
+  background-image: linear-gradient(90deg, rgba(59,130,246,0.02), transparent);
+}
+
+.partner-badge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  padding: 2px 4px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* MEIA CÉLULA */
+.half-cell {
+  width: 30px;
+  cursor: pointer;
+}
+
+.half-cell:hover {
+  background: rgba(59,130,246,0.06);
+}
+
+.half-cell.checkout {
+  border-right: none;
+}
+
+.half-cell.checkin {
+  border-left: none;
+}
+
+/* RESERVA */
+.reservation-cell {
+  color: var(--color-white);
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+  padding: 0 5px !important;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* STATUS */
+.status-pre-reserva {
+  background: var(--status-pre-reserva);
+  color: var(--color-white);
+}
+
+/* Reserved */
+.status-reservado,
+.status-reserved {
+  background: var(--status-reservado);
+  color: var(--color-white);
+}
+
+/* Confirmed */
+.status-confirmed,
+.status-confirmado,
+.status-confimado {
+  background: var(--status-confirmado);
+  color: var(--color-white);
+}
+
+/* No-show / guest did not arrive */
+.status-no_show,
+.status-no-show,
+.status-noshow {
+  background: var(--status-no-show);
+  color: var(--color-white);
+}
+
+/* Cancelled (less prominent) */
+.status-cancelado,
+.status-canceled {
+  background: var(--status-cancelado);
+  color: var(--color-white);
+}
+
+/* Checked in: guest has arrived (in-house) */
+.status-checked_in,
+.status-checked-in {
+  background: var(--status-checked-in);
+  color: var(--color-white);
+}
+
+/* Checked out: guest has left; show light background and dark text */
+.status-checked_out,
+.status-checked-out {
+  background: var(--status-checked-out);
+  color: var(--color-black);
+  border: 1px solid var(--color-gray-200);
+}
+
+/* Encerrado - final state after finalize action (visual parity with checked_out) */
+.status-encerrado {
+  background: var(--status-checked-out);
+  color: var(--color-black);
+  border: 1px solid var(--color-gray-200);
+}
+
+/* Blocked / maintenance */
+.status-blocked,
+.status-block {
+  background: var(--status-blocked);
+  color: var(--color-white);
+}
+
+/* Reusable pill for modal / labels */
+.status-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.modal-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Buttons that take the status color */
+.status-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.status-btn.secondary { background: transparent; border: 1px solid rgba(0,0,0,0.08); }
+
+
+.guarantee-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1;
+  vertical-align: middle;
+  margin-left: 8px;
+  background: rgba(0,0,0,0.06);
+  color: var(--color-black);
+}
+
+/* Room block visuals */
+.room-block-cell {
+  /* kept for backward compatibility; prefer .room-block */
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.room-block-cell {
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.room-block {
+  background: transparent;
+  color: var(--color-white);
+  font-size: 12px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.room-block .block-label {
+  font-size: 14px;
+  color: #ffffff;
+  margin-right: 6px;
+}
+
+.room-block .block-reason {
+  font-size: 12px;
+  opacity: 0.95;
+  color: #ffffff;
+}
+
+/* Reservation info layout inside reservation cell */
+.reservation-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

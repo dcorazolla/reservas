@@ -1,0 +1,112 @@
+/* Global design tokens: colors and common values */
+:root {
+  /* Palette */
+  --color-white: #ffffff;
+  --color-black: #111827;
+  --color-page-bg: #f9fafb;
+  --color-surface: #ffffff;
+  --color-muted: #6b7280; /* gray-500 */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-600: #374151;
+
+  /* Brand / primary */
+  --color-primary-500: #2563eb; /* blue-600 */
+  --color-primary-400: #3b82f6; /* blue-500 */
+  --color-primary-600: #1d4ed8; /* blue-700 */
+
+  /* Semantic colors */
+  --color-success: #10b981; /* green-500 */
+  --color-danger: #ef4444; /* red-500 */
+  --color-warning: #f59e0b; /* amber-500 */
+  --color-info: #06b6d4; /* cyan-500 */
+  --color-violet: #8b5cf6; /* violet-500 */
+
+  /* Status-specific (calendar) */
+  --status-pre-reserva: #f59e0b;
+  --status-reservado: #3b82f6;
+  --status-confirmado: #10b981;
+  --status-no-show: #ef4444;
+  --status-cancelado: #6b7280;
+  --status-checked-in: #06b6d4;
+  --status-checked-out: #f3f4f6;
+  --status-blocked: #8b5cf6;
+
+  /* Text colors */
+  --text-on-dark: rgba(255,255,255,0.87);
+  --text-default: #213547;
+
+  /* Shadows / overlays */
+  --shadow-1: 0 1px 3px rgba(0,0,0,0.10);
+  --shadow-2: 0 4px 12px rgba(0,0,0,0.08);
+  --backdrop-strong: rgba(0,0,0,0.45);
+  --backdrop-medium: rgba(0,0,0,0.35);
+
+  /* Common spacing / radii */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Misc */
+  --focus-ring: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-default: #213547;
+    --text-on-dark: rgba(0,0,0,0.87);
+    --color-page-bg: #ffffff;
+    --color-surface: #ffffff;
+  }
+}
+
+/* Additional tokens for alerts and lighter shades */
+:root {
+  --color-warning-100: #fff7ed;
+  --color-warning-300: #fbd38d;
+  --color-warning-700: #92400e;
+  --color-danger-100: #fee2e2;
+  --color-danger-700: #991b1b;
+}
+
+/* Theme switch: dark theme can be toggled by adding `.theme-dark` to the <html> element */
+.theme-dark {
+  --color-white: #0b1220; /* swapped semantics: surface becomes dark */
+  --color-black: #ffffff;
+  --color-page-bg: #071025;
+  --color-surface: #0f1724;
+  --color-muted: #9ca3af;
+  --color-gray-50: #0b1220;
+  --color-gray-100: #0f1724;
+  --color-gray-200: #1f2937;
+  --color-gray-300: #374151;
+  --color-gray-400: #4b5563;
+  --color-gray-600: #cbd5e1;
+
+  --color-primary-500: #3b82f6;
+  --color-primary-400: #60a5fa;
+  --color-primary-600: #2563eb;
+
+  --color-success: #34d399;
+  --color-danger: #f87171;
+  --color-warning: #f59e0b;
+  --color-info: #06b6d4;
+  --color-violet: #a78bfa;
+
+  --status-pre-reserva: #f59e0b;
+  --status-reservado: #3b82f6;
+  --status-confirmado: #10b981;
+  --status-no-show: #ef4444;
+  --status-cancelado: #9ca3af;
+  --status-checked-in: #06b6d4;
+  --status-checked-out: #0f1724;
+  --status-blocked: #8b5cf6;
+
+  --text-on-dark: rgba(255,255,255,0.9);
+  --text-default: #e6eef9;
+
+  --backdrop-strong: rgba(0,0,0,0.6);
+}
