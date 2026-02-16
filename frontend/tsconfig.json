@@ -5,7 +5,9 @@
       "@pages/*": ["pages/*"],
       "@components/*": ["components/*"],
       "@services/*": ["services/*"],
-      "@design/*": ["design-system/*"]
+      "@design/*": ["design-system/*"],
+      "@utils/*": ["utils/*"],
+      "@contexts/*": ["contexts/*"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,

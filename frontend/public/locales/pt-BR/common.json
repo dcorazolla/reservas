@@ -1,10 +1,33 @@
 {
   "title": "Reservas",
+  "header": {
+    "open_menu": "Abrir menu",
+    "subtitle": "gestão de reservas",
+    "user_menu_button": "Menu do usuário",
+    "user_fallback": "Usuário",
+    "logout": "Sair"
+  },
   "login": {
     "title": "Entrar",
+    "subtitle": "Entre na sua conta para continuar",
     "email": "E-mail",
     "password": "Senha",
     "submit": "Entrar",
+    "forgot": "Esqueceu a senha?",
+    "create_account": "Criar conta",
+    "no_account": "Não tem uma conta?",
+    "remember_me": "Lembrar-me",
+    "social_google": "Entrar com Google",
+    "social_facebook": "Entrar com Facebook",
+    "social_google_notice": "Login com Google não habilitado neste protótipo",
+    "social_facebook_notice": "Login com Facebook não habilitado neste protótipo",
+    "or": "ou",
+    "email_placeholder": "seu@email.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "Funcionalidade de login não implementada neste protótipo.",
+    "accessible_help": "Preencha o formulário para entrar",
+    "email_error": "Informe um e-mail válido",
+    "password_error": "Senha deve ter ao menos 6 caracteres",
     "error": "Falha ao autenticar"
   }
 }

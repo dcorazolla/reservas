@@ -32,6 +32,9 @@
     "recharts": "^3.7.0",
     "zod": "^4.3.6"
   },
+  "optionalDependencies": {
+    "flag-icons": "^6.7.0"
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

@@ -10,6 +10,8 @@ export default defineConfig({
       { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
       { find: '@services', replacement: path.resolve(__dirname, 'src/services') },
       { find: '@design', replacement: path.resolve(__dirname, 'src/design-system') },
+      { find: '@utils', replacement: path.resolve(__dirname, 'src/utils') },
+      { find: '@contexts', replacement: path.resolve(__dirname, 'src/contexts') },
     ],
   },
 })

@@ -1,10 +1,33 @@
 {
   "title": "Réservations",
+  "header": {
+    "open_menu": "Ouvrir le menu",
+    "subtitle": "gestion des réservations",
+    "user_menu_button": "Menu utilisateur",
+    "user_fallback": "Utilisateur",
+    "logout": "Se déconnecter"
+  },
   "login": {
     "title": "Se connecter",
+    "subtitle": "Connectez-vous à votre compte pour continuer",
     "email": "E-mail",
     "password": "Mot de passe",
     "submit": "Se connecter",
+    "forgot": "Mot de passe oublié ?",
+    "create_account": "Créer un compte",
+    "no_account": "Vous n'avez pas de compte ?",
+    "remember_me": "Se souvenir de moi",
+    "social_google": "Se connecter avec Google",
+    "social_facebook": "Se connecter avec Facebook",
+    "social_google_notice": "Connexion Google non activée dans ce prototype",
+    "social_facebook_notice": "Connexion Facebook non activée dans ce prototype",
+    "or": "ou",
+    "email_placeholder": "vous@exemple.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "La fonctionnalité de connexion n'est pas implémentée dans ce prototype.",
+    "accessible_help": "Remplissez le formulaire pour vous connecter",
+    "email_error": "Fournissez un e-mail valide",
+    "password_error": "Le mot de passe doit comporter au moins 6 caractères",
     "error": "Échec de l'authentification"
   }
 }

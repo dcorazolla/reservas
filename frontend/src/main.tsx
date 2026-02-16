@@ -2,7 +2,8 @@ import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
 import './i18n'
-import AppChakraProvider from './design-system/ChakraProvider'
+import 'flag-icons/css/flag-icons.min.css'
+import AppChakraProvider from '@design/ChakraProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient()

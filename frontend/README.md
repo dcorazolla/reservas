@@ -15,6 +15,10 @@ Decisões e stack
 - Data fetching / cache: `@tanstack/react-query` (para isLoading, cache e gerenciamento de fetch)
 - HTTP client: `axios` (encapsulado em `src/services/api` quando necessário)
 - Internacionalização: `react-i18next`, `i18next` com suporte a `pt-BR`, `es`, `fr`, `en`. Traduções armazenadas em `public/locales/{pt-BR,es,fr,en}`.
+- Flags (ícones): escolhemos `flag-icons` para exibir bandeiras no `LanguageSelector`.
+	- Por que: é uma dependência leve, evita manter SVGs manualmente e fornece classes CSS simples (`fi fi-xx`).
+	- Instalação: `npm install flag-icons` (já adicionada como dependência opcional no `package.json`).
+	- Uso: importamos `flag-icons/css/flag-icons.min.css` em `src/main.tsx` e mapeamos locales para códigos de país (`pt-BR -> br`, `en -> us`, `es -> es`, `fr -> fr`).
 - Testes: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `msw` para mocks HTTP em testes.
 - Lint & format: `eslint` + `eslint-plugin-react` + `eslint-plugin-jsx-a11y` + `prettier`.
 - Acessibilidade: integrar `eslint-plugin-jsx-a11y`, usar `axe` em testes críticos.
@@ -91,7 +95,55 @@ Próximos passos sugeridos
 - Implementar `src/i18n.ts` e criar os arquivos de tradução iniciais.
 - Criar uma `LoginPage` de exemplo com skeleton e testes colocated.
 
+Autenticação (JWT) e rotas protegidas
+
+- Implementação atual: adicionamos suporte a autenticação JWT no frontend.
+	- `src/services/api.ts` cria uma instância axios e fornece `setAuthToken`.
+	- `src/services/auth.ts` contém `loginRequest`, `saveToken`, `removeToken` e `loadToken` helpers.
+	- `src/contexts/AuthContext.tsx` expõe `AuthProvider` e `useAuth()` com `login()` e `logout()`.
+	- `src/AppRoutes.tsx` protege a rota raiz (`/`) com `RequireAuth` e mantém `/login` pública.
+	- `src/pages/Home.tsx` é o template básico exibido após login (protegido).
+
+- Como usar localmente:
+	1. Garanta o backend rodando (você mencionou que o `docker compose up` já está ativo).
+	2. Ajuste a variável de ambiente `VITE_API_BASE_URL` se o backend não estiver no mesmo host/porta (ex.: `export VITE_API_BASE_URL=http://localhost:8000`).
+	3. Inicie o frontend: `npm run dev` e acesse `/login`.
+	4. Ao autenticar com sucesso, o token JWT será salvo em `localStorage` e enviado automaticamente em `Authorization: Bearer <token>` nas requisições Axios.
+
+Observações e próximos passos
+
+- O endpoint de login usado pelo frontend é `POST /api/auth/login` e espera um JSON `{ email, password }` retornando `{ accessToken }`.
+- Ideal: adicionar um hook `useCurrentUser` que decodifica o JWT (exp, sub) e busca dados do usuário, além de renovar tokens quando próximo do vencimento.
+- Segurança: estamos armazenando o token em `localStorage` por simplicidade. Para maior segurança, considere cookies HttpOnly com renovação no backend.
+
+
 Se quiser, eu executo os comandos `npm install` para adicionar as dependências e depois rodo `npm run build` (não rodarei `npm run dev`). Diga para eu prosseguir quando quiser que eu execute os installs e build agora.
+
+## Progresso, decisões e descobertas (resumo)
+
+Este projeto passou por várias iterações enquanto estabilizamos o frontend. Abaixo resumo as decisões importantes, avanços e problemas encontrados até o momento.
+
+- **Autenticação (JWT)**: Implementamos `AuthContext` em `src/contexts/AuthContext.tsx` com `login(email,password,remember?)`, `logout()` e sincronização entre abas via `storage` event. Tokens podem ser salvos em `localStorage` (remember) ou `sessionStorage` (sessão).
+- **Auto-logout e renovação**: Decodificamos o `exp` do JWT (`src/utils/jwt.ts`) e agendamos logout automático no fim da validade. Também adicionamos um interceptor axios que faz logout em respostas 401.
+- **Layout e componentes**: Criado `Header`, `Sidebar`, `Footer` e `PageShell` (componentes responsivos e acessíveis). O `Header` agora exibe o `property_name`, subtítulo, um relógio (`DateTimeClock`), seletor de idioma e menu de usuário com logout.
+- **Internacionalização**: `react-i18next` configurado e locais em `public/locales/{pt-BR,en,es,fr}`. Adicionamos chaves `header.*` para textos do cabeçalho.
+- **Chakra UI compatibilidade**: Ajustes feitos para a versão instalada do `@chakra-ui/react` (algumas APIs/exports não estavam disponíveis na versão do projeto). Evitamos componentes não-exportados e usamos implementações portáveis quando necessário.
+- **Testes**: Ambiente de testes com `vitest` + Testing Library. Criamos testes colocated para `LanguageSelector` e `LoginPage` i18n. Agora adicionamos testes unitários para `Header` e `DateTimeClock` (arquivos novos: `src/components/Layout/Header.test.tsx` e `src/components/Layout/DateTimeClock.test.tsx`).
+- **Alias de importação**: Normalizamos imports para aliases (`@components`, `@services`, `@contexts`, etc.) em `tsconfig.json` e `vite.config.ts` para melhorar a navegabilidade.
+
+Problemas encontrados e ações tomadas
+
+- Erros de import/exports do Chakra — resolvido usando a API compatível com a versão instalada ou substituindo componentes ausentes por implementações simples.
+- Race condition no carregamento do token (RequireAuth redirecionando antes do token ser lido) — corrigido inicializando token de forma síncrona no `AuthProvider`.
+- Testes que dependem do provider real (Chakra) geravam warnings; para os testes novos usamos `ChakraProvider` no wrapper ou mocks leves quando necessário.
+
+Próximos passos imediatos
+
+- Rodar a suíte de testes (`vitest`) e consertar falhas remanescentes.
+- Commitar as alterações e criar um PR na branch `chore/design-system-audit`.
+- Opcional: migrar para uma versão mais nova do `@chakra-ui/react` e refatorar o theme provider.
+
+Se quiser que eu execute os testes agora, eu posso rodar `npm test` no diretório `frontend` e reportar resultados e correções.
 ````
 
 **AGENT_TODO_JSON**
@@ -184,8 +236,21 @@ Se quiser, eu executo os comandos `npm install` para adicionar as dependências 
 - **Consolidar tema Chakra**: decidir entre atualizar `@chakra-ui/react` para uma versão mais recente (e usar `extendTheme`) ou manter v3 e construir tokens via `mergeConfigs`/`createSystem`. (Status: pending decision)
 - **Remover ruído de warnings em testes**: melhorar mocks ou criar um adaptador de teste para Chakra que filtre props não padronizados.
 - **Documentar dev server**: adicionar nota no README sobre a porta fallback do Vite e como limpar cache se necessário.
-
+ 
 Se quiser, implemento automaticamente os itens acima (tests setup + MSW + vitest setup) — diga qual deseja priorizar.
+
+---
+
+**Atualização: seletor de idioma global**
+
+- Implementamos um seletor de idioma global no cabeçalho do aplicativo em `src/components/PageShell.tsx`. O seletor é um `<select>` que chama `i18next.changeLanguage` e permite alternar entre `pt-BR`, `en`, `es` e `fr` em tempo de execução.
+- Por enquanto escolhemos um elemento nativo para máxima compatibilidade com a versão atual do `@chakra-ui/react` (v3). Podemos substituir por um componente `Select` estilizado do Chakra ou por um menu customizado com flags e labels se atualizarmos a lib.
+- A seleção de idioma é acessível (contém `aria-label`) e testada: adicionamos `src/pages/LoginPage/LoginPage.i18n.test.tsx` que valida a troca de idioma no `LoginPage`.
+
+**Visual e UX**
+
+- O seletor global foi posicionado no topo de `PageShell` para ser facilmente encontrado. Em uma iteração futura podemos mover para um menu de perfil ou um cabeçalho persistente com logo e ações do usuário.
+
 - A lista de TODOs (incluindo `AGENT_TODO_JSON`) deve ser atualizada ao final de cada ciclo de trabalho (sprint/iteração). Ao encerrar um ciclo, o responsável deve:
   - marcar os itens concluídos com o status apropriado,
   - adicionar novos itens que surgirem durante o ciclo,
