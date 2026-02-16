@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from '@contexts/AuthContext'
 
 const Home = React.lazy(() => import('./pages/Home'))
 const Properties = React.lazy(() => import('./pages/Properties'))
+const RoomCategories = React.lazy(() => import('./pages/RoomCategories/RoomCategoriesPage'))
 
 export default function AppRoutes() {
   return (
@@ -44,6 +45,18 @@ export default function AppRoutes() {
                 <PageShell>
                   <Suspense fallback={<div />}>
                     <Properties />
+                  </Suspense>
+                </PageShell>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/settings/room-categories"
+            element={
+              <RequireAuth>
+                <PageShell>
+                  <Suspense fallback={<div />}>
+                    <RoomCategories />
                   </Suspense>
                 </PageShell>
               </RequireAuth>

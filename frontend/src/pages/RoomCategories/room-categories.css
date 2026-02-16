@@ -1,0 +1,3 @@
+.room-categories-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.room-category-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.04);background:var(--chakra-colors-white,#fff);transition:background-color 120ms ease, transform 120ms ease;width:100%;box-sizing:border-box}
+.room-category-row:hover{background:rgba(37,99,235,0.04);transform:translateY(-1px);cursor:pointer}

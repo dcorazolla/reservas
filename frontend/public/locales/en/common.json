@@ -7,6 +7,59 @@
     "user_fallback": "User",
     "logout": "Logout"
   },
+  "roomCategories": {
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "rate_group_title": "Category rates",
+      "show_rates": "Show rates",
+      "hide_rates": "Hide rates",
+      "cancel": "Cancel",
+      "save": "Save",
+      "new": "New category",
+      "create": "Create category",
+      "edit": "Edit category",
+      "error_required": "Required field"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Remove"
+    },
+    "page": {
+      "title": "Room Categories"
+    },
+    "confirm": {
+      "delete_title": "Delete confirmation",
+      "delete_message_prefix": "Are you sure you want to remove",
+      "delete_message_suffix": "This action cannot be undone.",
+      "delete_confirm": "Remove"
+    }
+  },
+  "roomCategories": {
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "cancel": "Cancel",
+      "save": "Save",
+      "new": "New category",
+      "create": "Create category",
+      "edit": "Edit category",
+      "error_required": "Required field"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Remove"
+    },
+    "page": {
+      "title": "Room categories"
+    },
+    "confirm": {
+      "delete_title": "Delete confirmation",
+      "delete_message_prefix": "Are you sure you want to remove",
+      "delete_message_suffix": "This action cannot be undone.",
+      "delete_confirm": "Remove"
+    }
+  },
   "menu": {
     "calendar": "Calendar",
     "reservations": "Reservations",
@@ -16,6 +69,7 @@
     "settings": {
       "label": "Settings",
       "properties": "Properties",
+      "roomCategories": "Room categories",
       "rooms": "Rooms",
       "users": "Users",
       "partners": "Partners",

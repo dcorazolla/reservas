@@ -7,7 +7,8 @@ import {
   useDisclosure,
   Button,
 } from '@chakra-ui/react'
-import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiBox, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock } from 'react-icons/fi'
+import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock } from 'react-icons/fi'
+import { MdMeetingRoom } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
@@ -23,7 +24,8 @@ const ICON_MAP: Record<string, any> = {
   reservations: FiList,
   settings: FiSettings,
   properties: FiHome,
-  rooms: FiBox,
+  rooms: MdMeetingRoom,
+  roomCategories: FiBox,
   users: FiUsers,
   partners: FiBriefcase,
   rates: FiTag,
@@ -39,8 +41,9 @@ const nav: NavItem[] = [
     labelKey: 'menu.settings.label',
     icon: 'settings',
     children: [
-      { labelKey: 'menu.settings.properties', to: '/settings/properties', icon: 'properties' },
-      { labelKey: 'menu.settings.rooms', to: '/settings/rooms', icon: 'rooms' },
+    { labelKey: 'menu.settings.properties', to: '/settings/properties', icon: 'properties' },
+    { labelKey: 'menu.settings.roomCategories', to: '/settings/room-categories', icon: 'rooms' },
+    { labelKey: 'menu.settings.rooms', to: '/settings/rooms', icon: 'rooms' },
       { labelKey: 'menu.settings.users', to: '/settings/users', icon: 'users' },
       { labelKey: 'menu.settings.partners', to: '/settings/partners', icon: 'partners' },
       {
