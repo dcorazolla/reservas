@@ -38,6 +38,11 @@ vi.mock('react-i18next', () => {
           'confirm.cancel': 'Cancelar',
           'properties.confirm.delete_message_prefix': 'Deseja remover ',
           'properties.confirm.delete_message_suffix': '?',
+          // common shared labels
+          'common.form.save': 'Salvar',
+          'common.form.cancel': 'Cancelar',
+          'common.actions.edit': 'Editar',
+          'common.actions.delete': 'Remover',
         }
         return map[k] ?? k
       },

@@ -1,4 +1,23 @@
 {
+  "actions": {
+    "edit": "Editar",
+    "delete": "Eliminar"
+  },
+  "form": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "new": "Nuevo",
+    "create": "Crear",
+    "edit": "Editar",
+    "error_required": "Campo obligatorio"
+  },
+  "confirm": {
+    "delete_title": "Confirmación de eliminación",
+    "delete_message_prefix": "¿Está seguro que desea eliminar",
+    "delete_message_suffix": "Esta acción no se puede deshacer.",
+    "delete_confirm": "Eliminar"
+  },
+  "loading": "Cargando...",
   "title": "Reservas",
   "header": {
     "open_menu": "Abrir menú",

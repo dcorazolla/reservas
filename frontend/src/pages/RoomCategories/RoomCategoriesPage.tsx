@@ -135,8 +135,8 @@ export default function RoomCategoriesPage() {
                 <Text as="div" fontSize="sm" color="gray.600">{c.description}</Text>
               </div>
               <div>
-                <Button size="sm" variant="ghost" onClick={() => { setEditing(c); setIsModalOpen(true) }}>{t('roomCategories.actions.edit')}</Button>
-                <Button size="sm" colorScheme="red" variant="ghost" onClick={() => setDeleting(c)}>{t('roomCategories.actions.delete')}</Button>
+                <Button size="sm" variant="ghost" onClick={() => { setEditing(c); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>
+                <Button size="sm" colorScheme="red" variant="ghost" onClick={() => setDeleting(c)}>{t('common.actions.delete')}</Button>
               </div>
             </div>
           )}

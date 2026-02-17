@@ -33,6 +33,8 @@ Este arquivo reúne as regras de negócio, requisitos funcionais e não-funciona
 - Fluxo Git: `main` como trunk; branches curtas e PRs com CI e revisão humana.
 - Antes do PR:
   - Rodar testes (backend + frontend) e gerar cobertura.
+    - Observação importante: ao rodar a suíte frontend (`vitest`) em ambientes não-interativos (CI, scripts, runners), execute com a flag `-- --run` (ou `--run`) para forçar execução não-interativa e evitar que o runner entre em modo watch aguardando interação.
+      - Ex.: `cd frontend && npm ci && npm run test -- --run --coverage` ou `npm test -- --run --coverage`.
   - Atualizar OpenAPI (`backend/src/public/openapi.yaml`) e coleção Bruno (`docs/collections/reservas`) quando endpoints mudarem.
   - Atualizar `RELEASE_NOTES.md` no pacote afetado (frontend/backend).
 - Convenções: backend usa `app/Services/*` para lógica; controllers finos. Frontend: components colocated, i18n obrigatório, a11y e testes.

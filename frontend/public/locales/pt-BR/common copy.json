@@ -1,0 +1,121 @@
+{
+  "common": {
+    "actions": {
+      "edit": "Editar",
+      "delete": "Remover"
+    },
+    "form": {
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "new": "Novo",
+      "create": "Criar",
+      "edit": "Editar",
+      "error_required": "Campo obrigatório"
+    },
+    "confirm": {
+      "delete_title": "Confirmação de remoção",
+      "delete_message_prefix": "Tem certeza de que deseja remover",
+      "delete_message_suffix": "Esta ação não pode ser desfeita.",
+      "delete_confirm": "Remover"
+    },
+    "loading": "Carregando..."
+  },
+  "menu": {
+    "calendar": "Calendário",
+    "reservations": "Reservas",
+    "navigation": "Navegação",
+    "open": "Abrir menu",
+    "toggle": "Alternar submenu",
+    "settings": {
+      "label": "Configurações",
+      "properties": "Propriedades",
+      "roomCategories": "Categorias de quarto",
+      "rooms": "Quartos",
+      "users": "Usuários",
+      "partners": "Parceiros",
+      "rates": {
+        "label": "Tarifas",
+        "base": "Tarifa base",
+        "room": "Tarifa por quarto",
+        "period": "Tarifa por período"
+      }
+    }
+  },
+  "properties": {
+    "form": {
+      "name": "Nome",
+      "timezone": "Fuso horário",
+      "infant_max_age": "Idade máxima (bebês)",
+      "child_max_age": "Idade máxima (crianças)",
+      "child_factor": "Fator criança",
+      "base_one_adult": "Base 1 adulto",
+      "base_two_adults": "Base 2 adultos",
+      "additional_adult": "Adulto adicional",
+      "child_price": "Preço criança",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "new": "Nova propriedade",
+      "edit": "Editar propriedade",
+      "base_rates_title": "Tarifa Base",
+      "show_base_rates": "Mostrar tarifas",
+      "hide_base_rates": "Ocultar tarifas",
+      "error_required": "Campo obrigatório"
+    },
+  }
+}
+
+ {} "title": "Reservas",
+  "header": {
+    "open_menu": "Abrir menu",
+    "subtitle": "gestão de reservas",
+    "user_menu_button": "Menu do usuário",
+    "user_fallback": "Usuário",
+    "logout": "Sair"
+  },
+  "roomCategories": {
+    "form": {
+      "name": "Nome",
+      "description": "Descrição",
+      "rate_group_title": "Tarifas de categoria",
+      "show_rates": "Mostrar tarifas",
+      "hide_rates": "Ocultar tarifas",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "new": "Nova categoria",
+      "create": "Criar categoria",
+      "edit": "Editar categoria",
+      "error_required": "Campo obrigatório"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Remover"
+    },
+    "page": {
+      "title": "Categorias de quartos"
+    },
+    "confirm": {
+      "delete_title": "Confirmação de remoção",
+      "delete_message_prefix": "Tem certeza de que deseja remover",
+      "delete_message_suffix": "Esta ação não pode ser desfeita.",
+      "delete_confirm": "Remover"
+    }
+  },
+  
+  
+    "actions": {
+      "edit": "Editar",
+      "delete": "Remover"
+    },
+    "loading": "Carregando...",
+    "page": {
+      "title": "Propriedades"
+    },
+    "confirm": {
+      "delete_title": "Confirmação de remoção",
+      "delete_message_prefix": "Tem certeza de que deseja remover",
+      "delete_message_suffix": "Esta ação não pode ser desfeita.",
+      "delete_confirm": "Remover"
+    }
+  },
+  
+}

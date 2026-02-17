@@ -58,7 +58,7 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={category?.id ? t('roomCategories.form.edit') : t('roomCategories.form.create')}>
+    <Modal isOpen={isOpen} onClose={onClose} title={category?.id ? t('roomCategories.form.edit') : t('roomCategories.form.new')}>
       <div className="room-category-form-grid">
         <div className="room-category-field full-width">
           <span>{t('roomCategories.form.name')}</span>
@@ -72,9 +72,9 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
 
         <div className="rate-group">
           <div className="rate-group-header">
-            <strong>{t('roomCategories.form.rate_group_title') || 'Category rates'}</strong>
+            <strong>{t('roomCategories.form.rate_group_title')}</strong>
             <button type="button" className="group-toggle" onClick={() => setShowRates((s) => !s)} aria-expanded={showRates}>
-              {showRates ? t('roomCategories.form.hide_rates') || 'Hide rates' : t('roomCategories.form.show_rates') || 'Show rates'}
+              {showRates ? t('common.form.pricing.hide_rates') : t('common.form.pricing.show_rates')}
             </button>
           </div>
 
@@ -84,22 +84,22 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
             ) : (
               <>
                 <div className="room-category-field">
-                  <span>{t('properties.form.base_one_adult') || 'Base one adult'}</span>
+                  <span>{t('common.form.pricing.one_adult')}</span>
                   <input type="number" value={rate?.base_one_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_one_adult: e.target.value })} />
                 </div>
 
                 <div className="room-category-field">
-                  <span>{t('properties.form.base_two_adults') || 'Base two adults'}</span>
+                  <span>{t('common.form.pricing.two_adults')}</span>
                   <input type="number" value={rate?.base_two_adults ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_two_adults: e.target.value })} />
                 </div>
 
                 <div className="room-category-field">
-                  <span>{t('properties.form.additional_adult') || 'Additional adult'}</span>
+                  <span>{t('common.form.pricing.additional_adult')}</span>
                   <input type="number" value={rate?.additional_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), additional_adult: e.target.value })} />
                 </div>
 
                 <div className="room-category-field">
-                  <span>{t('properties.form.child_price') || 'Child price'}</span>
+                  <span>{t('common.form.pricing.child_price')}</span>
                   <input type="number" step="0.01" value={rate?.child_price ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), child_price: e.target.value })} />
                 </div>
               </>
@@ -108,8 +108,8 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
         </div>
 
         <div className="modal-actions full-width">
-          <Button variant="ghost" onClick={onClose}>{t('roomCategories.form.cancel')}</Button>
-          <Button colorScheme="blue" type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(e); }}>{t('roomCategories.form.save')}</Button>
+          <Button variant="ghost" onClick={onClose}>{t('common.form.cancel')}</Button>
+          <Button colorScheme="blue" type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(e); }}>{t('common.form.save')}</Button>
         </div>
       </div>
     </Modal>

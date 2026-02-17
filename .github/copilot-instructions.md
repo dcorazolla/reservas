@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Instruções para GitHub Copilot / Assistente (consolidado)
 
 Este arquivo é o ponto único de referência para agentes automatizados e humanos sobre como operar neste repositório `reservas`.
@@ -101,7 +100,11 @@ Siga estas instruções ao trabalhar neste repositório. Leia `docs/copilot-inst
 
 Principais comandos
 - Frontend dev: `cd frontend && npm ci && npm run dev`
-- Frontend tests: `cd frontend && npm ci && npm test -- --coverage`
+- Frontend tests: `cd frontend && npm ci && npm test -- --run --coverage`
+  - Nota: em ambientes não-interativos (CI, runners, ou quando executar testes via script), o `vitest` pode iniciar em modo interativo/watch e ficar aguardando entrada.
+    - Para forçar execução não-interativa use a flag `-- --run` (ou `--run`). Exemplos:
+      - `cd frontend && npm ci && npm run test -- --run --coverage`
+      - `cd frontend && npm ci && npm test -- --run --coverage`
 - Backend tests (container): `docker compose exec app bash -lc "vendor/bin/phpunit"`
 - Full local test helper: `./scripts/test-all.sh`
 

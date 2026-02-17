@@ -48,7 +48,7 @@ describe('EditRoomCategoryModal', () => {
     }
 
     // click save
-    const saveBtn = screen.getByText('roomCategories.form.save')
+    const saveBtn = screen.getByText('common.form.save')
     await userEvent.click(saveBtn)
 
     await waitFor(() => expect(onSave).toHaveBeenCalled())
@@ -84,7 +84,7 @@ describe('EditRoomCategoryModal', () => {
     await userEvent.click(toggle)
 
     // save without entering numbers
-    const saveBtn = screen.getByText('roomCategories.form.save')
+    const saveBtn = screen.getByText('common.form.save')
     await userEvent.click(saveBtn)
 
     await waitFor(() => expect(onSave).toHaveBeenCalled())
@@ -119,7 +119,7 @@ describe('EditRoomCategoryModal', () => {
       await userEvent.type(numberInputs[i], String((i + 1) * 10))
     }
 
-    await userEvent.click(screen.getByText('roomCategories.form.save'))
+    await userEvent.click(screen.getByText('common.form.save'))
 
     await waitFor(() => expect(onSave).toHaveBeenCalled())
     const payload = onSave.mock.calls[0][0]
@@ -164,7 +164,7 @@ describe('EditRoomCategoryModal', () => {
     await userEvent.type(textarea, 'My desc')
 
     // cancel should call onClose and not call onSave
-    const cancelBtn = screen.getByText('roomCategories.form.cancel')
+    const cancelBtn = screen.getByText('common.form.cancel')
     await userEvent.click(cancelBtn)
     expect(onClose).toHaveBeenCalled()
     expect(onSave).not.toHaveBeenCalled()

@@ -116,8 +116,8 @@ export default function PropertiesPage() {
                 <Text as="div" fontSize="sm" color="gray.600">{p.timezone}</Text>
               </div>
               <div>
-                <Button size="sm" variant="ghost" onClick={() => { setEditing(p); setIsModalOpen(true) }}>{t('properties.actions.edit')}</Button>
-                <Button size="sm" colorScheme="red" variant="ghost" onClick={() => setDeleting(p)}>{t('properties.actions.delete')}</Button>
+                <Button size="sm" variant="ghost" onClick={() => { setEditing(p); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>
+                <Button size="sm" colorScheme="red" variant="ghost" onClick={() => setDeleting(p)}>{t('common.actions.delete')}</Button>
               </div>
             </div>
           )}

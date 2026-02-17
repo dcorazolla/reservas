@@ -1,0 +1,20 @@
+/* shared styles used by Rooms components */
+.room-form-field, .room-field { margin-bottom: 12px; }
+.room-form-field input, .room-field input, .room-field select { width: 100%; padding: 6px 8px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.room-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+
+.rooms-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.room-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.04);background:var(--chakra-colors-white,#fff);transition:background-color 120ms ease, transform 120ms ease;width:100%;box-sizing:border-box}
+.room-row:hover{background:rgba(37,99,235,0.04);transform:translateY(-1px);cursor:pointer}
+
+.room-form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;align-items:start}
+.room-field{display:flex;flex-direction:column;margin:6px 0}
+.room-field span{font-size:0.9rem;margin-bottom:6px}
+.room-field input,.room-field select{padding:8px;border-radius:6px;border:1px solid rgba(0,0,0,0.08)}
+.full-width{grid-column:1 / -1}
+.field-error{color:#dc2626;font-size:0.85rem;margin-top:6px}
+
+@media (max-width: 800px){
+	.room-form-grid{grid-template-columns:1fr}
+}

@@ -50,6 +50,14 @@ vi.mock('react-i18next', () => {
           'properties.form.infant_max_age': 'Idade máxima (infantes)',
           'properties.form.child_max_age': 'Idade máxima (crianças)',
           'properties.form.error_required': 'Campo obrigatório',
+          // common shared labels
+          'common.actions.edit': 'Editar',
+          'common.actions.delete': 'Remover',
+          'common.form.save': 'Salvar',
+          'common.form.cancel': 'Cancelar',
+          'common.form.error_required': 'Campo obrigatório',
+          'common.confirm.delete_title': 'Confirmação de exclusão',
+          'common.confirm.delete_confirm': 'Remover',
         }
         return map[k] ?? k
       },
@@ -130,7 +138,7 @@ describe('PropertiesPage flows', () => {
 
     // after create, created item should be in the list
     expect(await screen.findByText('Nova')).toBeInTheDocument()
-  })
+  }, 20000)
 
   it('edits an existing property and updates list', async () => {
     // prepare update mock

@@ -1,39 +1,63 @@
 {
-  "title": "Reservas",
-  "header": {
-    "open_menu": "Abrir menu",
-    "subtitle": "gestão de reservas",
-    "user_menu_button": "Menu do usuário",
-    "user_fallback": "Usuário",
-    "logout": "Sair"
-  },
-  "roomCategories": {
-    "form": {
-      "name": "Nome",
-      "description": "Descrição",
-      "rate_group_title": "Tarifários da categoria",
-      "show_rates": "Mostrar tarifas",
-      "hide_rates": "Ocultar tarifas",
-      "cancel": "Cancelar",
-      "save": "Salvar",
-      "new": "Nova categoria",
-      "create": "Criar categoria",
-      "edit": "Editar categoria",
-      "error_required": "Campo obrigatório"
-    },
+  "common": {
     "actions": {
       "edit": "Editar",
       "delete": "Remover"
     },
-    "page": {
-      "title": "Categorias de quarto"
-    },
     "confirm": {
-      "delete_title": "Confirmação de exclusão",
-      "delete_message_prefix": "Tem certeza que deseja remover",
+      "delete_title": "Confirmação de remoção",
+      "delete_message_prefix": "Tem certeza de que deseja remover",
       "delete_message_suffix": "Esta ação não pode ser desfeita.",
       "delete_confirm": "Remover"
-    }
+    },
+    "form": {
+      "cancel": "Cancelar",
+      "create": "Criar",
+      "edit": "Editar",
+      "error_required": "Campo obrigatório",
+      "new": "Novo",
+      "pricing": {
+        "additional_adult": "Preço adulto adicional",
+        "child_factor": "Fator criança",
+        "child_max_age": "Idade máxima (crianças)",
+        "child_price": "Preço criança",
+        "five_adults": "Preço 5 adultos",
+        "four_adults": "Preço 4 adultos",
+        "hide_rates": "Ocultar tarifas",
+        "infant_max_age": "Idade máxima (bebês)",
+        "one_adult": "Preço 1 adulto",
+        "seven_adults": "Preço 7 adultos",
+        "show_rates": "Mostrar tarifas",
+        "six_adults": "Preço 6 adultos",
+        "trhee_adults": "Preço 3 adultos",
+        "two_adults": "Preço 2 adultos"
+      },
+      "save": "Salvar"
+    },
+    "loading": "Carregando..."
+  },
+  "login": {
+    "title": "Entrar",
+    "subtitle": "Entre na sua conta para continuar",
+    "email": "E-mail",
+    "password": "Senha",
+    "submit": "Entrar",
+    "forgot": "Esqueceu a senha?",
+    "create_account": "Criar conta",
+    "no_account": "Não tem uma conta?",
+    "remember_me": "Lembrar-me",
+    "social_google": "Entrar com Google",
+    "social_facebook": "Entrar com Facebook",
+    "social_google_notice": "Login com Google não habilitado neste protótipo",
+    "social_facebook_notice": "Login com Facebook não habilitado neste protótipo",
+    "or": "ou",
+    "email_placeholder": "seu@email.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "Funcionalidade de login não implementada neste protótipo.",
+    "accessible_help": "Preencha o formulário para entrar",
+    "email_error": "Forneça um e-mail válido",
+    "password_error": "A senha deve ter pelo menos 6 caracteres",
+    "error": "Erro ao autenticar"
   },
   "menu": {
     "calendar": "Calendário",
@@ -57,61 +81,28 @@
     }
   },
   "properties": {
-    "form": {
-      "name": "Nome",
-      "timezone": "Timezone",
-      "infant_max_age": "Idade máxima (infantes)",
-      "child_max_age": "Idade máxima (crianças)",
-      "child_factor": "Fator criança",
-      "base_one_adult": "Base 1 adulto",
-      "base_two_adults": "Base 2 adultos",
-      "additional_adult": "Adicional adulto",
-      "child_price": "Preço criança",
-      "cancel": "Cancelar",
-      "save": "Salvar",
-      "new": "Nova propriedade",
-      "edit": "Editar propriedade",
-      "base_rates_title": "Tarifa Base",
-      "show_base_rates": "Mostrar tarifas",
-      "hide_base_rates": "Ocultar tarifas",
-      "error_required": "Campo obrigatório"
-    },
-    "actions": {
-      "edit": "Editar",
-      "delete": "Remover"
-    },
-    "loading": "Carregando...",
     "page": {
       "title": "Propriedades"
     },
-    "confirm": {
-      "delete_title": "Confirmação de exclusão",
-      "delete_message_prefix": "Tem certeza que deseja remover",
-      "delete_message_suffix": "Esta ação não pode ser desfeita.",
-      "delete_confirm": "Remover"
+    "form": {
+      "name": "Nome",
+      "timezone": "Fuso horário",
+      "new": "Nova propriedade",
+      "edit": "Editar propriedade",
+      "base_rates_title": "Tarifa Base"
     }
   },
-  "login": {
-    "title": "Entrar",
-    "subtitle": "Entre na sua conta para continuar",
-    "email": "E-mail",
-    "password": "Senha",
-    "submit": "Entrar",
-    "forgot": "Esqueceu a senha?",
-    "create_account": "Criar conta",
-    "no_account": "Não tem uma conta?",
-    "remember_me": "Lembrar-me",
-    "social_google": "Entrar com Google",
-    "social_facebook": "Entrar com Facebook",
-    "social_google_notice": "Login com Google não habilitado neste protótipo",
-    "social_facebook_notice": "Login com Facebook não habilitado neste protótipo",
-    "or": "ou",
-    "email_placeholder": "seu@email.com",
-    "password_placeholder": "••••••••",
-    "demo_notice": "Funcionalidade de login não implementada neste protótipo.",
-    "accessible_help": "Preencha o formulário para entrar",
-    "email_error": "Informe um e-mail válido",
-    "password_error": "Senha deve ter ao menos 6 caracteres",
-    "error": "Falha ao autenticar"
+  "roomCategories": {
+    "page": {
+      "title": "Categorias de quarto"
+    },
+    "form": {
+      "name": "Nome",
+      "description": "Descrição",
+      "new": "Nova categoria",
+      "edit": "Editar categoria",
+      "rate_group_title": "Tarifas de categoria"
+    }
   }
 }
+
