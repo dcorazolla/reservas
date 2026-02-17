@@ -2,7 +2,17 @@
   "common": {
     "actions": {
       "edit": "Editar",
-      "delete": "Remover"
+      "delete": "Remover",
+      "cancel": "Cancelar",
+      "create": "Criar",
+      "save": "Salvar",
+      "confirm": "Confirmar"
+    },
+    "status": {
+      "loading": "Carregando...",
+      "error": "Ocorreu um erro",
+      "new": "Novo",
+      "error_required": "Campo obrigatório"
     },
     "confirm": {
       "delete_title": "Confirmação de remoção",
@@ -10,33 +20,35 @@
       "delete_message_suffix": "Esta ação não pode ser desfeita.",
       "delete_confirm": "Remover"
     },
-    "form": {
-      "cancel": "Cancelar",
-      "create": "Criar",
-      "edit": "Editar",
-      "error_required": "Campo obrigatório",
-      "new": "Novo",
-      "pricing": {
-        "additional_adult": "Preço adulto adicional",
-        "child_factor": "Fator criança",
-        "child_max_age": "Idade máxima (crianças)",
-        "child_price": "Preço criança",
-        "five_adults": "Preço 5 adultos",
-        "four_adults": "Preço 4 adultos",
-        "hide_rates": "Ocultar tarifas",
-        "infant_max_age": "Idade máxima (bebês)",
-        "one_adult": "Preço 1 adulto",
-        "seven_adults": "Preço 7 adultos",
-        "show_rates": "Mostrar tarifas",
-        "six_adults": "Preço 6 adultos",
-        "trhee_adults": "Preço 3 adultos",
-        "two_adults": "Preço 2 adultos"
-      },
-      "save": "Salvar"
-    },
-    "loading": "Carregando..."
+    "pricing": {
+      "additional_adult": "Preço adulto adicional",
+      "child_factor": "Fator criança",
+      "child_max_age": "Idade máxima (crianças)",
+      "child_price": "Preço criança",
+      "five_adults": "Preço 5 adultos",
+      "four_adults": "Preço 4 adultos",
+      "hide_rates": "Ocultar tarifas",
+      "infant_max_age": "Idade máxima (bebês)",
+      "one_adult": "Preço 1 adulto",
+      "seven_adults": "Preço 7 adultos",
+      "show_rates": "Mostrar tarifas",
+      "six_adults": "Preço 6 adultos",
+      "trhee_adults": "Preço 3 adultos",
+      "two_adults": "Preço 2 adultos"
+    }
+  },
+  "header": {
+    "open_menu": "Abrir menu",
+    "subtitle": "gestão de reservas",
+    "user_menu_button": "Menu do usuário",
+    "user_fallback": "Usuário",
+    "logout": "Sair"
+  },
+  "footer": {
+    "copy": "© 2026 Reservas. Todos os direitos reservados."
   },
   "login": {
+    "change_language": "Alterar idioma",
     "title": "Entrar",
     "subtitle": "Entre na sua conta para continuar",
     "email": "E-mail",
@@ -57,7 +69,7 @@
     "accessible_help": "Preencha o formulário para entrar",
     "email_error": "Forneça um e-mail válido",
     "password_error": "A senha deve ter pelo menos 6 caracteres",
-    "error": "Erro ao autenticar"
+    "error": "Falha ao autenticar — verifique suas credenciais."
   },
   "menu": {
     "calendar": "Calendário",
@@ -99,6 +111,8 @@
     "form": {
       "name": "Nome",
       "description": "Descrição",
+      "show_rates": "Mostrar tarifas",
+      "hide_rates": "Ocultar tarifas",
       "new": "Nova categoria",
       "edit": "Editar categoria",
       "rate_group_title": "Tarifas de categoria"
@@ -116,8 +130,13 @@
       "capacity": "Capacidade",
       "notes": "Notas",
       "number": "Número",
+      "create": "Criar quarto",
       "new": "Novo quarto",
       "edit": "Editar quarto"
+    },
+    "errors": {
+      "load": "Falha ao carregar quartos",
+      "save": "Falha ao salvar quarto"
     }
   }
 }

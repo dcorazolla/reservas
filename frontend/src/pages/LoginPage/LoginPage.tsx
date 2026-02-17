@@ -24,10 +24,10 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { decodeTokenPayload } from '@services/auth'
-import './login-page.css'
 import { FaGoogle, FaFacebookF } from 'react-icons/fa'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { LanguageSelector } from '@components/LanguageSelector'
+import './login-page.css'
 
 const schema = z.object({
   email: z.string().email('login.email_error' as any),
@@ -108,7 +108,7 @@ export function LoginPage() {
     } catch (e: any) {
       // extract message from axios response if available
       const apiMsg = e?.response?.data?.message
-      const message = apiMsg || e?.message || t('login.error', 'Falha ao autenticar — verifique suas credenciais.')
+      const message = apiMsg || e?.message || t('login.error')
       setNotice({ type: 'error', message })
       setSubmitting(false)
     }

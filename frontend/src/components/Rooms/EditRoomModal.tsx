@@ -36,9 +36,9 @@ export default function EditRoomModal({ isOpen, room, onClose, onSave, loading }
     e?.preventDefault()
 
     const newErrors: Record<string, string> = {}
-    if (!form.name || !form.name.trim()) newErrors['name'] = t('common.form.error_required')
-    if (!form.beds || Number.isNaN(Number(form.beds)) || Number(form.beds) < 1) newErrors['beds'] = t('common.form.error_required')
-    if (!form.capacity || Number.isNaN(Number(form.capacity)) || Number(form.capacity) < 1) newErrors['capacity'] = t('common.form.error_required')
+    if (!form.name || !form.name.trim()) newErrors['name'] = t('common.status.error_required')
+    if (!form.beds || Number.isNaN(Number(form.beds)) || Number(form.beds) < 1) newErrors['beds'] = t('common.status.error_required')
+    if (!form.capacity || Number.isNaN(Number(form.capacity)) || Number(form.capacity) < 1) newErrors['capacity'] = t('common.status.error_required')
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
@@ -63,7 +63,7 @@ export default function EditRoomModal({ isOpen, room, onClose, onSave, loading }
 
     if (loading || loadingCategories) {
     return (
-      <Modal isOpen={!!isOpen} onClose={onClose} title={t('common.loading')} size="md">
+      <Modal isOpen={!!isOpen} onClose={onClose} title={t('common.status.loading')} size="md">
         <VStack spacing={3} align="stretch">
           <Skeleton height="36px" />
           <Skeleton height="36px" />
@@ -116,8 +116,8 @@ export default function EditRoomModal({ isOpen, room, onClose, onSave, loading }
             </div>
 
           <div className="modal-actions full-width">
-            <Button variant="ghost" onClick={onClose}>{t('common.form.cancel')}</Button>
-            <Button colorScheme="blue" type="submit">{t('common.form.save')}</Button>
+            <Button variant="ghost" onClick={onClose}>{t('common.actions.cancel')}</Button>
+            <Button colorScheme="blue" type="submit">{t('common.actions.save')}</Button>
           </div>
         </div>
       </form>

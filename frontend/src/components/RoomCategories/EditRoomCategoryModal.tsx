@@ -74,7 +74,7 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
           <div className="rate-group-header">
             <strong>{t('roomCategories.form.rate_group_title')}</strong>
             <button type="button" className="group-toggle" onClick={() => setShowRates((s) => !s)} aria-expanded={showRates}>
-              {showRates ? t('common.form.pricing.hide_rates') : t('common.form.pricing.show_rates')}
+              {showRates ? t('common.pricing.hide_rates') : t('common.pricing.show_rates')}
             </button>
           </div>
 
@@ -84,22 +84,22 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
             ) : (
               <>
                 <div className="room-category-field">
-                  <span>{t('common.form.pricing.one_adult')}</span>
+                  <span>{t('common.pricing.one_adult')}</span>
                   <input type="number" value={rate?.base_one_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_one_adult: e.target.value })} />
                 </div>
 
                 <div className="room-category-field">
-                  <span>{t('common.form.pricing.two_adults')}</span>
+                  <span>{t('common.pricing.two_adults')}</span>
                   <input type="number" value={rate?.base_two_adults ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_two_adults: e.target.value })} />
                 </div>
 
                 <div className="room-category-field">
-                  <span>{t('common.form.pricing.additional_adult')}</span>
+                  <span>{t('common.pricing.additional_adult')}</span>
                   <input type="number" value={rate?.additional_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), additional_adult: e.target.value })} />
                 </div>
 
                 <div className="room-category-field">
-                  <span>{t('common.form.pricing.child_price')}</span>
+                  <span>{t('common.pricing.child_price')}</span>
                   <input type="number" step="0.01" value={rate?.child_price ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), child_price: e.target.value })} />
                 </div>
               </>
@@ -108,8 +108,8 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
         </div>
 
         <div className="modal-actions full-width">
-          <Button variant="ghost" onClick={onClose}>{t('common.form.cancel')}</Button>
-          <Button colorScheme="blue" type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(e); }}>{t('common.form.save')}</Button>
+          <Button variant="ghost" onClick={onClose}>{t('common.actions.cancel')}</Button>
+          <Button colorScheme="blue" type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(e); }}>{t('common.actions.save')}</Button>
         </div>
       </div>
     </Modal>
