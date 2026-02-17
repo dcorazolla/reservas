@@ -103,6 +103,22 @@
       "edit": "Editar categoria",
       "rate_group_title": "Tarifas de categoria"
     }
+  },
+  "rooms": {
+    "page": {
+      "title": "Quartos"
+    },
+    "form": {
+      "name": "Nome",
+      "category": "Categoria",
+      "category_placeholder": "Selecione uma categoria",
+      "beds": "Camas",
+      "capacity": "Capacidade",
+      "notes": "Notas",
+      "number": "Número",
+      "new": "Novo quarto",
+      "edit": "Editar quarto"
+    }
   }
 }
 
