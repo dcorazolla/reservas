@@ -1,24 +1,42 @@
 {
-  "actions": {
-    "edit": "Edit",
-    "delete": "Delete"
+  "common": {
+    "actions": {
+      "edit": "Edit",
+      "delete": "Remove",
+      "cancel": "Cancel",
+      "create": "Create",
+      "save": "Save",
+      "confirm": "Confirm"
+    },
+    "status": {
+      "loading": "Loading...",
+      "error": "An error occurred",
+      "new": "New",
+      "error_required": "Field is required"
+    },
+    "confirm": {
+      "delete_title": "Delete confirmation",
+      "delete_message_prefix": "Are you sure you want to remove",
+      "delete_message_suffix": "This action cannot be undone.",
+      "delete_confirm": "Remove"
+    },
+    "pricing": {
+      "additional_adult": "Additional adult price",
+      "child_factor": "Child factor",
+      "child_max_age": "Max age (children)",
+      "child_price": "Child price",
+      "five_adults": "Price 5 adults",
+      "four_adults": "Price 4 adults",
+      "hide_rates": "Hide rates",
+      "infant_max_age": "Max age (infants)",
+      "one_adult": "Price 1 adult",
+      "seven_adults": "Price 7 adults",
+      "show_rates": "Show rates",
+      "six_adults": "Price 6 adults",
+      "trhee_adults": "Price 3 adults",
+      "two_adults": "Price 2 adults"
+    }
   },
-  "form": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "new": "New",
-    "create": "Create",
-    "edit": "Edit",
-    "error_required": "Field is required"
-  },
-  "confirm": {
-    "delete_title": "Delete confirmation",
-    "delete_message_prefix": "Are you sure you want to delete",
-    "delete_message_suffix": "This action cannot be undone.",
-    "delete_confirm": "Delete"
-  },
-  "loading": "Loading...",
-  "title": "Reservations",
   "header": {
     "open_menu": "Open menu",
     "subtitle": "reservation management",
@@ -26,33 +44,32 @@
     "user_fallback": "User",
     "logout": "Logout"
   },
-  "roomCategories": {
-    "form": {
-      "name": "Name",
-      "description": "Description",
-      "rate_group_title": "Category rates",
-      "show_rates": "Show rates",
-      "hide_rates": "Hide rates",
-      "cancel": "Cancel",
-      "save": "Save",
-      "new": "New category",
-      "create": "Create category",
-      "edit": "Edit category",
-      "error_required": "Field is required"
-    },
-    "actions": {
-      "edit": "Edit",
-      "delete": "Delete"
-    },
-    "page": {
-      "title": "Room categories"
-    },
-    "confirm": {
-      "delete_title": "Delete confirmation",
-      "delete_message_prefix": "Are you sure you want to delete",
-      "delete_message_suffix": "This action cannot be undone.",
-      "delete_confirm": "Delete"
-    }
+  "footer": {
+    "copy": "© 2026 Reservas. All rights reserved."
+  },
+  "login": {
+    "change_language": "Change language",
+    "title": "Sign in",
+    "subtitle": "Sign in to your account to continue",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "forgot": "Forgot password?",
+    "create_account": "Create account",
+    "no_account": "Don't have an account?",
+    "remember_me": "Remember me",
+    "social_google": "Sign in with Google",
+    "social_facebook": "Sign in with Facebook",
+    "social_google_notice": "Google sign-in is not enabled in this prototype",
+    "social_facebook_notice": "Facebook sign-in is not enabled in this prototype",
+    "or": "or",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "Login functionality is not implemented in this prototype.",
+    "accessible_help": "Fill the form to sign in",
+    "email_error": "Provide a valid email",
+    "password_error": "Password must be at least 6 characters",
+    "error": "Failed to authenticate"
   },
   "menu": {
     "calendar": "Calendar",
@@ -76,113 +93,50 @@
     }
   },
   "properties": {
+    "page": {
+      "title": "Properties"
+    },
     "form": {
       "name": "Name",
       "timezone": "Timezone",
-      "infant_max_age": "Max age (infants)",
-      "child_max_age": "Max age (children)",
-      "child_factor": "Child factor",
-      "base_one_adult": "Base one adult",
-      "base_two_adults": "Base two adults",
-      "additional_adult": "Additional adult",
-      "child_price": "Child price",
-      "cancel": "Cancel",
-      "save": "Save",
       "new": "New property",
       "edit": "Edit property",
-      "base_rates_title": "Base Rate",
-      "show_base_rates": "Show rates",
-      "hide_base_rates": "Hide rates",
-      "error_required": "Field is required"
-    },
-    "actions": {
-      "edit": "Edit",
-      "delete": "Delete"
-    },
-    "loading": "Loading...",
-    "page": {
-      "title": "Properties"
-    },
-    "confirm": {
-      "delete_title": "Delete confirmation",
-      "delete_message_prefix": "Are you sure you want to delete",
-      "delete_message_suffix": "This action cannot be undone.",
-      "delete_confirm": "Delete"
+      "base_rates_title": "Base Rate"
     }
   },
-  "login": {
-    "title": "Sign in",
-    "subtitle": "Sign in to your account to continue",
-    "email": "Email",
-    "password": "Password",
-    "submit": "Sign in",
-    "forgot": "Forgot password?",
-    "create_account": "Create account",
-    "no_account": "Don't have an account?",
-    "remember_me": "Remember me",
-    "social_google": "Sign in with Google",
-    "social_facebook": "Sign in with Facebook",
-    "social_google_notice": "Google sign-in not enabled in this prototype",
-    "social_facebook_notice": "Facebook sign-in not enabled in this prototype",
-    "or": "or",
-    "email_placeholder": "you@domain.com",
-    "password_placeholder": "••••••••",
-    "demo_notice": "Login functionality isn't implemented in this prototype.",
-    "accessible_help": "Fill the form to sign in",
-    "email_error": "Provide a valid email",
-    "password_error": "Password must be at least 6 characters",
-    "error": "Authentication error"
-  }
-}
-      "base_one_adult": "Base one adult",
-      "base_two_adults": "Base two adults",
-      "additional_adult": "Additional adult",
-      "child_price": "Child price",
-      "cancel": "Cancel",
-      "save": "Save",
-      "new": "New property",
-      "edit": "Edit property",
-      "base_rates_title": "Base Rate",
-      "show_base_rates": "Show tariffs",
-      "hide_base_rates": "Hide tariffs",
-      "error_required": "Required field"
-    },
-    "actions": {
-      "edit": "Edit",
-      "delete": "Remove"
-    },
-    "loading": "Loading...",
+  "roomCategories": {
     "page": {
-      "title": "Properties"
+      "title": "Room categories"
     },
-    "confirm": {
-      "delete_title": "Delete confirmation",
-      "delete_message_prefix": "Are you sure you want to remove",
-      "delete_message_suffix": "This action cannot be undone.",
-      "delete_confirm": "Remove"
+    "form": {
+      "name": "Name",
+      "description": "Description",
+      "show_rates": "Show rates",
+      "hide_rates": "Hide rates",
+      "new": "New category",
+      "edit": "Edit category",
+      "rate_group_title": "Category rates"
     }
   },
-  "login": {
-    "title": "Sign in",
-    "subtitle": "Sign in to your account to continue",
-    "email": "Email",
-    "password": "Password",
-    "submit": "Sign in",
-    "forgot": "Forgot password?",
-    "create_account": "Create account",
-    "no_account": "Don't have an account?",
-    "remember_me": "Remember me",
-    "social_google": "Sign in with Google",
-    "social_facebook": "Sign in with Facebook",
-    "social_google_notice": "Google sign-in is not enabled in this prototype",
-    "social_facebook_notice": "Facebook sign-in is not enabled in this prototype",
-    "or": "or",
-    "email_placeholder": "you@example.com",
-    "password_placeholder": "••••••••",
-    "demo_notice": "Login functionality is not implemented in this prototype.",
-    "accessible_help": "Fill the form to sign in",
-    "email_error": "Provide a valid email",
-    "password_error": "Password must be at least 6 characters",
-    "error": "Failed to authenticate"
+  "rooms": {
+    "page": {
+      "title": "Rooms"
+    },
+    "form": {
+      "name": "Name",
+      "category": "Category",
+      "category_placeholder": "Select a category",
+      "beds": "Beds",
+      "capacity": "Capacity",
+      "notes": "Notes",
+      "number": "Number",
+      "create": "Create room",
+      "new": "New room",
+      "edit": "Edit room"
+    },
+    "errors": {
+      "load": "Failed to load rooms",
+      "save": "Failed to save room"
+    }
   }
 }
