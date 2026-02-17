@@ -140,6 +140,28 @@
       "load": "Falha ao carregar quartos",
       "save": "Falha ao salvar quarto"
     }
+  },
+  "partners": {
+    "page": {
+      "title": "Parceiros"
+    },
+    "form": {
+      "name": "Nome",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "tax_id": "CPF/CNPJ",
+      "address": "Endereço",
+      "notes": "Notas",
+      "billing_rule": "Regra de faturamento",
+      "discount_percent": "Desconto (%)",
+      "new": "Novo parceiro",
+      "edit": "Editar parceiro"
+    },
+    "billing_rule": {
+      "none": "Sem faturamento",
+      "charge_partner": "Cobrar do parceiro",
+      "charge_guest": "Cobrar do hóspede"
+    }
   }
 }
 

@@ -140,5 +140,27 @@
       "load": "Failed to load rooms",
       "save": "Failed to save room"
     }
+  },
+  "partners": {
+    "page": {
+      "title": "Partners"
+    },
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "tax_id": "Tax ID (CPF/CNPJ)",
+      "address": "Address",
+      "notes": "Notes",
+      "billing_rule": "Billing rule",
+      "discount_percent": "Discount (%)",
+      "new": "New partner",
+      "edit": "Edit partner"
+    },
+    "billing_rule": {
+      "none": "No billing",
+      "charge_partner": "Charge partner",
+      "charge_guest": "Charge guest"
+    }
   }
 }
