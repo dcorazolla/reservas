@@ -33,31 +33,29 @@ vi.mock('react-i18next', () => {
           'properties.form.new': 'Nova propriedade',
           'properties.form.name': 'Nome',
           'properties.form.timezone': 'Timezone',
-          'properties.form.save': 'Salvar',
-          'properties.form.cancel': 'Cancelar',
-          'properties.actions.edit': 'Editar',
-          'properties.actions.delete': 'Remover',
-          'properties.confirm.delete_title': 'Confirmação de exclusão',
-          'properties.confirm.delete_confirm': 'Remover',
+          'properties.form.edit': 'Editar propriedade',
           'properties.form.base_rates_title': 'Tarifa Base',
-          'properties.form.show_base_rates': 'Mostrar tarifas',
-          'properties.form.hide_base_rates': 'Ocultar tarifas',
-          'properties.form.child_factor': 'Fator criança',
-          'properties.form.child_price': 'Preço criança',
-          'properties.form.base_one_adult': 'Base 1 adulto',
-          'properties.form.base_two_adults': 'Base 2 adultos',
-          'properties.form.additional_adult': 'Adicional adulto',
-          'properties.form.infant_max_age': 'Idade máxima (infantes)',
-          'properties.form.child_max_age': 'Idade máxima (crianças)',
-          'properties.form.error_required': 'Campo obrigatório',
           // common shared labels
+          'common.actions.save': 'Salvar',
+          'common.actions.cancel': 'Cancelar',
           'common.actions.edit': 'Editar',
           'common.actions.delete': 'Remover',
-          'common.form.save': 'Salvar',
-          'common.form.cancel': 'Cancelar',
-          'common.form.error_required': 'Campo obrigatório',
+          'common.status.error_required': 'Campo obrigatório',
+          'common.status.loading': 'Carregando...',
+          'common.pricing.show_rates': 'Mostrar tarifas',
+          'common.pricing.hide_rates': 'Ocultar tarifas',
+          'common.pricing.child_factor': 'Fator criança',
+          'common.pricing.child_price': 'Preço criança',
+          'common.pricing.one_adult': 'Base 1 adulto',
+          'common.pricing.two_adults': 'Base 2 adultos',
+          'common.pricing.additional_adult': 'Adicional adulto',
+          'common.pricing.infant_max_age': 'Idade máxima (infantes)',
+          'common.pricing.child_max_age': 'Idade máxima (crianças)',
+          // confirm modal
           'common.confirm.delete_title': 'Confirmação de exclusão',
           'common.confirm.delete_confirm': 'Remover',
+          'common.confirm.delete_message_prefix': 'Deseja remover',
+          'common.confirm.delete_message_suffix': 'Esta ação não pode ser desfeita.',
         }
         return map[k] ?? k
       },
@@ -191,10 +189,9 @@ describe('PropertiesPage flows', () => {
     // click remove on first row
     await userEvent.click(screen.getAllByText('Remover')[0])
 
-    // confirm modal has remove button; there are multiple 'Remover' buttons
-    const removerButtons = await screen.findAllByText('Remover')
-    // click the last one which belongs to the confirm dialog
-    await userEvent.click(removerButtons[removerButtons.length - 1])
+    // confirm modal has remove button; click the confirm button inside the modal
+    const confirmBtn = await screen.findByText('Remover', { selector: '.btn-danger' })
+    await userEvent.click(confirmBtn)
 
     await waitFor(async () => {
       const svcAssert = await import('@services/properties')

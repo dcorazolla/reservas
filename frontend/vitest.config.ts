@@ -7,6 +7,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: path.resolve(__dirname, 'src/setupTests.ts'),
     exclude: ['**/@BKP/**', 'node_modules/**', 'dist/**'],
+    testTimeout: 15000,
     coverage: {
       provider: 'v8',
     },

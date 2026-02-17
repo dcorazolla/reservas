@@ -24,26 +24,27 @@ vi.mock('react-i18next', () => {
         const map: Record<string, string> = {
           'rooms.page.title': 'Rooms',
           'rooms.form.new': 'New room',
+          'rooms.form.create': 'New room',
+          'rooms.form.edit': 'Edit room',
           'rooms.form.name': 'Name',
-            'rooms.form.number': 'Number',
-            'rooms.form.beds': 'Beds',
-            'rooms.form.capacity': 'Capacity',
-            'rooms.form.notes': 'Notes',
-          'rooms.form.save': 'Save',
-          'rooms.form.cancel': 'Cancel',
-          'rooms.actions.edit': 'Edit',
-          'rooms.actions.delete': 'Remove',
-          // common
-          'common.form.save': 'Save',
-          'common.form.cancel': 'Cancel',
+          'rooms.form.number': 'Number',
+          'rooms.form.beds': 'Beds',
+          'rooms.form.capacity': 'Capacity',
+          'rooms.form.notes': 'Notes',
+          'rooms.form.category': 'Category',
+          'rooms.form.category_placeholder': 'Select category',
+          // common shared labels
+          'common.actions.save': 'Save',
+          'common.actions.cancel': 'Cancel',
           'common.actions.edit': 'Edit',
           'common.actions.delete': 'Remove',
-          'properties.confirm.delete_title': 'Delete confirmation',
-          'properties.confirm.delete_confirm': 'Remove',
-          'confirm.cancel': 'Cancel',
-          'properties.confirm.delete_message_prefix': 'Are you sure you want to remove',
-          'properties.confirm.delete_message_suffix': '?',
-          'rooms.form.category_placeholder': 'Select category',
+          'common.status.error_required': 'Required',
+          'common.status.loading': 'Loading...',
+          // confirm modal
+          'common.confirm.delete_title': 'Delete confirmation',
+          'common.confirm.delete_confirm': 'Remove',
+          'common.confirm.delete_message_prefix': 'Are you sure you want to remove',
+          'common.confirm.delete_message_suffix': 'This action cannot be undone.',
         }
         return map[k] ?? k
       },
@@ -112,6 +113,7 @@ describe('RoomsPage flows', () => {
     })
   })
 
+
   it('deletes a room after confirm', async () => {
     const svcDelete = await import('@services/rooms')
     svcDelete.__mocks.deleteMock.mockResolvedValueOnce(undefined)
@@ -122,9 +124,9 @@ describe('RoomsPage flows', () => {
 
     await userEvent.click(screen.getAllByText('Remove')[0])
 
-    // confirm by clicking the last Remove button
-    const removerButtons = await screen.findAllByText('Remove')
-    await userEvent.click(removerButtons[removerButtons.length - 1])
+    // confirm by clicking the confirm button inside the confirm modal
+    const confirmBtn = await screen.findByText('Remove', { selector: '.btn-danger' })
+    await userEvent.click(confirmBtn)
 
     await waitFor(async () => {
       const svcAssert = await import('@services/rooms')

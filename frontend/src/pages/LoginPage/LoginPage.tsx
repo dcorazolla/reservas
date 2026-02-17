@@ -197,7 +197,7 @@ export function LoginPage() {
             <Button
               className="social-btn"
               variant="outline"
-              onClick={() => setNotice(t('login.social_google_notice'))}
+              onClick={() => setNotice({ type: 'info', message: t('login.social_google_notice') })}
             >
               <FaGoogle size={16} aria-hidden />
               {t('login.social_google')}
@@ -205,7 +205,7 @@ export function LoginPage() {
             <Button
               className="social-btn"
               variant="outline"
-              onClick={() => setNotice(t('login.social_facebook_notice'))}
+              onClick={() => setNotice({ type: 'info', message: t('login.social_facebook_notice') })}
             >
               <FaFacebookF size={16} aria-hidden />
               {t('login.social_facebook')}
