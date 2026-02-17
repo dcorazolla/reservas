@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, Heading, Text, Button, Skeleton, VStack, HStack } from '@chakra-ui/react'
+import { Box, Heading, Text, Button } from '@chakra-ui/react'
 import EditPropertyModal from '@components/Properties/EditPropertyModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
+import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
 import * as propertiesService from '@services/properties'
 import { useTranslation } from 'react-i18next'
 import type { Property as ServiceProperty, PropertyPayload } from '@services/properties'
@@ -94,14 +95,7 @@ export default function PropertiesPage() {
       </Box>
 
       {loading ? (
-        <VStack spacing={3} align="stretch">
-          {[1, 2, 3, 4].map((i) => (
-            <HStack key={i} justify="space-between">
-              <Skeleton height="40px" width="60%" />
-              <Skeleton height="40px" width="20%" />
-            </HStack>
-          ))}
-        </VStack>
+        <SkeletonList rows={4} />
       ) : error ? (
         <Text color="red.500">{error}</Text>
       ) : (

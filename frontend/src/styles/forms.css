@@ -161,3 +161,49 @@
   transform: translateY(-1px);
   cursor: pointer;
 }
+
+/* --- Skeleton loading (pure CSS) --- */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.skeleton {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.skeleton-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.skeleton-row .skeleton:first-child {
+  flex: 3;
+  height: 40px;
+}
+
+.skeleton-row .skeleton:last-child {
+  flex: 1;
+  height: 40px;
+}
+
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-field {
+  height: 36px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    opacity: 0.6;
+  }
+}

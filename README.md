@@ -177,13 +177,13 @@ Boas práticas adotadas:
 - Agrupar componentes por domínio (ex.: `rates/`, `Reservation/`, `Minibar/`) quando fizer sentido para manter pastas menores e com responsabilidade definida.
 - Mantemos tokens e variáveis globais em `frontend/src/styles/variables.css` para facilitar theming (incluído recentemente no projeto).
 
-**Room Categories feature (new)**
+**Room Categories feature**
 - Files added/updated:
 	- `frontend/src/pages/RoomCategories/RoomCategoriesPage.tsx` — listing, create/edit modal integration, delete flow.
 	- `frontend/src/components/RoomCategories/EditRoomCategoryModal.tsx` — modal UI with optional "Category rates" toggle and fields.
 	- `frontend/src/components/RoomCategories/room-category-modal.css` — modal styles (grid layout and responsive rules).
 	- `frontend/src/pages/RoomCategories/room-categories.css` — list styles.
-	- `frontend/src/services/roomCategoryRates.ts` — service for listing/creating/updating/deleting category rates.
+	- `frontend/src/services/roomCategoryRates.ts` — service for listing/creating/updating/deleting category rates (usa `createNestedCrudService`).
 	- `frontend/src/services/roomCategoryRates.test.ts` — unit tests for the rates service.
 	- `frontend/src/components/RoomCategories/EditRoomCategoryModal.test.tsx` — unit test for the modal.
 	- `frontend/src/pages/RoomCategories/RoomCategoriesPage.flow.test.tsx` — flow tests for create/delete flows.
@@ -192,6 +192,39 @@ Notes:
 - The modal includes a toggle to show/hide a "Category rates" panel that contains numeric inputs for `base_one_adult`, `base_two_adults`, `additional_adult`, and `child_price`.
 - When saving, if the rates panel is open, the modal includes `_rates` in the payload which the page persists via the `roomCategoryRates` service.
 - i18n keys for the modal/toggle were added to `frontend/public/locales/*/common.json`.
+
+**Room Rates feature**
+- Files added/updated:
+	- `frontend/src/components/Rooms/EditRoomModal.tsx` — modal com toggle de tarifas por nº de pessoas (dinâmico baseado na capacidade).
+	- `frontend/src/components/Rooms/EditRoomModal.test.tsx` — 14 testes (skeleton, toggle, rate fields, save).
+	- `frontend/src/pages/Rooms/RoomsPage.tsx` — `handleSave` com lógica de create/update/delete de rates.
+	- `frontend/src/services/roomRates.ts` — service para CRUD de rates por quarto (usa `createNestedCrudService`).
+	- `frontend/src/services/roomRates.test.ts` — 4 testes unitários.
+	- `frontend/src/models/roomRate.ts` — types `RoomRate` e `RoomRatePayload`.
+
+Notes:
+- Campos de tarifa são opcionais: campo vazio = não grava no banco.
+- Se o campo tinha valor e foi limpo = deleta o registro (via `deleteRate`).
+- Ao reduzir capacidade, rates órfãos (people_count > nova capacidade) são incluídos com `price_per_day: null` para deleção.
+- O toggle de tarifas **sempre inicia fechado** ao abrir o modal (`setShowRates(false)` no `useEffect`).
+- Labels usam i18n keys existentes (`price_single`, `price_double`, etc.) via mapa `RATE_LABEL_KEYS`.
+
+**Shared Components**
+- `frontend/src/components/Shared/CurrencyInput/CurrencyInput.tsx` — input monetário com máscara (R$ / formato brasileiro).
+- `frontend/src/components/Shared/FormField/FormField.tsx` — wrapper para campos de formulário com label, error e layout consistente.
+- `frontend/src/components/Shared/Skeleton/SkeletonFields.tsx` — skeleton de loading para formulários.
+- `frontend/src/components/Shared/Skeleton/SkeletonList.tsx` — skeleton de loading para listas.
+- `frontend/src/components/Shared/Modal/Modal.tsx` — modal compartilhado usado por todos os modals de edição.
+
+**Formulários (padrão)**
+- `react-hook-form` + `zod` (via `@hookform/resolvers/zod`) para validação.
+- Schemas Zod em `frontend/src/models/schemas.ts`.
+- `CurrencyInput` para campos monetários, `SkeletonFields` para loading.
+
+**Serviço CRUD genérico**
+- `createCrudService<T,P>(basePath)` — CRUD simples (list/get/create/update/remove).
+- `createNestedCrudService<T,P>(parentBase, sub, itemBase)` — CRUD para sub-recursos (rates de rooms, rates de categories).
+- Ambos em `frontend/src/services/crudService.ts`.
 
 How to run the frontend tests and coverage:
 ```bash

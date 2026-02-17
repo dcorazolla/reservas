@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
@@ -11,9 +11,6 @@ vi.mock('@chakra-ui/react', async () => {
     Heading: (props: any) => React.createElement('h2', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
-    Skeleton: (props: any) => React.createElement('div', { 'data-testid': 'skeleton', ...props }, 'loading'),
-    VStack: (props: any) => React.createElement('div', props, props.children),
-    HStack: (props: any) => React.createElement('div', props, props.children),
   }
 })
 
@@ -107,6 +104,17 @@ describe('PropertiesPage extended flows', () => {
     for (const ni of numberInputs) {
       await userEvent.clear(ni)
       await userEvent.type(ni, '1')
+    }
+
+    // Open rates section and fill CurrencyInput fields
+    await userEvent.click(screen.getByText('Mostrar tarifas'))
+    const rateSection = document.querySelector('.rate-group-content.expanded')
+    if (rateSection) {
+      const currencyInputs = rateSection.querySelectorAll('input[inputmode="numeric"]')
+      for (const ci of currencyInputs) {
+        fireEvent.change(ci, { target: { value: '1,00' } })
+        fireEvent.blur(ci)
+      }
     }
 
     await userEvent.click(screen.getByText('Salvar'))

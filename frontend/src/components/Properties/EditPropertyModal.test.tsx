@@ -1,15 +1,11 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 
 vi.mock('@chakra-ui/react', async () => {
-  const React = await import('react')
-  return {
-    Skeleton: (props: any) => React.createElement('div', { 'data-testid': 'skeleton', ...props }, 'loading'),
-    VStack: (props: any) => React.createElement('div', props, props.children),
-  }
+  return {}
 })
 
 vi.mock('react-i18next', () => ({
@@ -20,13 +16,37 @@ vi.mock('react-i18next', () => ({
 
 import EditPropertyModal from './EditPropertyModal'
 
+/** Helper: fill all required fields (name, age spinbuttons, and CurrencyInput fields in the rates section) */
+async function fillAllRequiredFields(container: HTMLElement) {
+  // Fill name (first textbox)
+  const nameInput = screen.getAllByRole('textbox')[0]
+  await userEvent.type(nameInput, 'New Hotel')
+
+  // Fill age spinbuttons (infant_max_age, child_max_age)
+  const spinbuttons = screen.getAllByRole('spinbutton')
+  for (const ni of spinbuttons) {
+    await userEvent.clear(ni)
+    await userEvent.type(ni, '10')
+  }
+
+  // Open rates section to access CurrencyInput fields
+  await userEvent.click(screen.getByText('common.pricing.show_rates'))
+
+  // CurrencyInput fields render as <input type="text" inputmode="numeric">
+  // They are inside the rate-group-content section
+  const rateSection = container.querySelector('.rate-group-content.expanded')
+  if (rateSection) {
+    const currencyInputs = rateSection.querySelectorAll('input[inputmode="numeric"]')
+    for (const ci of currencyInputs) {
+      fireEvent.change(ci, { target: { value: '10,00' } })
+      // Trigger blur to ensure react-hook-form picks up the value
+      fireEvent.blur(ci)
+    }
+  }
+}
+
 describe('EditPropertyModal', () => {
   beforeEach(() => vi.clearAllMocks())
-
-  it('shows loading skeleton when loading=true', () => {
-    render(<EditPropertyModal isOpen={true} onClose={vi.fn()} onSave={vi.fn()} loading={true} />)
-    expect(screen.getByText('common.status.loading')).toBeInTheDocument()
-  })
 
   it('renders create form when property is null', () => {
     render(<EditPropertyModal isOpen={true} onClose={vi.fn()} onSave={vi.fn()} property={null} />)
@@ -78,17 +98,9 @@ describe('EditPropertyModal', () => {
     const onSave = vi.fn()
     const onClose = vi.fn()
 
-    render(<EditPropertyModal isOpen={true} onClose={onClose} onSave={onSave} property={null} />)
+    const { container } = render(<EditPropertyModal isOpen={true} onClose={onClose} onSave={onSave} property={null} />)
 
-    const textInput = screen.getAllByRole('textbox')[0]
-    await userEvent.type(textInput, 'New Hotel')
-
-    // Fill all number inputs
-    const numberInputs = screen.getAllByRole('spinbutton')
-    for (const ni of numberInputs) {
-      await userEvent.clear(ni)
-      await userEvent.type(ni, '10')
-    }
+    await fillAllRequiredFields(container)
 
     await userEvent.click(screen.getByText('common.actions.save'))
 

@@ -49,7 +49,34 @@ Este arquivo reúne as regras de negócio, requisitos funcionais e não-funciona
 ## 7) Artefatos a manter atualizados
 - `docs/AGENT_CONTEXT/`, `OVERVIEW.md`, `SETUP.md`, `ARCHITECTURE.md`, `CHECKLIST.md`, `frontend/RELEASE_NOTES.md`, `backend/RELEASE_NOTES.md`, `docs/adr/`.
 
-## 8) Requisitos específicos extraídos
+## 8) Tarifário — cascata de preços
+
+O sistema calcula preços por dia usando uma cascata de prioridade. Para cada dia da estadia, o `ReservationPriceCalculator` busca a tarifa nesta ordem (a primeira encontrada vence):
+
+1. **Room Rate Period** (`room_rate_periods`) — tarifa do quarto para um período específico + people_count.
+2. **Category Rate Period** (`room_category_rate_periods`) — tarifa da categoria para um período.
+3. **Room Rate base** (`room_rates`) — tarifa base do quarto por `people_count`.
+4. **Category Rate base** (`room_category_rates`) — tarifa base da categoria (`base_one_adult`, `base_two_adults`, `additional_adult`, `child_price`).
+5. **Property base** (`properties`) — tarifa base da propriedade (mesmos campos da categoria).
+
+Regras complementares:
+- Quando a tarifa usa `price_per_day` (room rate / room rate period), o valor já inclui tudo para aquele `people_count`.
+- Quando a tarifa usa `base_two_adults` + `additional_adult` (category / property), o cálculo é: `base_two_adults + max(0, adultos-2) × additional_adult + crianças × child_price`.
+- Para 1 adulto, usa `base_one_adult` se disponível.
+- `child_price` tem fallback: se null, calcula `adult_per_person × child_factor` da propriedade.
+- Campos de tarifa são **opcionais** — se não configurados, o sistema cai na próxima camada da cascata automaticamente.
+- O endpoint `POST /reservations/calculate` (simplificado) trata `people_count` como adultos (0 crianças). Para cálculo com crianças, usar `POST /reservations/calculate-detailed`.
+
+Flexibilidade por porte:
+
+| Porte | O que configura | Onde |
+|---|---|---|
+| Pousada pequena | Só a propriedade | `properties.base_two_adults` + `additional_adult` |
+| Pousada média | Categorias (Standard, Luxo) | `room_category_rates` |
+| Hotel / Rede | Exceções por quarto | `room_rates` (por `people_count`) |
+| Alta temporada | Períodos específicos | `room_rate_periods` / `room_category_rate_periods` |
+
+## 9) Requisitos específicos extraídos
 - Reservas: CRUD, disponibilidade, overrides de preço auditados.
 - Pagamentos: parciais e totais, integração com frigobar, alocações por linha.
 - Frigobar: catálogo, lançamentos vinculados a reservas, agrupamento em invoice.

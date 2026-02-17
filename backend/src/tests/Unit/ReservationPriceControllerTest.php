@@ -32,8 +32,8 @@ class ReservationPriceControllerTest extends TestCase
         $mockCalc = $this->createMock(\App\Services\ReservationPriceCalculator::class);
         $mockCalc->expects($this->once())
             ->method('calculate')
-            ->with($validated['room_id'], $validated['start_date'], $validated['end_date'], $validated['people_count'])
-            ->willReturn(['total' => 123.45]);
+            ->with($validated['room_id'], $validated['start_date'], $validated['end_date'], 2)
+            ->willReturn(['source' => 'property_base', 'total' => 123.45]);
 
         $controller = new \App\Http\Controllers\Api\ReservationPriceController();
 
@@ -53,7 +53,7 @@ class ReservationPriceControllerTest extends TestCase
         $resp = $controller->calculate($request, $mockCalc);
 
         $this->assertEquals(200, $resp->getStatusCode());
-        $this->assertEquals(['total' => 123.45], $resp->getData(true));
+        $this->assertEquals(['source' => 'property_base', 'total' => 123.45], $resp->getData(true));
     }
 
     public function test_calculate_detailed_calls_service_and_returns_response()

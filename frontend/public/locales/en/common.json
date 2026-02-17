@@ -34,7 +34,8 @@
       "show_rates": "Show rates",
       "six_adults": "Price 6 adults",
       "trhee_adults": "Price 3 adults",
-      "two_adults": "Price 2 adults"
+      "two_adults": "Price 2 adults",
+      "price_n_people": "Price for {{count}} person(s)"
     }
   },
   "header": {
@@ -132,7 +133,8 @@
       "number": "Number",
       "create": "Create room",
       "new": "New room",
-      "edit": "Edit room"
+      "edit": "Edit room",
+      "rate_group_title": "Room rates"
     },
     "errors": {
       "load": "Failed to load rooms",

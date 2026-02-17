@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, Heading, Text, Button, VStack, HStack, Skeleton } from '@chakra-ui/react'
+import { Box, Heading, Text, Button } from '@chakra-ui/react'
 import EditRoomCategoryModal from '@components/RoomCategories/EditRoomCategoryModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
+import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
 import * as roomCategoriesService from '@services/roomCategories'
 import * as ratesService from '@services/roomCategoryRates'
 import { useTranslation } from 'react-i18next'
@@ -113,14 +114,7 @@ export default function RoomCategoriesPage() {
       </Box>
 
       {loading ? (
-        <VStack spacing={3} align="stretch">
-          {[1, 2, 3].map((i) => (
-            <HStack key={i} justify="space-between">
-              <Skeleton height="40px" width="60%" />
-              <Skeleton height="40px" width="20%" />
-            </HStack>
-          ))}
-        </VStack>
+        <SkeletonList rows={3} />
       ) : error ? (
         <Text color="red.500">{error}</Text>
       ) : (

@@ -1,9 +1,11 @@
 import React from 'react'
-import { Box, Heading, Text, Button, VStack, HStack, Skeleton } from '@chakra-ui/react'
+import { Box, Heading, Text, Button } from '@chakra-ui/react'
 import EditRoomModal from '@components/Rooms/EditRoomModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
+import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
 import * as roomsService from '@services/rooms'
+import * as roomRatesService from '@services/roomRates'
 import { useTranslation } from 'react-i18next'
 import type { Room as ServiceRoom, RoomPayload } from '@services/rooms'
 
@@ -16,20 +18,53 @@ export default function RoomsPage() {
   const [loading, setLoading] = React.useState<boolean>(true)
   const [error, setError] = React.useState<string | null>(null)
 
-  async function handleSave(updated: ServiceRoom) {
+  async function handleSave(updated: any) {
     try {
       const payload: RoomPayload = {
         name: updated.name,
         number: updated.number ?? null,
         room_category_id: updated.room_category_id ?? null,
+        beds: updated.beds,
+        capacity: updated.capacity,
+        active: updated.active,
+        notes: updated.notes ?? null,
       }
 
+      let savedRoom: ServiceRoom
       if (!updated.id) {
-        const created = await roomsService.createRoom(payload)
-        setItems((s) => [created, ...s])
+        savedRoom = await roomsService.createRoom(payload)
+        setItems((s) => [savedRoom, ...s])
       } else {
-        const saved = await roomsService.updateRoom(updated.id, payload)
-        setItems((s) => s.map((it) => (it.id === saved.id ? saved : it)))
+        savedRoom = await roomsService.updateRoom(updated.id, payload)
+        setItems((s) => s.map((it) => (it.id === savedRoom.id ? savedRoom : it)))
+      }
+
+      // handle room rates if provided
+      if (updated._rates) {
+        for (const rate of updated._rates) {
+          try {
+            const hasValue = rate.price_per_day != null && rate.price_per_day !== ''
+            if (hasValue && rate.id) {
+              // update existing rate
+              await roomRatesService.updateRate(rate.id, {
+                people_count: rate.people_count,
+                price_per_day: rate.price_per_day,
+              })
+            } else if (hasValue && !rate.id) {
+              // create new rate
+              await roomRatesService.createRate(savedRoom.id, {
+                people_count: rate.people_count,
+                price_per_day: rate.price_per_day,
+              })
+            } else if (!hasValue && rate.id) {
+              // field was cleared — remove from database
+              await roomRatesService.deleteRate(rate.id)
+            }
+            // if no value and no id, nothing to do
+          } catch (err) {
+            console.error('Failed to save room rate', err)
+          }
+        }
       }
     } catch (err: any) {
       console.error('Failed to save room', err)
@@ -77,14 +112,7 @@ export default function RoomsPage() {
       </Box>
 
       {loading ? (
-        <VStack spacing={3} align="stretch">
-          {[1, 2, 3].map((i) => (
-            <HStack key={i} justify="space-between">
-              <Skeleton height="40px" width="60%" />
-              <Skeleton height="40px" width="20%" />
-            </HStack>
-          ))}
-        </VStack>
+        <SkeletonList rows={3} />
       ) : error ? (
         <Text color="red.500">{error}</Text>
       ) : (

@@ -67,7 +67,7 @@ describe('EditRoomCategoryModal', () => {
     render(<EditRoomCategoryModal isOpen={true} category={{ id: 'rc-1', name: 'Cat A', description: 'Desc' }} onClose={onClose} onSave={onSave} />)
 
     // while the rates promise is pending, the loading placeholder should be visible
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+    expect(screen.getByTestId('skeleton-fields')).toBeInTheDocument()
 
     // after resolution, listRates should have been called
     await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalled())
@@ -79,11 +79,15 @@ describe('EditRoomCategoryModal', () => {
 
     render(<EditRoomCategoryModal isOpen={true} category={null} onClose={onClose} onSave={onSave} />)
 
+    // Fill required name field (zod schema requires it)
+    const nameInput = screen.getAllByRole('textbox')[0]
+    await userEvent.type(nameInput, 'New Category')
+
     // open rates group
     const toggle = screen.getByText('common.pricing.show_rates')
     await userEvent.click(toggle)
 
-    // save without entering numbers
+    // save without entering rate numbers
     const saveBtn = screen.getByText('common.actions.save')
     await userEvent.click(saveBtn)
 

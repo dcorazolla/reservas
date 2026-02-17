@@ -34,7 +34,8 @@
       "show_rates": "Mostrar tarifas",
       "six_adults": "Preço 6 adultos",
       "trhee_adults": "Preço 3 adultos",
-      "two_adults": "Preço 2 adultos"
+      "two_adults": "Preço 2 adultos",
+      "price_n_people": "Valor para {{count}} pessoa(s)"
     }
   },
   "header": {
@@ -132,7 +133,8 @@
       "number": "Número",
       "create": "Criar quarto",
       "new": "Novo quarto",
-      "edit": "Editar quarto"
+      "edit": "Editar quarto",
+      "rate_group_title": "Tarifas do quarto"
     },
     "errors": {
       "load": "Falha ao carregar quartos",

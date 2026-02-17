@@ -11,16 +11,16 @@ vi.mock('@chakra-ui/react', async () => {
     Heading: (props: any) => React.createElement('h2', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
-    Skeleton: (props: any) => React.createElement('div', props, props.children),
-    VStack: (props: any) => React.createElement('div', props, props.children),
-    HStack: (props: any) => React.createElement('div', props, props.children),
   }
 })
 
 vi.mock('react-i18next', () => {
   return {
     useTranslation: () => ({
-      t: (k: string) => {
+      t: (k: string, opts?: any) => {
+        if (k === 'common.pricing.price_n_people' && opts?.count != null) {
+          return `Price for ${opts.count} person(s)`
+        }
         const map: Record<string, string> = {
           'rooms.page.title': 'Rooms',
           'rooms.form.new': 'New room',
@@ -33,6 +33,7 @@ vi.mock('react-i18next', () => {
           'rooms.form.notes': 'Notes',
           'rooms.form.category': 'Category',
           'rooms.form.category_placeholder': 'Select category',
+          'rooms.form.rate_group_title': 'Room rates',
           // common shared labels
           'common.actions.save': 'Save',
           'common.actions.cancel': 'Cancel',
@@ -40,6 +41,8 @@ vi.mock('react-i18next', () => {
           'common.actions.delete': 'Remove',
           'common.status.error_required': 'Required',
           'common.status.loading': 'Loading...',
+          'common.pricing.show_rates': 'Show rates',
+          'common.pricing.hide_rates': 'Hide rates',
           // confirm modal
           'common.confirm.delete_title': 'Delete confirmation',
           'common.confirm.delete_confirm': 'Remove',
@@ -73,6 +76,20 @@ vi.mock('@services/roomCategories', () => {
   const listMock = vi.fn()
   listMock.mockResolvedValue([{ id: 'rc-1', name: 'Category A' }])
   return { listRoomCategories: () => listMock(), __mocks: { listMock } }
+})
+
+vi.mock('@services/roomRates', () => {
+  const listRatesMock = vi.fn().mockResolvedValue([])
+  const createRateMock = vi.fn().mockResolvedValue({})
+  const updateRateMock = vi.fn().mockResolvedValue({})
+  const deleteRateMock = vi.fn().mockResolvedValue(undefined)
+  return {
+    listRates: (...args: any[]) => listRatesMock(...args),
+    createRate: (...args: any[]) => createRateMock(...args),
+    updateRate: (...args: any[]) => updateRateMock(...args),
+    deleteRate: (...args: any[]) => deleteRateMock(...args),
+    __mocks: { listRatesMock, createRateMock, updateRateMock, deleteRateMock },
+  }
 })
 
 import RoomsPage from './RoomsPage'

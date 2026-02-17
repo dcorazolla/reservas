@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor, within, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
@@ -17,9 +17,6 @@ vi.mock('@chakra-ui/react', async () => {
     ListItem: (props: any) => React.createElement('li', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
-    Skeleton: (props: any) => React.createElement('div', props, props.children),
-    VStack: (props: any) => React.createElement('div', props, props.children),
-    HStack: (props: any) => React.createElement('div', props, props.children),
   }
 })
 
@@ -107,19 +104,31 @@ describe('PropertiesPage flows', () => {
     // click save without filling should show validation errors (inputs are required)
     await userEvent.click(await screen.findByText('Salvar'))
 
-    // expect error text appears
-    expect(await screen.findAllByText('Campo obrigatório')).toHaveLength(8)
+    // expect error text appears (name + 5 rate fields = 6 errors;
+    // infant_max_age/child_max_age default to 0 which passes validation)
+    expect(await screen.findAllByText('Campo obrigatório')).toHaveLength(6)
 
     // fill required fields (simple minimal values)
     const inputs = screen.getAllByRole('textbox')
     // first textbox is name
     await userEvent.type(inputs[0], 'Nova')
 
-    // numeric inputs: fill with '1' for each remaining
+    // fill age spinbuttons (infant_max_age, child_max_age)
     const numberInputs = screen.getAllByRole('spinbutton')
     for (const ni of numberInputs) {
       await userEvent.clear(ni)
       await userEvent.type(ni, '1')
+    }
+
+    // Open rates section and fill CurrencyInput fields (type="text" inputmode="numeric")
+    await userEvent.click(screen.getByText('Mostrar tarifas'))
+    const rateSection = document.querySelector('.rate-group-content.expanded')
+    if (rateSection) {
+      const currencyInputs = rateSection.querySelectorAll('input[inputmode="numeric"]')
+      for (const ci of currencyInputs) {
+        fireEvent.change(ci, { target: { value: '1,00' } })
+        fireEvent.blur(ci)
+      }
     }
 
     // select timezone (native select)
@@ -151,20 +160,31 @@ describe('PropertiesPage flows', () => {
     // open edit for first row
     await userEvent.click(screen.getAllByText('Editar')[0])
 
-    // modal should show name input prefilled
-    const nameInput = await screen.findByRole('textbox')
+    // modal should show name input prefilled (first textbox is the name)
+    const allTextboxes = await screen.findAllByRole('textbox')
+    const nameInput = allTextboxes[0]
     expect((nameInput as HTMLInputElement).value).toBe('Pousada Sol')
 
     // change name
     await userEvent.clear(nameInput)
     await userEvent.type(nameInput, 'Pousada Sol Updated')
 
-    // save
-    // fill remaining required numeric fields before saving
+    // fill remaining required age spinbuttons
     const numberInputsEdit = screen.getAllByRole('spinbutton')
     for (const ni of numberInputsEdit) {
       await userEvent.clear(ni)
       await userEvent.type(ni, '1')
+    }
+
+    // Open rates section and fill CurrencyInput fields
+    await userEvent.click(screen.getByText('Mostrar tarifas'))
+    const rateSection = document.querySelector('.rate-group-content.expanded')
+    if (rateSection) {
+      const currencyInputs = rateSection.querySelectorAll('input[inputmode="numeric"]')
+      for (const ci of currencyInputs) {
+        fireEvent.change(ci, { target: { value: '1,00' } })
+        fireEvent.blur(ci)
+      }
     }
 
     await userEvent.click(await screen.findByText('Salvar'))

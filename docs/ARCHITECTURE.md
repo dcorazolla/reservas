@@ -9,9 +9,19 @@ Camadas principais
 
 Entidades principais
 - Property
-  - Campos chave: id (uuid), name, address, timezone
+  - Campos chave: id (uuid), name, timezone, base_one_adult, base_two_adults, additional_adult, child_price, child_factor, infant_max_age, child_max_age
+- RoomCategory
+  - Campos: id, name, description
+- RoomCategoryRate
+  - Campos: id, room_category_id, base_one_adult, base_two_adults, additional_adult, child_price
+- RoomCategoryRatePeriod
+  - Campos: id, room_category_id, start_date, end_date, base_one_adult, base_two_adults, additional_adult, child_price, description
 - Room
-  - Campos: id, property_id, name, capacity, price_base
+  - Campos: id, property_id, room_category_id, name, number, beds, capacity, active, notes
+- RoomRate
+  - Campos: id, room_id, people_count, price_per_day (tarifa base por nº de pessoas)
+- RoomRatePeriod
+  - Campos: id, room_id, people_count, start_date, end_date, price_per_day, description
 - Reservation
   - Campos: id, property_id, room_id, guest_name, start_date, end_date, status, total_price
 - Invoice
@@ -19,11 +29,17 @@ Entidades principais
 - Payment
   - Campos: id, invoice_id, amount, provider, provider_id, status
 
+Cascata de preços (ver `docs/CONSOLIDATED_REQUIREMENTS.md` §8)
+- room_rate_period → category_rate_period → room_rate → category_rate → property_base
+- `ReservationPriceCalculator` em `backend/src/app/Services/` implementa a lógica.
+
 Onde encontrar o código (mapa rápido)
 - `backend/src/app/Services` — lógica de cálculo de preço, criação de reserva, faturamento
 - `backend/src/app/Http/Controllers/Api` — endpoints REST (reservations, invoices, payments)
-- `frontend/src/components` — componentes UI reutilizáveis (Modal, Form, Header)
-- `frontend/src/pages` — páginas (ReservationsPage, InvoicesPage)
+- `frontend/src/components` — componentes UI reutilizáveis (Modal, FormField, Skeleton, CurrencyInput)
+- `frontend/src/pages` — páginas (Properties, RoomCategories, Rooms, Reservations)
+- `frontend/src/services` — serviços API (crud genérico + nested crud para sub-recursos)
+- `frontend/src/models` — types/schemas TypeScript (Room, Property, RoomRate, schemas Zod)
 
 Decisões importantes (resumo)
 - Auditoria financeira: todas as alterações financeiras são registradas em logs append-only (ver ADRs quando existentes)

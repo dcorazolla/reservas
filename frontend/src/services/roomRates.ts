@@ -1,12 +1,12 @@
 import { createNestedCrudService } from './crudService'
-import type { RoomCategoryRate, RoomCategoryRatePayload } from '@models/roomCategoryRate'
+import type { RoomRate, RoomRatePayload } from '@models/roomRate'
 
-export type { RoomCategoryRate, RoomCategoryRatePayload }
+export type { RoomRate, RoomRatePayload }
 
-const crud = createNestedCrudService<RoomCategoryRate, RoomCategoryRatePayload>(
-  '/api/room-categories',
+const crud = createNestedCrudService<RoomRate, RoomRatePayload>(
+  '/api/rooms',
   'rates',
-  '/api/room-category-rates'
+  '/api/room-rates'
 )
 
 export const listRates  = crud.list
