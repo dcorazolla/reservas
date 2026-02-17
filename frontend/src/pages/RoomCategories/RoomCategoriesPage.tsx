@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Heading, Text, Button, VStack, HStack, Skeleton } from '@chakra-ui/react'
-import './room-categories.css'
 import EditRoomCategoryModal from '@components/RoomCategories/EditRoomCategoryModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
@@ -129,7 +128,7 @@ export default function RoomCategoriesPage() {
           items={items}
           className="room-categories-list"
           renderItem={(c: ServiceRoomCategory) => (
-            <div className="room-category-row">
+            <div className="entity-row">
               <div>
                 <Text as="div" fontWeight={600}>{c.name}</Text>
                 <Text as="div" fontSize="sm" color="gray.600">{c.description}</Text>

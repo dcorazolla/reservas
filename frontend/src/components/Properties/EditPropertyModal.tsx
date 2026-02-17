@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Modal from '@components/Shared/Modal/Modal'
-import './property-modal.css'
 import type { Property as ServiceProperty } from '@services/properties'
 import { Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { requiredString, requiredNumeric, runValidation, toNumberOrNull } from '@utils/validation'
 
 const COMMON_TIMEZONES = [
   'UTC',
@@ -70,37 +70,18 @@ export default function EditPropertyModal({
     }
   }, [property, isOpen])
 
-  function toNumberOrNull(v: string) {
-    if (v === '' || v == null) return null
-    const n = Number(v)
-    return Number.isNaN(n) ? null : n
-  }
-
   function handleSave() {
-    const newErrors: Record<string, string> = {}
-
-    // validation: all fields required
-    if (!name.trim()) newErrors['name'] = t('common.status.error_required')
-    if (!timezone) newErrors['timezone'] = t('common.status.error_required')
-
-    const numericFields = [
-      ['infantMaxAge', infantMaxAge],
-      ['childMaxAge', childMaxAge],
-      ['childFactor', childFactor],
-      ['baseOneAdult', baseOneAdult],
-      ['baseTwoAdults', baseTwoAdults],
-      ['additionalAdult', additionalAdult],
-      ['childPrice', childPrice],
-    ] as const
-
-    for (const [key, value] of numericFields) {
-      if (value === '' || value == null) {
-        newErrors[String(key)] = t('common.status.error_required')
-      } else {
-        const n = Number(value)
-        if (Number.isNaN(n)) newErrors[String(key)] = t('common.status.error_required')
-      }
-    }
+    const newErrors = runValidation({
+      name: [requiredString(name, t)],
+      timezone: [requiredString(timezone, t)],
+      infantMaxAge: [requiredNumeric(infantMaxAge, t)],
+      childMaxAge: [requiredNumeric(childMaxAge, t)],
+      childFactor: [requiredNumeric(childFactor, t)],
+      baseOneAdult: [requiredNumeric(baseOneAdult, t)],
+      baseTwoAdults: [requiredNumeric(baseTwoAdults, t)],
+      additionalAdult: [requiredNumeric(additionalAdult, t)],
+      childPrice: [requiredNumeric(childPrice, t)],
+    })
 
     if (Object.keys(newErrors).length > 0) {
       // ensure tariffs visible if any tariff field has error
@@ -143,14 +124,14 @@ export default function EditPropertyModal({
 
   return (
     <Modal isOpen={!!isOpen} onClose={onClose} title={property ? t('properties.form.edit') : t('properties.form.new')} size="lg">
-      <div className="property-form-grid">
-        <div className="property-field full-width">
+      <div className="form-grid">
+        <div className="form-field full-width">
           <span>{t('properties.form.name')}</span>
           <input value={name} onChange={(e) => setName(e.target.value)} required />
           {errors['name'] ? <div className="field-error">{errors['name']}</div> : null}
         </div>
 
-        <div className="property-field full-width">
+        <div className="form-field full-width">
           <span>{t('properties.form.timezone')}</span>
           <select value={timezone} onChange={(e) => setTimezone(e.target.value)} required>
             {COMMON_TIMEZONES.map((tz) => (
@@ -160,13 +141,13 @@ export default function EditPropertyModal({
           {errors['timezone'] ? <div className="field-error">{errors['timezone']}</div> : null}
         </div>
 
-        <div className="property-field number">
+        <div className="form-field number">
           <span>{t('common.pricing.infant_max_age')}</span>
           <input type="number" value={infantMaxAge} onChange={(e) => setInfantMaxAge(e.target.value)} required />
           {errors['infantMaxAge'] ? <div className="field-error">{errors['infantMaxAge']}</div> : null}
         </div>
 
-        <div className="property-field number">
+        <div className="form-field number">
           <span>{t('common.pricing.child_max_age')}</span>
           <input type="number" value={childMaxAge} onChange={(e) => setChildMaxAge(e.target.value)} required />
           {errors['childMaxAge'] ? <div className="field-error">{errors['childMaxAge']}</div> : null}
@@ -181,31 +162,31 @@ export default function EditPropertyModal({
           </div>
 
           <div className={`rate-group-content ${showRates ? 'expanded' : 'collapsed'}`}>
-            <div className="property-field number">
+            <div className="form-field number">
               <span>{t('common.pricing.child_factor')}</span>
               <input type="number" step="0.01" value={childFactor} onChange={(e) => setChildFactor(e.target.value)} required />
               {errors['childFactor'] ? <div className="field-error">{errors['childFactor']}</div> : null}
             </div>
 
-            <div className="property-field number">
+            <div className="form-field number">
               <span>{t('common.pricing.child_price')}</span>
               <input type="number" step="0.01" value={childPrice} onChange={(e) => setChildPrice(e.target.value)} required />
               {errors['childPrice'] ? <div className="field-error">{errors['childPrice']}</div> : null}
             </div>
 
-            <div className="property-field number">
+            <div className="form-field number">
               <span>{t('common.pricing.one_adult')}</span>
               <input type="number" step="0.01" value={baseOneAdult} onChange={(e) => setBaseOneAdult(e.target.value)} required />
               {errors['baseOneAdult'] ? <div className="field-error">{errors['baseOneAdult']}</div> : null}
             </div>
 
-            <div className="property-field number">
+            <div className="form-field number">
               <span>{t('common.pricing.two_adults')}</span>
               <input type="number" step="0.01" value={baseTwoAdults} onChange={(e) => setBaseTwoAdults(e.target.value)} required />
               {errors['baseTwoAdults'] ? <div className="field-error">{errors['baseTwoAdults']}</div> : null}
             </div>
 
-            <div className="property-field number">
+            <div className="form-field number">
               <span>{t('common.pricing.additional_adult')}</span>
               <input type="number" step="0.01" value={additionalAdult} onChange={(e) => setAdditionalAdult(e.target.value)} required />
               {errors['additionalAdult'] ? <div className="field-error">{errors['additionalAdult']}</div> : null}

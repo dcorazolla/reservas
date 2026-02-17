@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Heading, Text, Button, VStack, HStack, Skeleton } from '@chakra-ui/react'
-import './rooms.css'
 import EditRoomModal from '@components/Rooms/EditRoomModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
@@ -93,7 +92,7 @@ export default function RoomsPage() {
           items={items}
           className="rooms-list"
           renderItem={(r: ServiceRoom) => (
-            <div className="room-row">
+            <div className="entity-row">
               <div>
                 <Text as="div" fontWeight={600}>{r.name}</Text>
                 <Text as="div" fontSize="sm" color="gray.600">{r.number} {r.beds ? `· ${r.beds} bed(s)` : ''} {r.capacity ? `· ${r.capacity} pax` : ''}</Text>

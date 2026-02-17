@@ -1,7 +1,6 @@
 import React from 'react'
 import Modal from '@components/Shared/Modal/Modal'
-import { Box, Button } from '@chakra-ui/react'
-import './room-category-modal.css'
+import { Box } from '@chakra-ui/react'
 import * as ratesService from '@services/roomCategoryRates'
 import { useTranslation } from 'react-i18next'
 
@@ -58,14 +57,14 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={category?.id ? t('roomCategories.form.edit') : t('roomCategories.form.new')}>
-      <div className="room-category-form-grid">
-        <div className="room-category-field full-width">
+    <Modal isOpen={isOpen} onClose={onClose} title={category?.id ? t('roomCategories.form.edit') : t('roomCategories.form.new')} size="lg">
+      <div className="form-grid">
+        <div className="form-field full-width">
           <span>{t('roomCategories.form.name')}</span>
           <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
         </div>
 
-        <div className="room-category-field full-width">
+        <div className="form-field full-width">
           <span>{t('roomCategories.form.description')}</span>
           <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
         </div>
@@ -83,22 +82,22 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
               <div>Loading...</div>
             ) : (
               <>
-                <div className="room-category-field">
+                <div className="form-field">
                   <span>{t('common.pricing.one_adult')}</span>
                   <input type="number" value={rate?.base_one_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_one_adult: e.target.value })} />
                 </div>
 
-                <div className="room-category-field">
+                <div className="form-field">
                   <span>{t('common.pricing.two_adults')}</span>
                   <input type="number" value={rate?.base_two_adults ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_two_adults: e.target.value })} />
                 </div>
 
-                <div className="room-category-field">
+                <div className="form-field">
                   <span>{t('common.pricing.additional_adult')}</span>
                   <input type="number" value={rate?.additional_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), additional_adult: e.target.value })} />
                 </div>
 
-                <div className="room-category-field">
+                <div className="form-field">
                   <span>{t('common.pricing.child_price')}</span>
                   <input type="number" step="0.01" value={rate?.child_price ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), child_price: e.target.value })} />
                 </div>
@@ -108,8 +107,8 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
         </div>
 
         <div className="modal-actions full-width">
-          <Button variant="ghost" onClick={onClose}>{t('common.actions.cancel')}</Button>
-          <Button colorScheme="blue" type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(e); }}>{t('common.actions.save')}</Button>
+          <button className="btn btn-ghost" type="button" onClick={onClose}>{t('common.actions.cancel')}</button>
+          <button className="btn btn-primary" type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(e); }}>{t('common.actions.save')}</button>
         </div>
       </div>
     </Modal>

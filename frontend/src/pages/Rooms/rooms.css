@@ -1,6 +1,0 @@
-/* basic placeholders for rooms styles (keeps parity with other pages) */
-.room-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
-.room-field { margin-bottom: 12px; }
-.room-field input, .room-field select, .room-field textarea { width: 100%; padding: 6px 8px; }
-.room-form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-.modal-actions { display: flex; justify-content: flex-end; gap: 8px; }

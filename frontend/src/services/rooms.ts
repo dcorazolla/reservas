@@ -1,4 +1,4 @@
-import api from './api'
+import { createCrudService } from './crudService'
 
 export type RoomPayload = {
   name: string
@@ -21,31 +21,13 @@ export type Room = {
   notes?: string | null
 }
 
-const BASE = '/api/rooms'
+const crud = createCrudService<Room, RoomPayload>('/api/rooms')
 
-export async function listRooms(): Promise<Room[]> {
-  const resp = await api.get<Room[]>(BASE)
-  return resp.data
-}
-
-export async function getRoom(id: string): Promise<Room> {
-  const resp = await api.get<Room>(`${BASE}/${id}`)
-  return resp.data
-}
-
-export async function createRoom(payload: RoomPayload): Promise<Room> {
-  const resp = await api.post<Room>(BASE, payload)
-  return resp.data
-}
-
-export async function updateRoom(id: string, payload: RoomPayload): Promise<Room> {
-  const resp = await api.put<Room>(`${BASE}/${id}`, payload)
-  return resp.data
-}
-
-export async function deleteRoom(id: string): Promise<void> {
-  await api.delete(`${BASE}/${id}`)
-}
+export const listRooms  = crud.list
+export const getRoom    = crud.get
+export const createRoom = crud.create
+export const updateRoom = crud.update
+export const deleteRoom = crud.remove
 
 export default {
   listRooms,

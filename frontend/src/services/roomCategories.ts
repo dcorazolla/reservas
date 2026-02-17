@@ -1,4 +1,4 @@
-import api from './api'
+import { createCrudService } from './crudService'
 
 export type RoomCategoryPayload = {
   name: string
@@ -11,31 +11,13 @@ export type RoomCategory = {
   description?: string | null
 }
 
-const BASE = '/api/room-categories'
+const crud = createCrudService<RoomCategory, RoomCategoryPayload>('/api/room-categories')
 
-export async function listRoomCategories(): Promise<RoomCategory[]> {
-  const resp = await api.get<RoomCategory[]>(BASE)
-  return resp.data
-}
-
-export async function getRoomCategory(id: string): Promise<RoomCategory> {
-  const resp = await api.get<RoomCategory>(`${BASE}/${id}`)
-  return resp.data
-}
-
-export async function createRoomCategory(payload: RoomCategoryPayload): Promise<RoomCategory> {
-  const resp = await api.post<RoomCategory>(BASE, payload)
-  return resp.data
-}
-
-export async function updateRoomCategory(id: string, payload: RoomCategoryPayload): Promise<RoomCategory> {
-  const resp = await api.put<RoomCategory>(`${BASE}/${id}`, payload)
-  return resp.data
-}
-
-export async function deleteRoomCategory(id: string): Promise<void> {
-  await api.delete(`${BASE}/${id}`)
-}
+export const listRoomCategories  = crud.list
+export const getRoomCategory     = crud.get
+export const createRoomCategory  = crud.create
+export const updateRoomCategory  = crud.update
+export const deleteRoomCategory  = crud.remove
 
 export default {
   listRoomCategories,

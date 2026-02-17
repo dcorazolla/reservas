@@ -1,4 +1,4 @@
-import api from './api'
+import { createCrudService } from './crudService'
 
 export type PropertyPayload = {
   name: string
@@ -25,31 +25,13 @@ export type Property = {
   child_price?: number | null
 }
 
-const BASE = '/api/properties'
+const crud = createCrudService<Property, PropertyPayload>('/api/properties')
 
-export async function listProperties(): Promise<Property[]> {
-  const resp = await api.get<Property[]>(BASE)
-  return resp.data
-}
-
-export async function getProperty(id: string): Promise<Property> {
-  const resp = await api.get<Property>(`${BASE}/${id}`)
-  return resp.data
-}
-
-export async function createProperty(payload: PropertyPayload): Promise<Property> {
-  const resp = await api.post<Property>(BASE, payload)
-  return resp.data
-}
-
-export async function updateProperty(id: string, payload: PropertyPayload): Promise<Property> {
-  const resp = await api.put<Property>(`${BASE}/${id}`, payload)
-  return resp.data
-}
-
-export async function deleteProperty(id: string): Promise<void> {
-  await api.delete(`${BASE}/${id}`)
-}
+export const listProperties  = crud.list
+export const getProperty     = crud.get
+export const createProperty  = crud.create
+export const updateProperty  = crud.update
+export const deleteProperty  = crud.remove
 
 export default {
   listProperties,

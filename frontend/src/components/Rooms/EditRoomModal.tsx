@@ -1,10 +1,10 @@
 import React from 'react'
 import Modal from '@components/Shared/Modal/Modal'
-import { Button, Skeleton, VStack } from '@chakra-ui/react'
-import './rooms.css'
+import { Skeleton, VStack } from '@chakra-ui/react'
 import * as roomCategoriesService from '@services/roomCategories'
 import { useTranslation } from 'react-i18next'
 import type { Room as ServiceRoom } from '@services/rooms'
+import { requiredString, requiredPositiveNumber, runValidation } from '@utils/validation'
 
 export default function EditRoomModal({ isOpen, room, onClose, onSave, loading }: {
   isOpen: boolean
@@ -35,10 +35,11 @@ export default function EditRoomModal({ isOpen, room, onClose, onSave, loading }
   function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault()
 
-    const newErrors: Record<string, string> = {}
-    if (!form.name || !form.name.trim()) newErrors['name'] = t('common.status.error_required')
-    if (!form.beds || Number.isNaN(Number(form.beds)) || Number(form.beds) < 1) newErrors['beds'] = t('common.status.error_required')
-    if (!form.capacity || Number.isNaN(Number(form.capacity)) || Number(form.capacity) < 1) newErrors['capacity'] = t('common.status.error_required')
+    const newErrors = runValidation({
+      name: [requiredString(form.name, t)],
+      beds: [requiredPositiveNumber(form.beds, t)],
+      capacity: [requiredPositiveNumber(form.capacity, t)],
+    })
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors)
@@ -76,19 +77,19 @@ export default function EditRoomModal({ isOpen, room, onClose, onSave, loading }
   return (
     <Modal isOpen={!!isOpen} onClose={onClose} title={room?.id ? t('rooms.form.edit') : t('rooms.form.create')} size="lg">
       <form onSubmit={handleSubmit}>
-        <div className="room-form-grid">
-            <div className="room-field full-width">
+        <div className="form-grid">
+            <div className="form-field full-width">
               <span>{t('rooms.form.name')}</span>
               <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
               {errors['name'] ? <div className="field-error">{errors['name']}</div> : null}
             </div>
 
-            <div className="room-field">
+            <div className="form-field">
               <span>{t('rooms.form.number')}</span>
               <input value={form.number ?? ''} onChange={(e) => setForm({ ...form, number: e.target.value })} />
             </div>
 
-            <div className="room-field">
+            <div className="form-field">
               <span>{t('rooms.form.category')}</span>
               <select value={form.room_category_id ?? ''} onChange={(e) => setForm({ ...form, room_category_id: e.target.value })}>
                 <option value="">{t('rooms.form.category_placeholder')}</option>
@@ -98,26 +99,26 @@ export default function EditRoomModal({ isOpen, room, onClose, onSave, loading }
               </select>
             </div>
 
-            <div className="room-field">
+            <div className="form-field">
               <span>{t('rooms.form.beds')}</span>
               <input type="number" role="spinbutton" min={1} value={form.beds} onChange={(e) => setForm({ ...form, beds: e.target.value })} required />
               {errors['beds'] ? <div className="field-error">{errors['beds']}</div> : null}
             </div>
 
-            <div className="room-field">
+            <div className="form-field">
               <span>{t('rooms.form.capacity')}</span>
               <input type="number" role="spinbutton" min={1} value={form.capacity} onChange={(e) => setForm({ ...form, capacity: e.target.value })} required />
               {errors['capacity'] ? <div className="field-error">{errors['capacity']}</div> : null}
             </div>
 
-            <div className="room-field full-width">
+            <div className="form-field full-width">
               <span>{t('rooms.form.notes')}</span>
               <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} />
             </div>
 
           <div className="modal-actions full-width">
-            <Button variant="ghost" onClick={onClose}>{t('common.actions.cancel')}</Button>
-            <Button colorScheme="blue" type="submit">{t('common.actions.save')}</Button>
+            <button className="btn btn-ghost" type="button" onClick={onClose}>{t('common.actions.cancel')}</button>
+            <button className="btn btn-primary" type="submit">{t('common.actions.save')}</button>
           </div>
         </div>
       </form>

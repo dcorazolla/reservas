@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Heading, Text, Button, Skeleton, VStack, HStack } from '@chakra-ui/react'
-import './properties.css'
 import EditPropertyModal from '@components/Properties/EditPropertyModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
@@ -110,7 +109,7 @@ export default function PropertiesPage() {
           items={items}
           className="properties-list"
           renderItem={(p: ServiceProperty) => (
-            <div className="property-row">
+            <div className="entity-row">
               <div>
                 <Text as="div" fontWeight={600}>{p.name}</Text>
                 <Text as="div" fontSize="sm" color="gray.600">{p.timezone}</Text>
