@@ -79,6 +79,7 @@ export default function RoomCategoriesPage() {
     try {
       await roomCategoriesService.deleteRoomCategory(id)
       setItems((s) => s.filter((it) => it.id !== id))
+      setDeleting(null)
     } catch (err: any) {
       console.error('Failed to delete room category', err)
       setError(err?.message || 'Failed to delete')

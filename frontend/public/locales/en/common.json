@@ -12,7 +12,11 @@
       "loading": "Loading...",
       "error": "An error occurred",
       "new": "New",
-      "error_required": "Field is required"
+      "error_required": "Field is required",
+      "error_invalid_email": "Invalid email",
+      "error_max": "Field too long",
+      "error_min_zero": "Must be greater than zero",
+      "error_max_100": "Cannot be greater than 100"
     },
     "confirm": {
       "delete_title": "Delete confirmation",

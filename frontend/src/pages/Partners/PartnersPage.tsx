@@ -58,6 +58,7 @@ export default function PartnersPage() {
     try {
       await partnersService.deletePartner(id)
       setItems((s) => s.filter((it) => it.id !== id))
+      setDeleting(null)
     } catch (err: any) {
       console.error('Failed to delete partner', err)
       setError(err?.message || 'Failed to delete')

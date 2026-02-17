@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Modal from '@components/Shared/Modal/Modal'
 import FormField from '@components/Shared/FormField/FormField'
@@ -7,6 +7,7 @@ import CurrencyInput from '@components/Shared/CurrencyInput/CurrencyInput'
 import type { Partner } from '@models/partner'
 import { partnerSchema, type PartnerFormData } from '@models/schemas'
 import { useTranslation } from 'react-i18next'
+import { NumericFormat } from 'react-number-format'
 
 export default function EditPartnerModal({
   isOpen,
@@ -96,15 +97,39 @@ export default function EditPartnerModal({
           </FormField>
 
           <FormField label={t('partners.form.email')} name="email" errors={errors}>
-            <input {...register('email')} type="email" />
+            <input {...register('email')} type="email" placeholder="example@email.com" />
           </FormField>
 
           <FormField label={t('partners.form.phone')} name="phone" errors={errors}>
-            <input {...register('phone')} type="tel" />
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <NumericFormat
+                  {...field}
+                  format="+55 (##) #####-####"
+                  mask="_"
+                  placeholder="+55 (00) 00000-0000"
+                  onValueChange={(values) => field.onChange(values.value)}
+                />
+              )}
+            />
           </FormField>
 
           <FormField label={t('partners.form.tax_id')} name="tax_id" errors={errors}>
-            <input {...register('tax_id')} placeholder="CPF/CNPJ" />
+            <Controller
+              name="tax_id"
+              control={control}
+              render={({ field }) => (
+                <NumericFormat
+                  {...field}
+                  format="###.###.###-##"
+                  mask="_"
+                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                  onValueChange={(values) => field.onChange(values.value)}
+                />
+              )}
+            />
           </FormField>
 
           <FormField label={t('partners.form.address')} name="address" errors={errors} className="full-width">
@@ -124,22 +149,30 @@ export default function EditPartnerModal({
           </FormField>
 
           <FormField label={t('partners.form.discount_percent')} name="partner_discount_percent" errors={errors}>
-            <input
-              {...register('partner_discount_percent')}
-              type="number"
-              min="0"
-              max="100"
-              step="0.01"
-              placeholder="0"
+            <Controller
+              name="partner_discount_percent"
+              control={control}
+              render={({ field }) => (
+                <NumericFormat
+                  {...field}
+                  suffix="%"
+                  decimalScale={2}
+                  fixedDecimalScale
+                  min={0}
+                  max={100}
+                  placeholder="0.00%"
+                  onValueChange={(values) => field.onChange(values.floatValue ?? 0)}
+                />
+              )}
             />
           </FormField>
         </div>
 
-        <div className="modal-actions">
-          <button type="button" onClick={onClose} className="btn-secondary">
+        <div className="modal-actions full-width">
+          <button type="button" onClick={onClose} className="btn btn-ghost">
             {t('common.actions.cancel')}
           </button>
-          <button type="submit" className="btn-primary">
+          <button type="submit" className="btn btn-primary">
             {t('common.actions.save')}
           </button>
         </div>

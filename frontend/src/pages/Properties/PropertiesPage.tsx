@@ -60,6 +60,7 @@ export default function PropertiesPage() {
     try {
       await propertiesService.deleteProperty(id)
       setItems((s) => s.filter((it) => it.id !== id))
+      setDeleting(null)
     } catch (err: any) {
       console.error('Failed to delete property', err)
       setError(err?.message || 'Erro ao remover propriedade')
