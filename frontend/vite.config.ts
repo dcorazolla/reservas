@@ -12,6 +12,7 @@ export default defineConfig({
       { find: '@design', replacement: path.resolve(__dirname, 'src/design-system') },
       { find: '@utils', replacement: path.resolve(__dirname, 'src/utils') },
       { find: '@contexts', replacement: path.resolve(__dirname, 'src/contexts') },
+      { find: '@models', replacement: path.resolve(__dirname, 'src/models') },
     ],
   },
 })

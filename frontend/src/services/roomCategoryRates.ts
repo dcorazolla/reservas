@@ -1,16 +1,7 @@
 import api from './api'
+import type { RoomCategoryRate, RoomCategoryRatePayload } from '@models/roomCategoryRate'
 
-export type RoomCategoryRatePayload = {
-  base_one_adult: number
-  base_two_adults: number
-  additional_adult: number
-  child_price: number
-}
-
-export type RoomCategoryRate = RoomCategoryRatePayload & {
-  id: string
-  room_category_id: string
-}
+export type { RoomCategoryRate, RoomCategoryRatePayload }
 
 const BASE = '/api'
 

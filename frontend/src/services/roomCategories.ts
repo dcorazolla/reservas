@@ -1,15 +1,7 @@
 import { createCrudService } from './crudService'
+import type { RoomCategory, RoomCategoryPayload } from '@models/roomCategory'
 
-export type RoomCategoryPayload = {
-  name: string
-  description?: string | null
-}
-
-export type RoomCategory = {
-  id: string
-  name: string
-  description?: string | null
-}
+export type { RoomCategory, RoomCategoryPayload }
 
 const crud = createCrudService<RoomCategory, RoomCategoryPayload>('/api/room-categories')
 
