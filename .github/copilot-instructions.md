@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Instruções para GitHub Copilot / Assistente (consolidado)
 
 Este arquivo é o ponto único de referência para agentes automatizados e humanos sobre como operar neste repositório `reservas`.
@@ -101,7 +100,11 @@ Siga estas instruções ao trabalhar neste repositório. Leia `docs/copilot-inst
 
 Principais comandos
 - Frontend dev: `cd frontend && npm ci && npm run dev`
-- Frontend tests: `cd frontend && npm ci && npm test -- --coverage`
+- Frontend tests: `cd frontend && npm ci && npm test -- --run --coverage`
+  - Nota: em ambientes não-interativos (CI, runners, ou quando executar testes via script), o `vitest` pode iniciar em modo interativo/watch e ficar aguardando entrada.
+    - Para forçar execução não-interativa use a flag `-- --run` (ou `--run`). Exemplos:
+      - `cd frontend && npm ci && npm run test -- --run --coverage`
+      - `cd frontend && npm ci && npm test -- --run --coverage`
 - Backend tests (container): `docker compose exec app bash -lc "vendor/bin/phpunit"`
 - Full local test helper: `./scripts/test-all.sh`
 
@@ -111,6 +114,28 @@ Padrões e convenções do projeto
 - Lógica de negócio deve ficar em `backend/src/app/Services/*`; controllers apenas orquestram.
 - Frontend: seguir padrão de serviços em `frontend/src/services/*`, páginas em `frontend/src/pages/*`, componentes em `frontend/src/components/*` e traduções em `frontend/public/locales/<lang>/common.json`.
 - Modal compartilhado: `frontend/src/components/Shared/Modal/Modal.tsx` (padrão simples — usado por muitos modals locais).
+
+Serviços frontend
+- CRUD simples (list/get/create/update/remove): usar `createCrudService<T,P>(basePath)` de `frontend/src/services/crudService.ts`.
+- CRUD nested (sub-recursos como rates): usar `createNestedCrudService<T,P>(parentBase, sub, itemBase)` — ex: rooms→rates, room-categories→rates.
+- Types/models ficam em `frontend/src/models/*.ts` com alias `@models`.
+
+Formulários frontend
+- Usar `react-hook-form` + `zod` (via `@hookform/resolvers/zod`) para validação.
+- Schemas Zod ficam em `frontend/src/models/schemas.ts`.
+- Para campos monetários, usar `<CurrencyInput>` de `frontend/src/components/Shared/CurrencyInput/CurrencyInput.tsx`.
+- Para loading em formulários, usar `<SkeletonFields rows={n}>` de `frontend/src/components/Shared/Skeleton/SkeletonFields.tsx`.
+- Para loading em listas, usar `<SkeletonList rows={n}>` de `frontend/src/components/Shared/Skeleton/SkeletonList.tsx`.
+
+Modais com seção de tarifas (regra de UX)
+- O toggle de tarifas deve **sempre iniciar fechado** ao abrir o modal (`setShowRates(false)` no `useEffect` de abertura).
+- Campos de tarifa são opcionais: campo vazio = não grava no banco. Se o campo tinha valor e foi limpo = deleta o registro.
+- Ao reduzir a capacidade de um quarto, rates órfãos (people_count > nova capacidade) devem ser incluídos no payload com `price_per_day: null` para serem deletados.
+
+Cascata de preços (backend)
+- O `ReservationPriceCalculator` usa 5 níveis: room_period → category_period → room_base → category_base → property_base.
+- O endpoint `POST /reservations/calculate` trata `people_count` como adultos, usa a cascata completa e retorna `source` indicando de onde veio o preço.
+- Ver `docs/CONSOLIDATED_REQUIREMENTS.md` §8 para detalhes.
 
 Testes e mocks
 - Vitest + Testing Library no frontend. Mock factories seguem o padrão usado em `frontend/src/pages/Properties/PropertiesPage.flow.test.tsx` (criar spies dentro do `vi.mock` e expor `__mocks`).

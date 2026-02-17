@@ -18,7 +18,7 @@ export default function ConfirmModal({ isOpen, title, message, onCancel, onConfi
     <Modal isOpen={isOpen} onClose={onCancel} title={title ?? t('confirm.title')} size="sm">
       <div className="confirm-message">{message}</div>
       <div className="confirm-actions">
-        <button className="btn btn-ghost" onClick={onCancel}>{t('confirm.cancel')}</button>
+        <button className="btn btn-ghost" onClick={onCancel}>{t('common.actions.cancel')}</button>
         <button className="btn btn-danger" onClick={onConfirm}>{confirmText}</button>
       </div>
     </Modal>

@@ -1,5 +1,42 @@
 {
-  "title": "Réservations",
+  "common": {
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "save": "Enregistrer",
+      "confirm": "Confirmer"
+    },
+    "status": {
+      "loading": "Chargement...",
+      "error": "Une erreur s'est produite",
+      "new": "Nouveau",
+      "error_required": "Champ obligatoire"
+    },
+    "confirm": {
+      "delete_title": "Confirmation de suppression",
+      "delete_message_prefix": "Êtes-vous sûr de vouloir supprimer",
+      "delete_message_suffix": "Cette action ne peut pas être annulée.",
+      "delete_confirm": "Supprimer"
+    },
+    "pricing": {
+      "additional_adult": "Prix adulte supplémentaire",
+      "child_factor": "Facteur enfant",
+      "child_max_age": "Âge max (enfants)",
+      "child_price": "Prix enfant",
+      "five_adults": "Prix 5 adultes",
+      "four_adults": "Prix 4 adultes",
+      "hide_rates": "Masquer les tarifs",
+      "infant_max_age": "Âge max (bébés)",
+      "one_adult": "Prix 1 adulte",
+      "seven_adults": "Prix 7 adultes",
+      "show_rates": "Afficher les tarifs",
+      "six_adults": "Prix 6 adultes",
+      "trhee_adults": "Prix 3 adultes",
+      "two_adults": "Prix 2 adultes"
+    }
+  },
   "header": {
     "open_menu": "Ouvrir le menu",
     "subtitle": "gestion des réservations",
@@ -7,33 +44,32 @@
     "user_fallback": "Utilisateur",
     "logout": "Se déconnecter"
   },
-  "roomCategories": {
-    "form": {
-      "name": "Nom",
-      "description": "Description",
-      "rate_group_title": "Tarifs de catégorie",
-      "show_rates": "Afficher les tarifs",
-      "hide_rates": "Masquer les tarifs",
-      "cancel": "Annuler",
-      "save": "Enregistrer",
-      "new": "Nouvelle catégorie",
-      "create": "Créer la catégorie",
-      "edit": "Modifier la catégorie",
-      "error_required": "Champ requis"
-    },
-    "actions": {
-      "edit": "Modifier",
-      "delete": "Supprimer"
-    },
-    "page": {
-      "title": "Catégories de chambre"
-    },
-    "confirm": {
-      "delete_title": "Confirmation de suppression",
-      "delete_message_prefix": "Êtes-vous sûr de vouloir supprimer",
-      "delete_message_suffix": "Cette action est irréversible.",
-      "delete_confirm": "Supprimer"
-    }
+  "footer": {
+    "copy": "© 2026 Reservas. Tous droits réservés."
+  },
+  "login": {
+    "change_language": "Changer de langue",
+    "title": "Se connecter",
+    "subtitle": "Connectez-vous à votre compte pour continuer",
+    "email": "Email",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "forgot": "Mot de passe oublié?",
+    "create_account": "Créer un compte",
+    "no_account": "Vous n'avez pas de compte?",
+    "remember_me": "Se souvenir de moi",
+    "social_google": "Se connecter avec Google",
+    "social_facebook": "Se connecter avec Facebook",
+    "social_google_notice": "Connexion Google non activée dans ce prototype",
+    "social_facebook_notice": "Connexion Facebook non activée dans ce prototype",
+    "or": "ou",
+    "email_placeholder": "vous@domaine.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "La fonctionnalité de connexion n'est pas implémentée dans ce prototype.",
+    "accessible_help": "Remplissez le formulaire pour vous connecter",
+    "email_error": "Fournissez un email valide",
+    "password_error": "Le mot de passe doit contenir au moins 6 caractères",
+    "error": "Erreur d'authentification"
   },
   "menu": {
     "calendar": "Calendrier",
@@ -44,7 +80,7 @@
     "settings": {
       "label": "Paramètres",
       "properties": "Propriétés",
-      "roomCategories": "Catégories de chambre",
+      "roomCategories": "Catégories de chambres",
       "rooms": "Chambres",
       "users": "Utilisateurs",
       "partners": "Partenaires",
@@ -57,61 +93,50 @@
     }
   },
   "properties": {
-    "form": {
-      "name": "Nom",
-      "timezone": "Fuseau horaire",
-      "infant_max_age": "Âge max (bébés)",
-      "child_max_age": "Âge max (enfants)",
-      "child_factor": "Facteur enfant",
-      "base_one_adult": "Base 1 adulte",
-      "base_two_adults": "Base 2 adultes",
-      "additional_adult": "Adulte supplémentaire",
-      "child_price": "Prix enfant",
-      "cancel": "Annuler",
-      "save": "Enregistrer",
-      "new": "Nouvelle propriété",
-      "edit": "Modifier la propriété",
-      "base_rates_title": "Tarif de base",
-      "show_base_rates": "Afficher les tarifs",
-      "hide_base_rates": "Masquer les tarifs",
-      "error_required": "Champ obligatoire"
-    },
-    "actions": {
-      "edit": "Modifier",
-      "delete": "Supprimer"
-    },
-    "loading": "Chargement...",
     "page": {
       "title": "Propriétés"
     },
-    "confirm": {
-      "delete_title": "Confirmation de suppression",
-      "delete_message_prefix": "Êtes-vous sûr de vouloir supprimer",
-      "delete_message_suffix": "Cette action ne peut pas être annulée.",
-      "delete_confirm": "Supprimer"
+    "form": {
+      "name": "Nom",
+      "timezone": "Fuseau horaire",
+      "new": "Nouvelle propriété",
+      "edit": "Modifier la propriété",
+      "base_rates_title": "Tarif de base"
     }
   },
-  "login": {
-    "title": "Se connecter",
-    "subtitle": "Connectez-vous à votre compte pour continuer",
-    "email": "E-mail",
-    "password": "Mot de passe",
-    "submit": "Se connecter",
-    "forgot": "Mot de passe oublié ?",
-    "create_account": "Créer un compte",
-    "no_account": "Vous n'avez pas de compte ?",
-    "remember_me": "Se souvenir de moi",
-    "social_google": "Se connecter avec Google",
-    "social_facebook": "Se connecter avec Facebook",
-    "social_google_notice": "Connexion Google non activée dans ce prototype",
-    "social_facebook_notice": "Connexion Facebook non activée dans ce prototype",
-    "or": "ou",
-    "email_placeholder": "vous@exemple.com",
-    "password_placeholder": "••••••••",
-    "demo_notice": "La fonctionnalité de connexion n'est pas implémentée dans ce prototype.",
-    "accessible_help": "Remplissez le formulaire pour vous connecter",
-    "email_error": "Fournissez un e-mail valide",
-    "password_error": "Le mot de passe doit comporter au moins 6 caractères",
-    "error": "Échec de l'authentification"
+  "roomCategories": {
+    "page": {
+      "title": "Catégories de chambres"
+    },
+    "form": {
+      "name": "Nom",
+      "description": "Description",
+      "show_rates": "Afficher les tarifs",
+      "hide_rates": "Masquer les tarifs",
+      "new": "Nouvelle catégorie",
+      "edit": "Modifier la catégorie",
+      "rate_group_title": "Tarifs de catégorie"
+    }
+  },
+  "rooms": {
+    "page": {
+      "title": "Chambres"
+    },
+    "form": {
+      "name": "Nom",
+      "category": "Catégorie",
+      "category_placeholder": "Sélectionnez une catégorie",
+      "beds": "Lits",
+      "capacity": "Capacité",
+      "notes": "Notes",
+      "number": "Numéro",
+      "create": "Créer une chambre",
+      "new": "Nouvelle chambre",
+      "edit": "Modifier la chambre"
+    },
+    "errors": {
+      "load": "Échec du chargement des chambres",
+      "save": "Échec de l'enregistrement de la chambre"
+    }
   }
 }

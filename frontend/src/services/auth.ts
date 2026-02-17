@@ -1,15 +1,10 @@
 import api, { setAuthToken } from './api'
+import type { LoginResponse, LoginPayload } from '@models/auth'
+
+export type { LoginResponse, LoginPayload }
 
 const TOKEN_KEY = 'auth_token'
 const REFRESH_KEY = 'refresh_token'
-
-export type LoginResponse = {
-  access_token?: string
-  accessToken?: string
-  refresh_token?: string
-  token_type?: string
-  expires_in?: number
-}
 
 export async function loginRequest(email: string, password: string) {
   const res = await api.post<LoginResponse>('/api/auth/login', { email, password })
@@ -92,7 +87,6 @@ export function loadToken(): string | null {
     return null
   }
 }
-export type LoginPayload = { email: string; password: string }
 
 export async function login(payload: LoginPayload) {
   const res = await fetch('/api/login', {

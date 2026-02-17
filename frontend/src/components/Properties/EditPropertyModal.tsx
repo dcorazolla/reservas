@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Modal from '@components/Shared/Modal/Modal'
-import './property-modal.css'
-import type { Property as ServiceProperty } from '@services/properties'
-import { Skeleton, VStack } from '@chakra-ui/react'
+import FormField from '@components/Shared/FormField/FormField'
+import CurrencyInput from '@components/Shared/CurrencyInput/CurrencyInput'
+import type { Property } from '@models/property'
+import { propertySchema, type PropertyFormData } from '@models/schemas'
 import { useTranslation } from 'react-i18next'
 
 const COMMON_TIMEZONES = [
@@ -23,201 +26,154 @@ export default function EditPropertyModal({
   onClose,
   property,
   onSave,
-  loading,
 }: {
   isOpen: boolean
   onClose: () => void
-  property?: ServiceProperty | null
-  onSave: (p: ServiceProperty) => void
-  loading?: boolean
+  property?: Property | null
+  onSave: (p: Property) => void
 }) {
   const { t } = useTranslation()
-  const [name, setName] = useState<string>('')
-  const [timezone, setTimezone] = useState<string>('UTC')
-  const [infantMaxAge, setInfantMaxAge] = useState<string>('')
-  const [childMaxAge, setChildMaxAge] = useState<string>('')
-  const [childFactor, setChildFactor] = useState<string>('')
-  const [baseOneAdult, setBaseOneAdult] = useState<string>('')
-  const [baseTwoAdults, setBaseTwoAdults] = useState<string>('')
-  const [additionalAdult, setAdditionalAdult] = useState<string>('')
-  const [childPrice, setChildPrice] = useState<string>('')
   const [showRates, setShowRates] = useState<boolean>(false)
-  const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<PropertyFormData>({
+    resolver: zodResolver(propertySchema),
+    defaultValues: {
+      name: '',
+      timezone: 'UTC',
+      infant_max_age: undefined,
+      child_max_age: undefined,
+      child_factor: undefined,
+      base_one_adult: undefined,
+      base_two_adults: undefined,
+      additional_adult: undefined,
+      child_price: undefined,
+    },
+  })
 
   useEffect(() => {
-    if (property) {
-      setName(property.name ?? '')
-      setTimezone(property.timezone ?? 'UTC')
-      setInfantMaxAge(property.infant_max_age?.toString() ?? '')
-      setChildMaxAge(property.child_max_age?.toString() ?? '')
-      setChildFactor(property.child_factor?.toString() ?? '')
-      setBaseOneAdult(property.base_one_adult?.toString() ?? '')
-      setBaseTwoAdults(property.base_two_adults?.toString() ?? '')
-      setAdditionalAdult(property.additional_adult?.toString() ?? '')
-      setChildPrice(property.child_price?.toString() ?? '')
-      setErrors({})
-    } else {
-      setName('')
-      setTimezone('UTC')
-      setInfantMaxAge('')
-      setChildMaxAge('')
-      setChildFactor('')
-      setBaseOneAdult('')
-      setBaseTwoAdults('')
-      setAdditionalAdult('')
-      setChildPrice('')
-      setErrors({})
-    }
-  }, [property, isOpen])
-
-  function toNumberOrNull(v: string) {
-    if (v === '' || v == null) return null
-    const n = Number(v)
-    return Number.isNaN(n) ? null : n
-  }
-
-  function handleSave() {
-    const newErrors: Record<string, string> = {}
-
-    // validation: all fields required
-    if (!name.trim()) newErrors['name'] = t('properties.form.error_required')
-    if (!timezone) newErrors['timezone'] = t('properties.form.error_required')
-
-    const numericFields = [
-      ['infantMaxAge', infantMaxAge],
-      ['childMaxAge', childMaxAge],
-      ['childFactor', childFactor],
-      ['baseOneAdult', baseOneAdult],
-      ['baseTwoAdults', baseTwoAdults],
-      ['additionalAdult', additionalAdult],
-      ['childPrice', childPrice],
-    ] as const
-
-    for (const [key, value] of numericFields) {
-      if (value === '' || value == null) {
-        newErrors[String(key)] = t('properties.form.error_required')
+    if (isOpen) {
+      setShowRates(false)
+      if (property) {
+        reset({
+          name: property.name ?? '',
+          timezone: property.timezone ?? 'UTC',
+          infant_max_age: property.infant_max_age ?? undefined,
+          child_max_age: property.child_max_age ?? undefined,
+          child_factor: property.child_factor ?? undefined,
+          base_one_adult: property.base_one_adult ?? undefined,
+          base_two_adults: property.base_two_adults ?? undefined,
+          additional_adult: property.additional_adult ?? undefined,
+          child_price: property.child_price ?? undefined,
+        })
       } else {
-        const n = Number(value)
-        if (Number.isNaN(n)) newErrors[String(key)] = t('properties.form.error_required')
+        reset({
+          name: '',
+          timezone: 'UTC',
+          infant_max_age: undefined,
+          child_max_age: undefined,
+          child_factor: undefined,
+          base_one_adult: undefined,
+          base_two_adults: undefined,
+          additional_adult: undefined,
+          child_price: undefined,
+        })
       }
     }
+  }, [property, isOpen, reset])
 
-    if (Object.keys(newErrors).length > 0) {
-      // ensure tariffs visible if any tariff field has error
-      const tariffKeys = ['childFactor', 'childPrice', 'baseOneAdult', 'baseTwoAdults', 'additionalAdult']
-      if (tariffKeys.some((k) => newErrors[k])) setShowRates(true)
-      setErrors(newErrors)
-      return
-    }
-
-    const payload: ServiceProperty = {
+  function onFormSubmit(data: PropertyFormData) {
+    const payload: Property = {
       id: property?.id ?? '',
-      name: name.trim(),
-      timezone: timezone,
-      infant_max_age: toNumberOrNull(infantMaxAge),
-      child_max_age: toNumberOrNull(childMaxAge),
-      child_factor: toNumberOrNull(childFactor),
-      base_one_adult: toNumberOrNull(baseOneAdult),
-      base_two_adults: toNumberOrNull(baseTwoAdults),
-      additional_adult: toNumberOrNull(additionalAdult),
-      child_price: toNumberOrNull(childPrice),
+      name: data.name.trim(),
+      timezone: data.timezone,
+      infant_max_age: data.infant_max_age,
+      child_max_age: data.child_max_age,
+      child_factor: data.child_factor,
+      base_one_adult: data.base_one_adult,
+      base_two_adults: data.base_two_adults,
+      additional_adult: data.additional_adult,
+      child_price: data.child_price,
     }
 
-    setErrors({})
     onSave(payload)
     onClose()
   }
 
-  if (loading) {
-    return (
-      <Modal isOpen={!!isOpen} onClose={onClose} title={t('properties.loading')} size="md">
-        <VStack spacing={3} align="stretch">
-          <Skeleton height="36px" />
-          <Skeleton height="36px" />
-          <Skeleton height="36px" />
-          <Skeleton height="36px" />
-        </VStack>
-      </Modal>
-    )
+  function onFormError() {
+    // expand tariff section if any tariff field has error
+    const tariffKeys = ['child_factor', 'child_price', 'base_one_adult', 'base_two_adults', 'additional_adult'] as const
+    if (tariffKeys.some((k) => errors[k])) {
+      setShowRates(true)
+    }
   }
 
   return (
     <Modal isOpen={!!isOpen} onClose={onClose} title={property ? t('properties.form.edit') : t('properties.form.new')} size="lg">
-      <div className="property-form-grid">
-        <div className="property-field full-width">
-          <span>{t('properties.form.name')}</span>
-          <input value={name} onChange={(e) => setName(e.target.value)} required />
-          {errors['name'] ? <div className="field-error">{errors['name']}</div> : null}
-        </div>
+      <form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
+        <div className="form-grid">
+          <FormField label={t('properties.form.name')} name="name" errors={errors} className="full-width">
+            <input {...register('name')} />
+          </FormField>
 
-        <div className="property-field full-width">
-          <span>{t('properties.form.timezone')}</span>
-          <select value={timezone} onChange={(e) => setTimezone(e.target.value)} required>
-            {COMMON_TIMEZONES.map((tz) => (
-              <option key={tz} value={tz}>{tz}</option>
-            ))}
-          </select>
-          {errors['timezone'] ? <div className="field-error">{errors['timezone']}</div> : null}
-        </div>
+          <FormField label={t('properties.form.timezone')} name="timezone" errors={errors} className="full-width">
+            <select {...register('timezone')}>
+              {COMMON_TIMEZONES.map((tz) => (
+                <option key={tz} value={tz}>{tz}</option>
+              ))}
+            </select>
+          </FormField>
 
-        <div className="property-field number">
-          <span>{t('properties.form.infant_max_age')}</span>
-          <input type="number" value={infantMaxAge} onChange={(e) => setInfantMaxAge(e.target.value)} required />
-          {errors['infantMaxAge'] ? <div className="field-error">{errors['infantMaxAge']}</div> : null}
-        </div>
+          <FormField label={t('common.pricing.infant_max_age')} name="infant_max_age" errors={errors} className="number">
+            <input type="number" {...register('infant_max_age')} />
+          </FormField>
 
-        <div className="property-field number">
-          <span>{t('properties.form.child_max_age')}</span>
-          <input type="number" value={childMaxAge} onChange={(e) => setChildMaxAge(e.target.value)} required />
-          {errors['childMaxAge'] ? <div className="field-error">{errors['childMaxAge']}</div> : null}
-        </div>
+          <FormField label={t('common.pricing.child_max_age')} name="child_max_age" errors={errors} className="number">
+            <input type="number" {...register('child_max_age')} />
+          </FormField>
 
-        <div className="rate-group">
-          <div className="rate-group-header">
-            <strong>{t('properties.form.base_rates_title')}</strong>
-            <button className="group-toggle" aria-expanded={showRates} onClick={() => setShowRates((s) => !s)}>
-              {showRates ? t('properties.form.hide_base_rates') : t('properties.form.show_base_rates')}
-            </button>
-          </div>
-
-          <div className={`rate-group-content ${showRates ? 'expanded' : 'collapsed'}`}>
-            <div className="property-field number">
-              <span>{t('properties.form.child_factor')}</span>
-              <input type="number" step="0.01" value={childFactor} onChange={(e) => setChildFactor(e.target.value)} required />
-              {errors['childFactor'] ? <div className="field-error">{errors['childFactor']}</div> : null}
+          <div className="rate-group">
+            <div className="rate-group-header">
+              <strong>{t('properties.form.base_rates_title')}</strong>
+              <button className="group-toggle" type="button" aria-expanded={showRates} onClick={() => setShowRates((s) => !s)}>
+                {showRates ? t('common.pricing.hide_rates') : t('common.pricing.show_rates')}
+              </button>
             </div>
 
-            <div className="property-field number">
-              <span>{t('properties.form.child_price')}</span>
-              <input type="number" step="0.01" value={childPrice} onChange={(e) => setChildPrice(e.target.value)} required />
-              {errors['childPrice'] ? <div className="field-error">{errors['childPrice']}</div> : null}
-            </div>
+            <div className={`rate-group-content ${showRates ? 'expanded' : 'collapsed'}`}>
+              <FormField label={t('common.pricing.child_factor')} name="child_factor" errors={errors} className="number">
+                <CurrencyInput name="child_factor" control={control} decimalScale={2} />
+              </FormField>
 
-            <div className="property-field number">
-              <span>{t('properties.form.base_one_adult')}</span>
-              <input type="number" step="0.01" value={baseOneAdult} onChange={(e) => setBaseOneAdult(e.target.value)} required />
-              {errors['baseOneAdult'] ? <div className="field-error">{errors['baseOneAdult']}</div> : null}
-            </div>
+              <FormField label={t('common.pricing.child_price')} name="child_price" errors={errors} className="number">
+                <CurrencyInput name="child_price" control={control} decimalScale={2} />
+              </FormField>
 
-            <div className="property-field number">
-              <span>{t('properties.form.base_two_adults')}</span>
-              <input type="number" step="0.01" value={baseTwoAdults} onChange={(e) => setBaseTwoAdults(e.target.value)} required />
-              {errors['baseTwoAdults'] ? <div className="field-error">{errors['baseTwoAdults']}</div> : null}
-            </div>
+              <FormField label={t('common.pricing.one_adult')} name="base_one_adult" errors={errors} className="number">
+                <CurrencyInput name="base_one_adult" control={control} decimalScale={2} />
+              </FormField>
 
-            <div className="property-field number">
-              <span>{t('properties.form.additional_adult')}</span>
-              <input type="number" step="0.01" value={additionalAdult} onChange={(e) => setAdditionalAdult(e.target.value)} required />
-              {errors['additionalAdult'] ? <div className="field-error">{errors['additionalAdult']}</div> : null}
+              <FormField label={t('common.pricing.two_adults')} name="base_two_adults" errors={errors} className="number">
+                <CurrencyInput name="base_two_adults" control={control} decimalScale={2} />
+              </FormField>
+
+              <FormField label={t('common.pricing.additional_adult')} name="additional_adult" errors={errors} className="number">
+                <CurrencyInput name="additional_adult" control={control} decimalScale={2} />
+              </FormField>
             </div>
           </div>
-        </div>
 
-        <div className="modal-actions full-width">
-          <button className="btn btn-ghost" onClick={onClose}>{t('properties.form.cancel')}</button>
-          <button className="btn btn-primary" onClick={handleSave}>{t('properties.form.save')}</button>
+          <div className="modal-actions full-width">
+            <button className="btn btn-ghost" type="button" onClick={onClose}>{t('common.actions.cancel')}</button>
+            <button className="btn btn-primary" type="submit">{t('common.actions.save')}</button>
+          </div>
         </div>
-      </div>
+      </form>
     </Modal>
   )
 }

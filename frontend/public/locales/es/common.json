@@ -1,5 +1,42 @@
 {
-  "title": "Reservas",
+  "common": {
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "create": "Crear",
+      "save": "Guardar",
+      "confirm": "Confirmar"
+    },
+    "status": {
+      "loading": "Cargando...",
+      "error": "Ocurrió un error",
+      "new": "Nuevo",
+      "error_required": "Campo obligatorio"
+    },
+    "confirm": {
+      "delete_title": "Confirmación de eliminación",
+      "delete_message_prefix": "¿Está seguro que desea eliminar",
+      "delete_message_suffix": "Esta acción no se puede deshacer.",
+      "delete_confirm": "Eliminar"
+    },
+    "pricing": {
+      "additional_adult": "Precio adulto adicional",
+      "child_factor": "Factor niño",
+      "child_max_age": "Edad máxima (niños)",
+      "child_price": "Precio niño",
+      "five_adults": "Precio 5 adultos",
+      "four_adults": "Precio 4 adultos",
+      "hide_rates": "Ocultar tarifas",
+      "infant_max_age": "Edad máxima (infantes)",
+      "one_adult": "Precio 1 adulto",
+      "seven_adults": "Precio 7 adultos",
+      "show_rates": "Mostrar tarifas",
+      "six_adults": "Precio 6 adultos",
+      "trhee_adults": "Precio 3 adultos",
+      "two_adults": "Precio 2 adultos"
+    }
+  },
   "header": {
     "open_menu": "Abrir menú",
     "subtitle": "gestión de reservas",
@@ -7,33 +44,32 @@
     "user_fallback": "Usuario",
     "logout": "Salir"
   },
-  "roomCategories": {
-    "form": {
-      "name": "Nombre",
-      "description": "Descripción",
-      "rate_group_title": "Tarifas de categoría",
-      "show_rates": "Mostrar tarifas",
-      "hide_rates": "Ocultar tarifas",
-      "cancel": "Cancelar",
-      "save": "Guardar",
-      "new": "Nueva categoría",
-      "create": "Crear categoría",
-      "edit": "Editar categoría",
-      "error_required": "Campo obligatorio"
-    },
-    "actions": {
-      "edit": "Editar",
-      "delete": "Eliminar"
-    },
-    "page": {
-      "title": "Categorías de habitaciones"
-    },
-    "confirm": {
-      "delete_title": "Confirmación de eliminación",
-      "delete_message_prefix": "¿Está seguro que desea eliminar",
-      "delete_message_suffix": "Esta acción no se puede deshacer.",
-      "delete_confirm": "Eliminar"
-    }
+  "footer": {
+    "copy": "© 2026 Reservas. Todos los derechos reservados."
+  },
+  "login": {
+    "change_language": "Cambiar idioma",
+    "title": "Iniciar sesión",
+    "subtitle": "Inicia sesión en tu cuenta para continuar",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Entrar",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "create_account": "Crear cuenta",
+    "no_account": "¿No tienes una cuenta?",
+    "remember_me": "Recuérdame",
+    "social_google": "Entrar con Google",
+    "social_facebook": "Entrar con Facebook",
+    "social_google_notice": "Inicio con Google no habilitado en este prototipo",
+    "social_facebook_notice": "Inicio con Facebook no habilitado en este prototipo",
+    "or": "o",
+    "email_placeholder": "tu@correo.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "La funcionalidad de inicio de sesión no está implementada en este prototipo.",
+    "accessible_help": "Rellena el formulario para iniciar sesión",
+    "email_error": "Proporciona un correo electrónico válido",
+    "password_error": "La contraseña debe tener al menos 6 caracteres",
+    "error": "Error al autenticar"
   },
   "menu": {
     "calendar": "Calendario",
@@ -57,61 +93,50 @@
     }
   },
   "properties": {
-    "form": {
-      "name": "Nombre",
-      "timezone": "Zona horaria",
-      "infant_max_age": "Edad máxima (infantes)",
-      "child_max_age": "Edad máxima (niños)",
-      "child_factor": "Factor niño",
-      "base_one_adult": "Base 1 adulto",
-      "base_two_adults": "Base 2 adultos",
-      "additional_adult": "Adulto adicional",
-      "child_price": "Precio niño",
-      "cancel": "Cancelar",
-      "save": "Guardar",
-      "new": "Nueva propiedad",
-      "edit": "Editar propiedad",
-      "base_rates_title": "Tarifa Base",
-      "show_base_rates": "Mostrar tarifas",
-      "hide_base_rates": "Ocultar tarifas",
-      "error_required": "Campo obligatorio"
-    },
-    "actions": {
-      "edit": "Editar",
-      "delete": "Eliminar"
-    },
-    "loading": "Cargando...",
     "page": {
       "title": "Propiedades"
     },
-    "confirm": {
-      "delete_title": "Confirmación de eliminación",
-      "delete_message_prefix": "¿Estás seguro de que deseas eliminar",
-      "delete_message_suffix": "Esta acción no se puede deshacer.",
-      "delete_confirm": "Eliminar"
+    "form": {
+      "name": "Nombre",
+      "timezone": "Zona horaria",
+      "new": "Nueva propiedad",
+      "edit": "Editar propiedad",
+      "base_rates_title": "Tarifa Base"
     }
   },
-  "login": {
-    "title": "Iniciar sesión",
-    "subtitle": "Inicia sesión en tu cuenta para continuar",
-    "email": "Correo electrónico",
-    "password": "Contraseña",
-    "submit": "Entrar",
-    "forgot": "¿Olvidaste tu contraseña?",
-    "create_account": "Crear cuenta",
-    "no_account": "¿No tienes una cuenta?",
-    "remember_me": "Recuérdame",
-    "social_google": "Entrar con Google",
-    "social_facebook": "Entrar con Facebook",
-    "social_google_notice": "Inicio con Google no habilitado en este prototipo",
-    "social_facebook_notice": "Inicio con Facebook no habilitado en este prototipo",
-    "or": "o",
-    "email_placeholder": "tu@correo.com",
-    "password_placeholder": "••••••••",
-    "demo_notice": "La funcionalidad de inicio de sesión no está implementada en este prototipo.",
-    "accessible_help": "Rellena el formulario para iniciar sesión",
-    "email_error": "Proporciona un correo electrónico válido",
-    "password_error": "La contraseña debe tener al menos 6 caracteres",
-    "error": "Error al autenticar"
+  "roomCategories": {
+    "page": {
+      "title": "Categorías de cuarto"
+    },
+    "form": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "show_rates": "Mostrar tarifas",
+      "hide_rates": "Ocultar tarifas",
+      "new": "Nueva categoría",
+      "edit": "Editar categoría",
+      "rate_group_title": "Tarifas de categoría"
+    }
+  },
+  "rooms": {
+    "page": {
+      "title": "Habitaciones"
+    },
+    "form": {
+      "name": "Nombre",
+      "category": "Categoría",
+      "category_placeholder": "Selecciona una categoría",
+      "beds": "Camas",
+      "capacity": "Capacidad",
+      "notes": "Notas",
+      "number": "Número",
+      "create": "Crear habitación",
+      "new": "Nueva habitación",
+      "edit": "Editar habitación"
+    },
+    "errors": {
+      "load": "Error al cargar habitaciones",
+      "save": "Error al guardar habitación"
+    }
   }
 }

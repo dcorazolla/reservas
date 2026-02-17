@@ -34,6 +34,7 @@ class ReservationPriceCalculatorAdditionalTest extends TestCase
         $calc = new ReservationPriceCalculator();
         $res = $calc->calculate($room->id, '2026-02-10', '2026-02-12', 2);
 
+        $this->assertEquals('room_base', $res['source']);
         $this->assertCount(2, $res['days']);
         $this->assertEquals(220.0 * 2, $res['total']);
     }

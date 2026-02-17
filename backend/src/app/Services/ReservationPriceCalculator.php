@@ -9,11 +9,14 @@ use App\Models\RoomCategoryRate;
 use App\Models\RoomCategoryRatePeriod;
 use App\Models\Property;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use RuntimeException;
 
 class ReservationPriceCalculator
 {
+    /**
+     * Simplified calculation: treats all people as adults, 0 children.
+     * Uses the full pricing cascade (room period → category period → room base → category base → property base).
+     */
     public function calculate(
         string|int $roomId,
         string $startDate,
@@ -26,84 +29,7 @@ class ReservationPriceCalculator
             throw new RuntimeException('Número de pessoas excede a capacidade do quarto.');
         }
 
-        try {
-            $start = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
-        } catch (\Throwable $e) {
-            $start = Carbon::parse($startDate)->startOfDay();
-        }
-
-        try {
-            $end = Carbon::createFromFormat('Y-m-d', $endDate)->startOfDay();
-        } catch (\Throwable $e) {
-            $end = Carbon::parse($endDate)->startOfDay();
-        }
-
-        if ($end <= $start) {
-            throw new RuntimeException('Data de saída deve ser maior que a data de entrada.');
-        }
-
-        $days = new Collection();
-        $total = 0;
-
-        for ($date = $start->copy(); $date->lt($end); $date->addDay()) {
-            $price = $this->priceForDayLegacy(
-                $room->id,
-                $peopleCount,
-                $date
-            );
-
-            $days->push([
-                'date' => $date->toDateString(),
-                'price' => $price,
-            ]);
-
-            $total += $price;
-        }
-
-        return [
-            'total' => $total,
-            'days'  => $days,
-        ];
-    }
-
-    protected function priceForDayLegacy(
-        string|int $roomId,
-        int $peopleCount,
-        Carbon $date
-    ): float {
-        $periodRate = RoomRatePeriod::where('room_id', $roomId)
-            ->where('people_count', $peopleCount)
-            ->whereDate('start_date', '<=', $date)
-            ->whereDate('end_date', '>=', $date)
-            ->orderByDesc('start_date')
-            ->first();
-
-        if ($periodRate) {
-            return (float) $periodRate->price_per_day;
-        }
-
-        $baseRate = RoomRate::where('room_id', $roomId)
-            ->where('people_count', $peopleCount)
-            ->first();
-
-        if ($baseRate) {
-            return (float) $baseRate->price_per_day;
-        }
-
-        // Legacy fallback
-        $room = Room::findOrFail($roomId);
-        $property = $room->property;
-        if (!$property) {
-            throw new RuntimeException('Tarifa base não encontrada.');
-        }
-        $baseForTwo = (float) ($property->base_two_adults ?? 0);
-        $additional = (float) ($property->additional_adult ?? 0);
-        $extraPeople = max(0, $peopleCount - 2);
-        $computed = $baseForTwo + ($additional * $extraPeople);
-        if ($computed <= 0) {
-            throw new RuntimeException('Tarifa base não encontrada.');
-        }
-        return $computed;
+        return $this->calculateDetailed($room, $startDate, $endDate, $peopleCount, 0, 0);
     }
 
     public function calculateDetailed(

@@ -71,11 +71,21 @@ npm run build
 ```
 
 - Rodar testes:
+ - Rodar testes:
 
 ```bash
+# Rodar em modo interativo (watch):
 npm test
-# ou com foco
-npm run test -- src/pages/Login/LoginPage.test.tsx -t "shows error on failed login"
+
+# Rodar em modo não-interativo / CI (necessário para evitar que o Vitest fique aguardando interação):
+# Use a flag `-- --run` ou `--run` para forçar execução não-interativa.
+# Exemplo:
+npm run test -- --run
+# ou
+npm test -- --run
+
+# Exemplo de execução com foco e não-interativo:
+npm run test -- src/pages/Login/LoginPage.test.tsx -t "shows error on failed login" -- --run
 ```
 
 Fluxo de Git (CLI recomendado)

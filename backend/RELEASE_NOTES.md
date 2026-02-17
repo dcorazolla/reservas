@@ -19,6 +19,9 @@ Fluxo para nova release:
   - Pagamentos e faturas: endpoints de pagamento e criação de faturas a partir de reservas (flaggeado).
   - Partners: CRUD completo de parceiros e associação a reservas.
   - Auditoria financeira: logs de auditoria de transações implementados.
+  - **Remoção do `calculate()` legado**: o método `calculate()` do `ReservationPriceCalculator` agora delega inteiramente ao `calculateDetailed()`, eliminando código duplicado e garantindo cascata de preços correta (5 níveis: room_period → category_period → room_base → category_base → property_base).
+  - **Campo `source` no response**: o endpoint `POST /reservations/calculate` agora retorna `source` indicando de onde veio o preço (`room_period`, `category_period`, `room_rate`, `category_rate`, `property_base`).
+  - **Documentação OpenAPI atualizada**: endpoint `/reservations/calculate` documentado com cascata e schema de resposta incluindo `source`.
 
 - Observações e próximos passos:
   - Habilitar feature-flag `invoices.create_from_reservation` em staging para validação manual.

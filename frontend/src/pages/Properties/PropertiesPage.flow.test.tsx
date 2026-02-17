@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { render, screen, waitFor, within, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
@@ -17,9 +17,6 @@ vi.mock('@chakra-ui/react', async () => {
     ListItem: (props: any) => React.createElement('li', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
-    Skeleton: (props: any) => React.createElement('div', props, props.children),
-    VStack: (props: any) => React.createElement('div', props, props.children),
-    HStack: (props: any) => React.createElement('div', props, props.children),
   }
 })
 
@@ -33,23 +30,29 @@ vi.mock('react-i18next', () => {
           'properties.form.new': 'Nova propriedade',
           'properties.form.name': 'Nome',
           'properties.form.timezone': 'Timezone',
-          'properties.form.save': 'Salvar',
-          'properties.form.cancel': 'Cancelar',
-          'properties.actions.edit': 'Editar',
-          'properties.actions.delete': 'Remover',
-          'properties.confirm.delete_title': 'Confirmação de exclusão',
-          'properties.confirm.delete_confirm': 'Remover',
+          'properties.form.edit': 'Editar propriedade',
           'properties.form.base_rates_title': 'Tarifa Base',
-          'properties.form.show_base_rates': 'Mostrar tarifas',
-          'properties.form.hide_base_rates': 'Ocultar tarifas',
-          'properties.form.child_factor': 'Fator criança',
-          'properties.form.child_price': 'Preço criança',
-          'properties.form.base_one_adult': 'Base 1 adulto',
-          'properties.form.base_two_adults': 'Base 2 adultos',
-          'properties.form.additional_adult': 'Adicional adulto',
-          'properties.form.infant_max_age': 'Idade máxima (infantes)',
-          'properties.form.child_max_age': 'Idade máxima (crianças)',
-          'properties.form.error_required': 'Campo obrigatório',
+          // common shared labels
+          'common.actions.save': 'Salvar',
+          'common.actions.cancel': 'Cancelar',
+          'common.actions.edit': 'Editar',
+          'common.actions.delete': 'Remover',
+          'common.status.error_required': 'Campo obrigatório',
+          'common.status.loading': 'Carregando...',
+          'common.pricing.show_rates': 'Mostrar tarifas',
+          'common.pricing.hide_rates': 'Ocultar tarifas',
+          'common.pricing.child_factor': 'Fator criança',
+          'common.pricing.child_price': 'Preço criança',
+          'common.pricing.one_adult': 'Base 1 adulto',
+          'common.pricing.two_adults': 'Base 2 adultos',
+          'common.pricing.additional_adult': 'Adicional adulto',
+          'common.pricing.infant_max_age': 'Idade máxima (infantes)',
+          'common.pricing.child_max_age': 'Idade máxima (crianças)',
+          // confirm modal
+          'common.confirm.delete_title': 'Confirmação de exclusão',
+          'common.confirm.delete_confirm': 'Remover',
+          'common.confirm.delete_message_prefix': 'Deseja remover',
+          'common.confirm.delete_message_suffix': 'Esta ação não pode ser desfeita.',
         }
         return map[k] ?? k
       },
@@ -101,19 +104,31 @@ describe('PropertiesPage flows', () => {
     // click save without filling should show validation errors (inputs are required)
     await userEvent.click(await screen.findByText('Salvar'))
 
-    // expect error text appears
-    expect(await screen.findAllByText('Campo obrigatório')).toHaveLength(8)
+    // expect error text appears (name + 5 rate fields = 6 errors;
+    // infant_max_age/child_max_age default to 0 which passes validation)
+    expect(await screen.findAllByText('Campo obrigatório')).toHaveLength(6)
 
     // fill required fields (simple minimal values)
     const inputs = screen.getAllByRole('textbox')
     // first textbox is name
     await userEvent.type(inputs[0], 'Nova')
 
-    // numeric inputs: fill with '1' for each remaining
+    // fill age spinbuttons (infant_max_age, child_max_age)
     const numberInputs = screen.getAllByRole('spinbutton')
     for (const ni of numberInputs) {
       await userEvent.clear(ni)
       await userEvent.type(ni, '1')
+    }
+
+    // Open rates section and fill CurrencyInput fields (type="text" inputmode="numeric")
+    await userEvent.click(screen.getByText('Mostrar tarifas'))
+    const rateSection = document.querySelector('.rate-group-content.expanded')
+    if (rateSection) {
+      const currencyInputs = rateSection.querySelectorAll('input[inputmode="numeric"]')
+      for (const ci of currencyInputs) {
+        fireEvent.change(ci, { target: { value: '1,00' } })
+        fireEvent.blur(ci)
+      }
     }
 
     // select timezone (native select)
@@ -130,7 +145,7 @@ describe('PropertiesPage flows', () => {
 
     // after create, created item should be in the list
     expect(await screen.findByText('Nova')).toBeInTheDocument()
-  })
+  }, 20000)
 
   it('edits an existing property and updates list', async () => {
     // prepare update mock
@@ -145,20 +160,31 @@ describe('PropertiesPage flows', () => {
     // open edit for first row
     await userEvent.click(screen.getAllByText('Editar')[0])
 
-    // modal should show name input prefilled
-    const nameInput = await screen.findByRole('textbox')
+    // modal should show name input prefilled (first textbox is the name)
+    const allTextboxes = await screen.findAllByRole('textbox')
+    const nameInput = allTextboxes[0]
     expect((nameInput as HTMLInputElement).value).toBe('Pousada Sol')
 
     // change name
     await userEvent.clear(nameInput)
     await userEvent.type(nameInput, 'Pousada Sol Updated')
 
-    // save
-    // fill remaining required numeric fields before saving
+    // fill remaining required age spinbuttons
     const numberInputsEdit = screen.getAllByRole('spinbutton')
     for (const ni of numberInputsEdit) {
       await userEvent.clear(ni)
       await userEvent.type(ni, '1')
+    }
+
+    // Open rates section and fill CurrencyInput fields
+    await userEvent.click(screen.getByText('Mostrar tarifas'))
+    const rateSection = document.querySelector('.rate-group-content.expanded')
+    if (rateSection) {
+      const currencyInputs = rateSection.querySelectorAll('input[inputmode="numeric"]')
+      for (const ci of currencyInputs) {
+        fireEvent.change(ci, { target: { value: '1,00' } })
+        fireEvent.blur(ci)
+      }
     }
 
     await userEvent.click(await screen.findByText('Salvar'))
@@ -183,10 +209,9 @@ describe('PropertiesPage flows', () => {
     // click remove on first row
     await userEvent.click(screen.getAllByText('Remover')[0])
 
-    // confirm modal has remove button; there are multiple 'Remover' buttons
-    const removerButtons = await screen.findAllByText('Remover')
-    // click the last one which belongs to the confirm dialog
-    await userEvent.click(removerButtons[removerButtons.length - 1])
+    // confirm modal has remove button; click the confirm button inside the modal
+    const confirmBtn = await screen.findByText('Remover', { selector: '.btn-danger' })
+    await userEvent.click(confirmBtn)
 
     await waitFor(async () => {
       const svcAssert = await import('@services/properties')

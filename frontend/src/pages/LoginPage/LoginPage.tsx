@@ -24,10 +24,10 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { decodeTokenPayload } from '@services/auth'
-import './login-page.css'
 import { FaGoogle, FaFacebookF } from 'react-icons/fa'
 import { AiOutlineWarning } from 'react-icons/ai'
 import { LanguageSelector } from '@components/LanguageSelector'
+import './login-page.css'
 
 const schema = z.object({
   email: z.string().email('login.email_error' as any),
@@ -108,7 +108,7 @@ export function LoginPage() {
     } catch (e: any) {
       // extract message from axios response if available
       const apiMsg = e?.response?.data?.message
-      const message = apiMsg || e?.message || t('login.error', 'Falha ao autenticar — verifique suas credenciais.')
+      const message = apiMsg || e?.message || t('login.error')
       setNotice({ type: 'error', message })
       setSubmitting(false)
     }
@@ -148,7 +148,7 @@ export function LoginPage() {
                   <LanguageSelector />
                 </Flex>
 
-                <Text color="gray.600">{t('login.subtitle', 'Entre na sua conta para continuar')}</Text>
+                <Text color="gray.600">{t('login.subtitle')}</Text>
 
           <FieldRoot>
             <FieldLabel htmlFor="email">{t('login.email')}</FieldLabel>
@@ -181,10 +181,10 @@ export function LoginPage() {
           <Flex align="center" justify="space-between">
             <label className="remember-label">
               <input type="checkbox" {...register('remember')} />
-              <span>{t('login.remember_me', 'Lembrar-me')}</span>
+              <span>{t('login.remember_me')}</span>
             </label>
             <Link href="#" color="blue.600">
-              {t('login.forgot', 'Esqueceu a senha?')}
+              {t('login.forgot')}
             </Link>
           </Flex>
 
@@ -192,34 +192,34 @@ export function LoginPage() {
             {t('login.submit')}
           </Button>
 
-          <div className="or-divider">{t('login.or', 'ou')}</div>
+          <div className="or-divider">{t('login.or')}</div>
           <div className="social-row">
             <Button
               className="social-btn"
               variant="outline"
-              onClick={() => setNotice(t('login.social_google_notice', 'Login com Google não habilitado neste protótipo'))}
+              onClick={() => setNotice({ type: 'info', message: t('login.social_google_notice') })}
             >
               <FaGoogle size={16} aria-hidden />
-              {t('login.social_google', 'Entrar com Google')}
+              {t('login.social_google')}
             </Button>
             <Button
               className="social-btn"
               variant="outline"
-              onClick={() => setNotice(t('login.social_facebook_notice', 'Login com Facebook não habilitado neste protótipo'))}
+              onClick={() => setNotice({ type: 'info', message: t('login.social_facebook_notice') })}
             >
               <FaFacebookF size={16} aria-hidden />
-              {t('login.social_facebook', 'Entrar com Facebook')}
+              {t('login.social_facebook')}
             </Button>
           </div>
 
           <Text fontSize="sm" color="gray.600" className="login-page-footer">
-            {t('login.no_account', "Não tem uma conta?")}{' '}
+            {t('login.no_account')}{' '}
             <Link href="#" color="blue.600">
-              {t('login.create_account', 'Criar conta')}
+              {t('login.create_account')}
             </Link>
           </Text>
 
-          <VisuallyHidden aria-live="polite">{t('login.accessible_help', 'Preencha o formulário para entrar')}</VisuallyHidden>
+          <VisuallyHidden aria-live="polite">{t('login.accessible_help')}</VisuallyHidden>
         </VStack>
       </Box>
     </Box>

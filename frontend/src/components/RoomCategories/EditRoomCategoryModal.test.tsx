@@ -37,7 +37,7 @@ describe('EditRoomCategoryModal', () => {
     await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalledWith('rc-1'))
 
     // open rates toggle (use exact i18n key string)
-    const toggle = screen.getByText('roomCategories.form.show_rates')
+    const toggle = screen.getByText('common.pricing.show_rates')
     await userEvent.click(toggle)
 
     // change a rate input
@@ -48,7 +48,7 @@ describe('EditRoomCategoryModal', () => {
     }
 
     // click save
-    const saveBtn = screen.getByText('roomCategories.form.save')
+    const saveBtn = screen.getByText('common.actions.save')
     await userEvent.click(saveBtn)
 
     await waitFor(() => expect(onSave).toHaveBeenCalled())
@@ -67,7 +67,7 @@ describe('EditRoomCategoryModal', () => {
     render(<EditRoomCategoryModal isOpen={true} category={{ id: 'rc-1', name: 'Cat A', description: 'Desc' }} onClose={onClose} onSave={onSave} />)
 
     // while the rates promise is pending, the loading placeholder should be visible
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
+    expect(screen.getByTestId('skeleton-fields')).toBeInTheDocument()
 
     // after resolution, listRates should have been called
     await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalled())
@@ -79,12 +79,16 @@ describe('EditRoomCategoryModal', () => {
 
     render(<EditRoomCategoryModal isOpen={true} category={null} onClose={onClose} onSave={onSave} />)
 
+    // Fill required name field (zod schema requires it)
+    const nameInput = screen.getAllByRole('textbox')[0]
+    await userEvent.type(nameInput, 'New Category')
+
     // open rates group
-    const toggle = screen.getByText('roomCategories.form.show_rates')
+    const toggle = screen.getByText('common.pricing.show_rates')
     await userEvent.click(toggle)
 
-    // save without entering numbers
-    const saveBtn = screen.getByText('roomCategories.form.save')
+    // save without entering rate numbers
+    const saveBtn = screen.getByText('common.actions.save')
     await userEvent.click(saveBtn)
 
     await waitFor(() => expect(onSave).toHaveBeenCalled())
@@ -109,7 +113,7 @@ describe('EditRoomCategoryModal', () => {
     await waitFor(() => expect(svc.__mocks.listRates).toHaveBeenCalled())
 
     // open rates
-    const toggle = screen.getByText('roomCategories.form.show_rates')
+    const toggle = screen.getByText('common.pricing.show_rates')
     await userEvent.click(toggle)
 
     const numberInputs = screen.getAllByRole('spinbutton')
@@ -119,7 +123,7 @@ describe('EditRoomCategoryModal', () => {
       await userEvent.type(numberInputs[i], String((i + 1) * 10))
     }
 
-    await userEvent.click(screen.getByText('roomCategories.form.save'))
+    await userEvent.click(screen.getByText('common.actions.save'))
 
     await waitFor(() => expect(onSave).toHaveBeenCalled())
     const payload = onSave.mock.calls[0][0]
@@ -152,10 +156,10 @@ describe('EditRoomCategoryModal', () => {
     render(<EditRoomCategoryModal isOpen={true} category={null} onClose={onClose} onSave={onSave} />)
 
     // toggle open rates, then close
-    const toggle = screen.getByText('roomCategories.form.show_rates')
+    const toggle = screen.getByText('common.pricing.show_rates')
     await userEvent.click(toggle)
     // now it should show hide label
-    expect(screen.getByText('roomCategories.form.hide_rates')).toBeInTheDocument()
+    expect(screen.getByText('common.pricing.hide_rates')).toBeInTheDocument()
 
     // change description (second textbox is the textarea)
     const textboxes = screen.getAllByRole('textbox')
@@ -164,7 +168,7 @@ describe('EditRoomCategoryModal', () => {
     await userEvent.type(textarea, 'My desc')
 
     // cancel should call onClose and not call onSave
-    const cancelBtn = screen.getByText('roomCategories.form.cancel')
+    const cancelBtn = screen.getByText('common.actions.cancel')
     await userEvent.click(cancelBtn)
     expect(onClose).toHaveBeenCalled()
     expect(onSave).not.toHaveBeenCalled()

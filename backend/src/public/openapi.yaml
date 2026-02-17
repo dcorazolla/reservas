@@ -185,7 +185,10 @@ paths:
   /reservations/calculate:
     post:
       tags: [Reservations]
-      summary: Calcular preço (modo simples)
+      summary: Calcular preço (modo simples — trata todos como adultos)
+      description: |
+        Usa a cascata completa de tarifas: room period → category period → room base → category base → property base.
+        Trata people_count como adultos (0 crianças). Para cálculo com crianças use /reservations/calculate-detailed.
       requestBody:
         required: true
         content:
@@ -197,9 +200,26 @@ paths:
                 room_id: { type: string, format: uuid }
                 start_date: { type: string, format: date }
                 end_date: { type: string, format: date }
-                people_count: { type: integer }
+                people_count: { type: integer, minimum: 1 }
       responses:
-        '200': { description: Preço calculado }
+        '200':
+          description: Preço calculado com fonte da tarifa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  source:
+                    type: string
+                    enum: [room_period, category_period, room_base, category_base, property_base]
+                  total: { type: number }
+                  days:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date: { type: string, format: date }
+                        price: { type: number }
   /availability/search:
     post:
       tags: [Availability]

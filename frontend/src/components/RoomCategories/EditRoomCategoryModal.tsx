@@ -1,9 +1,12 @@
 import React from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import Modal from '@components/Shared/Modal/Modal'
-import { Box, Button } from '@chakra-ui/react'
-import './room-category-modal.css'
+import FormField from '@components/Shared/FormField/FormField'
+import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
 import * as ratesService from '@services/roomCategoryRates'
 import { useTranslation } from 'react-i18next'
+import { roomCategorySchema, type RoomCategoryFormData } from '@models/schemas'
 
 type Props = {
   isOpen: boolean
@@ -14,42 +17,68 @@ type Props = {
 
 export default function EditRoomCategoryModal({ isOpen, category, onClose, onSave }: Props) {
   const { t } = useTranslation()
-  const [form, setForm] = React.useState({ name: '', description: '' })
   const [showRates, setShowRates] = React.useState<boolean>(false)
   const [rate, setRate] = React.useState<any | null>(null)
   const [rateLoading, setRateLoading] = React.useState<boolean>(false)
-  const [rateErrors, setRateErrors] = React.useState<Record<string, string>>({})
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<RoomCategoryFormData>({
+    resolver: zodResolver(roomCategorySchema),
+    defaultValues: { name: '', description: '' },
+  })
+
+  // Separate form for rates (not validated by zod — optional fields)
+  const [rateForm, setRateForm] = React.useState({
+    base_one_adult: '' as string | number,
+    base_two_adults: '' as string | number,
+    additional_adult: '' as string | number,
+    child_price: '' as string | number,
+  })
 
   React.useEffect(() => {
     if (isOpen) {
-      setForm({ name: category?.name ?? '', description: category?.description ?? '' })
+      setShowRates(false)
+      reset({ name: category?.name ?? '', description: category?.description ?? '' })
       // load existing rates for category when editing
       if (category?.id) {
         setRateLoading(true)
         ratesService
           .listRates(category.id)
           .then((list) => {
-            setRate(list[0] ?? null)
+            const r = list[0] ?? null
+            setRate(r)
+            if (r) {
+              setRateForm({
+                base_one_adult: r.base_one_adult ?? '',
+                base_two_adults: r.base_two_adults ?? '',
+                additional_adult: r.additional_adult ?? '',
+                child_price: r.child_price ?? '',
+              })
+            }
           })
           .catch((err) => console.error('Failed to load rates', err))
           .finally(() => setRateLoading(false))
       } else {
         setRate(null)
+        setRateForm({ base_one_adult: '', base_two_adults: '', additional_adult: '', child_price: '' })
       }
     }
-  }, [isOpen, category])
+  }, [isOpen, category, reset])
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    const payload: any = { ...form }
+  function onFormSubmit(data: RoomCategoryFormData) {
+    const payload: any = { ...data }
     if (category?.id) payload['id'] = category.id
     if (showRates) {
       payload['_rates'] = {
         id: rate?.id,
-        base_one_adult: rate?.base_one_adult !== undefined && rate?.base_one_adult !== '' ? Number(rate.base_one_adult) : null,
-        base_two_adults: rate?.base_two_adults !== undefined && rate?.base_two_adults !== '' ? Number(rate.base_two_adults) : null,
-        additional_adult: rate?.additional_adult !== undefined && rate?.additional_adult !== '' ? Number(rate.additional_adult) : null,
-        child_price: rate?.child_price !== undefined && rate?.child_price !== '' ? Number(rate.child_price) : null,
+        base_one_adult: rateForm.base_one_adult !== '' ? Number(rateForm.base_one_adult) : null,
+        base_two_adults: rateForm.base_two_adults !== '' ? Number(rateForm.base_two_adults) : null,
+        additional_adult: rateForm.additional_adult !== '' ? Number(rateForm.additional_adult) : null,
+        child_price: rateForm.child_price !== '' ? Number(rateForm.child_price) : null,
       }
     }
 
@@ -58,60 +87,60 @@ export default function EditRoomCategoryModal({ isOpen, category, onClose, onSav
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={category?.id ? t('roomCategories.form.edit') : t('roomCategories.form.create')}>
-      <div className="room-category-form-grid">
-        <div className="room-category-field full-width">
-          <span>{t('roomCategories.form.name')}</span>
-          <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-        </div>
+    <Modal isOpen={isOpen} onClose={onClose} title={category?.id ? t('roomCategories.form.edit') : t('roomCategories.form.new')} size="lg">
+      <form onSubmit={handleSubmit(onFormSubmit)}>
+        <div className="form-grid">
+          <FormField label={t('roomCategories.form.name')} name="name" errors={errors} className="full-width">
+            <input {...register('name')} required />
+          </FormField>
 
-        <div className="room-category-field full-width">
-          <span>{t('roomCategories.form.description')}</span>
-          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-        </div>
+          <FormField label={t('roomCategories.form.description')} name="description" errors={errors} className="full-width">
+            <textarea {...register('description')} />
+          </FormField>
 
-        <div className="rate-group">
-          <div className="rate-group-header">
-            <strong>{t('roomCategories.form.rate_group_title') || 'Category rates'}</strong>
-            <button type="button" className="group-toggle" onClick={() => setShowRates((s) => !s)} aria-expanded={showRates}>
-              {showRates ? t('roomCategories.form.hide_rates') || 'Hide rates' : t('roomCategories.form.show_rates') || 'Show rates'}
-            </button>
+          <div className="rate-group">
+            <div className="rate-group-header">
+              <strong>{t('roomCategories.form.rate_group_title')}</strong>
+              <button type="button" className="group-toggle" onClick={() => setShowRates((s) => !s)} aria-expanded={showRates}>
+                {showRates ? t('common.pricing.hide_rates') : t('common.pricing.show_rates')}
+              </button>
+            </div>
+
+            <div className={`rate-group-content ${showRates ? 'expanded' : 'collapsed'}`}>
+              {rateLoading ? (
+                <SkeletonFields rows={4} />
+              ) : (
+                <>
+                  <div className="form-field">
+                    <span>{t('common.pricing.one_adult')}</span>
+                    <input type="number" value={rateForm.base_one_adult} onChange={(e) => setRateForm({ ...rateForm, base_one_adult: e.target.value })} />
+                  </div>
+
+                  <div className="form-field">
+                    <span>{t('common.pricing.two_adults')}</span>
+                    <input type="number" value={rateForm.base_two_adults} onChange={(e) => setRateForm({ ...rateForm, base_two_adults: e.target.value })} />
+                  </div>
+
+                  <div className="form-field">
+                    <span>{t('common.pricing.additional_adult')}</span>
+                    <input type="number" value={rateForm.additional_adult} onChange={(e) => setRateForm({ ...rateForm, additional_adult: e.target.value })} />
+                  </div>
+
+                  <div className="form-field">
+                    <span>{t('common.pricing.child_price')}</span>
+                    <input type="number" step="0.01" value={rateForm.child_price} onChange={(e) => setRateForm({ ...rateForm, child_price: e.target.value })} />
+                  </div>
+                </>
+              )}
+            </div>
           </div>
 
-          <div className={`rate-group-content ${showRates ? 'expanded' : 'collapsed'}`}>
-            {rateLoading ? (
-              <div>Loading...</div>
-            ) : (
-              <>
-                <div className="room-category-field">
-                  <span>{t('properties.form.base_one_adult') || 'Base one adult'}</span>
-                  <input type="number" value={rate?.base_one_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_one_adult: e.target.value })} />
-                </div>
-
-                <div className="room-category-field">
-                  <span>{t('properties.form.base_two_adults') || 'Base two adults'}</span>
-                  <input type="number" value={rate?.base_two_adults ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), base_two_adults: e.target.value })} />
-                </div>
-
-                <div className="room-category-field">
-                  <span>{t('properties.form.additional_adult') || 'Additional adult'}</span>
-                  <input type="number" value={rate?.additional_adult ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), additional_adult: e.target.value })} />
-                </div>
-
-                <div className="room-category-field">
-                  <span>{t('properties.form.child_price') || 'Child price'}</span>
-                  <input type="number" step="0.01" value={rate?.child_price ?? ''} onChange={(e) => setRate({ ...(rate ?? {}), child_price: e.target.value })} />
-                </div>
-              </>
-            )}
+          <div className="modal-actions full-width">
+            <button className="btn btn-ghost" type="button" onClick={onClose}>{t('common.actions.cancel')}</button>
+            <button className="btn btn-primary" type="submit">{t('common.actions.save')}</button>
           </div>
         </div>
-
-        <div className="modal-actions full-width">
-          <Button variant="ghost" onClick={onClose}>{t('roomCategories.form.cancel')}</Button>
-          <Button colorScheme="blue" type="submit" onClick={(e) => { e.preventDefault(); handleSubmit(e); }}>{t('roomCategories.form.save')}</Button>
-        </div>
-      </div>
+      </form>
     </Modal>
   )
 }

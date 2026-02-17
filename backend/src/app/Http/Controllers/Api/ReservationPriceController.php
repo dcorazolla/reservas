@@ -22,7 +22,7 @@ class ReservationPriceController extends Controller
                 $data['room_id'],
                 $data['start_date'],
                 $data['end_date'],
-                $data['people_count']
+                (int) $data['people_count']
             )
         );
     }

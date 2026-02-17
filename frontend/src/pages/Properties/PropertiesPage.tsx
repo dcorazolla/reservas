@@ -1,9 +1,9 @@
 import React from 'react'
-import { Box, Heading, Text, Button, Skeleton, VStack, HStack } from '@chakra-ui/react'
-import './properties.css'
+import { Box, Heading, Text, Button } from '@chakra-ui/react'
 import EditPropertyModal from '@components/Properties/EditPropertyModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
+import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
 import * as propertiesService from '@services/properties'
 import { useTranslation } from 'react-i18next'
 import type { Property as ServiceProperty, PropertyPayload } from '@services/properties'
@@ -95,14 +95,7 @@ export default function PropertiesPage() {
       </Box>
 
       {loading ? (
-        <VStack spacing={3} align="stretch">
-          {[1, 2, 3, 4].map((i) => (
-            <HStack key={i} justify="space-between">
-              <Skeleton height="40px" width="60%" />
-              <Skeleton height="40px" width="20%" />
-            </HStack>
-          ))}
-        </VStack>
+        <SkeletonList rows={4} />
       ) : error ? (
         <Text color="red.500">{error}</Text>
       ) : (
@@ -110,14 +103,14 @@ export default function PropertiesPage() {
           items={items}
           className="properties-list"
           renderItem={(p: ServiceProperty) => (
-            <div className="property-row">
+            <div className="entity-row">
               <div>
                 <Text as="div" fontWeight={600}>{p.name}</Text>
                 <Text as="div" fontSize="sm" color="gray.600">{p.timezone}</Text>
               </div>
               <div>
-                <Button size="sm" variant="ghost" onClick={() => { setEditing(p); setIsModalOpen(true) }}>{t('properties.actions.edit')}</Button>
-                <Button size="sm" colorScheme="red" variant="ghost" onClick={() => setDeleting(p)}>{t('properties.actions.delete')}</Button>
+                <Button size="sm" variant="ghost" onClick={() => { setEditing(p); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>
+                <Button size="sm" colorScheme="red" variant="ghost" onClick={() => setDeleting(p)}>{t('common.actions.delete')}</Button>
               </div>
             </div>
           )}

@@ -34,6 +34,7 @@ class ReservationPriceCalculatorTest extends TestCase
         $res = $calc->calculate($room->id, '2026-02-01', '2026-02-04', 3);
 
         // 3 nights, computed price: base_two_adults + additional * (3-2) = 100 + 20 = 120
+        $this->assertEquals('property_base', $res['source']);
         $this->assertEquals(3, count($res['days']));
         $this->assertEquals(120.0 * 3, $res['total']);
         foreach ($res['days'] as $d) {
@@ -108,6 +109,7 @@ class ReservationPriceCalculatorTest extends TestCase
         $res = $calc->calculate($room->id, '2026-02-10', '2026-02-12', 2);
 
         $this->assertIsArray($res);
+        $this->assertEquals('property_base', $res['source']);
         $this->assertEquals(200, $res['total']);
         $this->assertCount(2, $res['days']);
 

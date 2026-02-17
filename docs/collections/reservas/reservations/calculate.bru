@@ -7,15 +7,24 @@ meta {
 post {
   url: {{api_url}}/api/reservations/calculate
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearer_token}}
 }
 
 body:json {
   {
-    "room_id": 1,
+    "room_id": "{{room_id}}",
     "start_date": "2026-12-24",
     "end_date": "2026-12-27",
     "people_count": 2
   }
-  
+}
+
+docs {
+  Uses the full pricing cascade (room period → category period → room base → category base → property base).
+  Treats people_count as adults only. For children, use /reservations/calculate-detailed.
+  Response includes "source" field indicating which pricing tier was used.
 }

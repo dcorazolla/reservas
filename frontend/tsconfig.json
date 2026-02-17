@@ -7,7 +7,9 @@
       "@services/*": ["services/*"],
       "@design/*": ["design-system/*"],
       "@utils/*": ["utils/*"],
-      "@contexts/*": ["contexts/*"]
+      "@contexts/*": ["contexts/*"],
+      "@models": ["models"],
+      "@models/*": ["models/*"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -17,6 +19,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
     "strict": true,
     "skipLibCheck": true

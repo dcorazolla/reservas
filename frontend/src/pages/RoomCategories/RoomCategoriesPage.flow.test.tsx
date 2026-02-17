@@ -12,9 +12,6 @@ vi.mock('@chakra-ui/react', async () => {
     Heading: (props: any) => React.createElement('h2', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
-    Skeleton: (props: any) => React.createElement('div', props, props.children),
-    VStack: (props: any) => React.createElement('div', props, props.children),
-    HStack: (props: any) => React.createElement('div', props, props.children),
   }
 })
 
@@ -27,17 +24,23 @@ vi.mock('react-i18next', () => {
           'roomCategories.form.new': 'Nova categoria',
           'roomCategories.form.name': 'Nome',
           'roomCategories.form.description': 'Descrição',
-          'roomCategories.form.save': 'Salvar',
-          'roomCategories.form.cancel': 'Cancelar',
-          'roomCategories.actions.edit': 'Editar',
-          'roomCategories.actions.delete': 'Remover',
-          'roomCategories.form.show_rates': 'Mostrar tarifas',
-          // confirm modal strings come from shared keys used across pages
-          'properties.confirm.delete_title': 'Confirmação de exclusão',
-          'properties.confirm.delete_confirm': 'Remover',
-          'confirm.cancel': 'Cancelar',
-          'properties.confirm.delete_message_prefix': 'Deseja remover ',
-          'properties.confirm.delete_message_suffix': '?',
+          'roomCategories.form.edit': 'Editar categoria',
+          // common shared labels
+          'common.actions.save': 'Salvar',
+          'common.actions.cancel': 'Cancelar',
+          'common.actions.edit': 'Editar',
+          'common.actions.delete': 'Remover',
+          'common.pricing.show_rates': 'Mostrar tarifas',
+          'common.pricing.hide_rates': 'Ocultar tarifas',
+          'common.pricing.one_adult': 'Base 1 adulto',
+          'common.pricing.two_adults': 'Base 2 adultos',
+          'common.pricing.additional_adult': 'Adicional adulto',
+          'common.pricing.child_price': 'Preço criança',
+          // confirm modal
+          'common.confirm.delete_title': 'Confirmação de exclusão',
+          'common.confirm.delete_confirm': 'Remover',
+          'common.confirm.delete_message_prefix': 'Deseja remover',
+          'common.confirm.delete_message_suffix': 'Esta ação não pode ser desfeita.',
         }
         return map[k] ?? k
       },
@@ -95,7 +98,7 @@ describe('RoomCategoriesPage flows', () => {
     await userEvent.type(nameInput, 'New Cat')
 
     // open rates
-    const showRatesBtn = await screen.findByText('Mostrar tarifas')
+    const showRatesBtn = await screen.findByText('Mostrar tarifas', { exact: false })
     await userEvent.click(showRatesBtn)
 
     // fill a rate numeric input
@@ -119,11 +122,13 @@ describe('RoomCategoriesPage flows', () => {
 
     expect(await screen.findByText('Category A')).toBeInTheDocument()
 
-    await userEvent.click(screen.getAllByText('Remover')[0])
+    // click delete on the list item
+    const deleteButtons = screen.getAllByText('Remover')
+    await userEvent.click(deleteButtons[0])
 
-    // confirm by clicking the last Remove button
-    const removerButtons = await screen.findAllByText('Remover')
-    await userEvent.click(removerButtons[removerButtons.length - 1])
+    // confirm by clicking the confirm button inside the confirm modal
+    const confirmBtn = await screen.findByText('Remover', { selector: '.btn-danger' })
+    await userEvent.click(confirmBtn)
 
     await waitFor(async () => {
       const svcAssert = await import('@services/roomCategories')
@@ -300,8 +305,8 @@ describe('RoomCategoriesPage flows', () => {
     expect(await screen.findByText('Category A')).toBeInTheDocument()
     await userEvent.click(screen.getAllByText('Remover')[0])
     // click confirm in modal
-    const removerButtons = await screen.findAllByText('Remover')
-    await userEvent.click(removerButtons[removerButtons.length - 1])
+    const confirmBtn = await screen.findByText('Remover', { selector: '.btn-danger' })
+    await userEvent.click(confirmBtn)
 
     expect(await screen.findByText('delete fail')).toBeInTheDocument()
   })
