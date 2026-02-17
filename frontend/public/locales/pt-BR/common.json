@@ -12,7 +12,11 @@
       "loading": "Carregando...",
       "error": "Ocorreu um erro",
       "new": "Novo",
-      "error_required": "Campo obrigatório"
+      "error_required": "Campo obrigatório",
+      "error_invalid_email": "E-mail inválido",
+      "error_max": "Campo muito longo",
+      "error_min_zero": "Deve ser maior que zero",
+      "error_max_100": "Não pode ser maior que 100"
     },
     "confirm": {
       "delete_title": "Confirmação de remoção",
@@ -139,6 +143,28 @@
     "errors": {
       "load": "Falha ao carregar quartos",
       "save": "Falha ao salvar quarto"
+    }
+  },
+  "partners": {
+    "page": {
+      "title": "Parceiros"
+    },
+    "form": {
+      "name": "Nome",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "tax_id": "CPF/CNPJ",
+      "address": "Endereço",
+      "notes": "Notas",
+      "billing_rule": "Regra de faturamento",
+      "discount_percent": "Desconto (%)",
+      "new": "Novo parceiro",
+      "edit": "Editar parceiro"
+    },
+    "billing_rule": {
+      "none": "Sem faturamento",
+      "charge_partner": "Cobrar do parceiro",
+      "charge_guest": "Cobrar do hóspede"
     }
   }
 }

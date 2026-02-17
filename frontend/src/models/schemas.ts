@@ -56,3 +56,21 @@ export const roomCategoryRateSchema = z.object({
 })
 
 export type RoomCategoryRateFormData = z.infer<typeof roomCategoryRateSchema>
+
+/* ------------------------------------------------------------------ */
+/*  Partner schema                                                      */
+/* ------------------------------------------------------------------ */
+
+export const partnerSchema = z.object({
+  name: z.string().min(1, 'common.status.error_required').max(191, 'common.status.error_max'),
+  email: z.string().optional().refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), 'common.status.error_invalid_email'),
+  phone: z.string().optional(),
+  tax_id: z.string().optional(),
+  address: z.string().optional(),
+  notes: z.string().optional(),
+  billing_rule: z.enum(['none', 'charge_partner', 'charge_guest']).optional(),
+  partner_discount_percent: z.coerce.number().min(0, 'common.status.error_min_zero').max(100, 'common.status.error_max_100').optional(),
+})
+
+export type PartnerFormData = z.infer<typeof partnerSchema>
+

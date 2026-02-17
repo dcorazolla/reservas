@@ -76,6 +76,7 @@ export default function RoomsPage() {
     try {
       await roomsService.deleteRoom(id)
       setItems((s) => s.filter((it) => it.id !== id))
+      setDeleting(null)
     } catch (err: any) {
       console.error('Failed to delete room', err)
       setError(err?.message || 'Failed to delete')

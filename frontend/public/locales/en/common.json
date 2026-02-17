@@ -12,7 +12,11 @@
       "loading": "Loading...",
       "error": "An error occurred",
       "new": "New",
-      "error_required": "Field is required"
+      "error_required": "Field is required",
+      "error_invalid_email": "Invalid email",
+      "error_max": "Field too long",
+      "error_min_zero": "Must be greater than zero",
+      "error_max_100": "Cannot be greater than 100"
     },
     "confirm": {
       "delete_title": "Delete confirmation",
@@ -139,6 +143,28 @@
     "errors": {
       "load": "Failed to load rooms",
       "save": "Failed to save room"
+    }
+  },
+  "partners": {
+    "page": {
+      "title": "Partners"
+    },
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "tax_id": "Tax ID (CPF/CNPJ)",
+      "address": "Address",
+      "notes": "Notes",
+      "billing_rule": "Billing rule",
+      "discount_percent": "Discount (%)",
+      "new": "New partner",
+      "edit": "Edit partner"
+    },
+    "billing_rule": {
+      "none": "No billing",
+      "charge_partner": "Charge partner",
+      "charge_guest": "Charge guest"
     }
   }
 }
