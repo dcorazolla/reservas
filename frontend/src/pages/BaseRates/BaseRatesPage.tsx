@@ -88,7 +88,7 @@ export default function BaseRatesPage() {
     return (
       <VStack spacing={6} align="stretch">
         <Heading as="h2" size="lg">
-          {t('menu.rates.base')}
+          {t('menu.settings.rates.base')}
         </Heading>
         <SkeletonFields rows={5} />
       </VStack>
@@ -99,7 +99,7 @@ export default function BaseRatesPage() {
     return (
       <VStack spacing={6} align="stretch">
         <Heading as="h2" size="lg">
-          {t('menu.rates.base')}
+          {t('menu.settings.rates.base')}
         </Heading>
         <Box>{t('common.status.no_data')}</Box>
       </VStack>
@@ -110,7 +110,7 @@ export default function BaseRatesPage() {
     <VStack spacing={6} align="stretch" as="form" onSubmit={handleSubmit(handleSave)}>
       <Box>
         <Heading as="h2" size="lg" mb={2}>
-          {t('menu.rates.base')}
+          {t('menu.settings.rates.base')}
         </Heading>
         <Box color="gray.600" fontSize="sm">
           {t('baseRates.form.description')}
