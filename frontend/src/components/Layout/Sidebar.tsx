@@ -7,7 +7,7 @@ import {
   useDisclosure,
   Button,
 } from '@chakra-ui/react'
-import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiBox, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock } from 'react-icons/fi'
+import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiBox, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock, FiPackage, FiLock } from 'react-icons/fi'
 import { MdMeetingRoom } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -25,9 +25,10 @@ const ICON_MAP: Record<string, any> = {
   settings: FiSettings,
   properties: FiHome,
   rooms: MdMeetingRoom,
-  roomCategories: FiBox,
+  roomCategories: FiPackage,
   users: FiUsers,
   partners: FiBriefcase,
+  blocks: FiLock,
   rates: FiTag,
   base: FiDollarSign,
   roomRate: FiHome,

@@ -94,6 +94,7 @@
       "rooms": "Rooms",
       "users": "Users",
       "partners": "Partners",
+      "blocks": "Blocks",
       "rates": {
         "label": "Rates",
         "base": "Base rate",
