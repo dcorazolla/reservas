@@ -76,10 +76,83 @@ Flexibilidade por porte:
 | Hotel / Rede | Exceções por quarto | `room_rates` (por `people_count`) |
 | Alta temporada | Períodos específicos | `room_rate_periods` / `room_category_rate_periods` |
 
-## 9) Requisitos específicos extraídos
+## 9) Requisitos de Reservas - UI e Frontend
+
+### 9.1 Calendário de Reservas (CalendarPage)
+- Grid interativo: rows=quartos, cols=dias (2 colunas por dia: checkout|checkin)
+- Responsividade adaptativa:
+  - Mobile (< 600px): 5-10 dias (padrão 7), half-cell 30px, não sticky room col
+  - Tablet (600-1024px): 10-15 dias (padrão 12), half-cell 35px, room col 90px sticky
+  - Desktop (> 1024px): 15-35 dias (padrão 21), half-cell 40px, room col 120px sticky
+- Controles no header:
+  - Botões Prev/Next ou date input para navegação
+  - Input numérico para alterar número de dias (respeita min/max por breakpoint)
+  - Texto de período (ex: "Fevereiro 2026" ou "01/02 - 28/02")
+- 8 status com cores diferenciadas (mantidas do frontend antigo @BKP):
+  - pre-reserva (#fbbf24), reservado (#60a5fa), confirmado (#34d399)
+  - checked_in (#a78bfa), checked_out (#fb923c), no_show (#ef4444)
+  - cancelado (#9ca3af), blocked (#1f2937 com ícone 🔒)
+- Interatividade:
+  - Clique célula vazia → criar reserva (ReservationModal)
+  - Clique reserva → editar (ReservationModal)
+  - Clique bloqueio → editar bloqueio (RoomBlockModal)
+  - Hover → popover com nome hóspede, datas, partner badge (🤝)
+- Design baseado em: `@BKP/src/components/Calendar/CalendarGrid.tsx` (prova conceito validada)
+
+### 9.2 Listagem de Reservas (ListPage)
+- Tabela com 9 colunas: Quarto | Hóspede | Check-in | Check-out | Status | Contato | Partner | Valor | Ações
+- Status badge com cores iguais ao calendário
+- Partner badge (🤝) se partner_id não null
+- Contato: email + phone com tooltip ao hover
+- Ações: Edit (✏️) + Delete (🗑️) com confirmação
+- Filtros intuitivos:
+  1. **Período**: Dropdown mês/ano (mês atual padrão) - determina intervalo
+  2. **Hóspede**: Input busca real-time em guest_name
+  3. **Contato**: Input busca real-time em email E phone
+  4. **Partner**: Select com "Todos" ou lista de partners
+  5. **Status**: Multi-select (8 opcões com cores)
+  6. **Botão "Limpar Filtros"**: Reset all
+- Paginação: 20 items/página, mostra total de resultados
+- Sorting: Clicável em headers (Quarto, Hóspede, Datas, Status, Valor)
+- Exibição: "123 reservas encontradas"
+
+### 9.3 Modal de Edição de Reservas (ReservationModal)
+- Mantém implementação do @BKP (refatorada para novos padrões)
+- Campos: guest_name, adults_count, children_count, infants_count
+- Room select (dropdown)
+- Datas: start_date, end_date (inputs date)
+- Status select (8 opcões)
+- Cálculo automático de preço por dia (via backend)
+- Price override manual (opcional)
+- Notas de reserva (textarea)
+- Partner select (opcional)
+- Minibar panel (opcional - consumo adicional)
+- Buttons: Save | Cancel | Check-in | Check-out | Confirm | Finalize
+
+### 9.4 Backend Endpoints para Reservas
+- `GET /api/calendar` - Retorna calendar grid data
+  - Params: `property_id`, `start`, `end`
+  - Response: `{ rooms: Room[], start: date, end: date }`
+- `GET /api/reservations` - Listagem com paginação e filtros
+  - Params: `property_id`, `from`, `to`, `search[guest]`, `search[contact]`, `search[partner_id]`, `search[status][]`, `sort`, `order`, `page`, `per_page`
+  - Response: `{ data: Reservation[], total, per_page, current_page, last_page }`
+- `POST /api/reservations` - Criar nova reserva
+- `GET /api/reservations/{id}` - Detalhes de uma reserva
+- `PUT /api/reservations/{id}` - Editar reserva
+- `DELETE /api/reservations/{id}` - Deletar reserva
+- `POST /api/reservations/{id}/check-in` - Check-in
+- `POST /api/reservations/{id}/check-out` - Check-out
+- `POST /api/reservations/{id}/confirm` - Confirmar reserva
+- `POST /api/reservations/{id}/cancel` - Cancelar reserva
+- `POST /api/reservations/calculate-detailed` - Calcular preço com adultos/crianças/infantes
+
+## 10) Requisitos específicos extraídos
 - Reservas: CRUD, disponibilidade, overrides de preço auditados.
 - Pagamentos: parciais e totais, integração com frigobar, alocações por linha.
 - Frigobar: catálogo, lançamentos vinculados a reservas, agrupamento em invoice.
 
 ---
 Referências originárias: `docs/AGENT_CONTEXT/RULES_AND_REQUIREMENTS.md`, `docs/requirements/*`, `docs/adr/*`.
+
+**Última atualização**: 2026-02-18 - Adicionada seção 9 (Requisitos de Reservas - UI)
+
