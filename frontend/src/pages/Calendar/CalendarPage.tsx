@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '@auth/AuthContext'
+import { useAuth } from '@contexts/AuthContext'
 import { useAlert } from '@components/Shared/AlertContext/AlertContext'
 import Modal from '@components/Shared/Modal/Modal'
 import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
