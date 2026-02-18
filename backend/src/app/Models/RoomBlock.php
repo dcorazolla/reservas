@@ -13,8 +13,19 @@ class RoomBlock extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
+    // Enums
+    const TYPE_MAINTENANCE = 'maintenance';
+    const TYPE_CLEANING = 'cleaning';
+    const TYPE_PRIVATE = 'private';
+    const TYPE_CUSTOM = 'custom';
+    
+    const RECURRENCE_NONE = 'none';
+    const RECURRENCE_DAILY = 'daily';
+    const RECURRENCE_WEEKLY = 'weekly';
+    const RECURRENCE_MONTHLY = 'monthly';
+
     protected $fillable = [
-        'room_id', 'start_date', 'end_date', 'reason', 'partner_id', 'created_by',
+        'property_id', 'room_id', 'start_date', 'end_date', 'type', 'reason', 'recurrence', 'created_by',
     ];
 
     protected $casts = [

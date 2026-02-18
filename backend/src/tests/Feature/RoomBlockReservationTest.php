@@ -36,10 +36,13 @@ class RoomBlockReservationTest extends TestCase
 
         // Create a room block overlapping today
         RoomBlock::create([
+            'property_id' => $property->id,
             'room_id' => $room->id,
             'start_date' => now()->toDateString(),
             'end_date' => now()->addDays(2)->toDateString(),
+            'type' => 'maintenance',
             'reason' => 'Maintenance',
+            'recurrence' => 'none',
         ]);
 
         $user = User::factory()->create();

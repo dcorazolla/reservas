@@ -78,7 +78,8 @@ Route::middleware(['auth:api'])->group(function () {
     // Products (minibar inventory) - admin
     Route::apiResource('products', \App\Http\Controllers\Api\ProductController::class);
 
-    // Room blocks (maintenance / partner blocks)
+    // Room blocks (maintenance / availability blocks)
+    Route::get('/room-blocks/expand', [\App\Http\Controllers\Api\RoomBlockController::class, 'expand']);
     Route::get('/room-blocks', [\App\Http\Controllers\Api\RoomBlockController::class, 'index']);
     Route::post('/room-blocks', [\App\Http\Controllers\Api\RoomBlockController::class, 'store']);
     Route::put('/room-blocks/{roomBlock}', [\App\Http\Controllers\Api\RoomBlockController::class, 'update']);

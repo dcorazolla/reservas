@@ -46,6 +46,7 @@ class RoomBlockAuthorizationTest extends TestCase
             'room_id' => $room->id,
             'start_date' => now()->toDateString(),
             'end_date' => now()->addDays(1)->toDateString(),
+            'type' => 'maintenance',
             'reason' => 'Test',
         ];
 
@@ -79,10 +80,13 @@ class RoomBlockAuthorizationTest extends TestCase
         ]);
 
         $block = RoomBlock::create([
+            'property_id' => $property->id,
             'room_id' => $room->id,
             'start_date' => now()->toDateString(),
             'end_date' => now()->addDays(1)->toDateString(),
+            'type' => 'maintenance',
             'reason' => 'Test',
+            'recurrence' => 'none',
         ]);
 
         // create user belonging to same property
