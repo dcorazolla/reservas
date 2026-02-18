@@ -167,14 +167,18 @@ type Reservation = {
 
 #### Visual & UX
 - [ ] Grid com tabela: rows=quartos, cols=dias (2 subcols cada)
+- [ ] Design baseado em `@BKP/src/components/Calendar/CalendarGrid.tsx` (mantém UX validada)
 - [ ] Header com controles:
-  - [ ] Input de data (ou prev/next buttons) para navegar
-  - [ ] Seletor do número de dias (5/10/15/20/30/35)
+  - [ ] Botões prev/next ou input de data para navegar
+  - [ ] Seletor do número de dias (input numérico com min/max por breakpoint)
   - [ ] Mês/ano atual em texto
+  - [ ] Indicador visual se há overflow horizontal
 - [ ] Responsividade adaptativa:
-  - [ ] Mobile (< 600px): 5-10 dias
-  - [ ] Tablet (600-1024px): 10-15 dias
-  - [ ] Desktop (> 1024px): 15-35 dias
+  - [ ] Mobile (< 600px): 5-10 dias (padrão: 7)
+  - [ ] Tablet (600-1024px): 10-15 dias (padrão: 12)
+  - [ ] Desktop (> 1024px): 15-35 dias (padrão: 21)
+  - [ ] User pode mudar o número de dias via controle (input numérico ou slider)
+  - [ ] Número de dias se ajusta para manter legibilidade
 - [ ] Status com cores diferenciadas:
   - [ ] pre-reserva: cor A
   - [ ] reservado: cor B
@@ -203,32 +207,147 @@ type Reservation = {
 - [ ] Tabela com colunas:
   - [ ] Quarto (Room name)
   - [ ] Hóspede (Guest name)
-  - [ ] Datas (Check-in, Check-out)
-  - [ ] Status (badge colorido)
-  - [ ] Contato (email, phone) - opcional, expansível?
-  - [ ] Partner (se houver)
-  - [ ] Valor total
-  - [ ] Ações (Edit, Delete)
+  - [ ] Check-in (start_date)
+  - [ ] Check-out (end_date)
+  - [ ] Status (badge colorido - cores iguais ao calendário)
+  - [ ] Contato (email e phone - expandível ou tooltip)
+  - [ ] Partner (🤝 badge se houver)
+  - [ ] Valor total (preço formatado)
+  - [ ] Ações (Edit, Delete com confirmação)
 
-#### Filtros
-- [ ] Mês/Ano (para definir intervalo)
-- [ ] Filtro por hóspede (busca/select)
-- [ ] Filtro por contato (email/phone - search)
-- [ ] Filtro por status (multi-select ou checkboxes)
-- [ ] Filtro por partner (select)
+#### Filtros (Simples e Úteis)
+- [ ] **Período**: Mês/Ano dropdown (mês atual padrão) - determina range de datas
+- [ ] **Hóspede**: Input de busca em tempo real (busca em guest_name)
+- [ ] **Contato**: Input de busca em tempo real (busca em email E phone)
+- [ ] **Partner**: Select com opcões (todos + lista de partners)
+- [ ] **Status**: Multi-select com 8 opcões
+- [ ] **Botão**: Limpar filtros (reset)
 
-#### Referência Visual
-- [ ] Cores por status (like calendar)
-- [ ] Partner badge (🤝 ou similar) na linha
-- [ ] Ícone de edit/delete nas ações
+**Layout de Filtros (Integrado):**
+```tsx
+// Header/Bar acima da tabela:
+<div class="filters-bar">
+  <select>Mês/Ano</select>
+  <input placeholder="Buscar hóspede..." />
+  <input placeholder="Buscar contato (email/phone)..." />
+  <select>Partner (Todos)</select>
+  <MultiSelect>Status</MultiSelect>
+  <button>Limpar Filtros</button>
+</div>
+
+// Mostra: "123 reservas encontradas"
+// Suporta paginação ou lazy-load
+```
+
+#### Referência Visual em Linha
+- [ ] Status badge (cor + texto: "Confirmado", "Check-in", etc)
+- [ ] Partner badge com ícone (🤝) se partner_id não null
+- [ ] Texto: guest_name em bold
+- [ ] Datas em formato DD/MM/YYYY
+- [ ] Valor em moeda formatada (R$ 1.234,56)
+- [ ] Ações com ícones (✏️ Edit, 🗑️ Delete)
 
 #### Backend
-- [ ] Endpoint `GET /api/reservations?property_id=...&from=...&to=...&filters[guest]=...&filters[contact]=...`
-  - Retorna lista de reservations com dados do hóspede
+- [ ] Endpoint `GET /api/reservations?property_id=...&from=...&to=...&filters[guest]=...&filters[contact]=...&filters[partner_id]=...&filters[status][]=...`
+  - Retorna lista paginada de reservations
 
-#### Paginação
-- [ ] Paginação ou lazy-loading
-- [ ] Mostrar total de resultados
+#### Paginação/Carregamento
+- [ ] Mostrar total de resultados (ex: "123 reservas em 3 páginas")
+- [ ] 20 items por página (padrão)
+- [ ] Paginação com prev/next e jump to page
+
+---
+
+## 5.3 Especificações de Design - Baseadas em @BKP
+
+### Calendário Grid - Adaptação por Tamanho de Tela
+
+**Layout da Tabela:**
+```tsx
+// Estrutura mantida do @BKP:
+<table class="calendar-table">
+  <thead>
+    <tr>
+      <th class="room-col">Quarto</th>
+      {days.map(date => (
+        <th colSpan={2} class="day-header">
+          <span>{mês (abr)}</span>
+          <span>{dia}</span>
+        </th>
+      ))}
+    </tr>
+  </thead>
+  <tbody>
+    {rooms.map(room => (
+      <tr>
+        <td class="room-col">{room.name}</td>
+        {/* 2 cells per day: checkout | checkin */}
+      </tr>
+    ))}
+  </tbody>
+</table>
+```
+
+**Responsividade por Breakpoint:**
+
+1. **Desktop (> 1024px):**
+   - Room col: 120px (sticky)
+   - Half-cell: 40px cada
+   - Font: 14px normal
+   - Dias padrão: 21
+   - Máximo: 35 dias
+   - Overflow: scroll horizontal se ultrapassar viewport
+
+2. **Tablet (600-1024px):**
+   - Room col: 90px (sticky)
+   - Half-cell: 35px cada
+   - Font: 12px reduzida
+   - Dias padrão: 12
+   - Máximo: 15 dias
+   - Overflow: scroll horizontal
+
+3. **Mobile (< 600px):**
+   - Room col: auto (não sticky, row-level)
+   - Half-cell: 30px cada
+   - Font: 11px reduzida
+   - Dias padrão: 7
+   - Máximo: 10 dias
+   - Overflow: scroll horizontal necessário
+
+**Controle de Número de Dias (Header):**
+```tsx
+// Input ou Stepper para alterar dias
+<input 
+  type="number"
+  value={visibleDays}
+  min={getMinDays()}    // 5 mobile, 10 tablet, 15 desktop
+  max={getMaxDays()}    // 10 mobile, 15 tablet, 35 desktop
+  onChange={setVisibleDays}
+/>
+
+// Atualizar live grid ao mudar
+// CSS table: width se ajusta automaticamente
+// Garantir que número de dias não quebre layout
+```
+
+**Cores e Status (mantidas do @BKP):**
+```css
+.status-pre-reserva { background: #fbbf24; }      /* Âmbar */
+.status-reservado { background: #60a5fa; }        /* Azul */
+.status-confirmado { background: #34d399; }       /* Verde */
+.status-checked_in { background: #a78bfa; }       /* Roxo */
+.status-checked_out { background: #fb923c; }      /* Laranja */
+.status-no_show { background: #ef4444; }          /* Vermelho */
+.status-cancelado { background: #9ca3af; }        /* Cinza */
+.status-blocked { background: #1f2937; color: #fff; } /* Preto */
+```
+
+**Interatividade:**
+- Clique em célula vazia → criar reserva
+- Clique em reserva → editar
+- Hover em reserva → popover com (nome, datas, partner badge)
+- Scroll horizontal quando necessário
+- Touch-friendly half-cells (≥ 30px)
 
 ---
 
@@ -303,20 +422,21 @@ type Reservation = {
 
 ---
 
-## 9. Resumo das Diferenças
+## 9. Resumo das Diferenças (ATUALIZADO)
 
-| Item | Pedido | Documentado? | Ação Necessária |
-|------|-------|------------|-----------------|
-| **Calendário com grid** | ✅ | ⚠️ Código antigo existe | ADR + spec de requisitos |
-| **Cores por status** | ✅ | ⚠️ Parcial | Formalizar paleta de cores |
-| **Navegação intuitiva** | ✅ | ❌ | Especificar UX (prev/next, input data) |
-| **Responsividade 5-35 dias** | ✅ | ❌ | Definir breakpoints e visibilidade |
-| **2 colunas check-in/out** | ✅ | ⚠️ Código prova conceito | Documentar padrão |
-| **Modal de edição** | ✅ | ⚠️ Existe no @BKP | Portar e refatorar |
-| **Página CRUD listagem** | ✅ | ❌ | Especificar colunas, filtros, layout |
-| **Filtro por hóspede** | ✅ | ❌ | Detalhar interação (busca/select) |
-| **Filtro por contato** | ✅ | ❌ | Detalhar (email? phone? ambos?) |
-| **Referência visual linha** | ✅ | ❌ | Especificar (cores, badges, ícones) |
+| Item | Pedido | Documentado? | Status Final |
+|------|-------|------------|--------------|
+| **Calendário com grid** | ✅ | ⚠️ Código antigo existe | ✅ **ESPECIFICADO**: Design baseado no @BKP, responsivo |
+| **Cores por status** | ✅ | ⚠️ Parcial | ✅ **ESPECIFICADO**: 8 cores mantidas do @BKP |
+| **Navegação intuitiva** | ✅ | ❌ | ✅ **ESPECIFICADO**: Prev/Next + Date input + Day selector |
+| **Responsividade 5-35 dias** | ✅ | ❌ | ✅ **ESPECIFICADO**: User pode alterar, ajusta por breakpoint |
+| **2 colunas check-in/out** | ✅ | ⚠️ Código prova conceito | ✅ **ESPECIFICADO**: Mantém design do @BKP |
+| **Modal de edição** | ✅ | ⚠️ Existe no @BKP | ✅ **A PORTAR**: Refatorar para novos padrões |
+| **Página CRUD listagem** | ✅ | ❌ | ✅ **ESPECIFICADO**: Tabela com 9 colunas + ações |
+| **Filtro por hóspede** | ✅ | ❌ | ✅ **ESPECIFICADO**: Busca em tempo real (guest_name) |
+| **Filtro por contato** | ✅ | ❌ | ✅ **ESPECIFICADO**: Busca em tempo real (email E phone) |
+| **Filtro por partner** | ✅ (novo) | ❌ | ✅ **ESPECIFICADO**: Select com todas as opções |
+| **Referência visual linha** | ✅ | ❌ | ✅ **ESPECIFICADO**: Status badge + partner badge + cores |
 
 ---
 
