@@ -70,9 +70,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "v${{ steps.frontend_version.outputs.version }}" \
+          RELEASE_TAG="v${{ steps.frontend_version.outputs.version }}"
+          gh release create "$RELEASE_TAG" \
             --target main \
-            --title "Release v${{ steps.frontend_version.outputs.version }}" \
-            --notes "Frontend: v${{ steps.frontend_version.outputs.version }} | Backend: v${{ steps.backend_version.outputs.version }}" \
+            --title "Release: Frontend v${{ steps.frontend_version.outputs.version }} | Backend v${{ steps.backend_version.outputs.version }}" \
+            --notes "## Tags Created
+
+- **Frontend**: frontend/v${{ steps.frontend_version.outputs.version }}
+- **Backend**: backend/v${{ steps.backend_version.outputs.version }}
+
+See individual RELEASE_NOTES.md files in frontend/ and backend/ directories for detailed changes." \
             --draft=false
-          echo "✅ Release created: v${{ steps.frontend_version.outputs.version }}"
+          echo "✅ Release created: $RELEASE_TAG with both frontend and backend tags"
