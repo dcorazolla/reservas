@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
-import { Box, Heading, VStack, Button, Grid, GridItem } from '@chakra-ui/react'
+import { Box, Heading, VStack, Button, Grid, GridItem, CloseButton, HStack } from '@chakra-ui/react'
 import { useAuth } from '@contexts/AuthContext'
 import { decodeJwtPayload } from '@utils/jwt'
 import FormField from '@components/Shared/FormField/FormField'
@@ -79,7 +79,7 @@ export default function BaseRatesPage() {
       })
       setProperty(updated)
       setSavedMessage(true)
-      setTimeout(() => setSavedMessage(false), 3000)
+      setTimeout(() => setSavedMessage(false), 6000)
       console.log('Base rates saved successfully')
     } catch (error) {
       console.error('Error saving rates:', error)
@@ -130,16 +130,22 @@ export default function BaseRatesPage() {
         </Heading>
 
         {savedMessage && (
-          <Box
+          <HStack
             p={3}
             borderRadius="md"
             bg="green.50"
             borderLeft="4px solid"
             borderColor="green.500"
             color="green.800"
+            justify="space-between"
           >
-            {t('baseRates.form.saved_success')}
-          </Box>
+            <Box>{t('baseRates.form.saved_success')}</Box>
+            <CloseButton
+              size="sm"
+              onClick={() => setSavedMessage(false)}
+              _hover={{ bg: 'green.100' }}
+            />
+          </HStack>
         )}
 
         <Grid templateColumns="repeat(2, 1fr)" gap={6}>
