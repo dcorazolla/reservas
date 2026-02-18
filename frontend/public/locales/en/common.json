@@ -17,7 +17,10 @@
       "error_invalid_email": "Invalid email",
       "error_max": "Field too long",
       "error_min_zero": "Must be greater than zero",
-      "error_max_100": "Cannot be greater than 100"
+      "error_max_100": "Cannot be greater than 100",
+      "error_loading": "Error loading data",
+      "error_saving": "Error saving data",
+      "success": "Success"
     },
     "confirm": {
       "delete_title": "Delete confirmation",
@@ -172,7 +175,8 @@
     },
     "baseRates": {
       "form": {
-        "description": "Edit the base rates for your property. These values are used as the starting point for price calculations throughout the platform."
+        "description": "Edit the base rates for your property. These values are used as the starting point for price calculations throughout the platform.",
+        "saved_success": "Base rates saved successfully!"
       }
     }
   }

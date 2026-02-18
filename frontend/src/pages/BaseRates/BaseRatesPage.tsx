@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
-import PageShell from '@components/PageShell/PageShell'
+import { Box, Heading, VStack, Button, useToast } from '@chakra-ui/react'
+import { useAuth } from '@auth/AuthContext'
 import RatesField from '@components/Shared/RatesField/RatesField'
 import FormField from '@components/Shared/FormField/FormField'
 import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
@@ -12,6 +13,8 @@ import type { Property } from '@models/property'
 
 export default function BaseRatesPage() {
   const { t } = useTranslation()
+  const toast = useToast()
+  const { property: activeProperty } = useAuth()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [property, setProperty] = useState<Property | null>(null)
@@ -27,44 +30,51 @@ export default function BaseRatesPage() {
     resolver: zodResolver(propertySchema),
   })
 
-  // Carregar propriedade ativa (da property_id no JWT/context)
-  // Por enquanto, carrega a primeira propriedade
+  // Carregar propriedade ativa (property_id do JWT via AuthContext)
   useEffect(() => {
     const loadProperty = async () => {
       try {
         setLoading(true)
-        const properties = await propertiesService.list()
-        if (properties.length > 0) {
-          const activeProperty = properties[0]
-          setProperty(activeProperty)
-          reset({
-            name: activeProperty.name,
-            timezone: activeProperty.timezone,
-            infant_max_age: activeProperty.infant_max_age ?? undefined,
-            child_max_age: activeProperty.child_max_age ?? undefined,
-            child_factor: activeProperty.child_factor ?? undefined,
-            base_one_adult: activeProperty.base_one_adult ?? undefined,
-            base_two_adults: activeProperty.base_two_adults ?? undefined,
-            additional_adult: activeProperty.additional_adult ?? undefined,
-            child_price: activeProperty.child_price ?? undefined,
-          })
+        if (!activeProperty?.id) {
+          throw new Error('No active property found in context')
         }
+        
+        const data = await propertiesService.getProperty(activeProperty.id)
+        setProperty(data)
+        reset({
+          name: data.name,
+          timezone: data.timezone,
+          infant_max_age: data.infant_max_age ?? undefined,
+          child_max_age: data.child_max_age ?? undefined,
+          child_factor: data.child_factor ?? undefined,
+          base_one_adult: data.base_one_adult ?? undefined,
+          base_two_adults: data.base_two_adults ?? undefined,
+          additional_adult: data.additional_adult ?? undefined,
+          child_price: data.child_price ?? undefined,
+        })
       } catch (error) {
         console.error('Error loading property:', error)
+        toast({
+          title: t('common.status.error'),
+          description: t('common.status.error_loading'),
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
       } finally {
         setLoading(false)
       }
     }
 
     loadProperty()
-  }, [reset])
+  }, [activeProperty?.id, reset, toast, t])
 
   async function handleSave(data: PropertyFormData) {
     if (!property?.id) return
 
     try {
       setSaving(true)
-      const updated = await propertiesService.update(property.id, {
+      const updated = await propertiesService.updateProperty(property.id, {
         name: data.name.trim(),
         timezone: data.timezone,
         infant_max_age: data.infant_max_age ?? null,
@@ -77,8 +87,22 @@ export default function BaseRatesPage() {
       })
       setProperty(updated)
       setShowRates(false)
+      toast({
+        title: t('common.status.success'),
+        description: t('baseRates.form.saved_success'),
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
     } catch (error) {
       console.error('Error saving rates:', error)
+      toast({
+        title: t('common.status.error'),
+        description: t('common.status.error_saving'),
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
     } finally {
       setSaving(false)
     }
@@ -86,34 +110,45 @@ export default function BaseRatesPage() {
 
   if (loading) {
     return (
-      <PageShell title={t('menu.rates.base')}>
-        <SkeletonFields rows={8} />
-      </PageShell>
+      <VStack spacing={6} align="stretch">
+        <Heading as="h2" size="lg">
+          {t('menu.rates.base')}
+        </Heading>
+        <SkeletonFields rows={5} />
+      </VStack>
     )
   }
 
   if (!property) {
     return (
-      <PageShell title={t('menu.rates.base')}>
-        <p>{t('common.status.no_data')}</p>
-      </PageShell>
+      <VStack spacing={6} align="stretch">
+        <Heading as="h2" size="lg">
+          {t('menu.rates.base')}
+        </Heading>
+        <Box>{t('common.status.no_data')}</Box>
+      </VStack>
     )
   }
 
   return (
-    <PageShell title={t('menu.rates.base')}>
-      <form onSubmit={handleSubmit(handleSave)} className="base-rates-form">
-        <div className="form-section">
-          <h3>{t('properties.form.base_rates_title')}</h3>
-          <p className="form-description">
-            {t('baseRates.form.description')}
-          </p>
+    <VStack spacing={6} align="stretch" as="form" onSubmit={handleSubmit(handleSave)}>
+      <Heading as="h2" size="lg">
+        {t('menu.rates.base')}
+      </Heading>
 
+      <Box>
+        <Heading as="h3" size="md" mb={2}>
+          {t('properties.form.base_rates_title')}
+        </Heading>
+        <Box mb={6} color="gray.600" fontSize="sm">
+          {t('baseRates.form.description')}
+        </Box>
+
+        <VStack spacing={4} align="stretch">
           <FormField
             label={t('properties.form.name')}
             name="name"
             errors={errors}
-            className="full-width"
           >
             <input type="text" {...register('name')} disabled />
           </FormField>
@@ -122,7 +157,6 @@ export default function BaseRatesPage() {
             label={t('properties.form.timezone')}
             name="timezone"
             errors={errors}
-            className="full-width"
           >
             <input type="text" {...register('timezone')} disabled />
           </FormField>
@@ -131,7 +165,6 @@ export default function BaseRatesPage() {
             label={t('common.pricing.infant_max_age')}
             name="infant_max_age"
             errors={errors}
-            className="number"
           >
             <input type="number" {...register('infant_max_age')} disabled />
           </FormField>
@@ -140,34 +173,30 @@ export default function BaseRatesPage() {
             label={t('common.pricing.child_max_age')}
             name="child_max_age"
             errors={errors}
-            className="number"
           >
             <input type="number" {...register('child_max_age')} disabled />
           </FormField>
-        </div>
+        </VStack>
+      </Box>
 
-        <div className="form-section rates-section">
-          <RatesField
-            control={control}
-            errors={errors}
-            showRates={showRates}
-            onToggleRates={setShowRates}
-            title="properties.form.base_rates_title"
-            toggleLabel="common.pricing.show_rates"
-            hideLabel="common.pricing.hide_rates"
-          />
-        </div>
+      <RatesField
+        control={control}
+        errors={errors}
+        showRates={showRates}
+        onToggleRates={setShowRates}
+        title="properties.form.base_rates_title"
+        toggleLabel="common.pricing.show_rates"
+        hideLabel="common.pricing.hide_rates"
+      />
 
-        <div className="form-actions full-width">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={saving}
-          >
-            {saving ? t('common.status.loading') : t('common.actions.save')}
-          </button>
-        </div>
-      </form>
-    </PageShell>
+      <Button
+        type="submit"
+        colorScheme="blue"
+        isLoading={saving}
+        alignSelf="flex-start"
+      >
+        {t('common.actions.save')}
+      </Button>
+    </VStack>
   )
 }
