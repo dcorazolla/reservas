@@ -120,7 +120,41 @@ docker compose exec app php artisan env  # Deve retornar: "testing"
 
 - CRUD simples (list/get/create/update/remove): usar `createCrudService<T,P>(basePath)` de `frontend/src/services/crudService.ts`.
 - CRUD nested (sub-recursos como rates): usar `createNestedCrudService<T,P>(parentBase, sub, itemBase)` — ex: rooms→rates, room-categories→rates.
+- **CRUD com scoping de property (blocks, reservations)**: usar `createScopedCrudService<T,P>(basePath, token)` — injeta `property_id` do JWT automaticamente em todas as operações.
 - Types/models ficam em `frontend/src/models/*.ts` com alias `@models`.
+
+### createScopedCrudService (property-scoped CRUD)
+
+**Uso:**
+```tsx
+// Em um componente/serviço que tem acesso ao token
+const { token } = useAuth()
+
+// Criar serviço scoped
+const blocksService = createScopedCrudService<RoomBlock, RoomBlockInput>(
+  '/api/room-blocks',
+  token
+)
+
+// Todas as operações incluem automaticamente property_id no params
+const blocks = await blocksService.list()  // property_id injetado
+const block = await blocksService.get(id)  // property_id injetado
+const newBlock = await blocksService.create(data)  // property_id injetado
+```
+
+**Benefícios:**
+- ✅ Elimina duplicação: propriedade_id é sempre extraída do JWT
+- ✅ Seguro: token é validado no momento de criação do serviço
+- ✅ Simples: mesma interface que `createCrudService`, mas com scoping automático
+- ✅ Testável: token pode ser mockado em testes
+
+**Quando usar:**
+- Recursos que dependem de `property_id` do usuário (blocks, reservations)
+- Sempre que houver múltiplas operações (list/get/create/update/delete) que precisam do mesmo `property_id`
+
+**Quando NÃO usar:**
+- Recursos globais/sem tenant (properties, users, etc) → use `createCrudService`
+- Recursos nested com parent explícito (rates sob rooms) → use `createNestedCrudService`
 
 ## Formulários frontend
 
