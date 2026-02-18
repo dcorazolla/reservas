@@ -1,8 +1,34 @@
 # Frontend Release Notes
 
-## Release - 2026-02-18
+## v0.3.0 - 2026-02-18
 
-- feat(messaging): add Message component with 30s autoclose to all CRUD operations (Diogo Santana Corazolla)
+**Reservations Module - Phase 1 & 2: Models and Services**
+
+### Features
+- feat(reservations): implement complete Reservation model with 8 statuses, 3 payment types, 4 guarantee types
+- feat(reservations): add ReservationStatus enum (pre-reserva, reservado, confirmado, checked_in, checked_out, no_show, cancelado, blocked)
+- feat(reservations): add status color mapping (8 colors) and English labels for all statuses
+- feat(reservations): add CALENDAR_BREAKPOINTS configuration (mobile/tablet/desktop with adaptive 5-35 days)
+- feat(reservations): add helper functions (getCalendarConfig, isValidReservationDates, getStayLength, isDateInReservation, canonicalizeStatus)
+- feat(reservations): add canonicalizeStatus function handling 30+ backend status variations
+- feat(reservations): add Reservation, Room, RoomBlock, CalendarResponse, ReservationListResponse types
+- feat(reservations): implement ReservationService with CRUD operations (list, get, create, update, delete)
+- feat(reservations): add state transition methods (checkIn, checkOut, confirm, cancel)
+- feat(reservations): add price calculation with cascade source indication
+- feat(reservations): implement ReservationFilters with guest_name, contact, partner_id, status, pagination, sorting
+- feat(reservations): implement calendar service with date utilities (generateDateRange, formatDateDisplay, month navigation)
+- feat(reservations): add room filtering and sorting utilities (sortRoomsByName, filterRoomsByName)
+- feat(reservations): add multi-tenant safety with property_id in all requests
+- feat(reservations): add factory pattern helper createReservationCrudService
+
+### Testing
+- test(reservations): add 38 comprehensive tests for reservation models (100% passing)
+- test(reservations): add 32 tests for calendar service utilities (100% passing)
+- test(reservations): add 29 tests for reservation CRUD service (100% passing)
+- test(reservations): validate filter support, pagination, sorting, state transitions, error handling, concurrency
+- test(overall): 309/309 frontend tests passing (100% coverage maintained)
+
+### Previous Release - 2026-02-18
 - feat(crud-pages): add success/error messages with 30s autoclose to all CRUD pages (Diogo Santana Corazolla)
 - feat(base-rates): add close button to success message and increase display time to 6s (Diogo Santana Corazolla)
 - chore(i18n): equalize translations across all 4 languages (pt-BR, en, es, fr) (Diogo Santana Corazolla)
