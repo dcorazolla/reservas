@@ -34,8 +34,12 @@ class PropertyController extends Controller
 
     public function destroy(Property $property)
     {
-        // Prevent deletion if property has reservations
-        if ($property->reservations()->exists()) {
+        // Prevent deletion if property has reservations through rooms
+        $hasReservations = $property->rooms()
+            ->whereHas('reservations')
+            ->exists();
+        
+        if ($hasReservations) {
             return response()->json([
                 'error' => 'CONFLICT',
                 'message' => 'Propriedade possui reservas vinculadas e não pode ser excluída.',
