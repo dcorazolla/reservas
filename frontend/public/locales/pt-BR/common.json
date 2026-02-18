@@ -202,6 +202,70 @@
       "private": "Privado",
       "custom": "Customizado"
     }
+  },
+  "calendar": {
+    "title": "Calendário de Reservas",
+    "prev": "Anterior",
+    "next": "Próximo",
+    "period": "Período",
+    "days": "Dias",
+    "empty": "Nenhuma reserva encontrada para este período",
+    "error_loading": "Erro ao carregar calendário"
+  },
+  "reservations": {
+    "title": "Reservas",
+    "new": "Nova Reserva",
+    "edit": "Editar Reserva",
+    "form": {
+      "guest_name": "Nome do Hóspede",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "room": "Quarto",
+      "start_date": "Check-in",
+      "end_date": "Check-out",
+      "adults_count": "Adultos",
+      "children_count": "Crianças",
+      "infants_count": "Bebês",
+      "status": "Status",
+      "partner": "Parceiro",
+      "notes": "Notas",
+      "price_override": "Preço Manual",
+      "total_value": "Valor Total"
+    },
+    "list": {
+      "room": "Quarto",
+      "guest": "Hóspede",
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "status": "Status",
+      "contact": "Contato",
+      "partner": "Parceiro",
+      "value": "Valor",
+      "actions": "Ações",
+      "period": "Período",
+      "search_guest": "Buscar por hóspede",
+      "search_contact": "Buscar por contato",
+      "filter_status": "Filtrar por status",
+      "filter_partner": "Filtrar por parceiro"
+    },
+    "status": {
+      "pre-reserva": "Pré-reserva",
+      "reservado": "Reservado",
+      "confirmado": "Confirmado",
+      "checked-in": "Check-in",
+      "checked-out": "Check-out",
+      "no-show": "Ausência",
+      "cancelado": "Cancelado",
+      "blocked": "Bloqueado"
+    },
+    "actions": {
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "finalize": "Finalizar",
+      "delete": "Remover"
+    }
   }
 }
 

@@ -175,5 +175,69 @@
       "private": "Privado",
       "custom": "Personalizado"
     }
+  },
+  "calendar": {
+    "title": "Calendario de Reservas",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "period": "Período",
+    "days": "Días",
+    "empty": "No hay reservas para este período",
+    "error_loading": "Error al cargar el calendario"
+  },
+  "reservations": {
+    "title": "Reservas",
+    "new": "Nueva Reserva",
+    "edit": "Editar Reserva",
+    "form": {
+      "guest_name": "Nombre del Huésped",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "room": "Habitación",
+      "start_date": "Check-in",
+      "end_date": "Check-out",
+      "adults_count": "Adultos",
+      "children_count": "Niños",
+      "infants_count": "Bebés",
+      "status": "Estado",
+      "partner": "Socio",
+      "notes": "Notas",
+      "price_override": "Precio Manual",
+      "total_value": "Valor Total"
+    },
+    "list": {
+      "room": "Habitación",
+      "guest": "Huésped",
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "status": "Estado",
+      "contact": "Contacto",
+      "partner": "Socio",
+      "value": "Valor",
+      "actions": "Acciones",
+      "period": "Período",
+      "search_guest": "Buscar por huésped",
+      "search_contact": "Buscar por contacto",
+      "filter_status": "Filtrar por estado",
+      "filter_partner": "Filtrar por socio"
+    },
+    "status": {
+      "pre-reserva": "Pre-reserva",
+      "reservado": "Reservado",
+      "confirmado": "Confirmado",
+      "checked-in": "Ingresado",
+      "checked-out": "Salida",
+      "no-show": "No se presentó",
+      "cancelado": "Cancelado",
+      "blocked": "Bloqueado"
+    },
+    "actions": {
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "finalize": "Finalizar",
+      "delete": "Eliminar"
+    }
   }
 }

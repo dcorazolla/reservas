@@ -198,5 +198,69 @@
       "private": "Private",
       "custom": "Custom"
     }
+  },
+  "calendar": {
+    "title": "Reservations Calendar",
+    "prev": "Previous",
+    "next": "Next",
+    "period": "Period",
+    "days": "Days",
+    "empty": "No reservations found for this period",
+    "error_loading": "Error loading calendar"
+  },
+  "reservations": {
+    "title": "Reservations",
+    "new": "New Reservation",
+    "edit": "Edit Reservation",
+    "form": {
+      "guest_name": "Guest Name",
+      "email": "Email",
+      "phone": "Phone",
+      "room": "Room",
+      "start_date": "Check-in",
+      "end_date": "Check-out",
+      "adults_count": "Adults",
+      "children_count": "Children",
+      "infants_count": "Infants",
+      "status": "Status",
+      "partner": "Partner",
+      "notes": "Notes",
+      "price_override": "Manual Price",
+      "total_value": "Total Value"
+    },
+    "list": {
+      "room": "Room",
+      "guest": "Guest",
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "status": "Status",
+      "contact": "Contact",
+      "partner": "Partner",
+      "value": "Value",
+      "actions": "Actions",
+      "period": "Period",
+      "search_guest": "Search by guest",
+      "search_contact": "Search by contact",
+      "filter_status": "Filter by status",
+      "filter_partner": "Filter by partner"
+    },
+    "status": {
+      "pre-reserva": "Pre-reservation",
+      "reservado": "Reserved",
+      "confirmado": "Confirmed",
+      "checked-in": "Checked In",
+      "checked-out": "Checked Out",
+      "no-show": "No Show",
+      "cancelado": "Cancelled",
+      "blocked": "Blocked"
+    },
+    "actions": {
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "finalize": "Finalize",
+      "delete": "Delete"
+    }
   }
 }

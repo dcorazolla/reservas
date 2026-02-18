@@ -1,0 +1,343 @@
+/* Calendar Grid Styles */
+.calendar-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 14px;
+}
+
+.calendar-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.calendar-table th {
+  padding: 8px 4px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  border-right: 1px solid #e9ecef;
+}
+
+.calendar-table th:last-child {
+  border-right: none;
+}
+
+/* Room column - sticky on left */
+.room-col {
+  background-color: #fff !important;
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  width: 120px;
+  min-width: 120px;
+  text-align: left;
+  padding: 12px !important;
+  font-weight: 600;
+  border-right: 2px solid #dee2e6;
+}
+
+thead .room-col {
+  background-color: #f8f9fa !important;
+  z-index: 4;
+  border-right: 2px solid #dee2e6;
+}
+
+/* Day header */
+.day-header {
+  min-width: 80px;
+}
+
+.day-header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.month-label {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.day-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Table body */
+.calendar-table tbody tr {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.calendar-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Half cells (checkout/checkin) */
+.half-cell {
+  width: 40px;
+  height: 60px;
+  border-right: 1px solid #e9ecef;
+  cursor: pointer;
+  position: relative;
+  background-color: white;
+  transition: background-color 0.2s;
+}
+
+.half-cell:hover {
+  background-color: #f0f7ff;
+  box-shadow: inset 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+.half-cell.checkout::after {
+  content: 'C';
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #ccc;
+  font-weight: 600;
+}
+
+.half-cell.checkin::after {
+  content: 'I';
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #ccc;
+  font-weight: 600;
+}
+
+/* Reservation cells */
+.reservation-cell {
+  padding: 4px;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: 500;
+  border-right: 1px solid #e9ecef;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.reservation-cell:hover {
+  opacity: 0.85;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Status colors - 8 statuses */
+.status-pre-reserva {
+  background-color: #fbbf24;
+  color: #78350f;
+  border-left: 3px solid #f59e0b;
+}
+
+.status-reservado {
+  background-color: #60a5fa;
+  color: white;
+  border-left: 3px solid #3b82f6;
+}
+
+.status-confirmado {
+  background-color: #34d399;
+  color: white;
+  border-left: 3px solid #10b981;
+}
+
+.status-checked-in {
+  background-color: #a78bfa;
+  color: white;
+  border-left: 3px solid #8b5cf6;
+}
+
+.status-checked-out {
+  background-color: #fb923c;
+  color: white;
+  border-left: 3px solid #f97316;
+}
+
+.status-no-show {
+  background-color: #ef4444;
+  color: white;
+  border-left: 3px solid #dc2626;
+}
+
+.status-cancelado {
+  background-color: #9ca3af;
+  color: white;
+  border-left: 3px solid #6b7280;
+}
+
+/* Room block (blocked) status */
+.room-block-cell {
+  background-color: #1f2937;
+  color: white;
+  border-left: 3px solid #111827;
+}
+
+.room-block-cell:hover {
+  background-color: #374151;
+}
+
+/* Reservation info */
+.reservation-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  word-break: break-word;
+  padding: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guest-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partner-badge {
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+/* Room block display */
+.room-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.block-label {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.block-reason {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Responsive: Mobile (< 600px) */
+@media (max-width: 600px) {
+  .room-col {
+    width: 60px;
+    min-width: 60px;
+    padding: 6px !important;
+    font-size: 12px;
+  }
+
+  .half-cell {
+    width: 30px;
+    height: 40px;
+  }
+
+  .day-header {
+    min-width: 60px;
+  }
+
+  .day-header-inner {
+    gap: 0;
+  }
+
+  .month-label {
+    font-size: 9px;
+  }
+
+  .day-label {
+    font-size: 12px;
+  }
+
+  .reservation-cell {
+    font-size: 10px;
+    padding: 2px;
+  }
+
+  .reservation-info {
+    font-size: 10px;
+    gap: 2px;
+  }
+
+  .partner-badge {
+    font-size: 10px;
+  }
+
+  .room-col {
+    background-color: #fff !important;
+  }
+
+  thead .room-col {
+    background-color: #f8f9fa !important;
+  }
+}
+
+/* Responsive: Tablet (600px - 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .room-col {
+    width: 90px;
+    min-width: 90px;
+  }
+
+  .half-cell {
+    width: 35px;
+    height: 50px;
+  }
+
+  .day-header {
+    min-width: 70px;
+  }
+
+  .day-label {
+    font-size: 14px;
+  }
+
+  .reservation-info {
+    font-size: 11px;
+  }
+}
+
+/* Responsive: Desktop (> 1024px) */
+@media (min-width: 1024px) {
+  .room-col {
+    width: 120px;
+    min-width: 120px;
+  }
+
+  .half-cell {
+    width: 40px;
+    height: 60px;
+  }
+
+  .day-header {
+    min-width: 80px;
+  }
+}

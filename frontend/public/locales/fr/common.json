@@ -175,5 +175,69 @@
       "private": "Privé",
       "custom": "Personnalisé"
     }
+  },
+  "calendar": {
+    "title": "Calendrier des Réservations",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "period": "Période",
+    "days": "Jours",
+    "empty": "Aucune réservation trouvée pour cette période",
+    "error_loading": "Erreur lors du chargement du calendrier"
+  },
+  "reservations": {
+    "title": "Réservations",
+    "new": "Nouvelle Réservation",
+    "edit": "Modifier la Réservation",
+    "form": {
+      "guest_name": "Nom de l'Hôte",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "room": "Chambre",
+      "start_date": "Arrivée",
+      "end_date": "Départ",
+      "adults_count": "Adultes",
+      "children_count": "Enfants",
+      "infants_count": "Bébés",
+      "status": "Statut",
+      "partner": "Partenaire",
+      "notes": "Remarques",
+      "price_override": "Prix Manuel",
+      "total_value": "Valeur Totale"
+    },
+    "list": {
+      "room": "Chambre",
+      "guest": "Hôte",
+      "checkin": "Arrivée",
+      "checkout": "Départ",
+      "status": "Statut",
+      "contact": "Contact",
+      "partner": "Partenaire",
+      "value": "Valeur",
+      "actions": "Actions",
+      "period": "Période",
+      "search_guest": "Rechercher par nom",
+      "search_contact": "Rechercher par contact",
+      "filter_status": "Filtrer par statut",
+      "filter_partner": "Filtrer par partenaire"
+    },
+    "status": {
+      "pre-reserva": "Pré-réservation",
+      "reservado": "Réservé",
+      "confirmado": "Confirmé",
+      "checked-in": "Arrivée confirmée",
+      "checked-out": "Départ confirmé",
+      "no-show": "Absent",
+      "cancelado": "Annulé",
+      "blocked": "Bloqué"
+    },
+    "actions": {
+      "checkin": "Arrivée",
+      "checkout": "Départ",
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "finalize": "Finaliser",
+      "delete": "Supprimer"
+    }
   }
 }
