@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
-import { Box, Heading, VStack, Button, useToast } from '@chakra-ui/react'
+import { Box, Heading, VStack, Button } from '@chakra-ui/react'
 import { useAuth } from '@contexts/AuthContext'
 import RatesField from '@components/Shared/RatesField/RatesField'
 import FormField from '@components/Shared/FormField/FormField'
@@ -13,7 +13,6 @@ import type { Property } from '@models/property'
 
 export default function BaseRatesPage() {
   const { t } = useTranslation()
-  const toast = useToast()
   const { property: activeProperty } = useAuth()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -54,20 +53,13 @@ export default function BaseRatesPage() {
         })
       } catch (error) {
         console.error('Error loading property:', error)
-        toast({
-          title: t('common.status.error'),
-          description: t('common.status.error_loading'),
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
       } finally {
         setLoading(false)
       }
     }
 
     loadProperty()
-  }, [activeProperty?.id, reset, toast, t])
+  }, [activeProperty?.id, reset])
 
   async function handleSave(data: PropertyFormData) {
     if (!property?.id) return
@@ -87,22 +79,9 @@ export default function BaseRatesPage() {
       })
       setProperty(updated)
       setShowRates(false)
-      toast({
-        title: t('common.status.success'),
-        description: t('baseRates.form.saved_success'),
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
+      console.log('Base rates saved successfully')
     } catch (error) {
       console.error('Error saving rates:', error)
-      toast({
-        title: t('common.status.error'),
-        description: t('common.status.error_saving'),
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      })
     } finally {
       setSaving(false)
     }
