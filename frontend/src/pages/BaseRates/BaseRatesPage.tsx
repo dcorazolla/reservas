@@ -108,14 +108,9 @@ export default function BaseRatesPage() {
 
   return (
     <VStack spacing={6} align="stretch" as="form" onSubmit={handleSubmit(handleSave)}>
-      <Box>
-        <Heading as="h2" size="lg" mb={2}>
-          {t('menu.settings.rates.base')}
-        </Heading>
-        <Box color="gray.600" fontSize="sm">
-          {t('baseRates.form.description')}
-        </Box>
-      </Box>
+      <Heading as="h2" size="lg">
+        {t('menu.settings.rates.base')}
+      </Heading>
 
       <VStack spacing={4} align="stretch">
         <FormField

@@ -173,7 +173,6 @@
     },
     "baseRates": {
       "form": {
-        "description": "Edite as tarifas base da propriedade. Estes valores são usados como ponto de partida para cálculos de preço em toda a plataforma.",
         "saved_success": "Tarifas base salvas com sucesso!"
       }
     }

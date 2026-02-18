@@ -173,7 +173,6 @@
     },
     "baseRates": {
       "form": {
-        "description": "Edit the base rates for your property. These values are used as the starting point for price calculations throughout the platform.",
         "saved_success": "Base rates saved successfully!"
       }
     }
