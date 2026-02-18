@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
-import { Box, Heading, VStack, Button } from '@chakra-ui/react'
+import { Box, Heading, VStack, Button, Grid, GridItem } from '@chakra-ui/react'
 import { useAuth } from '@contexts/AuthContext'
 import { decodeJwtPayload } from '@utils/jwt'
 import FormField from '@components/Shared/FormField/FormField'
@@ -112,13 +112,21 @@ export default function BaseRatesPage() {
         {t('menu.settings.rates.base')}
       </Heading>
 
-      <VStack spacing={4} align="stretch">
+      <Grid templateColumns="repeat(2, 1fr)" gap={6}>
         <FormField
           label={t('common.pricing.child_factor')}
           name="child_factor"
           errors={errors}
         >
           <CurrencyInput control={control} name="child_factor" />
+        </FormField>
+
+        <FormField
+          label={t('common.pricing.child_price')}
+          name="child_price"
+          errors={errors}
+        >
+          <CurrencyInput control={control} name="child_price" />
         </FormField>
 
         <FormField
@@ -137,22 +145,16 @@ export default function BaseRatesPage() {
           <CurrencyInput control={control} name="base_two_adults" />
         </FormField>
 
-        <FormField
-          label={t('common.pricing.additional_adult')}
-          name="additional_adult"
-          errors={errors}
-        >
-          <CurrencyInput control={control} name="additional_adult" />
-        </FormField>
-
-        <FormField
-          label={t('common.pricing.child_price')}
-          name="child_price"
-          errors={errors}
-        >
-          <CurrencyInput control={control} name="child_price" />
-        </FormField>
-      </VStack>
+        <GridItem colSpan={{ base: 2, md: 1 }}>
+          <FormField
+            label={t('common.pricing.additional_adult')}
+            name="additional_adult"
+            errors={errors}
+          >
+            <CurrencyInput control={control} name="additional_adult" />
+          </FormField>
+        </GridItem>
+      </Grid>
 
       <Button
         type="submit"
