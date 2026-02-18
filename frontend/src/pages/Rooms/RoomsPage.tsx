@@ -1,5 +1,6 @@
 import React from 'react'
-import { Box, Heading, Text, Button } from '@chakra-ui/react'
+import { Box, Heading, Button, Text } from '@chakra-ui/react'
+import Message from '@components/Shared/Message/Message'
 import EditRoomModal from '@components/Rooms/EditRoomModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
@@ -16,10 +17,11 @@ export default function RoomsPage() {
   const [deleting, setDeleting] = React.useState<ServiceRoom | null>(null)
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false)
   const [loading, setLoading] = React.useState<boolean>(true)
-  const [error, setError] = React.useState<string | null>(null)
+  const [message, setMessage] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   async function handleSave(updated: any) {
     try {
+      setMessage(null)
       const payload: RoomPayload = {
         name: updated.name,
         number: updated.number ?? null,
@@ -66,20 +68,25 @@ export default function RoomsPage() {
           }
         }
       }
+      setMessage({ type: 'success', text: t('common.status.success') })
+      setEditing(null)
+      setIsModalOpen(false)
     } catch (err: any) {
       console.error('Failed to save room', err)
-      setError(t('rooms.errors.save') || err?.message || 'Failed to save')
+      setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
     }
   }
 
   async function handleDelete(id: string) {
     try {
+      setMessage(null)
       await roomsService.deleteRoom(id)
       setItems((s) => s.filter((it) => it.id !== id))
       setDeleting(null)
+      setMessage({ type: 'success', text: t('common.status.success') })
     } catch (err: any) {
       console.error('Failed to delete room', err)
-      setError(err?.message || 'Failed to delete')
+      setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
     }
   }
 
@@ -94,7 +101,7 @@ export default function RoomsPage() {
       })
       .catch((err) => {
         console.error('Failed to load rooms', err)
-        if (mounted) setError(t('rooms.errors.load') || err?.message || 'Failed to load')
+        if (mounted) setMessage({ type: 'error', text: err?.message || t('common.status.error_loading') })
       })
       .finally(() => {
         if (mounted) setLoading(false)
@@ -112,10 +119,10 @@ export default function RoomsPage() {
         <Button colorScheme="blue" size="sm" onClick={() => { setEditing(null); setIsModalOpen(true) }}>{t('rooms.form.new')}</Button>
       </Box>
 
+      {message && <Message type={message.type} message={message.text} onClose={() => setMessage(null)} autoClose={30000} />}
+
       {loading ? (
         <SkeletonList rows={3} />
-      ) : error ? (
-        <Text color="red.500">{error}</Text>
       ) : (
         <DataList
           items={items}
@@ -123,8 +130,8 @@ export default function RoomsPage() {
           renderItem={(r: ServiceRoom) => (
             <div className="entity-row">
               <div>
-                <Text as="div" fontWeight={600}>{r.name}</Text>
-                <Text as="div" fontSize="sm" color="gray.600">{r.number} {r.beds ? `· ${r.beds} bed(s)` : ''} {r.capacity ? `· ${r.capacity} pax` : ''}</Text>
+                <Box fontWeight={600}>{r.name}</Box>
+                <Box fontSize="sm" color="gray.600">{r.number} {r.beds ? `· ${r.beds} bed(s)` : ''} {r.capacity ? `· ${r.capacity} pax` : ''}</Box>
               </div>
               <div>
                 <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>

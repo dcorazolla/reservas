@@ -315,4 +315,184 @@ Se aprovar, eu posso agora:
 - Escrever os testes do modal e, depois, criar o commit, push e abrir um PR para `main`.
 - Ou, se preferir, eu crio o commit+PR imediatamente com o código atual e adiciono os testes em um PR separado. Indique qual fluxo prefere.
 
+---
+
+## 🔧 Message Component - Padrão de Notificações
+
+### Visão Geral
+
+O componente `Message` fornece feedback visual consistente para operações CRUD (create, read, update, delete) em todas as páginas.
+
+**Localização:** `frontend/src/components/Shared/Message/Message.tsx`
+
+### Características
+
+- ✅ **Tipos**: `'success'` (verde) | `'error'` (vermelho)
+- ✅ **Auto-close**: 30 segundos (configurável)
+- ✅ **Close Button**: Botão X para fechar manualmente
+- ✅ **Animação**: Entrada suave com transição
+- ✅ **i18n**: Mensagens em 4 idiomas (pt-BR, en, es, fr)
+
+### Como Usar
+
+```typescript
+import { Message } from '@components/Shared/Message/Message'
+
+function MyPage() {
+  const [message, setMessage] = React.useState<MessageState | null>(null)
+
+  const handleSave = async (data: Item) => {
+    try {
+      await api.create(data)
+      setMessage({
+        type: 'success',
+        message: 'Item criado com sucesso'
+      })
+      // Modal fecha automaticamente após setMessage
+      setIsModalOpen(false)
+    } catch (error) {
+      setMessage({
+        type: 'error',
+        message: 'Falha ao criar item'
+      })
+    }
+  }
+
+  return (
+    <>
+      {message && (
+        <Message
+          type={message.type}
+          message={message.message}
+          onClose={() => setMessage(null)}
+          autoClose={30000}  // 30 segundos
+        />
+      )}
+      {/* resto do page... */}
+    </>
+  )
+}
+```
+
+### Props
+
+| Prop | Tipo | Descrição |
+|------|------|-----------|
+| `type` | `'success' \| 'error'` | Tipo de mensagem (cor e ícone) |
+| `message` | `string` | Texto da notificação |
+| `onClose` | `() => void` | Callback ao fechar |
+| `autoClose?` | `number` | Tempo em ms até fechar auto (default: 30000) |
+
+### Páginas com Integração
+
+Todas as CRUD pages incluem Message Component:
+- ✅ `frontend/src/pages/BaseRates/BaseRatesPage.tsx`
+- ✅ `frontend/src/pages/Partners/PartnersPage.tsx`
+- ✅ `frontend/src/pages/Properties/PropertiesPage.tsx`
+- ✅ `frontend/src/pages/Rooms/RoomsPage.tsx`
+- ✅ `frontend/src/pages/RoomCategories/RoomCategoriesPage.tsx`
+
+### Importação de Tipos
+
+```typescript
+// Type definitions
+type MessageState = {
+  type: 'success' | 'error'
+  message: string
+}
+```
+
+---
+
+## ⚙️ CRUD Pages Pattern - Best Practices
+
+### useEffect Dependencies (CRITICAL)
+
+**Problema Descoberto:** Funções recreadas em cada render (como `t` do `useTranslation`) causavam re-execução indesejada de `useEffect`, resultando em perda de estado após operações CRUD.
+
+**Solução:** Use dependências vazias `[]` para efeitos que só devem executar na montagem.
+
+```typescript
+// ✅ CORRETO - Carrega dados apenas uma vez
+React.useEffect(() => {
+  let mounted = true
+  listItems()
+    .then((data) => {
+      if (!mounted) return
+      setItems(data)
+    })
+  return () => { mounted = false }
+}, [])  // ← Dependências vazias = mount-only
+```
+
+**Consequências de não seguir:**
+- ❌ Lista reseta após update
+- ❌ Item atualizado desaparece e reverte ao valor anterior
+- ❌ Testes falham com "Unable to find element..."
+- ❌ Race conditions entre operações
+
+### Checklist para CRUD Pages
+
+- [x] Inicialização de lista usa `useEffect` com dependências vazias `[]`
+- [x] Modal state é separado do state de dados
+- [x] Operações CRUD (create/update/delete) atualizam estado imediatamente
+- [x] Message component mostra feedback visual
+- [x] Modal fecha explicitamente após salvar (não via efeito)
+- [x] Sem funções recreadas em dependencies
+
+### Padrão Completo
+
+```typescript
+export function MyPage() {
+  const [items, setItems] = React.useState<Item[]>([])
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const [message, setMessage] = React.useState<MessageState | null>(null)
+
+  // ✅ Carregamento inicial com dependências vazias
+  React.useEffect(() => {
+    let mounted = true
+    listItems().then((data) => {
+      if (!mounted) return
+      setItems(data)
+    })
+    return () => { mounted = false }
+  }, [])  // ← Sem [t] ou outras funções recreadas
+
+  const handleSave = async (data: Item) => {
+    try {
+      await api.save(data)
+      // ✅ Atualizar estado imediatamente
+      if (data.id) {
+        setItems((prev) => prev.map((it) => it.id === data.id ? data : it))
+      } else {
+        setItems((prev) => [...prev, data])
+      }
+      setMessage({ type: 'success', message: 'Salvo com sucesso' })
+      setIsModalOpen(false)  // ✅ Fechar explicitamente
+    } catch (error) {
+      setMessage({ type: 'error', message: 'Erro ao salvar' })
+    }
+  }
+
+  return (
+    <>
+      {message && <Message {...message} onClose={() => setMessage(null)} />}
+      <button onClick={() => setIsModalOpen(true)}>Novo</button>
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <Form onSave={handleSave} />
+        </Modal>
+      )}
+      <List items={items} />
+    </>
+  )
+}
+```
+
+### Referências
+
+- **ADR**: `docs/adr/0010-useeffect-dependencies-pattern.md`
+- **Documentação**: `.github/copilot-instructions.md` - "React Patterns & Descobertas"
+- **Exemplos de código**: Veja `RoomsPage.tsx`, `PropertiesPage.tsx` para implementações corretas
+
 ```

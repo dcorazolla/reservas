@@ -1,5 +1,6 @@
 import React from 'react'
-import { Box, Heading, Text, Button } from '@chakra-ui/react'
+import { Box, Heading, Button, Text } from '@chakra-ui/react'
+import Message from '@components/Shared/Message/Message'
 import EditPropertyModal from '@components/Properties/EditPropertyModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
@@ -15,10 +16,11 @@ export default function PropertiesPage() {
   const [deleting, setDeleting] = React.useState<ServiceProperty | null>(null)
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false)
   const [loading, setLoading] = React.useState<boolean>(true)
-  const [error, setError] = React.useState<string | null>(null)
+  const [message, setMessage] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   async function handleSave(updated: ServiceProperty) {
     try {
+      setMessage(null)
       if (!updated.id) {
         // create
         const payload: PropertyPayload = {
@@ -50,20 +52,25 @@ export default function PropertiesPage() {
         const saved = await propertiesService.updateProperty(updated.id, payload)
         setItems((s) => s.map((it) => (it.id === saved.id ? saved : it)))
       }
+      setMessage({ type: 'success', text: t('common.status.success') })
+      setIsModalOpen(false)
+      setEditing(null)
     } catch (err: any) {
       console.error('Failed to save property', err)
-      setError(err?.message || 'Erro ao salvar propriedade')
+      setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
     }
   }
 
   async function handleDelete(id: string) {
     try {
+      setMessage(null)
       await propertiesService.deleteProperty(id)
       setItems((s) => s.filter((it) => it.id !== id))
       setDeleting(null)
+      setMessage({ type: 'success', text: t('common.status.success') })
     } catch (err: any) {
       console.error('Failed to delete property', err)
-      setError(err?.message || 'Erro ao remover propriedade')
+      setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
     }
   }
 
@@ -78,7 +85,7 @@ export default function PropertiesPage() {
       })
       .catch((err) => {
         console.error('Failed to load properties', err)
-        if (mounted) setError(err?.message || 'Falha ao carregar propriedades')
+        if (mounted) setMessage({ type: 'error', text: err?.message || t('common.status.error_loading') })
       })
       .finally(() => {
         if (mounted) setLoading(false)
@@ -95,10 +102,10 @@ export default function PropertiesPage() {
         <Button colorScheme="blue" size="sm" onClick={() => { setEditing(null); setIsModalOpen(true) }}>{t('properties.form.new')}</Button>
       </Box>
 
+      {message && <Message type={message.type} message={message.text} onClose={() => setMessage(null)} autoClose={30000} />}
+
       {loading ? (
         <SkeletonList rows={4} />
-      ) : error ? (
-        <Text color="red.500">{error}</Text>
       ) : (
         <DataList
           items={items}
@@ -106,8 +113,8 @@ export default function PropertiesPage() {
           renderItem={(p: ServiceProperty) => (
             <div className="entity-row">
               <div>
-                <Text as="div" fontWeight={600}>{p.name}</Text>
-                <Text as="div" fontSize="sm" color="gray.600">{p.timezone}</Text>
+                <Box fontWeight={600}>{p.name}</Box>
+                <Box fontSize="sm" color="gray.600">{p.timezone}</Box>
               </div>
               <div>
                 <Button size="sm" variant="ghost" onClick={() => { setEditing(p); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>

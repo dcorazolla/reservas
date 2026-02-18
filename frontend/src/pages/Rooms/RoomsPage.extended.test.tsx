@@ -11,6 +11,16 @@ vi.mock('@chakra-ui/react', async () => {
     Heading: (props: any) => React.createElement('h2', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
+    HStack: (props: any) => React.createElement('div', props, props.children),
+    VStack: (props: any) => React.createElement('div', props, props.children),
+    CloseButton: (props: any) => React.createElement('button', props, '×'),
+  }
+})
+
+vi.mock('@components/Shared/Message/Message', async () => {
+  const React = await import('react')
+  return {
+    default: (props: any) => React.createElement('div', { 'data-testid': `message-${props.type}`, role: 'alert' }, props.message),
   }
 })
 
@@ -39,8 +49,11 @@ vi.mock('react-i18next', () => ({
         'common.actions.cancel': 'Cancel',
         'common.actions.edit': 'Edit',
         'common.actions.delete': 'Remove',
-        'common.status.error_required': 'Required',
+        'common.status.error_required': 'Required field',
         'common.status.loading': 'Loading...',
+        'common.status.success': 'Saved successfully',
+        'common.status.error_saving': 'Error saving',
+        'common.status.error_loading': 'Error loading',
         'common.pricing.show_rates': 'Show rates',
         'common.pricing.hide_rates': 'Hide rates',
         'common.confirm.delete_title': 'Confirm',
@@ -59,6 +72,10 @@ vi.mock('@services/rooms', () => {
   const updateMock = vi.fn()
   const deleteMock = vi.fn()
   listMock.mockResolvedValue([{ id: 'r-1', name: 'Room A', number: '101', beds: 2, capacity: 3 }])
+  // Provide default values for mocks so they resolve to empty objects
+  createMock.mockResolvedValue({})
+  updateMock.mockResolvedValue({})
+  deleteMock.mockResolvedValue(undefined)
   return {
     listRooms: () => listMock(),
     createRoom: (...args: any[]) => createMock(...args),
@@ -109,7 +126,7 @@ describe('RoomsPage extended flows', () => {
     svc.__mocks.listMock.mockRejectedValueOnce(new Error('Network error'))
 
     render(<RoomsPage />)
-    expect(await screen.findByText('Failed to load')).toBeInTheDocument()
+    expect(await screen.findByText('Network error')).toBeInTheDocument()
   })
 
   it('shows error when save fails', async () => {
@@ -133,7 +150,7 @@ describe('RoomsPage extended flows', () => {
     await userEvent.click(screen.getByText('Save'))
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to save')).toBeInTheDocument()
+      expect(screen.getByText('Save failed')).toBeInTheDocument()
     })
   })
 

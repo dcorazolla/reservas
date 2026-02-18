@@ -12,11 +12,15 @@
       "loading": "Loading...",
       "error": "An error occurred",
       "new": "New",
-      "error_required": "Field is required",
+      "no_data": "No data available",
+      "error_required": "Required field",
       "error_invalid_email": "Invalid email",
       "error_max": "Field too long",
       "error_min_zero": "Must be greater than zero",
-      "error_max_100": "Cannot be greater than 100"
+      "error_max_100": "Cannot be greater than 100",
+      "error_loading": "Error loading data",
+      "error_saving": "Error saving data",
+      "success": "Success"
     },
     "confirm": {
       "delete_title": "Delete confirmation",
@@ -27,18 +31,19 @@
     "pricing": {
       "additional_adult": "Additional adult price",
       "child_factor": "Child factor",
-      "child_max_age": "Max age (children)",
+      "child_max_age": "Maximum age (children)",
       "child_price": "Child price",
+      "base_one_adult": "Base 1 adult",
+      "base_two_adults": "Base 2 adults",
+      "tariff_base": "Base Rate",
       "five_adults": "Price 5 adults",
       "four_adults": "Price 4 adults",
       "hide_rates": "Hide rates",
       "infant_max_age": "Max age (infants)",
-      "one_adult": "Price 1 adult",
       "seven_adults": "Price 7 adults",
       "show_rates": "Show rates",
       "six_adults": "Price 6 adults",
-      "trhee_adults": "Price 3 adults",
-      "two_adults": "Price 2 adults",
+      "three_adults": "Price 3 adults",
       "price_n_people": "Price for {{count}} person(s)"
     }
   },
@@ -165,6 +170,11 @@
       "none": "No billing",
       "charge_partner": "Charge partner",
       "charge_guest": "Charge guest"
+    },
+    "baseRates": {
+      "form": {
+        "saved_success": "Base rates saved successfully!"
+      }
     }
   }
 }

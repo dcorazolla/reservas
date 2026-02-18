@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Modal from '@components/Shared/Modal/Modal'
 import FormField from '@components/Shared/FormField/FormField'
-import CurrencyInput from '@components/Shared/CurrencyInput/CurrencyInput'
+import RatesField from '@components/Shared/RatesField/RatesField'
 import type { Property } from '@models/property'
 import { propertySchema, type PropertyFormData } from '@models/schemas'
 import { useTranslation } from 'react-i18next'
@@ -137,36 +137,13 @@ export default function EditPropertyModal({
             <input type="number" {...register('child_max_age')} />
           </FormField>
 
-          <div className="rate-group">
-            <div className="rate-group-header">
-              <strong>{t('properties.form.base_rates_title')}</strong>
-              <button className="group-toggle" type="button" aria-expanded={showRates} onClick={() => setShowRates((s) => !s)}>
-                {showRates ? t('common.pricing.hide_rates') : t('common.pricing.show_rates')}
-              </button>
-            </div>
-
-            <div className={`rate-group-content ${showRates ? 'expanded' : 'collapsed'}`}>
-              <FormField label={t('common.pricing.child_factor')} name="child_factor" errors={errors} className="number">
-                <CurrencyInput name="child_factor" control={control} decimalScale={2} />
-              </FormField>
-
-              <FormField label={t('common.pricing.child_price')} name="child_price" errors={errors} className="number">
-                <CurrencyInput name="child_price" control={control} decimalScale={2} />
-              </FormField>
-
-              <FormField label={t('common.pricing.one_adult')} name="base_one_adult" errors={errors} className="number">
-                <CurrencyInput name="base_one_adult" control={control} decimalScale={2} />
-              </FormField>
-
-              <FormField label={t('common.pricing.two_adults')} name="base_two_adults" errors={errors} className="number">
-                <CurrencyInput name="base_two_adults" control={control} decimalScale={2} />
-              </FormField>
-
-              <FormField label={t('common.pricing.additional_adult')} name="additional_adult" errors={errors} className="number">
-                <CurrencyInput name="additional_adult" control={control} decimalScale={2} />
-              </FormField>
-            </div>
-          </div>
+          <RatesField
+            control={control}
+            errors={errors}
+            showRates={showRates}
+            onToggleRates={setShowRates}
+            title="properties.form.base_rates_title"
+          />
 
           <div className="modal-actions full-width">
             <button className="btn btn-ghost" type="button" onClick={onClose}>{t('common.actions.cancel')}</button>

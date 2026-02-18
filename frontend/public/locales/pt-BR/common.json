@@ -12,11 +12,15 @@
       "loading": "Carregando...",
       "error": "Ocorreu um erro",
       "new": "Novo",
+      "no_data": "Nenhum dado disponível",
       "error_required": "Campo obrigatório",
       "error_invalid_email": "E-mail inválido",
       "error_max": "Campo muito longo",
       "error_min_zero": "Deve ser maior que zero",
-      "error_max_100": "Não pode ser maior que 100"
+      "error_max_100": "Não pode ser maior que 100",
+      "error_loading": "Erro ao carregar dados",
+      "error_saving": "Erro ao salvar dados",
+      "success": "Sucesso"
     },
     "confirm": {
       "delete_title": "Confirmação de remoção",
@@ -29,16 +33,17 @@
       "child_factor": "Fator criança",
       "child_max_age": "Idade máxima (crianças)",
       "child_price": "Preço criança",
+      "base_one_adult": "Base 1 adulto",
+      "base_two_adults": "Base 2 adultos",
+      "tariff_base": "Tarifa Base",
       "five_adults": "Preço 5 adultos",
       "four_adults": "Preço 4 adultos",
       "hide_rates": "Ocultar tarifas",
       "infant_max_age": "Idade máxima (bebês)",
-      "one_adult": "Preço 1 adulto",
       "seven_adults": "Preço 7 adultos",
       "show_rates": "Mostrar tarifas",
       "six_adults": "Preço 6 adultos",
-      "trhee_adults": "Preço 3 adultos",
-      "two_adults": "Preço 2 adultos",
+      "three_adults": "Preço 3 adultos",
       "price_n_people": "Valor para {{count}} pessoa(s)"
     }
   },
@@ -165,6 +170,11 @@
       "none": "Sem faturamento",
       "charge_partner": "Cobrar do parceiro",
       "charge_guest": "Cobrar do hóspede"
+    },
+    "baseRates": {
+      "form": {
+        "saved_success": "Tarifas base salvas com sucesso!"
+      }
     }
   }
 }

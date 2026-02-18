@@ -17,9 +17,14 @@ Este arquivo é o ponto único de referência para agentes automatizados e human
 - IDs: UUID strings; `property_id` vive no JWT e deve ser usado para scoping.
 
 ⚠️ **CRÍTICO - Segurança do Banco de Dados em Testes:**
-- Ao rodar testes backend em container (docker compose exec), SEMPRE passe `ALLOW_TESTS_ON_NON_TEST_DB=1` ou use `./scripts/test-all.sh`.
-- Sem essa flag, o phpunit vai resetar o banco de dados de produção (`reservas`), causando PERDA DE DADOS.
-- Verifique exemplos corretos e errados na seção "Principais comandos" abaixo.
+- **JAMAIS use `ALLOW_TESTS_ON_NON_TEST_DB=1`** — isso permite que phpunit modifique o banco de produção!
+- Testes backend DEVEM usar banco em memória ou ambiente isolado (SQLite in-memory, test DB container, etc).
+- **Protocolos de teste backend:**
+  - ✅ Use `docker compose` com env isolado (banco em teste/memória)
+  - ✅ Use variáveis de ambiente: `APP_ENV=testing`, `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:`
+  - ✅ Validar que `phpunit.xml` aponta para DB de teste
+  - ❌ NUNCA passe `ALLOW_TESTS_ON_NON_TEST_DB=1` (risco crítico de perda de dados em produção)
+- Verificação: antes de rodar phpunit, confirmar que `php artisan env` retorna `testing`.
 
 ## Fluxo de trabalho do agente
 
@@ -76,28 +81,30 @@ cd frontend && npm ci && npm test -- --run --coverage
 ### Backend
 
 ```bash
-# Full local test helper (recomendado - já tem envs corretas)
-./scripts/test-all.sh
+# ✅ RECOMENDADO: Use docker compose com ambiente de teste
+docker compose exec -e APP_ENV=testing -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: app sh -c "vendor/bin/phpunit"
 
-# OU rodar testes backend em container (com envs corretos)
-docker compose exec -e ALLOW_TESTS_ON_NON_TEST_DB=1 app sh -c "vendor/bin/phpunit"
+# OU: Criar script local que configura as envs corretas para SQLite em memória
+# Verificar: php artisan env  →  deve retornar "testing"
 ```
 
-⚠️ **IMPORTANTE - Segurança: Testes Backend em Container**
+⚠️ **CRÍTICO - Segurança: Testes Backend**
 
-Sempre passe as variáveis de ambiente corretas ao rodar testes no container, senão o banco de dados de produção (`reservas`) pode ser zerado!
-
-**✅ CORRETO:**
+**✅ CORRETO (Usa banco em memória):**
 ```bash
-docker compose exec -e ALLOW_TESTS_ON_NON_TEST_DB=1 app sh -c "vendor/bin/phpunit"
+docker compose exec -e APP_ENV=testing -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: app sh -c "vendor/bin/phpunit"
 ```
 
-**❌ ERRADO (PERIGOSO - VAI ZERAR O BANCO):**
+**❌ ERRADO (JAMAIS FAÇA ISSO - VAI ZERAR O BANCO DE PRODUÇÃO):**
 ```bash
-docker compose exec app vendor/bin/phpunit  # Sem envs - VAI DELETAR DADOS!
+docker compose exec app vendor/bin/phpunit  # Sem envs → banco produção será deletado!
+docker compose exec -e ALLOW_TESTS_ON_NON_TEST_DB=1 app vendor/bin/phpunit  # PROIBIDO!
 ```
 
-**Recomendação:** Use sempre `./scripts/test-all.sh` (já tem as envs corretas configuradas)
+**Verificação antes de rodar testes:**
+```bash
+docker compose exec app php artisan env  # Deve retornar: "testing"
+```
 
 ---
 
@@ -197,9 +204,10 @@ gh release list
 ## Políticas do agente
 
 - Use `manage_todo_list` para planejar passos de trabalho e marque tarefas conforme progresso.
-- Execute testes locais antes de commitar. Use `./scripts/test-all.sh` quando disponível.
+- Execute testes locais antes de commitar. Use comandos com envs de teste corretamente configuradas.
 - Não faça merge automático: sempre exigir CI verde e uma aprovação humana antes de merge.
-- **CRÍTICO:** Nunca rode testes backend sem as envs corretas. Risco crítico de perda de dados.
+- **CRÍTICO - JAMAIS use `ALLOW_TESTS_ON_NON_TEST_DB=1`**: Sempre rode testes com `APP_ENV=testing`, `DB_CONNECTION=sqlite`, `DB_DATABASE=:memory:` ou equivalent de banco em memória.
+- **CRÍTICO - Verificar ambiente:** Rodar `php artisan env` deve retornar `testing` antes de executar phpunit.
 - **IMPORTANTE:** Use `gh` (GitHub CLI) para todas as operações: branches, commits, push, PRs, labels, etc. Nunca use gitkraken.
 
 ## Arquivos importantes para checar rapidamente
@@ -211,6 +219,34 @@ gh release list
 ## Se algo for incerto
 
 - Abra uma issue curta descrevendo a dúvida, referencia os arquivos afetados e proponha 2 opções de implementação.
+
+## React Patterns & Descobertas 🔍
+
+### useEffect Dependencies - CRÍTICO
+**Descoberta (2026-02-18):** Funções como `t` (i18n translation) são recriadas a cada render. Se incluída como dependência de `useEffect`, causa re-execução indesejada.
+
+**Problema:**
+```typescript
+// ❌ ERRADO - t é recriada a cada render
+React.useEffect(() => {
+  listRooms().then((data) => setItems(data))
+}, [t])  // Causava reset da lista após updates
+```
+
+**Solução:**
+```typescript
+// ✅ CORRETO - useEffect executa apenas uma vez na montagem
+React.useEffect(() => {
+  listRooms().then((data) => setItems(data))
+}, [])  // Dependências vazias = executa só no mount
+```
+
+**Impacto:** CRUD pages (RoomsPage, PropertiesPage, RoomCategoriesPage) tiveram listas resetadas após update porque o efeito de carregamento inicial era re-executado, sobrescrevendo o estado atualizado com dados antigos.
+
+**Checklist para CRUD Pages:**
+- ✅ Inicialização de lista usa `useEffect` com dependências vazias `[]`
+- ✅ Se precisar de tradução dentro do efeito, armazene `t` no momento do mount
+- ✅ Operações CRUD (create/update/delete) NÃO causam re-execução do efeito de carregamento
 
 ---
 

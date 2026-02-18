@@ -50,7 +50,7 @@ const nav: NavItem[] = [
         labelKey: 'menu.settings.rates.label',
         icon: 'rates',
         children: [
-          { labelKey: 'menu.settings.rates.base', to: '/settings/rates/base', icon: 'base' },
+          { labelKey: 'menu.settings.rates.base', to: '/settings/base-rates', icon: 'base' },
           { labelKey: 'menu.settings.rates.room', to: '/settings/rates/room', icon: 'roomRate' },
           { labelKey: 'menu.settings.rates.period', to: '/settings/rates/period', icon: 'period' },
         ],

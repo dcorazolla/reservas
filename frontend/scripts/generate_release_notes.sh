@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 # Generate simple release notes for the frontend package.
 # Usage: ./scripts/generate_release_notes.sh
 

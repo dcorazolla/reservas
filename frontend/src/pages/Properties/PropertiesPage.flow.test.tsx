@@ -17,6 +17,17 @@ vi.mock('@chakra-ui/react', async () => {
     ListItem: (props: any) => React.createElement('li', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
+    HStack: (props: any) => React.createElement('div', props, props.children),
+    VStack: (props: any) => React.createElement('div', props, props.children),
+    CloseButton: (props: any) => React.createElement('button', props, '×'),
+  }
+})
+
+// Mock Message component
+vi.mock('@components/Shared/Message/Message', async () => {
+  const React = await import('react')
+  return {
+    default: (props: any) => React.createElement('div', { 'data-testid': `message-${props.type}`, role: 'alert' }, props.message),
   }
 })
 
@@ -39,6 +50,9 @@ vi.mock('react-i18next', () => {
           'common.actions.delete': 'Remover',
           'common.status.error_required': 'Campo obrigatório',
           'common.status.loading': 'Carregando...',
+          'common.status.success': 'Salvo com sucesso',
+          'common.status.error_saving': 'Erro ao salvar',
+          'common.status.error_loading': 'Erro ao carregar',
           'common.pricing.show_rates': 'Mostrar tarifas',
           'common.pricing.hide_rates': 'Ocultar tarifas',
           'common.pricing.child_factor': 'Fator criança',

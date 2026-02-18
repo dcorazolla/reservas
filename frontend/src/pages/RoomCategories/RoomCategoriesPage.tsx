@@ -1,5 +1,6 @@
 import React from 'react'
-import { Box, Heading, Text, Button } from '@chakra-ui/react'
+import { Box, Heading, Button, Text } from '@chakra-ui/react'
+import Message from '@components/Shared/Message/Message'
 import EditRoomCategoryModal from '@components/RoomCategories/EditRoomCategoryModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
 import DataList from '@components/Shared/List/DataList'
@@ -16,10 +17,11 @@ export default function RoomCategoriesPage() {
   const [deleting, setDeleting] = React.useState<ServiceRoomCategory | null>(null)
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false)
   const [loading, setLoading] = React.useState<boolean>(true)
-  const [error, setError] = React.useState<string | null>(null)
+  const [message, setMessage] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   async function handleSave(updated: any) {
     try {
+      setMessage(null)
       const payload: RoomCategoryPayload = { name: updated.name, description: updated.description ?? null }
 
       if (!updated.id) {
@@ -69,20 +71,25 @@ export default function RoomCategoriesPage() {
 
         setItems((s) => s.map((it) => (it.id === saved.id ? saved : it)))
       }
+      setMessage({ type: 'success', text: t('common.status.success') })
+      setIsModalOpen(false)
+      setEditing(null)
     } catch (err: any) {
       console.error('Failed to save room category', err)
-      setError(err?.message || 'Failed to save')
+      setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
     }
   }
 
   async function handleDelete(id: string) {
     try {
+      setMessage(null)
       await roomCategoriesService.deleteRoomCategory(id)
       setItems((s) => s.filter((it) => it.id !== id))
       setDeleting(null)
+      setMessage({ type: 'success', text: t('common.status.success') })
     } catch (err: any) {
       console.error('Failed to delete room category', err)
-      setError(err?.message || 'Failed to delete')
+      setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
     }
   }
 
@@ -97,7 +104,7 @@ export default function RoomCategoriesPage() {
       })
       .catch((err) => {
         console.error('Failed to load room categories', err)
-        if (mounted) setError(err?.message || 'Failed to load')
+        if (mounted) setMessage({ type: 'error', text: err?.message || t('common.status.error_loading') })
       })
       .finally(() => {
         if (mounted) setLoading(false)
@@ -114,10 +121,10 @@ export default function RoomCategoriesPage() {
         <Button colorScheme="blue" size="sm" onClick={() => { setEditing(null); setIsModalOpen(true) }}>{t('roomCategories.form.new')}</Button>
       </Box>
 
+      {message && <Message type={message.type} message={message.text} onClose={() => setMessage(null)} autoClose={30000} />}
+
       {loading ? (
         <SkeletonList rows={3} />
-      ) : error ? (
-        <Text color="red.500">{error}</Text>
       ) : (
         <DataList
           items={items}
@@ -125,8 +132,8 @@ export default function RoomCategoriesPage() {
           renderItem={(c: ServiceRoomCategory) => (
             <div className="entity-row">
               <div>
-                <Text as="div" fontWeight={600}>{c.name}</Text>
-                <Text as="div" fontSize="sm" color="gray.600">{c.description}</Text>
+                <Box fontWeight={600}>{c.name}</Box>
+                <Box fontSize="sm" color="gray.600">{c.description}</Box>
               </div>
               <div>
                 <Button size="sm" variant="ghost" onClick={() => { setEditing(c); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>
