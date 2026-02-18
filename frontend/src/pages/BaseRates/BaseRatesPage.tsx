@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
 import { Box, Heading, VStack, Button } from '@chakra-ui/react'
 import { useAuth } from '@contexts/AuthContext'
+import { decodeJwtPayload } from '@utils/jwt'
 import RatesField from '@components/Shared/RatesField/RatesField'
 import FormField from '@components/Shared/FormField/FormField'
 import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
@@ -13,7 +14,7 @@ import type { Property } from '@models/property'
 
 export default function BaseRatesPage() {
   const { t } = useTranslation()
-  const { property: activeProperty } = useAuth()
+  const { token } = useAuth()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [property, setProperty] = useState<Property | null>(null)
@@ -29,16 +30,19 @@ export default function BaseRatesPage() {
     resolver: zodResolver(propertySchema),
   })
 
-  // Carregar propriedade ativa (property_id do JWT via AuthContext)
+  // Carregar propriedade ativa (property_id do JWT)
   useEffect(() => {
     const loadProperty = async () => {
       try {
         setLoading(true)
-        if (!activeProperty?.id) {
-          throw new Error('No active property found in context')
+        const payload: any = decodeJwtPayload(token)
+        const propertyId = payload?.property_id
+
+        if (!propertyId) {
+          throw new Error('No property_id found in JWT')
         }
         
-        const data = await propertiesService.getProperty(activeProperty.id)
+        const data = await propertiesService.getProperty(propertyId)
         setProperty(data)
         reset({
           name: data.name,
@@ -59,7 +63,7 @@ export default function BaseRatesPage() {
     }
 
     loadProperty()
-  }, [activeProperty?.id, reset])
+  }, [token, reset])
 
   async function handleSave(data: PropertyFormData) {
     if (!property?.id) return
