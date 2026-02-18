@@ -12,7 +12,15 @@
       "loading": "Chargement...",
       "error": "Une erreur s'est produite",
       "new": "Nouveau",
-      "error_required": "Champ obligatoire"
+      "no_data": "Aucune donnée disponible",
+      "error_required": "Champ obligatoire",
+      "error_invalid_email": "Adresse e-mail invalide",
+      "error_max": "Champ trop long",
+      "error_min_zero": "Doit être supérieur à zéro",
+      "error_max_100": "Ne peut pas être supérieur à 100",
+      "error_loading": "Erreur lors du chargement des données",
+      "error_saving": "Erreur lors de l'enregistrement des données",
+      "success": "Succès"
     },
     "confirm": {
       "delete_title": "Confirmation de suppression",
@@ -23,18 +31,20 @@
     "pricing": {
       "additional_adult": "Prix adulte supplémentaire",
       "child_factor": "Facteur enfant",
-      "child_max_age": "Âge max (enfants)",
+      "child_max_age": "Âge maximum (enfants)",
       "child_price": "Prix enfant",
+      "base_one_adult": "Base 1 adulte",
+      "base_two_adults": "Base 2 adultes",
+      "tariff_base": "Tarif de base",
       "five_adults": "Prix 5 adultes",
       "four_adults": "Prix 4 adultes",
       "hide_rates": "Masquer les tarifs",
       "infant_max_age": "Âge max (bébés)",
-      "one_adult": "Prix 1 adulte",
       "seven_adults": "Prix 7 adultes",
       "show_rates": "Afficher les tarifs",
       "six_adults": "Prix 6 adultes",
-      "trhee_adults": "Prix 3 adultes",
-      "two_adults": "Prix 2 adultes"
+      "three_adults": "Prix 3 adultes",
+      "price_n_people": "Prix pour {{count}} personne(s)"
     }
   },
   "header": {
@@ -137,6 +147,11 @@
     "errors": {
       "load": "Échec du chargement des chambres",
       "save": "Échec de l'enregistrement de la chambre"
+    }
+  },
+  "baseRates": {
+    "form": {
+      "saved_success": "Tarifs de base enregistrés avec succès!"
     }
   }
 }

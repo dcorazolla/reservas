@@ -12,7 +12,15 @@
       "loading": "Cargando...",
       "error": "Ocurrió un error",
       "new": "Nuevo",
-      "error_required": "Campo obligatorio"
+      "no_data": "No hay datos disponibles",
+      "error_required": "Campo obligatorio",
+      "error_invalid_email": "Correo electrónico inválido",
+      "error_max": "Campo demasiado largo",
+      "error_min_zero": "Debe ser mayor que cero",
+      "error_max_100": "No puede ser mayor que 100",
+      "error_loading": "Error al cargar datos",
+      "error_saving": "Error al guardar datos",
+      "success": "Éxito"
     },
     "confirm": {
       "delete_title": "Confirmación de eliminación",
@@ -25,16 +33,18 @@
       "child_factor": "Factor niño",
       "child_max_age": "Edad máxima (niños)",
       "child_price": "Precio niño",
+      "base_one_adult": "Base 1 adulto",
+      "base_two_adults": "Base 2 adultos",
+      "tariff_base": "Tarifa base",
       "five_adults": "Precio 5 adultos",
       "four_adults": "Precio 4 adultos",
       "hide_rates": "Ocultar tarifas",
       "infant_max_age": "Edad máxima (infantes)",
-      "one_adult": "Precio 1 adulto",
       "seven_adults": "Precio 7 adultos",
       "show_rates": "Mostrar tarifas",
       "six_adults": "Precio 6 adultos",
-      "trhee_adults": "Precio 3 adultos",
-      "two_adults": "Precio 2 adultos"
+      "three_adults": "Precio 3 adultos",
+      "price_n_people": "Precio para {{count}} persona(s)"
     }
   },
   "header": {
@@ -137,6 +147,11 @@
     "errors": {
       "load": "Error al cargar habitaciones",
       "save": "Error al guardar habitación"
+    }
+  },
+  "baseRates": {
+    "form": {
+      "saved_success": "¡Tarifas base guardadas con éxito!"
     }
   }
 }
