@@ -22,13 +22,13 @@
 .calendar-controls {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   background: white;
-  padding: 16px;
+  padding: 8px 12px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   flex-shrink: 0;
 }
 
@@ -46,6 +46,13 @@
   flex-shrink: 0;
 }
 
+.btn-nav-small {
+  padding: 4px 8px;
+  font-size: 12px;
+  min-width: 36px;
+  text-align: center;
+}
+
 .btn-nav:hover {
   background-color: #2563eb;
 }
@@ -56,61 +63,61 @@
 
 .controls-group {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   flex: 1;
   min-width: 0;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .control-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex-shrink: 0;
 }
 
 .control-item label {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
   color: #6b7280;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .control-item input {
-  padding: 8px 12px;
+  padding: 4px 6px;
   border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 3px;
+  font-size: 12px;
   font-family: inherit;
   background: white;
   color: #1f2937;
   transition: border-color 0.2s, box-shadow 0.2s;
-  min-width: 100px;
+  min-width: 50px;
 }
 
 .control-item input[type="date"] {
-  min-width: 140px;
+  min-width: 100px;
 }
 
 .control-item input[type="number"] {
-  min-width: 80px;
+  min-width: 50px;
 }
 
 .control-item input:focus {
   outline: none;
   border-color: #3182ce;
-  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+  box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.1);
 }
 
 .period-label {
-  font-size: 13px;
+  font-size: 11px;
   color: #6b7280;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 4px 8px;
   background-color: #f3f4f6;
-  border-radius: 4px;
+  border-radius: 3px;
   white-space: nowrap;
   flex-shrink: 0;
 }
