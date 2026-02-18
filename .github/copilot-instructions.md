@@ -220,6 +220,34 @@ gh release list
 
 - Abra uma issue curta descrevendo a dúvida, referencia os arquivos afetados e proponha 2 opções de implementação.
 
+## React Patterns & Descobertas 🔍
+
+### useEffect Dependencies - CRÍTICO
+**Descoberta (2026-02-18):** Funções como `t` (i18n translation) são recriadas a cada render. Se incluída como dependência de `useEffect`, causa re-execução indesejada.
+
+**Problema:**
+```typescript
+// ❌ ERRADO - t é recriada a cada render
+React.useEffect(() => {
+  listRooms().then((data) => setItems(data))
+}, [t])  // Causava reset da lista após updates
+```
+
+**Solução:**
+```typescript
+// ✅ CORRETO - useEffect executa apenas uma vez na montagem
+React.useEffect(() => {
+  listRooms().then((data) => setItems(data))
+}, [])  // Dependências vazias = executa só no mount
+```
+
+**Impacto:** CRUD pages (RoomsPage, PropertiesPage, RoomCategoriesPage) tiveram listas resetadas após update porque o efeito de carregamento inicial era re-executado, sobrescrevendo o estado atualizado com dados antigos.
+
+**Checklist para CRUD Pages:**
+- ✅ Inicialização de lista usa `useEffect` com dependências vazias `[]`
+- ✅ Se precisar de tradução dentro do efeito, armazene `t` no momento do mount
+- ✅ Operações CRUD (create/update/delete) NÃO causam re-execução do efeito de carregamento
+
 ---
 
 **Nota:** Este arquivo substitui instruções dispersas previamente mantidas em `docs/copilot-instructions.md`, `docs/AGENT_CONTEXT/*` e seções do `frontend/README.md` e `README.md`. Se modificar este arquivo, atualize também o `README.md` na raiz para apontar onde agentes devem buscar instruções.
