@@ -46,6 +46,7 @@ const nav: NavItem[] = [
     { labelKey: 'menu.settings.rooms', to: '/settings/rooms', icon: 'rooms' },
       { labelKey: 'menu.settings.users', to: '/settings/users', icon: 'users' },
       { labelKey: 'menu.settings.partners', to: '/settings/partners', icon: 'partners' },
+      { labelKey: 'menu.settings.blocks', to: '/settings/blocks', icon: 'blocks' },
       {
         labelKey: 'menu.settings.rates.label',
         icon: 'rates',

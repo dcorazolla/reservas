@@ -10,6 +10,7 @@ const RoomCategories = React.lazy(() => import('./pages/RoomCategories/RoomCateg
 const Rooms = React.lazy(() => import('./pages/Rooms/RoomsPage'))
 const Partners = React.lazy(() => import('./pages/Partners/PartnersPage'))
 const BaseRates = React.lazy(() => import('./pages/BaseRates'))
+const Blocks = React.lazy(() => import('./pages/Settings/BlocksPage'))
 
 export default function AppRoutes() {
   return (
@@ -98,6 +99,16 @@ export default function AppRoutes() {
                     <BaseRates />
                   </Suspense>
                 </PageShell>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/settings/blocks"
+            element={
+              <RequireAuth>
+                <Suspense fallback={<div />}>
+                  <Blocks />
+                </Suspense>
               </RequireAuth>
             }
           />
