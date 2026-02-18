@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@contexts/AuthContext'
-import { useAlert } from '@components/Shared/AlertContext/AlertContext'
 import Modal from '@components/Shared/Modal/Modal'
 import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
 import { format, parseISO, addDays, subDays, addMonths, startOfMonth } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import CalendarGrid from '@components/Calendar/CalendarGrid'
-import ReservationModal from '@components/Reservations/ReservationModal'
 import { calendarService } from '@services/calendar'
 import { Room } from '@models/room'
 import { Reservation } from '@models/reservation'
@@ -16,7 +14,6 @@ import './CalendarPage.css'
 export default function CalendarPage() {
   const { t } = useTranslation()
   const { token } = useAuth()
-  const { showAlert } = useAlert()
 
   const [currentDate, setCurrentDate] = useState<Date>(() => startOfMonth(new Date()))
   const [days, setDays] = useState(21) // Default: 21 days for desktop
@@ -58,7 +55,6 @@ export default function CalendarPage() {
         const data = await calendarService.getCalendar(startDate, endDate)
         setRooms(data.rooms || [])
       } catch (error) {
-        showAlert('error', t('calendar.error_loading') || 'Erro ao carregar calendário')
         console.error('Error loading calendar:', error)
       } finally {
         setLoading(false)
@@ -212,14 +208,25 @@ export default function CalendarPage() {
         }}
         title={selectedReservation ? t('reservations.edit') : t('reservations.new')}
       >
-        <ReservationModal
-          reservation={selectedReservation}
-          roomId={selectedRoom}
-          startDate={selectedDate}
-          rooms={rooms}
-          onSave={handleSaveReservation}
-          onClose={() => setIsModalOpen(false)}
-        />
+        <div style={{ padding: '20px' }}>
+          <p>{selectedReservation ? 'Editar reserva' : 'Criar nova reserva'}</p>
+          <p>Room: {selectedRoom}</p>
+          <p>Date: {selectedDate}</p>
+          <button
+            onClick={handleSaveReservation}
+            style={{
+              padding: '8px 16px',
+              marginTop: '16px',
+              backgroundColor: '#3182CE',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            Salvar
+          </button>
+        </div>
       </Modal>
     </div>
   )
