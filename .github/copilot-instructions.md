@@ -26,7 +26,9 @@ Este arquivo é o ponto único de referência para agentes automatizados e human
 - Planejar multi-step tasks com `manage_todo_list` (obrigatório para tarefas não triviais).
 - Validar localmente: executar `./scripts/test-all.sh` ou o equivalente antes de criar commits automáticos.
 - Atualizar documentação e OpenAPI quando endpoints mudarem.
-- Ao finalizar um ciclo: criar commit(es) com mensagens concisas e abrir PR (usar `gh pr create --fill`), mas NÃO mesclar sem revisão humana.
+- Ao finalizar um ciclo: versionamento (frontend: `npm run bump:patch|minor|major`), gerar release-notes, criar commit(es) com mensagens concisas, fazer push, e abrir PR com `gh pr create --fill`.
+- **O agente NÃO deve fazer merge**: sempre aguardar revisão humana e aprovação antes de mesclar.
+- Usar `gh` (GitHub CLI) para todas as operações Git e PRs. Nunca usar gitkraken.
 
 ## Regras específicas para automação
 
@@ -145,15 +147,45 @@ docker compose exec app vendor/bin/phpunit  # Sem envs - VAI DELETAR DADOS!
 
 ## Commits, versionamento e releases
 
-- Frontend tem scripts de versionamento em `frontend/package.json`: `bump:patch|minor|major` e `release-notes`.
-- Fluxo recomendado (frontend): criar branch `feature/<x>`, rodar `npm run bump:patch` quando pronto, gerar `frontend/RELEASE_NOTES.md` com `npm run release-notes`, abrir PR e aguardar CI/revisão.
+**Frontend:**
+1. Criar branch `feature/<descrição>` ou `fix/<descrição>`
+2. Implementar mudanças e rodar testes: `cd frontend && npm test -- --run --coverage`
+3. Quando pronto para release, rodar: `npm run bump:patch|minor|major` (escolher conforme tipo de mudança)
+4. Gerar release-notes: `npm run release-notes` → cria/atualiza `frontend/RELEASE_NOTES.md`
+5. Fazer commit: `git add . && git commit -m "feat: descrição da mudança"`
+6. Fazer push: `git push origin <branch>`
+7. Abrir PR: `gh pr create --fill` (preenche automaticamente com branch/titulo)
+8. Aguardar aprovação humana antes de merge
+
+**Backend:**
+- Versioning por tag Git (v1.0.0, etc.)
+- Manter `backend/RELEASE_NOTES.md` atualizado com mudanças importantes
+- Mesmos passos de commit, push e PR que frontend
+
+**Operações com `gh` (GitHub CLI):**
+```bash
+# Abrir PR interativamente
+gh pr create --fill
+
+# Listar PRs
+gh pr list
+
+# Checar status de PR
+gh pr view <número>
+
+# Adicionar label/assignee
+gh pr edit <número> --add-label "label" --add-assignee "usuario"
+```
+
+**Nunca use gitkraken para operações Git neste repositório. Use sempre `gh` e `git` comandos diretos.**
 
 ## Políticas do agente
 
 - Use `manage_todo_list` para planejar passos de trabalho e marque tarefas conforme progresso.
-- Execute testes locais antes de commitar. Use `./scripts/commit_and_test.sh` quando disponível.
+- Execute testes locais antes de commitar. Use `./scripts/test-all.sh` quando disponível.
 - Não faça merge automático: sempre exigir CI verde e uma aprovação humana antes de merge.
 - **CRÍTICO:** Nunca rode testes backend sem as envs corretas. Risco crítico de perda de dados.
+- **IMPORTANTE:** Use `gh` (GitHub CLI) para todas as operações: branches, commits, push, PRs, labels, etc. Nunca use gitkraken.
 
 ## Arquivos importantes para checar rapidamente
 
