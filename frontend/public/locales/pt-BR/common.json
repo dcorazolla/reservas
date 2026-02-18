@@ -6,7 +6,8 @@
       "cancel": "Cancelar",
       "create": "Criar",
       "save": "Salvar",
-      "confirm": "Confirmar"
+      "confirm": "Confirmar",
+      "update": "Atualizar"
     },
     "status": {
       "loading": "Carregando...",
@@ -21,6 +22,9 @@
       "error_loading": "Erro ao carregar dados",
       "error_saving": "Erro ao salvar dados",
       "success": "Sucesso"
+    },
+    "list": {
+      "empty": "Nenhum registro encontrado"
     },
     "confirm": {
       "delete_title": "Confirmação de remoção",
@@ -176,6 +180,27 @@
       "form": {
         "saved_success": "Tarifas base salvas com sucesso!"
       }
+    }
+  },
+  "blocks": {
+    "page": {
+      "title": "Bloqueios de Quartos"
+    },
+    "form": {
+      "new": "Novo Bloqueio",
+      "edit": "Editar Bloqueio",
+      "room": "Quarto",
+      "type": "Tipo de Bloqueio",
+      "start_date": "Data Inicial",
+      "end_date": "Data Final",
+      "reason": "Motivo",
+      "recurrence": "Recorrência"
+    },
+    "type": {
+      "maintenance": "Manutenção",
+      "cleaning": "Limpeza",
+      "private": "Privado",
+      "custom": "Customizado"
     }
   }
 }

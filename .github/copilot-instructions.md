@@ -116,6 +116,59 @@ docker compose exec app php artisan env  # Deve retornar: "testing"
 - Frontend: seguir padrão de serviços em `frontend/src/services/*`, páginas em `frontend/src/pages/*`, componentes em `frontend/src/components/*` e traduções em `frontend/public/locales/<lang>/common.json`.
 - Modal compartilhado: `frontend/src/components/Shared/Modal/Modal.tsx` (padrão simples — usado por muitos modals locais).
 
+## ⚠️ Evitar Reinvenção de Componentes - CONSULTE ANTES DE CRIAR
+
+**REGRA CRÍTICA: SEMPRE procure se o componente já existe antes de criá-lo do zero**
+
+### Componentes Reutilizáveis Disponíveis
+
+**Listas:**
+- ✅ `DataList` - Lista com gap/espaçamento uniforme, entity-row styling
+  - Uso: `<DataList items={items} className="list-name" renderItem={(item) => <div>...</div>} />`
+  - Vantagem: Espaçamento consistente, CSS já padronizado
+  - Exemplos: RoomsPage, RoomCategoriesPage, PartnersPage, BlocksPage
+
+**Modais:**
+- ✅ `Modal` - Modal simples com header, close button
+  - Uso: `<Modal isOpen={isOpen} onClose={onClose} title="Título">{children}</Modal>`
+  - Já usado: EditRoomModal, EditRoomCategoryModal, EditPartnerModal, EditBlockModal
+- ✅ `ConfirmDeleteModal` - Modal específico para confirmação de exclusão
+  - Uso: `<ConfirmDeleteModal isOpen={isOpen} name="Item" onClose={onClose} onConfirm={onConfirm} />`
+
+**Formulários:**
+- ✅ `FormField` - Label + input/select/textarea + error message
+  - Uso: `<FormField label="Label" name="field" errors={errors}><input {...register('field')} /></FormField>`
+  - Vantagem: Styling consistente, tratamento de erros automático
+
+**Confirmação/Feedback:**
+- ✅ `Message` - Mensagens de sucesso/erro com auto-close
+  - Uso: `<Message type="success|error" message="Texto" onClose={onClose} autoClose={5000} />`
+- ✅ `ConfirmModal` - Modal de confirmação genérico
+
+**Skeleton/Loading:**
+- ✅ `SkeletonList` - Placeholder durante carregamento
+  - Uso: `<SkeletonList rows={3} />`
+- ✅ `SkeletonFields` - Placeholder para formulários
+
+**Checklist antes de criar novo componente:**
+1. ❓ Componente similar já existe em `frontend/src/components/Shared/*`?
+2. ❓ Outra página CRUD usa padrão similar que posso reutilizar?
+3. ❓ Posso usar componente genérico (DataList, Modal, FormField) em vez de criar específico?
+4. ✅ Somente DEPOIS de responder NÃO a todas, crie novo componente
+
+### Anti-Pattern: Componentes Desnecessários
+
+❌ **EVITAR:**
+- Criar `BlocksList` quando `DataList` + `entity-row` já resolve
+- Criar `BlocksModal` quando `Modal` + `FormField` + HTML nativo já resolve
+- Criar `BlockStatusBadge` quando uma `Box` com className já funciona
+- Componentes simples (< 50 linhas) que são apenas wrappers
+
+✅ **PREFERIR:**
+- Usar componentes genéricos do `Shared`
+- Composição: FormField + inputs em vez de FormField wrapper específico
+- CSS classes para styling em vez de componentes decoradores
+
 ## Serviços frontend
 
 - CRUD simples (list/get/create/update/remove): usar `createCrudService<T,P>(basePath)` de `frontend/src/services/crudService.ts`.
@@ -156,6 +209,132 @@ const newBlock = await blocksService.create(data)  // property_id injetado
 - Recursos globais/sem tenant (properties, users, etc) → use `createCrudService`
 - Recursos nested com parent explícito (rates sob rooms) → use `createNestedCrudService`
 
+### ⚠️ Anti-Pattern: Criar Novo Serviço Desnecessariamente
+
+❌ **NUNCA FAÇA:**
+```tsx
+// ❌ ERRADO - criar novo serviço quando factory genérico já existe
+const blocksService = {
+  async list() { return fetch(...).json() },
+  async get(id) { return fetch(...).json() },
+  async create(data) { return fetch(...).json() }
+}
+```
+
+✅ **USE FACTORY GENÉRICO:**
+```tsx
+// ✅ CORRETO - 3 linhas em vez de 30+ linhas de código duplicado
+import { createCrudService } from '@services/crudService'
+import type { RoomBlock, RoomBlockInput } from '@models/blocks'
+
+const blocksService = createCrudService<RoomBlock, RoomBlockInput>('/api/room-blocks')
+```
+
+**Benefício:** Reduz duplicação, mantém consistência, facilita testes, menos bugs.
+
+**Checklist ao criar novo serviço:**
+1. ❓ Já existe `createCrudService` ou `createNestedCrudService` que resolve?
+2. ❓ Preciso apenas de list/get/create/update/delete?
+3. ✅ Use factory genérico. ❌ Só crie novo se lógica é realmente diferente (calcs complexos, workflows especiais, etc)
+
+## ⚠️ Manipulação de Datas - OBRIGATÓRIO usar `date-fns`
+
+**REGRA CRÍTICA: NUNCA manipule datas manualmente (new Date, getMonth, setDate, toISOString.split(), etc)**
+
+A biblioteca `date-fns` já está instalada. Use SEMPRE para qualquer operação com datas.
+
+### Padrão obrigatório
+
+❌ **JAMAIS FAÇA:**
+```tsx
+const date = new Date(dateStr + 'T00:00:00')
+const day = date.getDate()
+const month = String(date.getMonth() + 1).padStart(2, '0')
+const year = date.getFullYear()
+return `${day}/${month}/${year}`
+```
+
+✅ **USE date-fns:**
+```tsx
+import { format, parseISO } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+
+const date = parseISO(dateStr)
+return format(date, 'dd/MM/yyyy', { locale: ptBR })
+```
+
+### Funções comuns
+
+```tsx
+import { 
+  format,      // Formatar datas: format(date, 'dd/MM/yyyy')
+  parseISO,    // Parse ISO strings: parseISO('2026-02-18')
+  addDays,     // Adicionar dias: addDays(date, 5)
+  addMonths,   // Adicionar meses: addMonths(date, 1)
+  subMonths,   // Subtrair meses: subMonths(date, 1)
+  startOfMonth, // Início do mês: startOfMonth(date)
+  endOfMonth,  // Fim do mês: endOfMonth(date)
+  differenceInDays, // Dias entre datas: differenceInDays(end, start)
+  isBefore,    // Comparar: isBefore(start, end)
+} from 'date-fns'
+import { ptBR } from 'date-fns/locale' // Sempre usar locale pt-BR
+```
+
+### Exemplos de refatoração
+
+**Gerar range de datas:**
+```tsx
+// ❌ Ruim
+const dates = []
+const current = new Date(startDate + 'T00:00:00')
+for (let i = 0; i < days; i++) {
+  dates.push(`${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`)
+  current.setDate(current.getDate() + 1)
+}
+
+// ✅ Bom
+import { format, parseISO, addDays } from 'date-fns'
+const dates = []
+let current = parseISO(startDate)
+for (let i = 0; i < days; i++) {
+  dates.push(format(current, 'yyyy-MM-dd'))
+  current = addDays(current, 1)
+}
+```
+
+**Calcular comprimento de estadia:**
+```tsx
+// ❌ Ruim
+const start = new Date(startDate)
+const end = new Date(endDate)
+return Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+
+// ✅ Bom
+import { differenceInDays, parseISO } from 'date-fns'
+return differenceInDays(parseISO(endDate), parseISO(startDate))
+```
+
+**Próximo/mês anterior:**
+```tsx
+// ❌ Ruim
+const date = new Date(fromDate + 'T00:00:00')
+date.setMonth(date.getMonth() + 1)
+
+// ✅ Bom
+import { addMonths, format } from 'date-fns'
+const next = addMonths(parseISO(fromDate), 1)
+return format(next, 'yyyy-MM-dd')
+```
+
+### Serviços com datas
+
+Todos os serviços que trabalham com datas estão refatorados em `date-fns`:
+- ✅ `frontend/src/services/calendar.ts` - Gerenciamento de calendário
+- ✅ `frontend/src/services/reservations.ts` - Reservas
+- ✅ `frontend/src/models/reservation.ts` - Validações de data
+
+Ao adicionar novas funcionalidades, siga o mesmo padrão nesses arquivos.
+
 ## Formulários frontend
 
 - Usar `react-hook-form` + `zod` (via `@hookform/resolvers/zod`) para validação.
@@ -163,6 +342,97 @@ const newBlock = await blocksService.create(data)  // property_id injetado
 - Para campos monetários, usar `<CurrencyInput>` de `frontend/src/components/Shared/CurrencyInput/CurrencyInput.tsx`.
 - Para loading em formulários, usar `<SkeletonFields rows={n}>` de `frontend/src/components/Shared/Skeleton/SkeletonFields.tsx`.
 - Para loading em listas, usar `<SkeletonList rows={n}>` de `frontend/src/components/Shared/Skeleton/SkeletonList.tsx`.
+
+### Padrão de Campos, Ordenação e Layout
+
+**Ordem obrigatória de campos em CRUD forms:**
+
+1. **Campos primários/obrigatórios** (topo) - Seleção, IDs, principais
+2. **Campos de range/datas** - Datas de início/fim agrupadas na mesma linha (grid 2 colunas)
+3. **Campos de classificação** - Tipo, categoria, status
+4. **Campos opcionais** (final) - Notas, motivos, textos descritivos
+
+**Exemplo - Room Blocks (EditBlockModal):**
+```tsx
+<FormField label={t('blocks.form.room')} name="room_id" errors={errors}>
+  <select {...register('room_id')} disabled={isSubmitting}>...</select>
+</FormField>
+
+{/* Datas agrupadas em grid 1fr 1fr com gap: 16px */}
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+  <FormField label={t('blocks.form.start_date')} name="start_date" errors={errors}>
+    <input type="date" {...register('start_date')} disabled={isSubmitting} />
+  </FormField>
+  <FormField label={t('blocks.form.end_date')} name="end_date" errors={errors}>
+    <input type="date" {...register('end_date')} disabled={isSubmitting} />
+  </FormField>
+</div>
+
+<FormField label={t('blocks.form.type')} name="type" errors={errors}>
+  <select {...register('type')} disabled={isSubmitting}>...</select>
+</FormField>
+
+<FormField label={t('blocks.form.recurrence')} name="recurrence" errors={errors}>
+  <select {...register('recurrence')} disabled={isSubmitting}>...</select>
+</FormField>
+
+<FormField label={t('blocks.form.reason')} name="reason" errors={errors}>
+  <input type="text" placeholder={t('common.optional')} {...register('reason')} disabled={isSubmitting} />
+</FormField>
+```
+
+**Checklist ao criar/editar form:**
+- ✅ Campos obrigatórios/primários no topo (sem "(optional)")
+- ✅ Datas/ranges agrupadas em grid com 2 colunas: `gridTemplateColumns: '1fr 1fr', gap: '16px'`
+- ✅ Tipos/categorias de classificação no meio
+- ✅ Campos opcionais no final com placeholder "(opcional)" ou "(optional)"
+- ✅ Usar sempre `<FormField>` wrapper para consistência de styling
+- ✅ Estados `disabled={isSubmitting}` durante submissão
+- ✅ Inputs HTML nativo (type="date", type="text", select, textarea)
+
+**Layout CSS para multi-coluna:**
+```tsx
+{/* 2 colunas iguais */}
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+  <FormField>...</FormField>
+  <FormField>...</FormField>
+</div>
+
+{/* 3 colunas iguais */}
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+  <FormField>...</FormField>
+  <FormField>...</FormField>
+  <FormField>...</FormField>
+</div>
+
+{/* Proporção customizada (80% + 20%) */}
+<div style={{ display: 'grid', gridTemplateColumns: '4fr 1fr', gap: '16px' }}>
+  <FormField>...</FormField>
+  <FormField>...</FormField>
+</div>
+```
+
+**Anti-patterns em formulários:**
+
+❌ **EVITAR:**
+- Todos os campos em uma coluna sem agrupamento visual
+- Campos opcionais no meio, misturados com obrigatórios
+- Datas de início/fim em linhas separadas (menos visível que são relacionadas)
+- Placeholders sem "(optional)" em campos opcionais
+- Usar `<Box>` Chakra em vez de `<FormField>` para envolver inputs
+
+✅ **PREFERIR:**
+- Agrupar logicamente (dados → datas → classificação → opcionais)
+- Datas relacionadas lado a lado em grid
+- FormField sempre como wrapper
+- CSS classes e grid layout em vez de componentes Chakra complexos
+- Nomes de campos claros e autodescritivos
+
+**Exemplos de referência (implementações corretas):**
+- ✅ `EditBlockModal.tsx` (Shared/Modal + FormField + grid layout para datas)
+- ✅ `EditRoomModal.tsx` (Shared/Modal + FormField + CurrencyInput para tarifas)
+- ✅ `EditRoomCategoryModal.tsx` (Shared/Modal + FormField)
+- ✅ `EditPartnerModal.tsx` (Shared/Modal + FormField)
 
 ## ⚠️ Chakra UI - Estratégia de Imports (CRÍTICO)
 
@@ -229,6 +499,70 @@ import Modal from '@components/Shared/Modal/Modal'
 - O `ReservationPriceCalculator` usa 5 níveis: room_period → category_period → room_base → category_base → property_base.
 - O endpoint `POST /reservations/calculate` trata `people_count` como adultos, usa a cascata completa e retorna `source` indicando de onde veio o preço.
 - Ver `docs/CONSOLIDATED_REQUIREMENTS.md` §8 para detalhes.
+
+## Padrões de Implementação no Backend
+
+### Estrutura de CRUD - Sempre use Services
+
+**Padrão obrigatório:**
+- ✅ Controllers orquestram, Services contêm lógica
+- ✅ Services usam Models para queries
+- ✅ Controllers fazem assertions de propriedade (`assertBelongsToProperty`)
+- ✅ Services usam scoping via relationships (`whereHas`, `where`)
+
+**Exemplo correto - RoomBlockService:**
+```php
+// ✅ CORRETO: Lógica em Service
+class RoomBlockService {
+  public function list(string $propertyId) {
+    return RoomBlock::whereHas('room', function ($q) use ($propertyId) {
+      $q->where('property_id', $propertyId);
+    })->get();
+  }
+}
+
+// ✅ CORRETO: Controller delega para Service
+class RoomBlockController {
+  public function index(Request $request, RoomBlockService $service) {
+    $propertyId = $this->getPropertyId($request);
+    return $service->list($propertyId);
+  }
+}
+```
+
+**❌ NUNCA FAÇA:**
+```php
+// ❌ ERRADO: Lógica no Controller
+public function index(Request $request) {
+  $propertyId = $this->getPropertyId($request);
+  return RoomBlock::where('property_id', $propertyId)->get();  // Direto!
+}
+
+// ❌ ERRADO: SQL com property_id direto em modelo
+// RoomBlock model não deve ter property_id - é via relacionamento!
+```
+
+### Property Scoping
+
+**Padrão obrigatório:**
+- ✅ Usar `assertBelongsToProperty` nos Controllers para validar
+- ✅ Usar `whereHas` com relationships para querying
+- ✅ Nunca armazenar `property_id` redundantemente no modelo
+
+**Exemplo - RoomBlockController.store():**
+```php
+public function store(StoreRoomBlockRequest $request, RoomBlockService $service): JsonResponse {
+  $propertyId = $this->getPropertyId($request);
+  $data = $request->validated();
+  
+  // Validar que room pertence à property
+  $room = Room::findOrFail($data['room_id']);
+  $this->assertBelongsToProperty($room, $propertyId);
+  
+  $block = $service->create($data);
+  return response()->json($block, 201);
+}
+```
 
 ## Testes e mocks
 
@@ -307,6 +641,55 @@ gh release list
 ## Se algo for incerto
 
 - Abra uma issue curta descrevendo a dúvida, referencia os arquivos afetados e proponha 2 opções de implementação.
+
+## ⚠️ Validação End-to-End Antes de Commits Automáticos
+
+**REGRA CRÍTICA:** Antes de qualquer commit automático, o agente DEVE executar validações completas:
+
+**Validação Backend:**
+1. ✅ Validar endpoints: `php artisan route:list | grep -E "GET|POST|PUT|DELETE"`
+2. ✅ Validar campos obrigatórios em Requests (FormRequests)
+3. ✅ Validar que `getPropertyId($request)` está sendo usado no controller
+4. ✅ Verificar que Services usam `whereHas` para property scoping
+5. ✅ Rodar testes: `./scripts/test-all.sh` ou equivalente
+
+**Validação Frontend:**
+1. ✅ Validar tipos TypeScript: `npm run type-check` no diretório frontend
+2. ✅ Validar existência de componentes/serviços genéricos antes de criar novos
+3. ✅ Validar que forms seguem padrão: obrigatórios topo → datas grid → opcionais final
+4. ✅ Validar que datas usam `date-fns` (não `new Date()`)
+5. ✅ Validar que listas usam `DataList` component
+6. ✅ Validar que modais usam `Shared/Modal/Modal` wrapper
+7. ✅ Validar que formulários usam `FormField` para cada input
+8. ✅ Rodar testes: `npm test -- --run --coverage`
+
+**Validação de Integração:**
+1. ✅ Backend retorna dados no formato esperado (types do frontend)?
+2. ✅ Propriedade `property_id` do JWT está sendo respeitada em todas as operações?
+3. ✅ Dates estão sendo formatadas corretamente (ISO strings ↔ DD/MM/YYYY)?
+4. ✅ Traduções estão presentes em todos os 4 idiomas (pt-BR, en, es, fr)?
+5. ✅ OpenAPI documentation atualizado (se endpoint mudou)?
+
+**Validação de Documentação:**
+1. ✅ Se novo padrão foi criado, está documentado em `copilot-instructions.md`?
+2. ✅ Se novo componente foi criado, está listado na seção "Evitar Reinvenção"?
+3. ✅ Se novo serviço foi criado, está documentado o padrão e exemplos?
+
+**Checklist Obrigatório Antes do Commit:**
+- [ ] Backend testes passam (100% cobertura em áreas alteradas, mínimo 80%)
+- [ ] Frontend testes passam (100% cobertura em áreas alteradas, mínimo 80%)
+- [ ] Tipos TypeScript validam sem erros
+- [ ] Componentes reutilizáveis (não reinvei)
+- [ ] Padrões seguidos (forms, datas, listas, modais)
+- [ ] Traduções em 4 idiomas
+- [ ] OpenAPI/documentação atualizado
+- [ ] Commit message segue padrão: `feat:`, `fix:`, `docs:`, `test:`, `chore:`
+
+**Se algo falhar:**
+- ❌ NÃO faça commit
+- ❌ NÃO faça push
+- 🔄 Volte e corrija antes de tentar novamente
+- 📝 Documente o erro encontrado e como foi corrigido
 
 ## React Patterns & Descobertas 🔍
 

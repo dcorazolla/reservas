@@ -4,6 +4,8 @@
  */
 
 import { apiClient } from './api'
+import { format, addDays, startOfMonth, endOfMonth, addMonths, subMonths, parseISO } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import type { CalendarResponse, Room } from '@models/reservation'
 
 /**
@@ -30,14 +32,11 @@ export async function getCalendarData(
  */
 export function generateDateRange(startDate: string, days: number): string[] {
   const dates: string[] = []
-  const current = new Date(startDate + 'T00:00:00')
+  let current = parseISO(startDate)
 
   for (let i = 0; i < days; i++) {
-    const year = current.getFullYear()
-    const month = String(current.getMonth() + 1).padStart(2, '0')
-    const day = String(current.getDate()).padStart(2, '0')
-    dates.push(`${year}-${month}-${day}`)
-    current.setDate(current.getDate() + 1)
+    dates.push(format(current, 'yyyy-MM-dd'))
+    current = addDays(current, 1)
   }
 
   return dates
@@ -47,48 +46,60 @@ export function generateDateRange(startDate: string, days: number): string[] {
  * Format date to display format (DD/MM/YYYY)
  */
 export function formatDateDisplay(dateStr: string): string {
-  const date = new Date(dateStr + 'T00:00:00')
-  return date.toLocaleDateString('pt-BR')
+  try {
+    const date = parseISO(dateStr)
+    return format(date, 'dd/MM/yyyy', { locale: ptBR })
+  } catch {
+    return dateStr
+  }
 }
 
 /**
  * Get current month start date (YYYY-MM-DD)
  */
 export function getCurrentMonthStart(): string {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  return `${year}-${month}-01`
+  const start = startOfMonth(new Date())
+  return format(start, 'yyyy-MM-dd')
 }
 
 /**
  * Get next month start date (YYYY-MM-DD)
  */
 export function getNextMonthStart(fromDate: string): string {
-  const date = new Date(fromDate + 'T00:00:00')
-  date.setMonth(date.getMonth() + 1)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  return `${year}-${month}-01`
+  try {
+    const date = parseISO(fromDate)
+    const next = addMonths(date, 1)
+    const start = startOfMonth(next)
+    return format(start, 'yyyy-MM-dd')
+  } catch {
+    return fromDate
+  }
 }
 
 /**
  * Get previous month start date (YYYY-MM-DD)
  */
 export function getPreviousMonthStart(fromDate: string): string {
-  const date = new Date(fromDate + 'T00:00:00')
-  date.setMonth(date.getMonth() - 1)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  return `${year}-${month}-01`
+  try {
+    const date = parseISO(fromDate)
+    const prev = subMonths(date, 1)
+    const start = startOfMonth(prev)
+    return format(start, 'yyyy-MM-dd')
+  } catch {
+    return fromDate
+  }
 }
 
 /**
  * Get month and year label (ex: "Fevereiro 2026")
  */
 export function getMonthYearLabel(dateStr: string): string {
-  const date = new Date(dateStr + 'T00:00:00')
-  return date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+  try {
+    const date = parseISO(dateStr)
+    return format(date, 'MMMM yyyy', { locale: ptBR })
+  } catch {
+    return dateStr
+  }
 }
 
 /**

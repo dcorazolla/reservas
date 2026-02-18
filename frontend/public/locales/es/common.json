@@ -154,5 +154,26 @@
     "form": {
       "saved_success": "¡Tarifas base guardadas con éxito!"
     }
+  },
+  "blocks": {
+    "page": {
+      "title": "Bloqueos de Habitaciones"
+    },
+    "form": {
+      "new": "Nuevo Bloqueo",
+      "edit": "Editar Bloqueo",
+      "room": "Habitación",
+      "type": "Tipo de Bloqueo",
+      "start_date": "Fecha de Inicio",
+      "end_date": "Fecha de Fin",
+      "reason": "Motivo",
+      "recurrence": "Recurrencia"
+    },
+    "type": {
+      "maintenance": "Mantenimiento",
+      "cleaning": "Limpieza",
+      "private": "Privado",
+      "custom": "Personalizado"
+    }
   }
 }

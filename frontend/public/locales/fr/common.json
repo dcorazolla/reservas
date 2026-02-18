@@ -154,5 +154,26 @@
     "form": {
       "saved_success": "Tarifs de base enregistrés avec succès!"
     }
+  },
+  "blocks": {
+    "page": {
+      "title": "Blocages de Chambres"
+    },
+    "form": {
+      "new": "Nouveau Blocage",
+      "edit": "Modifier le Blocage",
+      "room": "Chambre",
+      "type": "Type de Blocage",
+      "start_date": "Date de Début",
+      "end_date": "Date de Fin",
+      "reason": "Raison",
+      "recurrence": "Récurrence"
+    },
+    "type": {
+      "maintenance": "Maintenance",
+      "cleaning": "Nettoyage",
+      "private": "Privé",
+      "custom": "Personnalisé"
+    }
   }
 }

@@ -177,5 +177,26 @@
         "saved_success": "Base rates saved successfully!"
       }
     }
+  },
+  "blocks": {
+    "page": {
+      "title": "Room Blocks"
+    },
+    "form": {
+      "new": "New Block",
+      "edit": "Edit Block",
+      "room": "Room",
+      "type": "Block Type",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "reason": "Reason",
+      "recurrence": "Recurrence"
+    },
+    "type": {
+      "maintenance": "Maintenance",
+      "cleaning": "Cleaning",
+      "private": "Private",
+      "custom": "Custom"
+    }
   }
 }
