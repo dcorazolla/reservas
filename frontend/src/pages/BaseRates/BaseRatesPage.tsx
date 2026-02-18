@@ -107,63 +107,65 @@ export default function BaseRatesPage() {
   }
 
   return (
-    <VStack spacing={6} align="stretch" as="form" onSubmit={handleSubmit(handleSave)}>
-      <Heading as="h2" size="lg">
-        {t('menu.settings.rates.base')}
-      </Heading>
+    <form onSubmit={handleSubmit(handleSave)}>
+      <VStack spacing={6} align="stretch">
+        <Heading as="h2" size="lg">
+          {t('menu.settings.rates.base')}
+        </Heading>
 
-      <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-        <FormField
-          label={t('common.pricing.child_factor')}
-          name="child_factor"
-          errors={errors}
-        >
-          <CurrencyInput control={control} name="child_factor" />
-        </FormField>
-
-        <FormField
-          label={t('common.pricing.child_price')}
-          name="child_price"
-          errors={errors}
-        >
-          <CurrencyInput control={control} name="child_price" />
-        </FormField>
-
-        <FormField
-          label={t('common.pricing.base_one_adult')}
-          name="base_one_adult"
-          errors={errors}
-        >
-          <CurrencyInput control={control} name="base_one_adult" />
-        </FormField>
-
-        <FormField
-          label={t('common.pricing.base_two_adults')}
-          name="base_two_adults"
-          errors={errors}
-        >
-          <CurrencyInput control={control} name="base_two_adults" />
-        </FormField>
-
-        <GridItem colSpan={{ base: 2, md: 1 }}>
+        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
           <FormField
-            label={t('common.pricing.additional_adult')}
-            name="additional_adult"
+            label={t('common.pricing.child_factor')}
+            name="child_factor"
             errors={errors}
           >
-            <CurrencyInput control={control} name="additional_adult" />
+            <CurrencyInput control={control} name="child_factor" />
           </FormField>
-        </GridItem>
-      </Grid>
 
-      <Button
-        type="submit"
-        colorScheme="blue"
-        isLoading={saving}
-        alignSelf="flex-start"
-      >
-        {t('common.actions.save')}
-      </Button>
-    </VStack>
+          <FormField
+            label={t('common.pricing.child_price')}
+            name="child_price"
+            errors={errors}
+          >
+            <CurrencyInput control={control} name="child_price" />
+          </FormField>
+
+          <FormField
+            label={t('common.pricing.base_one_adult')}
+            name="base_one_adult"
+            errors={errors}
+          >
+            <CurrencyInput control={control} name="base_one_adult" />
+          </FormField>
+
+          <FormField
+            label={t('common.pricing.base_two_adults')}
+            name="base_two_adults"
+            errors={errors}
+          >
+            <CurrencyInput control={control} name="base_two_adults" />
+          </FormField>
+
+          <GridItem colSpan={{ base: 2, md: 1 }}>
+            <FormField
+              label={t('common.pricing.additional_adult')}
+              name="additional_adult"
+              errors={errors}
+            >
+              <CurrencyInput control={control} name="additional_adult" />
+            </FormField>
+          </GridItem>
+        </Grid>
+
+        <Button
+          type="submit"
+          colorScheme="blue"
+          isLoading={saving}
+          alignSelf="flex-start"
+        >
+          {t('common.actions.save')}
+        </Button>
+      </VStack>
+    </form>
   )
 }
