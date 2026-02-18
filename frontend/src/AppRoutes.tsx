@@ -11,6 +11,7 @@ const Rooms = React.lazy(() => import('./pages/Rooms/RoomsPage'))
 const Partners = React.lazy(() => import('./pages/Partners/PartnersPage'))
 const BaseRates = React.lazy(() => import('./pages/BaseRates'))
 const Blocks = React.lazy(() => import('./pages/Blocks/BlocksPage'))
+const Calendar = React.lazy(() => import('./pages/Calendar/CalendarPage'))
 
 export default function AppRoutes() {
   return (
@@ -30,6 +31,18 @@ export default function AppRoutes() {
             }
           />
           <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/calendar"
+            element={
+              <RequireAuth>
+                <PageShell>
+                  <Suspense fallback={<div />}>
+                    <Calendar />
+                  </Suspense>
+                </PageShell>
+              </RequireAuth>
+            }
+          />
           <Route
             path="/properties"
             element={

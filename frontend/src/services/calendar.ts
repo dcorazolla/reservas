@@ -3,7 +3,7 @@
  * Fetch and manage calendar grid data for reservations
  */
 
-import { apiClient } from './api'
+import api from './api'
 import { format, addDays, startOfMonth, endOfMonth, addMonths, subMonths, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import type { CalendarResponse, Room } from '@models/reservation'
@@ -16,7 +16,7 @@ export async function getCalendarData(
   startDate: string,
   endDate: string
 ): Promise<CalendarResponse> {
-  const response = await apiClient.get<CalendarResponse>('/api/calendar', {
+  const response = await api.get<CalendarResponse>('/api/calendar', {
     params: {
       property_id: propertyId,
       start: startDate,

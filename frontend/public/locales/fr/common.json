@@ -243,10 +243,6 @@
       "delete": "Supprimer"
     }
   },
-  "menu": {
-    "calendar": "Calendrier",
-    "reservations": "Réservations"
-  },
   "home": {
     "title": "Tableau de bord",
     "description": "Gérez vos propriétés, réservations et disponibilité",

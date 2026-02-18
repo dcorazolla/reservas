@@ -266,10 +266,6 @@
       "delete": "Delete"
     }
   },
-  "menu": {
-    "calendar": "Calendar",
-    "reservations": "Reservations"
-  },
   "home": {
     "title": "Dashboard",
     "description": "Manage your properties, reservations and availability",

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@contexts/AuthContext'
+import { decodeTokenPayload } from '@services/auth'
 import Modal from '@components/Shared/Modal/Modal'
 import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
 import { format, parseISO, addDays, subDays, addMonths, startOfMonth } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import CalendarGrid from '@components/Calendar/CalendarGrid'
-import { calendarService } from '@services/calendar'
+import { getCalendarData, generateDateRange } from '@services/calendar'
 import { Room } from '@models/room'
 import { Reservation } from '@models/reservation'
 import './CalendarPage.css'
@@ -14,6 +15,7 @@ import './CalendarPage.css'
 export default function CalendarPage() {
   const { t } = useTranslation()
   const { token } = useAuth()
+  const [propertyId, setPropertyId] = useState<string | null>(null)
 
   const [currentDate, setCurrentDate] = useState<Date>(() => startOfMonth(new Date()))
   const [days, setDays] = useState(21) // Default: 21 days for desktop
@@ -23,6 +25,17 @@ export default function CalendarPage() {
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+
+  // Determine responsive defaults based on viewport width
+  useEffect(() => {
+    // Decode property_id from token
+    if (token) {
+      const payload = decodeTokenPayload(token) as any
+      if (payload?.property_id) {
+        setPropertyId(payload.property_id)
+      }
+    }
+  }, [token])
 
   // Determine responsive defaults based on viewport width
   useEffect(() => {
@@ -44,7 +57,7 @@ export default function CalendarPage() {
 
   // Load calendar data
   useEffect(() => {
-    if (!token) return
+    if (!token || !propertyId) return
 
     const loadCalendarData = async () => {
       try {
@@ -52,7 +65,7 @@ export default function CalendarPage() {
         const startDate = format(currentDate, 'yyyy-MM-dd')
         const endDate = format(addDays(currentDate, days - 1), 'yyyy-MM-dd')
 
-        const data = await calendarService.getCalendar(startDate, endDate)
+        const data = await getCalendarData(propertyId, startDate, endDate)
         setRooms(data.rooms || [])
       } catch (error) {
         console.error('Error loading calendar:', error)
@@ -62,7 +75,7 @@ export default function CalendarPage() {
     }
 
     loadCalendarData()
-  }, [currentDate, days, token])
+  }, [currentDate, days, token, propertyId])
 
   const handlePrevMonth = () => {
     setCurrentDate(prev => subDays(prev, days))
@@ -111,7 +124,7 @@ export default function CalendarPage() {
       try {
         const startDate = format(currentDate, 'yyyy-MM-dd')
         const endDate = format(addDays(currentDate, days - 1), 'yyyy-MM-dd')
-        const data = await calendarService.getCalendar(startDate, endDate)
+        const data = await getCalendarData(propertyId, startDate, endDate)
         setRooms(data.rooms || [])
       } catch (error) {
         console.error('Error refreshing calendar:', error)

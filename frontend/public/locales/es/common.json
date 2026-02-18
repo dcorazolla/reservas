@@ -243,10 +243,6 @@
       "delete": "Eliminar"
     }
   },
-  "menu": {
-    "calendar": "Calendario",
-    "reservations": "Reservas"
-  },
   "home": {
     "title": "Panel de control",
     "description": "Administre sus propiedades, reservas y disponibilidad",
