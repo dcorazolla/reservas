@@ -53,6 +53,8 @@ export default function PropertiesPage() {
         setItems((s) => s.map((it) => (it.id === saved.id ? saved : it)))
       }
       setMessage({ type: 'success', text: t('common.status.success') })
+      setIsModalOpen(false)
+      setEditing(null)
     } catch (err: any) {
       console.error('Failed to save property', err)
       setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
@@ -91,7 +93,7 @@ export default function PropertiesPage() {
     return () => {
       mounted = false
     }
-  }, [t])
+  }, [])
 
   return (
     <Box p={4}>

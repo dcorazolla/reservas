@@ -69,6 +69,8 @@ export default function RoomsPage() {
         }
       }
       setMessage({ type: 'success', text: t('common.status.success') })
+      setEditing(null)
+      setIsModalOpen(false)
     } catch (err: any) {
       console.error('Failed to save room', err)
       setMessage({ type: 'error', text: err?.message || t('common.status.error_saving') })
@@ -108,7 +110,7 @@ export default function RoomsPage() {
     return () => {
       mounted = false
     }
-  }, [t])
+  }, [])
 
   return (
     <Box p={4}>

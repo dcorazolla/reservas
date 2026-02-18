@@ -50,6 +50,9 @@ vi.mock('react-i18next', () => {
           'properties.form.new': 'Nova propriedade',
           'properties.actions.edit': 'Editar',
           'properties.actions.delete': 'Remover',
+          'common.status.success': 'Salvo com sucesso',
+          'common.status.error_saving': 'Erro ao salvar',
+          'common.status.error_loading': 'Erro ao carregar',
         }
         return map[k] ?? k
       },

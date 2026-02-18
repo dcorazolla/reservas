@@ -46,6 +46,11 @@ vi.mock('react-i18next', () => {
           'common.pricing.two_adults': 'Base 2 adultos',
           'common.pricing.additional_adult': 'Adicional adulto',
           'common.pricing.child_price': 'Preço criança',
+          'common.status.error_required': 'Required field',
+          'common.status.loading': 'Loading...',
+          'common.status.success': 'Saved successfully',
+          'common.status.error_saving': 'Error saving',
+          'common.status.error_loading': 'Error loading',
           // confirm modal
           'common.confirm.delete_title': 'Confirmação de exclusão',
           'common.confirm.delete_confirm': 'Remover',

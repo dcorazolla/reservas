@@ -39,6 +39,8 @@ export default function PartnersPage() {
           type: 'success',
           text: t('common.status.success'),
         })
+        setIsModalOpen(false)
+        setEditing(null)
       } else {
         // update
         const payload: PartnerPayload = {
@@ -57,6 +59,8 @@ export default function PartnersPage() {
           type: 'success',
           text: t('common.status.success'),
         })
+        setIsModalOpen(false)
+        setEditing(null)
       }
     } catch (err: any) {
       console.error('Failed to save partner', err)

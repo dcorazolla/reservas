@@ -51,6 +51,9 @@ vi.mock('react-i18next', () => {
           'common.actions.delete': 'Remove',
           'common.status.error_required': 'Required',
           'common.status.loading': 'Loading...',
+          'common.status.success': 'Saved successfully',
+          'common.status.error_saving': 'Error saving',
+          'common.status.error_loading': 'Error loading',
           'common.pricing.show_rates': 'Show rates',
           'common.pricing.hide_rates': 'Hide rates',
           // confirm modal
