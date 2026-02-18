@@ -11,6 +11,16 @@ vi.mock('@chakra-ui/react', async () => {
     Heading: (props: any) => React.createElement('h2', props, props.children),
     Text: (props: any) => React.createElement('span', props, props.children),
     Button: (props: any) => React.createElement('button', props, props.children),
+    HStack: (props: any) => React.createElement('div', props, props.children),
+    VStack: (props: any) => React.createElement('div', props, props.children),
+    CloseButton: (props: any) => React.createElement('button', props, '×'),
+  }
+})
+
+vi.mock('@components/Shared/Message/Message', async () => {
+  const React = await import('react')
+  return {
+    default: (props: any) => React.createElement('div', { 'data-testid': `message-${props.type}`, role: 'alert' }, props.message),
   }
 })
 

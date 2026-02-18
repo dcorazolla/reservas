@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Heading, Button } from '@chakra-ui/react'
+import { Box, Heading, Button, Text } from '@chakra-ui/react'
 import Message from '@components/Shared/Message/Message'
 import EditRoomCategoryModal from '@components/RoomCategories/EditRoomCategoryModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
@@ -130,8 +130,8 @@ export default function RoomCategoriesPage() {
           renderItem={(c: ServiceRoomCategory) => (
             <div className="entity-row">
               <div>
-                <Text as="div" fontWeight={600}>{c.name}</Text>
-                <Text as="div" fontSize="sm" color="gray.600">{c.description}</Text>
+                <Box fontWeight={600}>{c.name}</Box>
+                <Box fontSize="sm" color="gray.600">{c.description}</Box>
               </div>
               <div>
                 <Button size="sm" variant="ghost" onClick={() => { setEditing(c); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>

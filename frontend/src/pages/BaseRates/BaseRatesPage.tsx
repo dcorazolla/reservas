@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
-import { Box, Heading, VStack, Button, Grid, GridItem, CloseButton, HStack } from '@chakra-ui/react'
+import { Box, Heading, VStack, Button, Grid, GridItem } from '@chakra-ui/react'
 import { useAuth } from '@contexts/AuthContext'
 import { decodeJwtPayload } from '@utils/jwt'
 import FormField from '@components/Shared/FormField/FormField'
 import CurrencyInput from '@components/Shared/CurrencyInput/CurrencyInput'
 import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
+import Message from '@components/Shared/Message/Message'
 import { propertySchema, baseRatesSchema, type BaseRatesFormData } from '@models/schemas'
 import * as propertiesService from '@services/properties'
 import type { Property } from '@models/property'
@@ -18,7 +19,7 @@ export default function BaseRatesPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [property, setProperty] = useState<Property | null>(null)
-  const [savedMessage, setSavedMessage] = useState(false)
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const {
     control,
@@ -52,6 +53,10 @@ export default function BaseRatesPage() {
         })
       } catch (error) {
         console.error('Error loading property:', error)
+        setMessage({
+          type: 'error',
+          text: t('common.status.error_loading'),
+        })
       } finally {
         setLoading(false)
       }
@@ -65,7 +70,7 @@ export default function BaseRatesPage() {
 
     try {
       setSaving(true)
-      setSavedMessage(false)
+      setMessage(null)
       const updated = await propertiesService.updateProperty(property.id, {
         name: property.name,
         timezone: property.timezone,
@@ -78,11 +83,17 @@ export default function BaseRatesPage() {
         child_price: data.child_price ?? null,
       })
       setProperty(updated)
-      setSavedMessage(true)
-      setTimeout(() => setSavedMessage(false), 6000)
+      setMessage({
+        type: 'success',
+        text: t('baseRates.form.saved_success'),
+      })
       console.log('Base rates saved successfully')
     } catch (error) {
       console.error('Error saving rates:', error)
+      setMessage({
+        type: 'error',
+        text: t('common.status.error_saving'),
+      })
     } finally {
       setSaving(false)
     }
@@ -129,23 +140,13 @@ export default function BaseRatesPage() {
           {t('menu.settings.rates.base')}
         </Heading>
 
-        {savedMessage && (
-          <HStack
-            p={3}
-            borderRadius="md"
-            bg="green.50"
-            borderLeft="4px solid"
-            borderColor="green.500"
-            color="green.800"
-            justify="space-between"
-          >
-            <Box>{t('baseRates.form.saved_success')}</Box>
-            <CloseButton
-              size="sm"
-              onClick={() => setSavedMessage(false)}
-              _hover={{ bg: 'green.100' }}
-            />
-          </HStack>
+        {message && (
+          <Message
+            type={message.type}
+            message={message.text}
+            onClose={() => setMessage(null)}
+            autoClose={30000}
+          />
         )}
 
         <Grid templateColumns="repeat(2, 1fr)" gap={6}>

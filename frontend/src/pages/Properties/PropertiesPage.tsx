@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Heading, Button } from '@chakra-ui/react'
+import { Box, Heading, Button, Text } from '@chakra-ui/react'
 import Message from '@components/Shared/Message/Message'
 import EditPropertyModal from '@components/Properties/EditPropertyModal'
 import ConfirmDeleteModal from '@components/Properties/ConfirmDeleteModal'
@@ -111,8 +111,8 @@ export default function PropertiesPage() {
           renderItem={(p: ServiceProperty) => (
             <div className="entity-row">
               <div>
-                <Text as="div" fontWeight={600}>{p.name}</Text>
-                <Text as="div" fontSize="sm" color="gray.600">{p.timezone}</Text>
+                <Box fontWeight={600}>{p.name}</Box>
+                <Box fontSize="sm" color="gray.600">{p.timezone}</Box>
               </div>
               <div>
                 <Button size="sm" variant="ghost" onClick={() => { setEditing(p); setIsModalOpen(true) }}>{t('common.actions.edit')}</Button>
