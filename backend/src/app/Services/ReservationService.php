@@ -54,6 +54,11 @@ class ReservationService
         return $reservation;
     }
 
+    public function delete(Reservation $reservation): bool
+    {
+        return $reservation->delete();
+    }
+
     protected function assertNoDateConflict(
         string $roomId,
         string $start,
