@@ -7,7 +7,7 @@ import RatesField from '@components/Shared/RatesField/RatesField'
 import FormField from '@components/Shared/FormField/FormField'
 import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
 import { propertySchema, type PropertyFormData } from '@models/schemas'
-import { propertiesService } from '@services/properties'
+import * as propertiesService from '@services/properties'
 import type { Property } from '@models/property'
 
 export default function BaseRatesPage() {
