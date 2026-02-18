@@ -1,0 +1,78 @@
+name: Create Release Tags
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  create-tags:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Frontend Version
+        id: frontend_version
+        run: |
+          VERSION=$(grep -m 1 '"version"' frontend/package.json | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Frontend version: $VERSION"
+
+      - name: Get Backend Version
+        id: backend_version
+        run: |
+          VERSION=$(grep -m 1 '"version"' backend/src/composer.json | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Backend version: $VERSION"
+
+      - name: Check if Frontend Tag exists
+        id: frontend_tag_exists
+        run: |
+          if git rev-parse "frontend/v${{ steps.frontend_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if Backend Tag exists
+        id: backend_tag_exists
+        run: |
+          if git rev-parse "backend/v${{ steps.backend_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Frontend Tag
+        if: steps.frontend_tag_exists.outputs.exists == 'false'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "frontend/v${{ steps.frontend_version.outputs.version }}" -m "Frontend release v${{ steps.frontend_version.outputs.version }}"
+          git push origin "frontend/v${{ steps.frontend_version.outputs.version }}"
+          echo "✅ Frontend tag created: frontend/v${{ steps.frontend_version.outputs.version }}"
+
+      - name: Create Backend Tag
+        if: steps.backend_tag_exists.outputs.exists == 'false'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "backend/v${{ steps.backend_version.outputs.version }}" -m "Backend release v${{ steps.backend_version.outputs.version }}"
+          git push origin "backend/v${{ steps.backend_version.outputs.version }}"
+          echo "✅ Backend tag created: backend/v${{ steps.backend_version.outputs.version }}"
+
+      - name: Create Release (if both tags are new)
+        if: steps.frontend_tag_exists.outputs.exists == 'false' && steps.backend_tag_exists.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v${{ steps.frontend_version.outputs.version }}" \
+            --target main \
+            --title "Release v${{ steps.frontend_version.outputs.version }}" \
+            --notes "Frontend: v${{ steps.frontend_version.outputs.version }} | Backend: v${{ steps.backend_version.outputs.version }}" \
+            --draft=false
+          echo "✅ Release created: v${{ steps.frontend_version.outputs.version }}"

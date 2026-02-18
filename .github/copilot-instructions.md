@@ -156,11 +156,23 @@ docker compose exec app vendor/bin/phpunit  # Sem envs - VAI DELETAR DADOS!
 6. Fazer push: `git push origin <branch>`
 7. Abrir PR: `gh pr create --fill` (preenche automaticamente com branch/titulo)
 8. Aguardar aprovação humana antes de merge
+9. **AUTOMÁTICO ao merge para main**: GitHub Actions cria tags `frontend/v<version>` e `backend/v<version>` lendo as versões de `package.json` e `composer.json`
 
 **Backend:**
-- Versioning por tag Git (v1.0.0, etc.)
+- Versioning por atualização em `backend/src/composer.json` (semver)
 - Manter `backend/RELEASE_NOTES.md` atualizado com mudanças importantes
 - Mesmos passos de commit, push e PR que frontend
+- **AUTOMÁTICO ao merge para main**: Tags são criadas via GitHub Actions
+
+**Automação de Tags (GitHub Actions):**
+- Workflow: `.github/workflows/create-release-tags.yml`
+- Triggered: Automaticamente ao push para `main` (após merge de PR)
+- Comportamento:
+  - Lê versão de `frontend/package.json` → cria tag `frontend/v<version>`
+  - Lê versão de `backend/src/composer.json` → cria tag `backend/v<version>`
+  - Verifica se tags já existem (não recria duplicatas)
+  - Se ambas as tags são novas, cria um Release no GitHub com ambas as versões
+- **Não é necessário criar tags manualmente** — o sistema faz automaticamente
 
 **Operações com `gh` (GitHub CLI):**
 ```bash
@@ -175,6 +187,9 @@ gh pr view <número>
 
 # Adicionar label/assignee
 gh pr edit <número> --add-label "label" --add-assignee "usuario"
+
+# Listar tags (para verificação)
+gh release list
 ```
 
 **Nunca use gitkraken para operações Git neste repositório. Use sempre `gh` e `git` comandos diretos.**
