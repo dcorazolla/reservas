@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Api\BaseApiController;
+use App\Http\Controllers\Concerns\EnsuresPropertyScope;
 use App\Models\RoomBlock;
 use App\Services\RoomBlockService;
 use Illuminate\Http\Request;
 
 class RoomBlockController extends BaseApiController
 {
-    public function __construct(
-        private RoomBlockService $service
-    ) {}
+    use EnsuresPropertyScope;
 
-    public function index(Request $request)
+    public function index(Request $request, RoomBlockService $service)
     {
         $propertyId = $this->getPropertyId($request);
 
-        $blocks = $this->service->list($propertyId, $request);
+        $blocks = $service->list($propertyId, $request);
 
         return $this->ok($blocks);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, RoomBlockService $service)
     {
         $this->authorize('create', RoomBlock::class);
 
@@ -33,10 +33,10 @@ class RoomBlockController extends BaseApiController
             'end_date' => 'required|date_format:Y-m-d',
             'type' => 'required|in:maintenance,cleaning,private,custom',
             'reason' => 'sometimes|nullable|string|max:255',
-            'recurrence' => 'sometimes|in:none,daily,weekly,monthly|default:none',
+            'recurrence' => 'sometimes|in:none,daily,weekly,monthly',
         ]);
 
-        $block = $this->service->create(
+        $block = $service->create(
             $data,
             $propertyId,
             $request->user()?->id
@@ -45,13 +45,11 @@ class RoomBlockController extends BaseApiController
         return $this->created($block);
     }
 
-    public function update(Request $request, RoomBlock $roomBlock)
+    public function update(Request $request, RoomBlock $roomBlock, RoomBlockService $service)
     {
         $propertyId = $this->getPropertyId($request);
 
-        if ($roomBlock->property_id !== $propertyId) {
-            return $this->forbidden('Block does not belong to this property.');
-        }
+        $this->assertBelongsToProperty($roomBlock->room, $propertyId);
 
         $this->authorize('update', $roomBlock);
 
@@ -63,22 +61,20 @@ class RoomBlockController extends BaseApiController
             'recurrence' => 'sometimes|in:none,daily,weekly,monthly',
         ]);
 
-        $block = $this->service->update($roomBlock, $data);
+        $block = $service->update($roomBlock, $data);
 
         return $this->ok($block);
     }
 
-    public function destroy(Request $request, RoomBlock $roomBlock)
+    public function destroy(Request $request, RoomBlock $roomBlock, RoomBlockService $service)
     {
         $propertyId = $this->getPropertyId($request);
 
-        if ($roomBlock->property_id !== $propertyId) {
-            return $this->forbidden('Block does not belong to this property.');
-        }
+        $this->assertBelongsToProperty($roomBlock->room, $propertyId);
 
         $this->authorize('delete', $roomBlock);
 
-        $this->service->delete($roomBlock);
+        $service->delete($roomBlock);
 
         return $this->noContent();
     }
@@ -87,7 +83,7 @@ class RoomBlockController extends BaseApiController
      * Expand recurring blocks for a given date range.
      * GET /room-blocks/expand?room_id=uuid&from=2026-02-01&to=2026-02-28
      */
-    public function expand(Request $request)
+    public function expand(Request $request, RoomBlockService $service)
     {
         $propertyId = $this->getPropertyId($request);
 
@@ -97,7 +93,7 @@ class RoomBlockController extends BaseApiController
             'to' => 'required|date_format:Y-m-d',
         ]);
 
-        $blockedDates = $this->service->expandBlocks(
+        $blockedDates = $service->expandBlocks(
             $validated['room_id'],
             $propertyId,
             $validated['from'],

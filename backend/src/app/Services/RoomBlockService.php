@@ -18,7 +18,11 @@ class RoomBlockService
      */
     public function list(string $propertyId, Request $request)
     {
-        $query = RoomBlock::where('property_id', $propertyId);
+        $query = RoomBlock::query()
+            ->whereHas('room', function ($q) use ($propertyId) {
+                $q->where('property_id', $propertyId);
+            })
+            ->orderBy('start_date', 'asc');
 
         // Filter by room_id
         if ($request->query('room_id')) {
@@ -45,13 +49,10 @@ class RoomBlockService
         if ($request->query('from') && $request->query('to')) {
             $from = $request->query('from');
             $to = $request->query('to');
-            $query->where('start_date', '<', $to)->where('end_date', '>', $from);
+            $query->where('start_date', '<=', $to)->where('end_date', '>=', $from);
         }
 
-        // Pagination
-        $perPage = $request->query('per_page', 15);
-
-        return $query->paginate($perPage);
+        return $query->get();
     }
 
     /**
@@ -69,7 +70,6 @@ class RoomBlockService
 
         return RoomBlock::create([
             ...$data,
-            'property_id' => $propertyId,
             'created_by' => $createdBy,
             'recurrence' => $data['recurrence'] ?? 'none',
         ]);
@@ -126,7 +126,9 @@ class RoomBlockService
 
         $blockedDates = [];
         $blocks = RoomBlock::where('room_id', $roomId)
-            ->where('property_id', $propertyId)
+            ->whereHas('room', function ($q) use ($propertyId) {
+                $q->where('property_id', $propertyId);
+            })
             ->where('start_date', '<', $toDate->toDateString())
             ->where('end_date', '>', $fromDate->toDateString())
             ->get();

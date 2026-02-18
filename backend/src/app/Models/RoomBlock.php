@@ -25,7 +25,7 @@ class RoomBlock extends Model
     const RECURRENCE_MONTHLY = 'monthly';
 
     protected $fillable = [
-        'property_id', 'room_id', 'start_date', 'end_date', 'type', 'reason', 'recurrence', 'created_by',
+        'room_id', 'start_date', 'end_date', 'type', 'reason', 'recurrence', 'created_by',
     ];
 
     protected $casts = [
