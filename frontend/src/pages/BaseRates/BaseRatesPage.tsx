@@ -18,6 +18,7 @@ export default function BaseRatesPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [property, setProperty] = useState<Property | null>(null)
+  const [savedMessage, setSavedMessage] = useState(false)
 
   const {
     control,
@@ -64,6 +65,7 @@ export default function BaseRatesPage() {
 
     try {
       setSaving(true)
+      setSavedMessage(false)
       const updated = await propertiesService.updateProperty(property.id, {
         name: property.name,
         timezone: property.timezone,
@@ -76,11 +78,25 @@ export default function BaseRatesPage() {
         child_price: data.child_price ?? null,
       })
       setProperty(updated)
+      setSavedMessage(true)
+      setTimeout(() => setSavedMessage(false), 3000)
       console.log('Base rates saved successfully')
     } catch (error) {
       console.error('Error saving rates:', error)
     } finally {
       setSaving(false)
+    }
+  }
+
+  function handleCancel() {
+    if (property) {
+      reset({
+        child_factor: property.child_factor ?? undefined,
+        base_one_adult: property.base_one_adult ?? undefined,
+        base_two_adults: property.base_two_adults ?? undefined,
+        additional_adult: property.additional_adult ?? undefined,
+        child_price: property.child_price ?? undefined,
+      })
     }
   }
 
@@ -112,6 +128,19 @@ export default function BaseRatesPage() {
         <Heading as="h2" size="lg">
           {t('menu.settings.rates.base')}
         </Heading>
+
+        {savedMessage && (
+          <Box
+            p={3}
+            borderRadius="md"
+            bg="green.50"
+            borderLeft="4px solid"
+            borderColor="green.500"
+            color="green.800"
+          >
+            {t('baseRates.form.saved_success')}
+          </Box>
+        )}
 
         <Grid templateColumns="repeat(2, 1fr)" gap={6}>
           <FormField
@@ -157,14 +186,23 @@ export default function BaseRatesPage() {
           </GridItem>
         </Grid>
 
-        <Button
-          type="submit"
-          colorScheme="blue"
-          isLoading={saving}
-          alignSelf="flex-start"
-        >
-          {t('common.actions.save')}
-        </Button>
+        <Box display="flex" gap={3}>
+          <Button
+            type="submit"
+            colorScheme="blue"
+            isLoading={saving}
+          >
+            {t('common.actions.save')}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCancel}
+            isDisabled={saving}
+          >
+            {t('common.actions.cancel')}
+          </Button>
+        </Box>
       </VStack>
     </form>
   )
