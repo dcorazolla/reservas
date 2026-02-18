@@ -4,9 +4,10 @@
 
 - Entregas principais:
   - **Room Blocks (Bloqueios de Disponibilidade)**: 
-    - Novos campos no modelo: `type` (enum: maintenance, cleaning, private, custom), `recurrence` (enum: none, daily, weekly, monthly), `property_id` (FK explícita para scoping multi-tenant).
+    - Novos campos no modelo: `type` (enum: maintenance, cleaning, private, custom) e `recurrence` (enum: none, daily, weekly, monthly).
+    - O escopo por propriedade foi mantido pela relação `room -> property_id`; não foi adicionada uma coluna `property_id` redundante na tabela `room_blocks`.
     - Remoção de `partner_id` (substituído pelo sistema de `type`).
-    - Nova migration: `2026_02_18_000001_update_room_blocks_table.php` com adição de índices para performance.
+    - Nova migration: `2026_02_18_000001_update_room_blocks_table.php` com adição de colunas e índices relevantes para `type` e `recurrence`.
   - **RoomBlockService (Nova Camada de Serviço)**:
     - Seguindo padrão arquitetural do projeto, toda lógica de CRUD movida para `App\Services\RoomBlockService`.
     - Métodos: `list()`, `create()`, `update()`, `delete()`, `expandBlocks()`.
@@ -33,10 +34,10 @@
   - ✅ 698 assertions
   - Cobertura: CRUD, authorization, recurrence validation, date range handling.
 
-- Breaking Changes:
+ - Breaking Changes:
   - `RoomBlock` agora requer campos `type` e `recurrence` (com defaults no controller).
   - `partner_id` removido do modelo (usar `type` em vez disso).
-  - `property_id` agora obrigatório (scoping automático pelo JWT).
+  - A coluna `property_id` não existe em `room_blocks`; o scoping deve ser feito através da relação `room -> property_id`.
 
 - Next Steps (Frontend):
   - Fase 3a: Bloqueios Models (frontend/src/models/blocks.ts)
