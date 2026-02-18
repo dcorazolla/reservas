@@ -14,7 +14,9 @@ export default function PageShell({ children }: Props) {
 
   return (
     <Box minH="100vh" pb="64px"> {/* reserve footer height */}
-      <Header onOpenMenu={() => setDrawerOpen(true)} />
+      <Box position="sticky" top={0} zIndex={10}>
+        <Header onOpenMenu={() => setDrawerOpen(true)} />
+      </Box>
 
       <Flex as="main" align="stretch">
         <Box display={{ base: 'none', md: 'block' }} aria-hidden={false}>

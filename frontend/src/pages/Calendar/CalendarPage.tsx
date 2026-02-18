@@ -147,9 +147,6 @@ export default function CalendarPage() {
   if (loading && rooms.length === 0) {
     return (
       <div className="calendar-page">
-        <div className="calendar-header">
-          <h1>{t('calendar.title')}</h1>
-        </div>
         <SkeletonList rows={5} />
       </div>
     )
@@ -163,10 +160,6 @@ export default function CalendarPage() {
 
   return (
     <div className="calendar-page">
-      <div className="calendar-header">
-        <h1>{t('calendar.title')}</h1>
-      </div>
-
       <div className="calendar-controls">
         <button onClick={handlePrevMonth} className="btn-nav btn-nav-small" title={t('calendar.prev')}>
           ←

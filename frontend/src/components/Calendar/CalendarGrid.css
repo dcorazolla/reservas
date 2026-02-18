@@ -88,7 +88,7 @@ thead .room-col {
 /* Half cells (checkout/checkin) */
 .half-cell {
   width: 40px;
-  height: 60px;
+  height: 45px;
   border-right: 1px solid #e9ecef;
   cursor: pointer;
   position: relative;
