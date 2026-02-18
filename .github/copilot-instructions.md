@@ -9,6 +9,21 @@ Este arquivo é o ponto único de referência para agentes automatizados e human
 - Use `manage_todo_list` para planejar tarefas multi-step e atualize `TODO.md` como snapshot humano.
 - Nunca faça merge sem aprovação humana; o agente não deve mesclar PRs automaticamente.
 
+## ⚠️ CRÍTICO - Operações Git e GitHub
+
+**JAMAIS use GitKraken ou qualquer ferramenta GUI para operações Git neste repositório.**
+
+Use SEMPRE:
+- ✅ `git` comandos diretos: `git branch`, `git commit`, `git push`, `git checkout`, `git log`, etc
+- ✅ `gh` (GitHub CLI) para operações GitHub: `gh pr create`, `gh pr list`, `gh pr view`, `gh pr edit`, `gh release list`, etc
+
+**❌ PROIBIDO:**
+- ❌ GitKraken (ou qualquer ferramenta GUI similar)
+- ❌ GitHub Desktop
+- ❌ Qualquer cliente visual de Git
+
+**Razão:** Ferramenta GUI pode criar comportamentos não-determinísticos, modificar commits, ou falhar silenciosamente em operações críticas. Command-line é determinístico, auditável e seguro.
+
 ## Comportamento e convenções (essenciais)
 
 - Trunk-based: `main` é release-ready. Branches curtas: `feature/*`, `fix/*`, `chore/*`.
