@@ -12,7 +12,8 @@
       "loading": "Loading...",
       "error": "An error occurred",
       "new": "New",
-      "error_required": "Field is required",
+      "no_data": "No data available",
+      "error_required": "Required field",
       "error_invalid_email": "Invalid email",
       "error_max": "Field too long",
       "error_min_zero": "Must be greater than zero",
@@ -27,8 +28,11 @@
     "pricing": {
       "additional_adult": "Additional adult price",
       "child_factor": "Child factor",
-      "child_max_age": "Max age (children)",
+      "child_max_age": "Maximum age (children)",
       "child_price": "Child price",
+      "one_adult": "Base 1 adult",
+      "two_adults": "Base 2 adults",
+      "tariff_base": "Base Rate",
       "five_adults": "Price 5 adults",
       "four_adults": "Price 4 adults",
       "hide_rates": "Hide rates",
@@ -165,6 +169,11 @@
       "none": "No billing",
       "charge_partner": "Charge partner",
       "charge_guest": "Charge guest"
+    },
+    "baseRates": {
+      "form": {
+        "description": "Edit the base rates for your property. These values are used as the starting point for price calculations throughout the platform."
+      }
     }
   }
 }

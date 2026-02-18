@@ -12,6 +12,7 @@
       "loading": "Carregando...",
       "error": "Ocorreu um erro",
       "new": "Novo",
+      "no_data": "Nenhum dado disponível",
       "error_required": "Campo obrigatório",
       "error_invalid_email": "E-mail inválido",
       "error_max": "Campo muito longo",
@@ -29,6 +30,9 @@
       "child_factor": "Fator criança",
       "child_max_age": "Idade máxima (crianças)",
       "child_price": "Preço criança",
+      "one_adult": "Base 1 adulto",
+      "two_adults": "Base 2 adultos",
+      "tariff_base": "Tarifa Base",
       "five_adults": "Preço 5 adultos",
       "four_adults": "Preço 4 adultos",
       "hide_rates": "Ocultar tarifas",
@@ -165,6 +169,11 @@
       "none": "Sem faturamento",
       "charge_partner": "Cobrar do parceiro",
       "charge_guest": "Cobrar do hóspede"
+    },
+    "baseRates": {
+      "form": {
+        "description": "Edite as tarifas base da propriedade. Estes valores são usados como ponto de partida para cálculos de preço em toda a plataforma."
+      }
     }
   }
 }
