@@ -1,7 +1,26 @@
 # Frontend Release Notes
 
-## Release - 2026-02-17
+## Release - 2026-02-18
 
+- feat(messaging): add Message component with 30s autoclose to all CRUD operations (Diogo Santana Corazolla)
+- feat(crud-pages): add success/error messages with 30s autoclose to all CRUD pages (Diogo Santana Corazolla)
+- feat(base-rates): add close button to success message and increase display time to 6s (Diogo Santana Corazolla)
+- chore(i18n): equalize translations across all 4 languages (pt-BR, en, es, fr) (Diogo Santana Corazolla)
+- feat(frontend): add cancel button and success message to BaseRatesPage (Diogo Santana Corazolla)
+- fix(frontend): create baseRatesSchema for BaseRatesPage validation (Diogo Santana Corazolla)
+- fix(frontend): use proper form element instead of VStack as for form submission (Diogo Santana Corazolla)
+- refactor(frontend): add 2-column grid layout to BaseRatesPage for better UX (Diogo Santana Corazolla)
+- refactor(frontend): remove baseRates.form.description for consistency with other pages (Diogo Santana Corazolla)
+- fix(frontend): add missing i18n keys and correct translation keys in BaseRatesPage (Diogo Santana Corazolla)
+- fix(frontend): correct CurrencyInput import path in BaseRatesPage (Diogo Santana Corazolla)
+- refactor(frontend): simplify BaseRatesPage to show only tariff base fields (Diogo Santana Corazolla)
+- fix(frontend): load property from JWT token in BaseRatesPage (Diogo Santana Corazolla)
+- fix(frontend): remove useToast from BaseRatesPage (use console logging) (Diogo Santana Corazolla)
+- fix(frontend): correct AuthContext import path in BaseRatesPage (Diogo Santana Corazolla)
+- fix(frontend): refactor BaseRatesPage to use AuthContext property and fix layout (Diogo Santana Corazolla)
+- fix(frontend): correct propertiesService import in BaseRatesPage (Diogo Santana Corazolla)
+- fix(frontend): correct PageShell import path in BaseRatesPage (Diogo Santana Corazolla)
+- chore(release): bump frontend to v0.2.1 with release notes (Diogo Santana Corazolla)
 - fix: correct base rates link in sidebar menu (Diogo Santana Corazolla)
 - docs: CRITICAL - update backend test security protocol to ban ALLOW_TESTS_ON_NON_TEST_DB=1 (Diogo Santana Corazolla)
 - refactor: replace duplicate tariff code with RatesField component in EditPropertyModal (Diogo Santana Corazolla)
