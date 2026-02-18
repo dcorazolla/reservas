@@ -23,7 +23,9 @@
       "error_max_100": "No puede ser mayor que 100",
       "error_loading": "Error al cargar datos",
       "error_saving": "Error al guardar datos",
-      "success": "Éxito"
+      "success": "Éxito",
+      "welcome": "Bienvenido",
+      "coming_soon": "Próximamente"
     },
     "confirm": {
       "delete_title": "Confirmación de eliminación",
@@ -85,6 +87,7 @@
     "error": "Error al autenticar"
   },
   "menu": {
+    "home": "Inicio",
     "calendar": "Calendario",
     "reservations": "Reservas",
     "navigation": "Navegación",

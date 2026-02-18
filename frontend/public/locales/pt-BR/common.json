@@ -23,7 +23,9 @@
       "error_max_100": "Não pode ser maior que 100",
       "error_loading": "Erro ao carregar dados",
       "error_saving": "Erro ao salvar dados",
-      "success": "Sucesso"
+      "success": "Sucesso",
+      "welcome": "Bem-vindo",
+      "coming_soon": "Em breve"
     },
     "list": {
       "empty": "Nenhum registro encontrado"
@@ -88,6 +90,7 @@
     "error": "Falha ao autenticar — verifique suas credenciais."
   },
   "menu": {
+    "home": "Início",
     "calendar": "Calendário",
     "reservations": "Reservas",
     "navigation": "Navegação",

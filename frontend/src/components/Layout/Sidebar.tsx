@@ -20,6 +20,7 @@ type NavItem = {
 }
 
 const ICON_MAP: Record<string, any> = {
+  home: FiHome,
   calendar: FiCalendar,
   reservations: FiList,
   settings: FiSettings,
@@ -36,6 +37,7 @@ const ICON_MAP: Record<string, any> = {
 }
 
 const nav: NavItem[] = [
+  { labelKey: 'menu.home', to: '/', icon: 'home' },
   { labelKey: 'menu.calendar', to: '/calendar', icon: 'calendar' },
   { labelKey: 'menu.reservations', to: '/reservations', icon: 'reservations' },
   {

@@ -23,7 +23,9 @@
       "error_max_100": "Cannot be greater than 100",
       "error_loading": "Error loading data",
       "error_saving": "Error saving data",
-      "success": "Success"
+      "success": "Success",
+      "welcome": "Welcome",
+      "coming_soon": "Coming Soon"
     },
     "confirm": {
       "delete_title": "Delete confirmation",
@@ -85,6 +87,7 @@
     "error": "Failed to authenticate"
   },
   "menu": {
+    "home": "Home",
     "calendar": "Calendar",
     "reservations": "Reservations",
     "navigation": "Navigation",

@@ -87,8 +87,8 @@ export default function CalendarPage() {
 
   const handleDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value)
-    const min = window.innerWidth < 600 ? 5 : window.innerWidth < 1024 ? 10 : 15
-    const max = window.innerWidth < 600 ? 10 : window.innerWidth < 1024 ? 15 : 35
+    const min = 5
+    const max = 35
 
     if (value >= min && value <= max) {
       setDays(value)
@@ -147,8 +147,8 @@ export default function CalendarPage() {
   const startDate = format(currentDate, 'yyyy-MM-dd')
   const endDate = format(addDays(currentDate, days - 1), 'yyyy-MM-dd')
   const monthYearLabel = format(currentDate, 'MMMM yyyy', { locale: ptBR })
-  const minDays = window.innerWidth < 600 ? 5 : window.innerWidth < 1024 ? 10 : 15
-  const maxDays = window.innerWidth < 600 ? 10 : window.innerWidth < 1024 ? 15 : 35
+  const minDays = 5
+  const maxDays = 35
 
   return (
     <div className="calendar-page">

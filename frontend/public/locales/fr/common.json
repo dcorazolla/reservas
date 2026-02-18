@@ -23,7 +23,9 @@
       "error_max_100": "Ne peut pas être supérieur à 100",
       "error_loading": "Erreur lors du chargement des données",
       "error_saving": "Erreur lors de l'enregistrement des données",
-      "success": "Succès"
+      "success": "Succès",
+      "welcome": "Bienvenue",
+      "coming_soon": "À venir"
     },
     "confirm": {
       "delete_title": "Confirmation de suppression",
@@ -85,6 +87,7 @@
     "error": "Erreur d'authentification"
   },
   "menu": {
+    "home": "Accueil",
     "calendar": "Calendrier",
     "reservations": "Réservations",
     "navigation": "Navigation",
