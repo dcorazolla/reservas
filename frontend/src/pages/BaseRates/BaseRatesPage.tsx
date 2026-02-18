@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { Box, Heading, VStack, Button } from '@chakra-ui/react'
 import { useAuth } from '@contexts/AuthContext'
 import { decodeJwtPayload } from '@utils/jwt'
-import RatesField from '@components/Shared/RatesField/RatesField'
 import FormField from '@components/Shared/FormField/FormField'
+import { CurrencyInput } from '@components/Shared/CurrencyInput'
 import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
 import { propertySchema, type PropertyFormData } from '@models/schemas'
 import * as propertiesService from '@services/properties'
@@ -18,10 +18,8 @@ export default function BaseRatesPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [property, setProperty] = useState<Property | null>(null)
-  const [showRates, setShowRates] = useState(false)
 
   const {
-    register,
     control,
     handleSubmit,
     reset,
@@ -45,10 +43,6 @@ export default function BaseRatesPage() {
         const data = await propertiesService.getProperty(propertyId)
         setProperty(data)
         reset({
-          name: data.name,
-          timezone: data.timezone,
-          infant_max_age: data.infant_max_age ?? undefined,
-          child_max_age: data.child_max_age ?? undefined,
           child_factor: data.child_factor ?? undefined,
           base_one_adult: data.base_one_adult ?? undefined,
           base_two_adults: data.base_two_adults ?? undefined,
@@ -71,10 +65,10 @@ export default function BaseRatesPage() {
     try {
       setSaving(true)
       const updated = await propertiesService.updateProperty(property.id, {
-        name: data.name.trim(),
-        timezone: data.timezone,
-        infant_max_age: data.infant_max_age ?? null,
-        child_max_age: data.child_max_age ?? null,
+        name: property.name,
+        timezone: property.timezone,
+        infant_max_age: property.infant_max_age ?? null,
+        child_max_age: property.child_max_age ?? null,
         child_factor: data.child_factor ?? null,
         base_one_adult: data.base_one_adult ?? null,
         base_two_adults: data.base_two_adults ?? null,
@@ -82,7 +76,6 @@ export default function BaseRatesPage() {
         child_price: data.child_price ?? null,
       })
       setProperty(updated)
-      setShowRates(false)
       console.log('Base rates saved successfully')
     } catch (error) {
       console.error('Error saving rates:', error)
@@ -115,62 +108,56 @@ export default function BaseRatesPage() {
 
   return (
     <VStack spacing={6} align="stretch" as="form" onSubmit={handleSubmit(handleSave)}>
-      <Heading as="h2" size="lg">
-        {t('menu.rates.base')}
-      </Heading>
-
       <Box>
-        <Heading as="h3" size="md" mb={2}>
-          {t('properties.form.base_rates_title')}
+        <Heading as="h2" size="lg" mb={2}>
+          {t('menu.rates.base')}
         </Heading>
-        <Box mb={6} color="gray.600" fontSize="sm">
+        <Box color="gray.600" fontSize="sm">
           {t('baseRates.form.description')}
         </Box>
-
-        <VStack spacing={4} align="stretch">
-          <FormField
-            label={t('properties.form.name')}
-            name="name"
-            errors={errors}
-          >
-            <input type="text" {...register('name')} disabled />
-          </FormField>
-
-          <FormField
-            label={t('properties.form.timezone')}
-            name="timezone"
-            errors={errors}
-          >
-            <input type="text" {...register('timezone')} disabled />
-          </FormField>
-
-          <FormField
-            label={t('common.pricing.infant_max_age')}
-            name="infant_max_age"
-            errors={errors}
-          >
-            <input type="number" {...register('infant_max_age')} disabled />
-          </FormField>
-
-          <FormField
-            label={t('common.pricing.child_max_age')}
-            name="child_max_age"
-            errors={errors}
-          >
-            <input type="number" {...register('child_max_age')} disabled />
-          </FormField>
-        </VStack>
       </Box>
 
-      <RatesField
-        control={control}
-        errors={errors}
-        showRates={showRates}
-        onToggleRates={setShowRates}
-        title="properties.form.base_rates_title"
-        toggleLabel="common.pricing.show_rates"
-        hideLabel="common.pricing.hide_rates"
-      />
+      <VStack spacing={4} align="stretch">
+        <FormField
+          label={t('common.pricing.child_factor')}
+          name="child_factor"
+          errors={errors}
+        >
+          <CurrencyInput control={control} name="child_factor" />
+        </FormField>
+
+        <FormField
+          label={t('common.pricing.base_one_adult')}
+          name="base_one_adult"
+          errors={errors}
+        >
+          <CurrencyInput control={control} name="base_one_adult" />
+        </FormField>
+
+        <FormField
+          label={t('common.pricing.base_two_adults')}
+          name="base_two_adults"
+          errors={errors}
+        >
+          <CurrencyInput control={control} name="base_two_adults" />
+        </FormField>
+
+        <FormField
+          label={t('common.pricing.additional_adult')}
+          name="additional_adult"
+          errors={errors}
+        >
+          <CurrencyInput control={control} name="additional_adult" />
+        </FormField>
+
+        <FormField
+          label={t('common.pricing.child_price')}
+          name="child_price"
+          errors={errors}
+        >
+          <CurrencyInput control={control} name="child_price" />
+        </FormField>
+      </VStack>
 
       <Button
         type="submit"
