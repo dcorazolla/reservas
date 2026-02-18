@@ -6,7 +6,10 @@
       "cancel": "Annuler",
       "create": "Créer",
       "save": "Enregistrer",
-      "confirm": "Confirmer"
+      "confirm": "Confirmer",
+      "update": "Mettre à jour",
+      "view": "Afficher",
+      "logout": "Déconnexion"
     },
     "status": {
       "loading": "Chargement...",
@@ -239,5 +242,16 @@
       "finalize": "Finaliser",
       "delete": "Supprimer"
     }
+  },
+  "menu": {
+    "calendar": "Calendrier",
+    "reservations": "Réservations"
+  },
+  "home": {
+    "title": "Tableau de bord",
+    "description": "Gérez vos propriétés, réservations et disponibilité",
+    "calendar_description": "Visualisez et gérez vos réservations dans un calendrier interactif",
+    "reservations_description": "Gérez vos réservations avec des filtres et des rapports",
+    "coming_soon": "À venir"
   }
 }

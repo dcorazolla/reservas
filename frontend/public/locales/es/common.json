@@ -6,7 +6,10 @@
       "cancel": "Cancelar",
       "create": "Crear",
       "save": "Guardar",
-      "confirm": "Confirmar"
+      "confirm": "Confirmar",
+      "update": "Actualizar",
+      "view": "Ver",
+      "logout": "Cerrar sesión"
     },
     "status": {
       "loading": "Cargando...",
@@ -239,5 +242,16 @@
       "finalize": "Finalizar",
       "delete": "Eliminar"
     }
+  },
+  "menu": {
+    "calendar": "Calendario",
+    "reservations": "Reservas"
+  },
+  "home": {
+    "title": "Panel de control",
+    "description": "Administre sus propiedades, reservas y disponibilidad",
+    "calendar_description": "Vea y administre sus reservas en un calendario interactivo",
+    "reservations_description": "Administre sus reservas con filtros e informes",
+    "coming_soon": "Próximamente"
   }
 }

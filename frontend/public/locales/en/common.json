@@ -6,7 +6,10 @@
       "cancel": "Cancel",
       "create": "Create",
       "save": "Save",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "update": "Update",
+      "view": "View",
+      "logout": "Sign Out"
     },
     "status": {
       "loading": "Loading...",
@@ -262,5 +265,16 @@
       "finalize": "Finalize",
       "delete": "Delete"
     }
+  },
+  "menu": {
+    "calendar": "Calendar",
+    "reservations": "Reservations"
+  },
+  "home": {
+    "title": "Dashboard",
+    "description": "Manage your properties, reservations and availability",
+    "calendar_description": "View and manage your reservations in an interactive calendar",
+    "reservations_description": "Manage your reservations with filters and reports",
+    "coming_soon": "Coming Soon"
   }
 }

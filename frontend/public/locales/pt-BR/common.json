@@ -7,7 +7,9 @@
       "create": "Criar",
       "save": "Salvar",
       "confirm": "Confirmar",
-      "update": "Atualizar"
+      "update": "Atualizar",
+      "view": "Visualizar",
+      "logout": "Sair"
     },
     "status": {
       "loading": "Carregando...",
@@ -266,6 +268,17 @@
       "finalize": "Finalizar",
       "delete": "Remover"
     }
+  },
+  "menu": {
+    "calendar": "Calendário",
+    "reservations": "Reservas"
+  },
+  "home": {
+    "title": "Dashboard",
+    "description": "Gerencie suas propriedades, reservas e disponibilidade",
+    "calendar_description": "Visualize e gerencie suas reservas em um calendário interativo",
+    "reservations_description": "Gerencie suas reservas com filtros e relatórios",
+    "coming_soon": "Em breve"
   }
 }
 
