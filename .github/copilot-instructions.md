@@ -130,6 +130,60 @@ docker compose exec app php artisan env  # Deve retornar: "testing"
 - Para loading em formulários, usar `<SkeletonFields rows={n}>` de `frontend/src/components/Shared/Skeleton/SkeletonFields.tsx`.
 - Para loading em listas, usar `<SkeletonList rows={n}>` de `frontend/src/components/Shared/Skeleton/SkeletonList.tsx`.
 
+## ⚠️ Chakra UI - Estratégia de Imports (CRÍTICO)
+
+**PROBLEMA:** Importar muitos componentes Chakra UI simultaneamente causa erro Vite: `SyntaxError: does not provide an export named 'FormControl'` (ou similar).
+
+**SOLUÇÃO:** Minimizar imports diretos de Chakra:
+
+❌ **NUNCA FAÇA:**
+```tsx
+import {
+  Modal, ModalOverlay, ModalContent, FormControl, FormLabel, Input,
+  Select, Textarea, Button, VStack, HStack, Box, Text, Spinner, Icon
+} from '@chakra-ui/react'
+```
+
+✅ **USE UM DESTES PADRÕES:**
+
+**1. Para Modais: Use `Shared/Modal/Modal` wrapper**
+```tsx
+import Modal from '@components/Shared/Modal/Modal'
+
+<Modal isOpen={isOpen} onClose={onClose} title="Título">
+  {/* HTML nativo ou FormField */}
+</Modal>
+```
+
+**2. Para Formulários: Use HTML nativo + FormField ou CSS**
+```tsx
+<div className="form-group">
+  <label htmlFor="field">Campo</label>
+  <input id="field" type="text" {...register('field')} />
+</div>
+```
+
+**3. Para Listas/Tabelas: Use HTML nativo `<table>` + CSS**
+```tsx
+<table className="custom-table">
+  <thead><tr><th>Header</th></tr></thead>
+  <tbody>{items.map(item => <tr key={item.id}>...</tr>)}</tbody>
+</table>
+```
+
+**Referências (implementações corretas):**
+- ✅ EditRoomModal.tsx (Shared/Modal + Shared/FormField)
+- ✅ BlocksModal.tsx (Shared/Modal + HTML)
+- ✅ BlocksList.tsx (HTML `<table>` + CSS)
+- ✅ RoomsPage.tsx (Chakra apenas para layout container)
+
+**Checklist ao criar componentes com muitos inputs:**
+- [ ] Não importo 10+ componentes Chakra ao mesmo tempo
+- [ ] Uso Shared/Modal wrapper em vez de Modal Chakra direto
+- [ ] HTML nativo para inputs (input, select, textarea, button)
+- [ ] CSS classes em arquivos .css separados para styling
+- [ ] Testes passam sem SyntaxError de Vite
+
 ## Modais com seção de tarifas (regra de UX)
 
 - O toggle de tarifas deve **sempre iniciar fechado** ao abrir o modal (`setShowRates(false)` no `useEffect` de abertura).

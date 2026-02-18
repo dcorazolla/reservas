@@ -1,35 +1,15 @@
 import React, { useEffect } from 'react'
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Textarea,
-  VStack,
-  FormErrorMessage,
-  HStack,
-  Box,
-  Text,
-} from '@chakra-ui/react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import Modal from '@components/Shared/Modal/Modal'
 import {
   BLOCK_TYPE_LABELS,
   BLOCK_RECURRENCE_LABELS,
-  BlockType,
-  BlockRecurrence,
   validateBlockInput,
 } from '@models/blocks'
 import type { RoomBlock, RoomBlockInput } from '@models/blocks'
-import { z } from 'zod'
+import './BlocksModal.css'
 
 // Define validation schema
 const blockSchema = z.object({
@@ -77,7 +57,7 @@ export const BlocksModal: React.FC<BlocksModalProps> = ({
 }) => {
   const isEditing = !!block
   const {
-    control,
+    register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
@@ -141,175 +121,154 @@ export const BlocksModal: React.FC<BlocksModalProps> = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>
-          {isEditing ? 'Editar Bloqueio' : 'Novo Bloqueio'}
-        </ModalHeader>
-        <ModalCloseButton />
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="blocks-modal-content">
+        <div className="blocks-modal-header">
+          <h2>{isEditing ? 'Editar Bloqueio' : 'Novo Bloqueio'}</h2>
+          <button
+            className="close-button"
+            onClick={onClose}
+            aria-label="Fechar"
+            disabled={isSubmitting || isLoading}
+          >
+            ✕
+          </button>
+        </div>
 
-        <ModalBody>
-          <VStack spacing={4}>
-            {/* Room Selection */}
-            <Controller
-              name="room_id"
-              control={control}
-              render={({ field }) => (
-                <FormControl isInvalid={!!errors.room_id}>
-                  <FormLabel fontWeight="600">Quarto</FormLabel>
-                  <Select
-                    {...field}
-                    placeholder="Selecione um quarto"
-                    disabled={isSubmitting || isLoading}
-                  >
-                    {rooms.map((room) => (
-                      <option key={room.id} value={room.id}>
-                        {room.name}
-                      </option>
-                    ))}
-                  </Select>
-                  <FormErrorMessage>{errors.room_id?.message}</FormErrorMessage>
-                </FormControl>
-              )}
-            />
-
-            {/* Block Type */}
-            <Controller
-              name="type"
-              control={control}
-              render={({ field }) => (
-                <FormControl>
-                  <FormLabel fontWeight="600">Tipo de Bloqueio</FormLabel>
-                  <Select {...field} disabled={isSubmitting || isLoading}>
-                    {Object.entries(BLOCK_TYPE_LABELS).map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            />
-
-            {/* Date Range */}
-            <HStack width="100%" spacing={4}>
-              <Controller
-                name="start_date"
-                control={control}
-                render={({ field }) => (
-                  <FormControl isInvalid={!!errors.start_date} flex={1}>
-                    <FormLabel fontWeight="600">Data Inicial</FormLabel>
-                    <Input
-                      {...field}
-                      type="date"
-                      disabled={isSubmitting || isLoading}
-                    />
-                    <FormErrorMessage>
-                      {errors.start_date?.message}
-                    </FormErrorMessage>
-                  </FormControl>
-                )}
-              />
-
-              <Controller
-                name="end_date"
-                control={control}
-                render={({ field }) => (
-                  <FormControl isInvalid={!!errors.end_date} flex={1}>
-                    <FormLabel fontWeight="600">Data Final</FormLabel>
-                    <Input
-                      {...field}
-                      type="date"
-                      disabled={isSubmitting || isLoading}
-                    />
-                    <FormErrorMessage>
-                      {errors.end_date?.message}
-                    </FormErrorMessage>
-                  </FormControl>
-                )}
-              />
-            </HStack>
-
-            {/* Date Range Validation Message */}
-            {startDate && endDate && !isDateRangeValid && (
-              <Box
-                p={2}
-                bg="red.50"
-                borderRadius="md"
-                borderLeft="4px solid"
-                borderColor="red.500"
-              >
-                <Text fontSize="sm" color="red.700">
-                  Data final deve ser posterior à data inicial
-                </Text>
-              </Box>
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="blocks-modal-form">
+          {/* Room Selection */}
+          <div className="form-group">
+            <label htmlFor="room_id">Quarto</label>
+            <select
+              id="room_id"
+              {...register('room_id')}
+              disabled={isSubmitting || isLoading}
+              className={errors.room_id ? 'error' : ''}
+            >
+              <option value="">Selecione um quarto</option>
+              {rooms.map((room) => (
+                <option key={room.id} value={room.id}>
+                  {room.name}
+                </option>
+              ))}
+            </select>
+            {errors.room_id && (
+              <span className="error-message">{errors.room_id.message}</span>
             )}
+          </div>
 
-            {/* Recurrence */}
-            <Controller
-              name="recurrence"
-              control={control}
-              render={({ field }) => (
-                <FormControl>
-                  <FormLabel fontWeight="600">Recorrência</FormLabel>
-                  <Select {...field} disabled={isSubmitting || isLoading}>
-                    {Object.entries(BLOCK_RECURRENCE_LABELS).map(
-                      ([value, label]) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      )
-                    )}
-                  </Select>
-                  <Text fontSize="xs" color="gray.500" mt={1}>
-                    Semanal: repete todo terça (se iniciar terça), etc.
-                    <br />
-                    Mensal: repete no mesmo dia de cada mês
-                  </Text>
-                </FormControl>
+          {/* Block Type */}
+          <div className="form-group">
+            <label htmlFor="type">Tipo de Bloqueio</label>
+            <select
+              id="type"
+              {...register('type')}
+              disabled={isSubmitting || isLoading}
+            >
+              {Object.entries(BLOCK_TYPE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Date Range */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="start_date">Data Inicial</label>
+              <input
+                id="start_date"
+                type="date"
+                {...register('start_date')}
+                disabled={isSubmitting || isLoading}
+                className={errors.start_date ? 'error' : ''}
+              />
+              {errors.start_date && (
+                <span className="error-message">{errors.start_date.message}</span>
               )}
-            />
+            </div>
 
-            {/* Reason */}
-            <Controller
-              name="reason"
-              control={control}
-              render={({ field }) => (
-                <FormControl>
-                  <FormLabel fontWeight="600">Motivo (opcional)</FormLabel>
-                  <Textarea
-                    {...field}
-                    placeholder="Ex: Manutenção de tubulação, Limpeza profunda..."
-                    rows={3}
-                    disabled={isSubmitting || isLoading}
-                  />
-                </FormControl>
+            <div className="form-group">
+              <label htmlFor="end_date">Data Final</label>
+              <input
+                id="end_date"
+                type="date"
+                {...register('end_date')}
+                disabled={isSubmitting || isLoading}
+                className={errors.end_date ? 'error' : ''}
+              />
+              {errors.end_date && (
+                <span className="error-message">{errors.end_date.message}</span>
               )}
-            />
-          </VStack>
-        </ModalBody>
+            </div>
+          </div>
 
-        <ModalFooter>
-          <HStack spacing={3}>
-            <Button
-              variant="ghost"
+          {/* Date Range Validation Message */}
+          {startDate && endDate && !isDateRangeValid && (
+            <div className="validation-error">
+              <p>Data final deve ser posterior à data inicial</p>
+            </div>
+          )}
+
+          {/* Recurrence */}
+          <div className="form-group">
+            <label htmlFor="recurrence">Recorrência</label>
+            <select
+              id="recurrence"
+              {...register('recurrence')}
+              disabled={isSubmitting || isLoading}
+            >
+              {Object.entries(BLOCK_RECURRENCE_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            <small className="help-text">
+              Semanal: repete todo terça (se iniciar terça), etc.<br />
+              Mensal: repete no mesmo dia de cada mês
+            </small>
+          </div>
+
+          {/* Reason */}
+          <div className="form-group">
+            <label htmlFor="reason">Motivo (opcional)</label>
+            <textarea
+              id="reason"
+              {...register('reason')}
+              placeholder="Ex: Manutenção de tubulação, Limpeza profunda..."
+              rows={3}
+              disabled={isSubmitting || isLoading}
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="blocks-modal-footer">
+            <button
+              type="button"
+              className="button button-ghost"
               onClick={onClose}
               disabled={isSubmitting || isLoading}
             >
               Cancelar
-            </Button>
-            <Button
-              colorScheme="blue"
-              onClick={handleSubmit(handleFormSubmit)}
-              isLoading={isSubmitting || isLoading}
-              disabled={!isDateRangeValid}
+            </button>
+            <button
+              type="submit"
+              className="button button-primary"
+              disabled={!isDateRangeValid || isSubmitting || isLoading}
             >
-              {isEditing ? 'Atualizar' : 'Criar'}
-            </Button>
-          </HStack>
-        </ModalFooter>
-      </ModalContent>
+              {isSubmitting || isLoading ? (
+                <span>Processando...</span>
+              ) : isEditing ? (
+                'Atualizar'
+              ) : (
+                'Criar'
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
     </Modal>
   )
 }

@@ -1,23 +1,9 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Button,
-  HStack,
-  VStack,
-  Text,
-  Icon,
-  Spinner,
-} from '@chakra-ui/react'
 import { FiEdit2, FiTrash2, FiChevronUp, FiChevronDown } from 'react-icons/fi'
 import BlockStatusBadge from './BlockStatusBadge'
 import type { RoomBlock } from '@models/blocks'
 import { sortBlocksByDate, getBlockDuration } from '@models/blocks'
+import './BlocksList.css'
 
 interface BlocksListProps {
   blocks: RoomBlock[]
@@ -84,130 +70,132 @@ export const BlocksList: React.FC<BlocksListProps> = ({
 
   if (isLoading) {
     return (
-      <VStack justify="center" align="center" py={10}>
-        <Spinner size="lg" color="blue.500" />
-        <Text color="gray.500">Carregando bloqueios...</Text>
-      </VStack>
+      <div className="blocks-list-loading">
+        <div className="spinner"></div>
+        <span>Carregando bloqueios...</span>
+      </div>
     )
   }
 
   if (blocks.length === 0) {
     return (
-      <VStack justify="center" align="center" py={10}>
-        <Text fontSize="lg" color="gray.600" fontWeight="500">
-          Nenhum bloqueio encontrado
-        </Text>
-        <Text fontSize="sm" color="gray.500">
-          Crie um novo bloqueio para começar
-        </Text>
-      </VStack>
+      <div className="blocks-list-empty">
+        <h3>Nenhum bloqueio encontrado</h3>
+        <p>Crie um novo bloqueio para começar</p>
+      </div>
     )
   }
 
   return (
-    <Box overflowX="auto">
-      <Table variant="striped" colorScheme="gray" size="sm">
-        <Thead bg="gray.50">
-          <Tr>
-            <Th cursor="pointer" onClick={() => handleSort('date')}>
-              <HStack spacing={1}>
-                <Text>Data Inicial</Text>
+    <div className="blocks-list-container">
+      <table className="blocks-table">
+        <thead>
+          <tr>
+            <th 
+              className={`sortable ${sortBy === 'date' ? 'active' : ''}`}
+              onClick={() => handleSort('date')}
+            >
+              <span className="header-content">
+                Data Inicial
                 {sortBy === 'date' && (
-                  <Icon as={sortDirection === 'asc' ? FiChevronUp : FiChevronDown} />
+                  <span className="sort-icon">
+                    {sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />}
+                  </span>
                 )}
-              </HStack>
-            </Th>
-            <Th cursor="pointer" onClick={() => handleSort('date')}>
-              <HStack spacing={1}>
-                <Text>Data Final</Text>
-              </HStack>
-            </Th>
-            <Th cursor="pointer" onClick={() => handleSort('type')}>
-              <HStack spacing={1}>
-                <Text>Tipo</Text>
+              </span>
+            </th>
+            <th>
+              <span className="header-content">Data Final</span>
+            </th>
+            <th 
+              className={`sortable ${sortBy === 'type' ? 'active' : ''}`}
+              onClick={() => handleSort('type')}
+            >
+              <span className="header-content">
+                Tipo
                 {sortBy === 'type' && (
-                  <Icon as={sortDirection === 'asc' ? FiChevronUp : FiChevronDown} />
+                  <span className="sort-icon">
+                    {sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />}
+                  </span>
                 )}
-              </HStack>
-            </Th>
-            <Th cursor="pointer" onClick={() => handleSort('duration')}>
-              <HStack spacing={1}>
-                <Text>Dias</Text>
+              </span>
+            </th>
+            <th 
+              className={`sortable ${sortBy === 'duration' ? 'active' : ''}`}
+              onClick={() => handleSort('duration')}
+            >
+              <span className="header-content">
+                Dias
                 {sortBy === 'duration' && (
-                  <Icon as={sortDirection === 'asc' ? FiChevronUp : FiChevronDown} />
+                  <span className="sort-icon">
+                    {sortDirection === 'asc' ? <FiChevronUp /> : <FiChevronDown />}
+                  </span>
                 )}
-              </HStack>
-            </Th>
-            <Th>Motivo</Th>
-            <Th isNumeric>Ações</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
+              </span>
+            </th>
+            <th>Motivo</th>
+            <th className="actions-header">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
           {sortedBlocks.map((block) => (
-            <Tr
+            <tr
               key={block.id}
+              className={`blocks-row ${hoveredId === block.id ? 'hovered' : ''} ${onRowClick ? 'clickable' : ''}`}
               onMouseEnter={() => setHoveredId(block.id)}
               onMouseLeave={() => setHoveredId(null)}
               onClick={() => onRowClick?.(block)}
-              cursor={onRowClick ? 'pointer' : 'default'}
-              bg={hoveredId === block.id ? 'gray.50' : 'transparent'}
-              transition="background-color 0.2s"
-              _hover={onRowClick ? { bg: 'gray.100' } : {}}
             >
-              <Td fontFamily="mono" fontSize="sm">
-                {block.start_date}
-              </Td>
-              <Td fontFamily="mono" fontSize="sm">
-                {block.end_date}
-              </Td>
-              <Td>
+              <td className="date-cell">
+                <span className="mono">{block.start_date}</span>
+              </td>
+              <td className="date-cell">
+                <span className="mono">{block.end_date}</span>
+              </td>
+              <td>
                 <BlockStatusBadge block={block} size="sm" variant="subtle" />
-              </Td>
-              <Td isNumeric>
-                <Text fontWeight="500">{getBlockDuration(block)}</Text>
-              </Td>
-              <Td maxW="250px" isTruncated>
-                <Text fontSize="sm" color="gray.600">
-                  {block.reason || '—'}
-                </Text>
-              </Td>
-              <Td isNumeric>
-                <HStack spacing={2} justify="flex-end">
+              </td>
+              <td className="number-cell">
+                <strong>{getBlockDuration(block)}</strong>
+              </td>
+              <td className="reason-cell">
+                <span className="text-small">{block.reason || '—'}</span>
+              </td>
+              <td className="actions-cell">
+                <div className="action-buttons">
                   {onEdit && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      colorScheme="blue"
-                      leftIcon={<FiEdit2 />}
+                    <button
+                      className="button-small button-edit"
                       onClick={(e) => {
                         e.stopPropagation()
                         onEdit(block)
                       }}
+                      title="Editar bloqueio"
                     >
-                      Editar
-                    </Button>
+                      <FiEdit2 size={16} />
+                      <span>Editar</span>
+                    </button>
                   )}
                   {onDelete && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      colorScheme="red"
-                      leftIcon={<FiTrash2 />}
+                    <button
+                      className="button-small button-delete"
                       onClick={(e) => {
                         e.stopPropagation()
                         onDelete(block)
                       }}
+                      title="Deletar bloqueio"
                     >
-                      Deletar
-                    </Button>
+                      <FiTrash2 size={16} />
+                      <span>Deletar</span>
+                    </button>
                   )}
-                </HStack>
-              </Td>
-            </Tr>
+                </div>
+              </td>
+            </tr>
           ))}
-        </Tbody>
-      </Table>
-    </Box>
+        </tbody>
+      </table>
+    </div>
   )
 }
 
