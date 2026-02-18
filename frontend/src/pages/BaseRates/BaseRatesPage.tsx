@@ -8,7 +8,7 @@ import { decodeJwtPayload } from '@utils/jwt'
 import FormField from '@components/Shared/FormField/FormField'
 import CurrencyInput from '@components/Shared/CurrencyInput/CurrencyInput'
 import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
-import { propertySchema, type PropertyFormData } from '@models/schemas'
+import { propertySchema, baseRatesSchema, type BaseRatesFormData } from '@models/schemas'
 import * as propertiesService from '@services/properties'
 import type { Property } from '@models/property'
 
@@ -24,8 +24,8 @@ export default function BaseRatesPage() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<PropertyFormData>({
-    resolver: zodResolver(propertySchema),
+  } = useForm<BaseRatesFormData>({
+    resolver: zodResolver(baseRatesSchema),
   })
 
   // Carregar propriedade ativa (property_id do JWT)
@@ -59,7 +59,7 @@ export default function BaseRatesPage() {
     loadProperty()
   }, [token, reset])
 
-  async function handleSave(data: PropertyFormData) {
+  async function handleSave(data: BaseRatesFormData) {
     if (!property?.id) return
 
     try {

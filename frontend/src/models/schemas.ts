@@ -19,6 +19,20 @@ export const propertySchema = z.object({
 export type PropertyFormData = z.infer<typeof propertySchema>
 
 /* ------------------------------------------------------------------ */
+/*  Base Rates schema (for BaseRatesPage - only rate fields)           */
+/* ------------------------------------------------------------------ */
+
+export const baseRatesSchema = z.object({
+  child_factor: z.coerce.number().nullable().optional(),
+  base_one_adult: z.coerce.number().nullable().optional(),
+  base_two_adults: z.coerce.number().nullable().optional(),
+  additional_adult: z.coerce.number().nullable().optional(),
+  child_price: z.coerce.number().nullable().optional(),
+})
+
+export type BaseRatesFormData = z.infer<typeof baseRatesSchema>
+
+/* ------------------------------------------------------------------ */
 /*  Room schema                                                         */
 /* ------------------------------------------------------------------ */
 
