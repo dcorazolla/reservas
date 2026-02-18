@@ -17,14 +17,21 @@ export default function CalendarPage() {
   const { token } = useAuth()
   const [propertyId, setPropertyId] = useState<string | null>(null)
 
-  const [currentDate, setCurrentDate] = useState<Date>(() => startOfMonth(new Date()))
   const [days, setDays] = useState(21) // Default: 21 days for desktop
+  const [dateOffset, setDateOffset] = useState(0) // Offset in days from centered today
   const [rooms, setRooms] = useState<Room[]>([])
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
   const [selectedRoom, setSelectedRoom] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+
+  // Compute currentDate: center on today, minus half of days, plus offset
+  const currentDate = React.useMemo(() => {
+    const today = new Date()
+    const halfDays = Math.floor(days / 2)
+    return addDays(subDays(today, halfDays), dateOffset)
+  }, [days, dateOffset])
 
   // Determine responsive defaults based on viewport width
   useEffect(() => {
@@ -78,11 +85,15 @@ export default function CalendarPage() {
   }, [currentDate, days, token, propertyId])
 
   const handlePrevMonth = () => {
-    setCurrentDate(prev => subDays(prev, days))
+    setDateOffset(prev => prev - days)
   }
 
   const handleNextMonth = () => {
-    setCurrentDate(prev => addDays(prev, days))
+    setDateOffset(prev => prev + days)
+  }
+
+  const handleResetToday = () => {
+    setDateOffset(0)
   }
 
   const handleDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -157,21 +168,19 @@ export default function CalendarPage() {
       </div>
 
       <div className="calendar-controls">
-        <button onClick={handlePrevMonth} className="btn-nav" title={t('calendar.prev')}>
-          ← {t('calendar.prev')}
+        <button onClick={handlePrevMonth} className="btn-nav btn-nav-small" title={t('calendar.prev')}>
+          ←
+        </button>
+
+        <button onClick={handleResetToday} className="btn-nav btn-nav-small" title="Hoje">
+          Hoje
+        </button>
+
+        <button onClick={handleNextMonth} className="btn-nav btn-nav-small" title={t('calendar.next')}>
+          →
         </button>
 
         <div className="controls-group">
-          <div className="control-item">
-            <label htmlFor="current-date">{t('calendar.period')}</label>
-            <input
-              type="date"
-              id="current-date"
-              value={startDate}
-              onChange={(e) => setCurrentDate(parseISO(e.target.value))}
-            />
-          </div>
-
           <div className="control-item">
             <label htmlFor="days-count">{t('calendar.days')}</label>
             <input
@@ -185,13 +194,9 @@ export default function CalendarPage() {
           </div>
 
           <div className="period-label">
-            {monthYearLabel} ({startDate} a {endDate})
+            {monthYearLabel}
           </div>
         </div>
-
-        <button onClick={handleNextMonth} className="btn-nav" title={t('calendar.next')}>
-          {t('calendar.next')} →
-        </button>
       </div>
 
       <div className="calendar-grid-wrapper">
