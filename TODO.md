@@ -65,13 +65,11 @@
   - Include mandatory checklist: tests pass, types valid, reusables used, patterns followed
 
 ### 🔄 IN PROGRESS
-- [ ] Update root README.md to point to `.github/copilot-instructions.md` as instruction source
+- [ ] Create PR with description and checklist
 
 ### ⏳ PENDING (Awaiting user validation)
 - [ ] Local testing of all CRUD operations
-- [ ] Git commit of all frontend changes
-- [ ] Git push to feature branch
-- [ ] Create PR with description and checklist
+- [ ] Code review and testing in local environment
 
 ### 📋 Future Work
 - [ ] Add CurrencyInput to Room rates section
