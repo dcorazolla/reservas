@@ -84,9 +84,14 @@ class PropertyControllerTest extends TestCase
     {
         $p = new class extends Property {
             public $id = 'stub-conflict';
-            public function reservations()
+            public function rooms()
             {
-                return new class { public function exists() { return true; } };
+                return new class {
+                    public function whereHas($relation)
+                    {
+                        return new class { public function exists() { return true; } };
+                    }
+                };
             }
         };
 
@@ -99,9 +104,14 @@ class PropertyControllerTest extends TestCase
     {
         $p = new class extends Property {
             public $id = 'stub-delete';
-            public function reservations()
+            public function rooms()
             {
-                return new class { public function exists() { return false; } };
+                return new class {
+                    public function whereHas($relation)
+                    {
+                        return new class { public function exists() { return false; } };
+                    }
+                };
             }
             public function delete()
             {
