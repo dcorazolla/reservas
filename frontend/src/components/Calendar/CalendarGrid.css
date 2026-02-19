@@ -20,11 +20,12 @@
 }
 
 .calendar-table th {
-  padding: 8px 4px;
+  padding: 6px 2px;
   text-align: center;
   font-weight: 600;
   color: #333;
   border-right: 1px solid #e9ecef;
+  font-size: 12px;
 }
 
 .calendar-table th:last-child {
@@ -37,12 +38,13 @@
   position: sticky;
   left: 0;
   z-index: 3;
-  width: 120px;
-  min-width: 120px;
+  width: 100px;
+  min-width: 100px;
   text-align: left;
-  padding: 12px !important;
+  padding: 8px !important;
   font-weight: 600;
   border-right: 2px solid #dee2e6;
+  font-size: 12px;
 }
 
 thead .room-col {
@@ -53,27 +55,30 @@ thead .room-col {
 
 /* Day header */
 .day-header {
-  min-width: 80px;
+  min-width: 64px;
 }
 
 .day-header-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 1px;
+  padding: 4px 0;
 }
 
 .month-label {
-  font-size: 11px;
+  font-size: 9px;
   color: #666;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  line-height: 1;
 }
 
 .day-label {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #333;
+  line-height: 1;
 }
 
 /* Table body */
@@ -87,13 +92,14 @@ thead .room-col {
 
 /* Half cells (checkout/checkin) */
 .half-cell {
-  width: 40px;
-  height: 45px;
+  width: 32px;
+  height: 35px;
   border-right: 1px solid #e9ecef;
   cursor: pointer;
   position: relative;
   background-color: white;
   transition: background-color 0.2s;
+  padding: 2px;
 }
 
 .half-cell:hover {
