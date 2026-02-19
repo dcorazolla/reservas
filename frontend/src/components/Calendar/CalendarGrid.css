@@ -1,7 +1,7 @@
 /* Calendar Grid Styles */
 .calendar-wrapper {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: visible;
 }
 
 .calendar-table {

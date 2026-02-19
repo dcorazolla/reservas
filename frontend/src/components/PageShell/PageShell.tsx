@@ -14,11 +14,11 @@ export default function PageShell({ children }: Props) {
 
   return (
     <Box minH="100vh" pb="64px"> {/* reserve footer height */}
-      <Box position="sticky" top={0} zIndex={10}>
+      <Box position="fixed" top={0} left={0} right={0} zIndex={10}>
         <Header onOpenMenu={() => setDrawerOpen(true)} />
       </Box>
 
-      <Flex as="main" align="stretch">
+      <Flex as="main" align="stretch" mt="60px">
         <Box display={{ base: 'none', md: 'block' }} aria-hidden={false}>
           <Sidebar desktop />
         </Box>

@@ -2,9 +2,10 @@
 .calendar-page {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 120px);
+  height: auto;
   background: transparent;
   padding: 0;
+  overflow-x: auto;
 }
 
 .calendar-controls {
@@ -115,7 +116,8 @@
   background: white;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: auto;
+  overflow-x: visible;
+  overflow-y: visible;
   min-height: 0;
 }
 
