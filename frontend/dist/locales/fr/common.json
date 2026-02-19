@@ -1,10 +1,256 @@
 {
-  "title": "Réservations",
+  "common": {
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "create": "Créer",
+      "save": "Enregistrer",
+      "confirm": "Confirmer",
+      "update": "Mettre à jour",
+      "view": "Afficher",
+      "logout": "Déconnexion"
+    },
+    "status": {
+      "loading": "Chargement...",
+      "error": "Une erreur s'est produite",
+      "new": "Nouveau",
+      "no_data": "Aucune donnée disponible",
+      "error_required": "Champ obligatoire",
+      "error_invalid_email": "Adresse e-mail invalide",
+      "error_max": "Champ trop long",
+      "error_min_zero": "Doit être supérieur à zéro",
+      "error_max_100": "Ne peut pas être supérieur à 100",
+      "error_loading": "Erreur lors du chargement des données",
+      "error_saving": "Erreur lors de l'enregistrement des données",
+      "success": "Succès",
+      "welcome": "Bienvenue",
+      "coming_soon": "À venir"
+    },
+    "confirm": {
+      "delete_title": "Confirmation de suppression",
+      "delete_message_prefix": "Êtes-vous sûr de vouloir supprimer",
+      "delete_message_suffix": "Cette action ne peut pas être annulée.",
+      "delete_confirm": "Supprimer"
+    },
+    "pricing": {
+      "additional_adult": "Prix adulte supplémentaire",
+      "child_factor": "Facteur enfant",
+      "child_max_age": "Âge maximum (enfants)",
+      "child_price": "Prix enfant",
+      "base_one_adult": "Base 1 adulte",
+      "base_two_adults": "Base 2 adultes",
+      "tariff_base": "Tarif de base",
+      "five_adults": "Prix 5 adultes",
+      "four_adults": "Prix 4 adultes",
+      "hide_rates": "Masquer les tarifs",
+      "infant_max_age": "Âge max (bébés)",
+      "seven_adults": "Prix 7 adultes",
+      "show_rates": "Afficher les tarifs",
+      "six_adults": "Prix 6 adultes",
+      "three_adults": "Prix 3 adultes",
+      "price_n_people": "Prix pour {{count}} personne(s)"
+    }
+  },
+  "header": {
+    "open_menu": "Ouvrir le menu",
+    "subtitle": "gestion des réservations",
+    "user_menu_button": "Menu utilisateur",
+    "user_fallback": "Utilisateur",
+    "logout": "Se déconnecter"
+  },
+  "footer": {
+    "copy": "© 2026 Reservas. Tous droits réservés."
+  },
   "login": {
+    "change_language": "Changer de langue",
     "title": "Se connecter",
-    "email": "E-mail",
+    "subtitle": "Connectez-vous à votre compte pour continuer",
+    "email": "Email",
     "password": "Mot de passe",
     "submit": "Se connecter",
-    "error": "Échec de l'authentification"
+    "forgot": "Mot de passe oublié?",
+    "create_account": "Créer un compte",
+    "no_account": "Vous n'avez pas de compte?",
+    "remember_me": "Se souvenir de moi",
+    "social_google": "Se connecter avec Google",
+    "social_facebook": "Se connecter avec Facebook",
+    "social_google_notice": "Connexion Google non activée dans ce prototype",
+    "social_facebook_notice": "Connexion Facebook non activée dans ce prototype",
+    "or": "ou",
+    "email_placeholder": "vous@domaine.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "La fonctionnalité de connexion n'est pas implémentée dans ce prototype.",
+    "accessible_help": "Remplissez le formulaire pour vous connecter",
+    "email_error": "Fournissez un email valide",
+    "password_error": "Le mot de passe doit contenir au moins 6 caractères",
+    "error": "Erreur d'authentification"
+  },
+  "menu": {
+    "home": "Accueil",
+    "calendar": "Calendrier",
+    "reservations": "Réservations",
+    "navigation": "Navigation",
+    "open": "Ouvrir le menu",
+    "toggle": "Basculer le sous-menu",
+    "settings": {
+      "label": "Paramètres",
+      "properties": "Propriétés",
+      "roomCategories": "Catégories de chambres",
+      "rooms": "Chambres",
+      "users": "Utilisateurs",
+      "partners": "Partenaires",
+      "blocks": "Blocages",
+      "rates": {
+        "label": "Tarifs",
+        "base": "Tarif de base",
+        "room": "Tarif par chambre",
+        "period": "Tarif par période"
+      }
+    }
+  },
+  "properties": {
+    "page": {
+      "title": "Propriétés"
+    },
+    "form": {
+      "name": "Nom",
+      "timezone": "Fuseau horaire",
+      "new": "Nouvelle propriété",
+      "edit": "Modifier la propriété",
+      "base_rates_title": "Tarif de base"
+    }
+  },
+  "roomCategories": {
+    "page": {
+      "title": "Catégories de chambres"
+    },
+    "form": {
+      "name": "Nom",
+      "description": "Description",
+      "show_rates": "Afficher les tarifs",
+      "hide_rates": "Masquer les tarifs",
+      "new": "Nouvelle catégorie",
+      "edit": "Modifier la catégorie",
+      "rate_group_title": "Tarifs de catégorie"
+    }
+  },
+  "rooms": {
+    "page": {
+      "title": "Chambres"
+    },
+    "form": {
+      "name": "Nom",
+      "category": "Catégorie",
+      "category_placeholder": "Sélectionnez une catégorie",
+      "beds": "Lits",
+      "capacity": "Capacité",
+      "notes": "Notes",
+      "number": "Numéro",
+      "create": "Créer une chambre",
+      "new": "Nouvelle chambre",
+      "edit": "Modifier la chambre"
+    },
+    "errors": {
+      "load": "Échec du chargement des chambres",
+      "save": "Échec de l'enregistrement de la chambre"
+    }
+  },
+  "baseRates": {
+    "form": {
+      "saved_success": "Tarifs de base enregistrés avec succès!"
+    }
+  },
+  "blocks": {
+    "page": {
+      "title": "Blocages de Chambres"
+    },
+    "form": {
+      "new": "Nouveau Blocage",
+      "edit": "Modifier le Blocage",
+      "room": "Chambre",
+      "type": "Type de Blocage",
+      "start_date": "Date de Début",
+      "end_date": "Date de Fin",
+      "reason": "Raison",
+      "recurrence": "Récurrence"
+    },
+    "type": {
+      "maintenance": "Maintenance",
+      "cleaning": "Nettoyage",
+      "private": "Privé",
+      "custom": "Personnalisé"
+    }
+  },
+  "calendar": {
+    "title": "Calendrier des Réservations",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "period": "Période",
+    "days": "Jours",
+    "empty": "Aucune réservation trouvée pour cette période",
+    "error_loading": "Erreur lors du chargement du calendrier"
+  },
+  "reservations": {
+    "title": "Réservations",
+    "new": "Nouvelle Réservation",
+    "edit": "Modifier la Réservation",
+    "form": {
+      "guest_name": "Nom de l'Hôte",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "room": "Chambre",
+      "start_date": "Arrivée",
+      "end_date": "Départ",
+      "adults_count": "Adultes",
+      "children_count": "Enfants",
+      "infants_count": "Bébés",
+      "status": "Statut",
+      "partner": "Partenaire",
+      "notes": "Remarques",
+      "price_override": "Prix Manuel",
+      "total_value": "Valeur Totale"
+    },
+    "list": {
+      "room": "Chambre",
+      "guest": "Hôte",
+      "checkin": "Arrivée",
+      "checkout": "Départ",
+      "status": "Statut",
+      "contact": "Contact",
+      "partner": "Partenaire",
+      "value": "Valeur",
+      "actions": "Actions",
+      "period": "Période",
+      "search_guest": "Rechercher par nom",
+      "search_contact": "Rechercher par contact",
+      "filter_status": "Filtrer par statut",
+      "filter_partner": "Filtrer par partenaire"
+    },
+    "status": {
+      "pre-reserva": "Pré-réservation",
+      "reservado": "Réservé",
+      "confirmado": "Confirmé",
+      "checked-in": "Arrivée confirmée",
+      "checked-out": "Départ confirmé",
+      "no-show": "Absent",
+      "cancelado": "Annulé",
+      "blocked": "Bloqué"
+    },
+    "actions": {
+      "checkin": "Arrivée",
+      "checkout": "Départ",
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "finalize": "Finaliser",
+      "delete": "Supprimer"
+    }
+  },
+  "home": {
+    "title": "Tableau de bord",
+    "description": "Gérez vos propriétés, réservations et disponibilité",
+    "calendar_description": "Visualisez et gérez vos réservations dans un calendrier interactif",
+    "reservations_description": "Gérez vos réservations avec des filtres et des rapports",
+    "coming_soon": "À venir"
   }
 }

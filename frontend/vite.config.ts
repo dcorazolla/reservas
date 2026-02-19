@@ -15,4 +15,31 @@ export default defineConfig({
       { find: '@models', replacement: path.resolve(__dirname, 'src/models') },
     ],
   },
+  server: {
+    // Run Vite as a normal dev server (not middleware mode) so the CLI
+    // starts an HTTP server. Middleware mode is used when embedding Vite
+    // into another server and causes the CLI to error with
+    // "HTTP server not available" when started directly.
+    middlewareMode: false,
+    // Use a non-default port to avoid collisions with lingering processes
+    // on machines where 5173 may already be used.
+    port: 5173,
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost',
+      port: 5173,
+    },
+  },
+  build: {
+    minify: 'esbuild',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['@chakra-ui/react', 'react-icons'],
+        },
+      },
+    },
+  },
 })

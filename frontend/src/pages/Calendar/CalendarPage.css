@@ -5,7 +5,9 @@
   height: auto;
   background: transparent;
   padding: 0;
-  overflow-x: auto;
+  /* allow page/document vertical scroll so sticky headers work */
+  overflow-x: visible;
+  overflow-y: visible;
 }
 
 .calendar-controls {
@@ -116,8 +118,11 @@
   background: white;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow-x: visible;
-  overflow-y: visible;
+  /* allow horizontal scrolling of the calendar only (keep vertical scroll on document)
+     This prevents the calendar container from becoming the scroll container and breaking
+     position: sticky on the header cells. */
+  overflow-x: auto !important;
+  overflow-y: visible !important;
   min-height: 0;
 }
 

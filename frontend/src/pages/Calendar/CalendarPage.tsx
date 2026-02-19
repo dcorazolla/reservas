@@ -85,11 +85,13 @@ export default function CalendarPage() {
   }, [currentDate, days, token, propertyId])
 
   const handlePrevMonth = () => {
-    setDateOffset(prev => prev - days)
+    const step = Math.max(1, Math.floor(days / 2))
+    setDateOffset(prev => prev - step)
   }
 
   const handleNextMonth = () => {
-    setDateOffset(prev => prev + days)
+    const step = Math.max(1, Math.floor(days / 2))
+    setDateOffset(prev => prev + step)
   }
 
   const handleResetToday = () => {
@@ -99,7 +101,7 @@ export default function CalendarPage() {
   const handleDaysChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value)
     const min = 5
-    const max = 35
+    const max = 60
 
     if (value >= min && value <= max) {
       setDays(value)
@@ -156,7 +158,7 @@ export default function CalendarPage() {
   const endDate = format(addDays(currentDate, days - 1), 'yyyy-MM-dd')
   const monthYearLabel = format(currentDate, 'MMMM yyyy', { locale: ptBR })
   const minDays = 5
-  const maxDays = 35
+  const maxDays = 60
 
   return (
     <div className="calendar-page">

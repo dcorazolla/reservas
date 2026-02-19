@@ -235,7 +235,7 @@ export default function Sidebar({ desktop, isOpen, onOpen, onClose, expandAll = 
             right={0}
             bottom={0}
             bg="blackAlpha.200"
-            zIndex={59}
+            zIndex={1089}
             pointerEvents="none"
           />
         )}
@@ -250,7 +250,7 @@ export default function Sidebar({ desktop, isOpen, onOpen, onClose, expandAll = 
           left={0}
           top={`${topOffset}px`}
           height={headerHeight ? `calc(100vh - ${topOffset}px)` : '100vh'}
-          zIndex={60}
+          zIndex={1090}
           bg="gray.100"
           boxShadow={compact ? 'sm' : 'lg'}
           borderRight={compact ? '1px' : undefined}
