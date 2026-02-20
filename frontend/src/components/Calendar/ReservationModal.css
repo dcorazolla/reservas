@@ -1,48 +1,39 @@
 /* ============================================================================
    RESERVATION MODAL - Component Styling
    
-   All inline styles extracted from ReservationModal.tsx component.
-   Uses CSS variables from base.css for consistency.
+   Consolidated to use component-base patterns (modal-*, badge-*).
+   Only component-specific styling remains.
    ============================================================================ */
 
-/* ========== MODAL CONTENT WRAPPER ========== */
+/* ========== CONTENT WRAPPER ========== */
 
 .reservation-modal-content {
-  padding: var(--spacing-xl);
   max-width: 800px;
 }
 
-/* ========== MODAL HEADER SECTION ========== */
+.reservation-modal-content.modal-body {
+  padding: var(--spacing-xl);
+}
+
+/* ========== HEADER SECTION - Uses .modal-header base ========== */
 
 .reservation-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: var(--border-width) solid var(--color-border);
   gap: var(--spacing-2xl);
 }
 
 .reservation-modal-header__title-section {
-  display: flex;
-  align-items: center;
   gap: var(--spacing-lg);
 }
 
 .reservation-modal-header__actions {
-  display: flex;
   gap: var(--spacing-sm);
   flex-shrink: 0;
 }
 
-/* ========== STATUS BADGE ========== */
+/* ========== STATUS BADGES - Uses .badge base pattern ========== */
 
 .status-badge {
-  display: inline-flex;
-  align-items: center;
   gap: 6px;
-  font-weight: 600;
   font-size: 12px;
   padding: 0;
   background: none;
@@ -115,23 +106,20 @@
   background-color: #991b1b;
 }
 
-/* ========== FORM GRIDS ========== */
+
+/* ========== FORM GRIDS - Uses utilities.css (grid-2col, grid-3col) ========== */
 
 .reservation-modal-grid-3col {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--spacing-lg);
+  /* Inherit from utilities.css */
   margin-bottom: var(--spacing-lg);
 }
 
 .reservation-modal-grid-2col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-lg);
+  /* Inherit from utilities.css */
   margin-bottom: var(--spacing-lg);
 }
 
-/* ========== FORM FIELDS ========== */
+/* ========== FORM FIELDS - Uses .form-control base ========== */
 
 .reservation-modal-textarea {
   min-height: 80px;
@@ -139,7 +127,7 @@
   resize: vertical;
 }
 
-/* ========== PRICE AND VALUES SECTION ========== */
+/* ========== PRICE SECTION - Uses .card base pattern ========== */
 
 .reservation-modal-values-section {
   background-color: var(--color-info-light);
@@ -194,41 +182,29 @@
   color: var(--color-info);
 }
 
-/* ========== MINIBAR SECTION ========== */
 
-.reservation-modal-minibar-section {
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-lg);
-  border-bottom: var(--border-width) solid var(--color-border);
+/* ========== MODAL SECTION - Uses .section base ========== */
+
+.reservation-modal-section {
+  margin-bottom: var(--spacing-lg);
 }
 
-.reservation-modal-minibar-toggle {
-  display: flex;
-  gap: var(--spacing-md);
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-base);
+.reservation-modal-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
 }
 
-.reservation-modal-minibar-toggle:hover {
-  background-color: var(--color-bg-hover);
-}
-
-/* ========== BUTTONS AND ACTIONS ========== */
+/* ========== BUTTONS AND ACTIONS - Uses .action-group base ========== */
 
 .reservation-modal-button-group {
-  display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
+  /* Inherit from .action-group in components-base.css */
   margin-top: var(--spacing-xl);
 }
 
 .reservation-modal-action-buttons {
-  display: flex;
-  gap: var(--spacing-sm);
+  /* Inherit from .action-group variant */
   margin-left: auto;
 }
 
@@ -244,15 +220,12 @@
   flex-shrink: 0;
 }
 
-/* ========== CONFIRMATION DIALOGS ========== */
+/* ========== CONFIRMATION DIALOGS - Uses .modal-box base ========== */
 
-/* Dialog content wrapper */
 .confirm-dialog-content {
-  padding: var(--spacing-xl);
   max-width: 500px;
 }
 
-/* Dialog actions */
 .confirm-dialog-actions {
   display: flex;
   gap: var(--spacing-md);
@@ -261,7 +234,6 @@
 
 /* Guarantee type dialog */
 .confirm-dialog-guarantee {
-  padding: var(--spacing-xl);
   max-width: 500px;
 }
 
@@ -309,7 +281,6 @@
 
 /* Cancellation dialog */
 .confirm-dialog-cancellation {
-  padding: var(--spacing-xl);
   max-width: 500px;
 }
 
@@ -336,60 +307,6 @@
   justify-content: flex-end;
 }
 
-/* ========== LOADING STATE ========== */
-
-.reservation-modal-loading {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* ========== HELPER TEXT UTILITIES ========== */
-
-.reservation-modal-text-muted {
-  color: var(--color-text-tertiary);
-}
-
-.reservation-modal-text-secondary {
-  color: var(--color-text-secondary);
-}
-
-.reservation-modal-text-info {
-  color: var(--color-info);
-  font-weight: var(--font-weight-semibold);
-}
-
-/* ========== SECTIONS ========== */
-
-.reservation-modal-section {
-  margin-bottom: var(--spacing-lg);
-}
-
-.reservation-modal-section-title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-md);
-}
-
-/* ========== FLEX UTILITIES FOR MODAL ========== */
-
-.reservation-modal-flex-row {
-  display: flex;
-  gap: var(--spacing-md);
-  align-items: center;
-}
-
-.reservation-modal-flex-row.space-between {
-  justify-content: space-between;
-}
-
-.reservation-modal-flex-row.center {
-  justify-content: center;
-}
-
-.reservation-modal-flex-row.end {
-  justify-content: flex-end;
-}
 
 /* ========== RESPONSIVE ========== */
 

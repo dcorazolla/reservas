@@ -1,0 +1,893 @@
+{
+  "analysisDate": "2026-02-19",
+  "project": "Reservas - Frontend",
+  "projectPath": "/home/diogo/projects/reservas/frontend",
+  "frontendVersion": "0.3.0",
+
+  "1_directoryStructure": {
+    "rootDirs": [
+      {
+        "path": "src/",
+        "subdirs": [
+          "components/ - Reusable UI components",
+          "pages/ - Page-level components (CRUD pages, Calendar, Home, Login)",
+          "services/ - API service layer (CRUD factories, calcs, auth)",
+          "models/ - TypeScript types, interfaces, Zod schemas",
+          "styles/ - Global CSS (forms.css, shared patterns)",
+          "contexts/ - React Context (Auth, i18n)",
+          "utils/ - Utility functions",
+          "design-system/ - Chakra theme/provider setup"
+        ]
+      },
+      {
+        "path": "public/",
+        "description": "Static assets, locales (pt-BR, en, es, fr), favicon"
+      },
+      {
+        "path": "test/",
+        "description": "Test setup, mocks, test utilities"
+      }
+    ],
+    "srcSubdirectories": {
+      "components": {
+        "purpose": "Reusable React components",
+        "structure": {
+          "Calendar": "Calendar grid, reservation modal, minibar panel",
+          "Shared": "Generic components (Modal, FormField, DataList, CurrencyInput, Message, Confirm, Skeleton)",
+          "Layout": "Header, Sidebar, PageShell, Footer",
+          "Rooms": "EditRoomModal component",
+          "RoomCategories": "EditRoomCategoryModal component",
+          "Blocks": "EditBlockModal component",
+          "Partners": "Edit partners modal",
+          "Properties": "Edit properties modal, ConfirmDeleteModal",
+          "DateTimeClock": "Clock display component (Chakra-based)",
+          "LanguageSelector": "Language switcher",
+          "PeriodoPicker": "Period selection picker"
+        }
+      },
+      "pages": {
+        "purpose": "Full-page components (routes)",
+        "structure": {
+          "Calendar": "CalendarPage - main calendar with grid and minibar",
+          "Home": "Landing/dashboard page",
+          "LoginPage": "Authentication login form",
+          "Rooms": "RoomsPage - CRUD list for rooms",
+          "Properties": "PropertiesPage - CRUD list for properties",
+          "RoomCategories": "RoomCategoriesPage - CRUD list for categories",
+          "Partners": "PartnersPage - CRUD list for partners",
+          "Blocks": "BlocksPage - CRUD list for room blocks",
+          "BaseRates": "BaseRatesPage - CRUD for base rates",
+          "Settings": "Settings page (TODO/placeholder)"
+        }
+      },
+      "services": {
+        "purpose": "API communication layer",
+        "pattern": "Factory-based CRUD services: createCrudService<T,P>(), createNestedCrudService<T,P>(), createScopedCrudService<T,P>()",
+        "examples": [
+          "crudService.ts - Generic CRUD factory",
+          "rooms.ts - Room CRUD service",
+          "roomCategories.ts - Room category CRUD",
+          "reservations.ts - Reservation CRUD with status transitions, price calculation",
+          "minibar.ts - Minibar products CRUD",
+          "auth.ts - Authentication (login, logout, refresh)",
+          "calendar.ts - Calendar helper functions (date ranges, availability)"
+        ]
+      },
+      "models": {
+        "purpose": "TypeScript types and validation schemas",
+        "files": [
+          "room.ts - Room type, Room[], RoomInput",
+          "reservation.ts - Reservation, ReservationStatus, ReservationInput, ReservationStatusTransition",
+          "blocks.ts - RoomBlock, BlockFormData",
+          "minibar.ts - MinibarProduct, MinibarConsumption types",
+          "schemas.ts - Zod schemas for all forms (roomSchema, reservationSchema, blockSchema, etc.)",
+          "partner.ts, property.ts, roomCategory.ts - Entity types"
+        ]
+      }
+    }
+  },
+
+  "2_componentsAndPages": {
+    "totalComponentFiles": 47,
+    "sharedComponents": {
+      "Modal": {
+        "path": "components/Shared/Modal/Modal.tsx",
+        "purpose": "Generic modal wrapper with backdrop, header, close button, body",
+        "sizes": ["sm (420px)", "md (640px)", "lg (920px)", "full"],
+        "css": "modal.css (2.1 KB, minified)",
+        "pattern": "Used by all CRUD modals (EditRoomModal, EditBlockModal, etc.)",
+        "props": {
+          "isOpen": "boolean",
+          "onClose": "() => void",
+          "title": "ReactNode (optional)",
+          "children": "ReactNode",
+          "size": "sm | md | lg | full (default: md)"
+        }
+      },
+      "FormField": {
+        "path": "components/Shared/FormField/FormField.tsx",
+        "purpose": "Consistent form field wrapper (label + input + error message)",
+        "css": "Paired with forms.css .form-field class",
+        "pattern": "Used in all forms via react-hook-form + Zod",
+        "props": {
+          "label": "string",
+          "name": "string (field name for error lookup)",
+          "errors": "FieldErrors (from react-hook-form)",
+          "className": "string (optional)",
+          "children": "ReactNode (input/select/textarea)"
+        }
+      },
+      "DataList": {
+        "path": "components/Shared/List/DataList.tsx",
+        "purpose": "Generic list component with uniform gap/spacing",
+        "pattern": "Used in all CRUD pages for entity rows",
+        "props": {
+          "items": "T[]",
+          "renderItem": "(item: T) => ReactNode",
+          "className": "string (optional)"
+        },
+        "css": "data-list.css - flex column, gap: 8px, list-style: none"
+      },
+      "Message": {
+        "path": "components/Shared/Message/Message.tsx",
+        "purpose": "Toast-like notification (success/error)",
+        "props": {
+          "type": "success | error",
+          "message": "string",
+          "onClose": "() => void",
+          "autoClose": "number (ms, default: 5000)"
+        }
+      },
+      "CurrencyInput": {
+        "path": "components/Shared/CurrencyInput/CurrencyInput.tsx",
+        "purpose": "Currency input using NumericFormat with react-hook-form",
+        "pattern": "Used in rate fields (price_per_day) and price inputs",
+        "props": {
+          "name": "field name",
+          "control": "react-hook-form control",
+          "prefix": "currency symbol (default: '')",
+          "decimalScale": "2",
+          "thousandSeparator": "'.'",
+          "decimalSeparator": "','"
+        }
+      },
+      "SkeletonList": {
+        "path": "components/Shared/Skeleton/SkeletonList.tsx",
+        "purpose": "Pure-CSS skeleton loader for lists",
+        "props": {
+          "rows": "number (default: 3)"
+        }
+      },
+      "SkeletonFields": {
+        "path": "components/Shared/Skeleton/SkeletonFields.tsx",
+        "purpose": "Pure-CSS skeleton loader for form fields",
+        "props": {
+          "rows": "number"
+        }
+      },
+      "ConfirmModal": {
+        "path": "components/Shared/Confirm/ConfirmModal.tsx",
+        "purpose": "Generic confirmation dialog (delete, action confirm)",
+        "pattern": "Used in CRUD pages for delete confirmation"
+      },
+      "RatesField": {
+        "path": "components/Shared/RatesField/RatesField.tsx",
+        "purpose": "Nested rate input component for room tariffs",
+        "pattern": "Used in EditRoomModal for people_count-based rates"
+      }
+    },
+    "crudModals": {
+      "EditRoomModal": {
+        "path": "components/Rooms/EditRoomModal.tsx",
+        "size": "lg (920px)",
+        "fields": [
+          "room_category_id (select - required)",
+          "name (text - required)",
+          "number (text - required)",
+          "beds (number - required)",
+          "capacity (number - required)",
+          "notes (textarea - optional)"
+        ],
+        "nestedFeature": "Rates section (collapsible) - people_count → price_per_day",
+        "pattern": "Uses react-hook-form + Zod validation"
+      },
+      "EditBlockModal": {
+        "path": "components/Blocks/EditBlockModal.tsx",
+        "size": "md (640px)",
+        "fields": [
+          "room_id (select - required)",
+          "start_date (date - required)",
+          "end_date (date - required)",
+          "type (select: maintenance|cleaning|private|custom - required)",
+          "reason (text - optional)",
+          "recurrence (select: none|daily|weekly|monthly)"
+        ],
+        "pattern": "2-column grid for dates (1fr 1fr, gap: 16px)"
+      },
+      "EditRoomCategoryModal": {
+        "path": "components/RoomCategories/EditRoomCategoryModal.tsx",
+        "pattern": "Similar to room modal with category-specific fields"
+      },
+      "EditPropertyModal": {
+        "path": "components/Properties/EditPropertyModal.tsx",
+        "pattern": "Multi-section form with property details"
+      },
+      "ConfirmDeleteModal": {
+        "path": "components/Properties/ConfirmDeleteModal.tsx",
+        "purpose": "Generic delete confirmation modal"
+      }
+    },
+    "crudPages": {
+      "RoomsPage": {
+        "path": "pages/Rooms/RoomsPage.tsx",
+        "structure": "Header + Search/Filter + DataList + EditRoomModal",
+        "testFiles": ["RoomsPage.flow.test.tsx", "RoomsPage.extended.test.tsx"]
+      },
+      "PropertiesPage": {
+        "path": "pages/Properties/PropertiesPage.tsx",
+        "structure": "Header + DataList + EditPropertyModal",
+        "testFiles": ["PropertiesPage.flow.test.tsx", "PropertiesPage.extended.test.tsx", "PropertiesPage.test.tsx"]
+      },
+      "RoomCategoriesPage": {
+        "path": "pages/RoomCategories/RoomCategoriesPage.tsx",
+        "structure": "Header + DataList + EditRoomCategoryModal"
+      },
+      "PartnersPage": {
+        "path": "pages/Partners/PartnersPage.tsx",
+        "structure": "Header + DataList + EditPartnerModal",
+        "testFiles": ["PartnersPage.flow.test.tsx"]
+      },
+      "BlocksPage": {
+        "path": "pages/Blocks/BlocksPage.tsx",
+        "structure": "Calendar view + Block management"
+      },
+      "BaseRatesPage": {
+        "path": "pages/BaseRates/BaseRatesPage.tsx",
+        "structure": "Rate configuration page"
+      }
+    },
+    "specialPages": {
+      "CalendarPage": {
+        "path": "pages/Calendar/CalendarPage.tsx",
+        "components": [
+          "CalendarGrid - main calendar grid (sticky headers, horizontal scroll)",
+          "ReservationModal - reservation CRUD with status transitions",
+          "MinibarPanel - minibar consumption tracking"
+        ],
+        "features": [
+          "Floating sticky headers (z-index management)",
+          "Floating room column on left",
+          "Horizontal scroll for dates",
+          "Color-coded reservation status",
+          "Real-time price calculation",
+          "Status transition buttons (Confirm, Check-in, Check-out, Cancel)",
+          "Minibar item consumption tracker"
+        ]
+      },
+      "LoginPage": {
+        "path": "pages/LoginPage/LoginPage.tsx",
+        "features": [
+          "Email + Password input",
+          "Chakra UI form components",
+          "Remember me checkbox",
+          "i18n support (4 languages)",
+          "Error/success notifications"
+        ]
+      },
+      "Home": {
+        "path": "pages/Home.tsx",
+        "description": "Dashboard with cards linking to main features"
+      }
+    }
+  },
+
+  "3_cssFiles": {
+    "totalCSSFiles": 13,
+    "bySize": [
+      {
+        "file": "CalendarGrid.css",
+        "path": "components/Calendar/CalendarGrid.css",
+        "size": "8.2 KB",
+        "purpose": "Calendar grid styling (sticky headers, rows, cells, status colors)",
+        "keyClasses": [
+          ".calendar-table - main table",
+          ".floating-thead - sticky header clone",
+          ".floating-roomcol - sticky room column",
+          ".room-col - left sticky column",
+          ".cell-reserved, .cell-confirmed, .cell-checkin, .cell-checkout - status colors",
+          ".reservation-event - event cell styling"
+        ]
+      },
+      {
+        "file": "MinibarPanel.css",
+        "path": "components/Calendar/MinibarPanel.css",
+        "size": "3.1 KB",
+        "purpose": "Minibar modal and consumption tracker styling"
+      },
+      {
+        "file": "modal.css",
+        "path": "components/Shared/Modal/modal.css",
+        "size": "2.1 KB (minified 1 line)",
+        "purpose": "Generic modal backdrop, panel, header, body"
+      },
+      {
+        "file": "CalendarPage.css",
+        "path": "pages/Calendar/CalendarPage.css",
+        "size": "2.8 KB",
+        "purpose": "Calendar page layout and top controls"
+      },
+      {
+        "file": "login-page.css",
+        "path": "pages/LoginPage/login-page.css",
+        "size": "3.6 KB",
+        "purpose": "Login form styling (Chakra overrides)"
+      },
+      {
+        "file": "forms.css",
+        "path": "styles/forms.css",
+        "size": "3.4 KB",
+        "purpose": "Global form styles (.form-field, .form-grid, .modal-actions, .btn)",
+        "keyClasses": [
+          ".form-grid - grid: 2 columns, gap: 12px",
+          ".form-field - flex column, label + input + error",
+          ".field-error - red text, font-size: 0.85rem",
+          ".modal-actions - flex end, gap: 8px"
+        ]
+      },
+      {
+        "file": "Home.css",
+        "path": "pages/Home.css",
+        "size": "1.1 KB"
+      },
+      {
+        "file": "ReservationModal.css",
+        "path": "components/Calendar/ReservationModal.css",
+        "size": "1.3 KB"
+      },
+      {
+        "file": "data-list.css",
+        "path": "components/Shared/List/data-list.css",
+        "size": "354 B",
+        "purpose": "Flex column list with 8px gap"
+      },
+      {
+        "file": "message.css",
+        "path": "components/Shared/Message/message.css",
+        "size": "200 B",
+        "purpose": "Slide-in animation for notifications"
+      },
+      {
+        "file": "confirm-modal.css",
+        "path": "components/Shared/Confirm/confirm-modal.css",
+        "size": "200 B"
+      },
+      {
+        "file": "header.css",
+        "path": "components/Layout/header.css",
+        "size": "101 B"
+      },
+      {
+        "file": "language-selector.css",
+        "path": "components/LanguageSelector/language-selector.css",
+        "size": "123 B"
+      }
+    ]
+  },
+
+  "4_inlineStyles": {
+    "totalMatches": 100,
+    "topFiles": [
+      {
+        "file": "MinibarPanel.tsx",
+        "matches": 35,
+        "examples": [
+          "display: 'flex', gap: '8px', alignItems: 'center'",
+          "backgroundColor: '#f5f5f5', border: '1px solid #ccc'",
+          "backgroundColor: '#3182CE' (primary blue)",
+          "padding: '4px 8px', '6px 8px', '8px 16px'"
+        ],
+        "note": "Significant inline styling - could be moved to CSS classes"
+      },
+      {
+        "file": "ReservationModal.tsx",
+        "matches": 25,
+        "examples": [
+          "backgroundColor: guaranteeInput === 'card' ? '#3b82f6' : '#f0f0f0'",
+          "display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px'",
+          "marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb'"
+        ]
+      },
+      {
+        "file": "@BKP/components/Modal/Modal.tsx",
+        "matches": 15,
+        "note": "Backup file, many inline styles that should be in CSS"
+      },
+      {
+        "file": "EditBlockModal.tsx",
+        "matches": 1,
+        "example": "display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' (date range grid)"
+      }
+    ]
+  },
+
+  "5_colorsUsed": {
+    "totalUniqueColors": 35,
+    "hexColors": [
+      "#3182ce - primary blue (light)",
+      "#3182CE - primary blue (uppercase variant)",
+      "#3b82f6 - primary blue (Tailwind blue-500)",
+      "#1e40af - primary blue dark (hover)",
+      "#2563eb - primary blue medium",
+      "#0284c7 - cyan-600",
+      "#10b981 - success green",
+      "#034857 - success green dark",
+      "#f97316 - orange-500",
+      "#ea580c - orange dark",
+      "#991b1b - error red dark",
+      "#ef4444 - error red",
+      "#f59e0b - warning amber",
+      "#fcd34d - warning yellow",
+      "#a78bfa - purple-400 (event color)",
+      "#fb923c - orange-400 (event color)",
+      "#64748b - slate-600",
+      "#475569 - slate dark",
+      "#1f2937 - gray-800 (text primary)",
+      "#111827 - gray-900 (text very dark)",
+      "#374151 - gray-700",
+      "#6b7280 - gray-500 (text secondary)",
+      "#9ca3af - gray-400",
+      "#d1d5db - gray-300",
+      "#e5e7eb - gray-200 (borders)",
+      "#e9ecef - border light",
+      "#f3f4f6 - gray-100 (bg light)",
+      "#f8f9fa - bg very light (header, footer)",
+      "#fafafa - bg minimal",
+      "#f9fafb - bg alternating",
+      "#ffffff - white",
+      "#fff - white short",
+      "#f0f7ff - blue-50 (hover state)",
+      "#f0f0f0 - gray neutral",
+      "#fee - error bg light (#ffeeee)",
+      "#c33 - error text (#cc3333)",
+      "#ccc - border gray",
+      "#666 - text medium gray",
+      "#333 - text dark gray"
+    ],
+    "colorPalette": {
+      "primary": {
+        "light": "#3182ce",
+        "medium": "#2563eb",
+        "dark": "#1e40af",
+        "tailwind": "#3b82f6"
+      },
+      "secondary": {
+        "cyan": "#0284c7"
+      },
+      "success": {
+        "light": "#10b981",
+        "dark": "#047857"
+      },
+      "error": {
+        "light": "#ef4444",
+        "dark": "#991b1b"
+      },
+      "warning": {
+        "amber": "#f59e0b",
+        "yellow": "#fcd34d"
+      },
+      "neutral": {
+        "900": "#111827",
+        "800": "#1f2937",
+        "700": "#374151",
+        "600": "#6b7280",
+        "500": "#9ca3af",
+        "400": "#d1d5db",
+        "300": "#e5e7eb",
+        "200": "#f3f4f6",
+        "100": "#f8f9fa"
+      },
+      "accents": {
+        "purple": "#a78bfa",
+        "orange": "#fb923c",
+        "slate": "#64748b"
+      }
+    },
+    "rgbColors": [
+      "rgba(0,0,0,0.4) - modal backdrop 40%",
+      "rgba(0,0,0,0.3) - overlay 30%",
+      "rgba(0,0,0,0.5) - overlay 50%",
+      "rgba(0,0,0,0.1) - shadow 10%",
+      "rgba(0,0,0,0.15) - shadow 15%",
+      "rgba(0,0,0,0.2) - shadow 20%",
+      "rgba(0,0,0,0.12) - shadow 12%",
+      "rgba(0,0,0,0.08) - border 8%",
+      "rgba(0,0,0,0.04) - border 4%",
+      "rgba(49,130,206,0.15) - primary blue shadow"
+    ]
+  },
+
+  "6_fonts": {
+    "fontSizes": {
+      "base": ["12px (xs - labels, small text)", "13px (sm - form text)", "14px (md - body, headers)", "16px (lg - large headers)", "20px (xl - extra large)"],
+      "heading": ["24px (h1 - page title)", "20px (h2/h3 - section title)", "16px (h4 - modal header)", "14px (label - form label)"],
+      "special": ["0.85rem (error messages)", "0.9rem (login form)", "0.95rem (login form)", "1.05rem (modal title)"],
+      "chakra": ["base: xs|sm, md: sm|md (responsive)"]
+    },
+    "fontWeights": {
+      "400": "normal (body text)",
+      "500": "medium (not commonly used)",
+      "600": "semibold (headers, labels, strong text)",
+      "700": "bold (page titles, card headers)"
+    },
+    "fontFamilies": {
+      "system": "font: inherit (uses HTML/body font)",
+      "monospace": "fontFamily: mono (SKU display)",
+      "chakra": "var(--chakra-fonts-body, system-ui)"
+    }
+  },
+
+  "7_spacing": {
+    "paddingValues": {
+      "micro": ["2px", "4px"],
+      "small": ["6px", "8px"],
+      "medium": ["12px", "16px"],
+      "large": ["20px", "24px"]
+    },
+    "marginValues": {
+      "micro": ["2px", "4px"],
+      "small": ["6px", "8px"],
+      "medium": ["12px", "16px"],
+      "large": ["20px"]
+    },
+    "gapValues": {
+      "1px": "hairline gap",
+      "2px": "minimal gap",
+      "4px": "small gap (table cells, buttons)",
+      "6px": "small-medium gap",
+      "8px": "standard gap (DataList, components)",
+      "12px": "medium gap (form grid, modal sections)",
+      "16px": "large gap (modal footer, sections)",
+      "20px": "extra large gap",
+      "24px": "page-level gap (cards, sections)"
+    },
+    "widthValues": {
+      "100px": "room column sticky width",
+      "120px": "input width for counts",
+      "140px": "input width for dates",
+      "180px": "date input width",
+      "280px": "card min-width",
+      "320px": "modal sm min-width",
+      "420px": "modal sm max-width",
+      "640px": "modal md max-width",
+      "920px": "modal lg max-width"
+    },
+    "heightValues": {
+      "30px": "calendar day cell height",
+      "32px": "input/select height",
+      "36px": "button height",
+      "44px": "icon box height",
+      "48px": "tall input/select",
+      "60px": "form textarea min-height",
+      "90vh": "modal max-height"
+    },
+    "borderRadiusValues": [
+      "6px (most elements - inputs, buttons, cards)",
+      "8px (modals, panels)",
+      "12px (modal panel in shared-modal)"
+    ]
+  },
+
+  "8_componentsPatterns": {
+    "repetitiveComponents": [
+      {
+        "pattern": "Edit modals (EditRoomModal, EditBlockModal, EditRoomCategoryModal, etc.)",
+        "count": 5,
+        "structure": "<Modal> + <form> + <FormField> (repeated for each field) + <button>s",
+        "improvement": "Meta-form builder or generic EditModal wrapper could reduce ~30% code duplication"
+      },
+      {
+        "pattern": "CRUD pages (RoomsPage, PropertiesPage, PartnersPage, RoomCategoriesPage, BlocksPage)",
+        "count": 5,
+        "structure": "Header + Search + DataList + EditModal + ConfirmDelete modal",
+        "improvement": "Generic CRUDPage<T> component could eliminate 80% boilerplate"
+      },
+      {
+        "pattern": "Checkbox toggle buttons (showRates, showHistory, etc.)",
+        "count": 3,
+        "example": "backgroundColor: showHistory ? '#10b981' : '#6b7280'",
+        "improvement": "Could be a <ToggleButton> component"
+      },
+      {
+        "pattern": "Status badge styling (reservation status colors)",
+        "count": 10,
+        "examples": [
+          ".cell-reserved - blue",
+          ".cell-confirmed - green",
+          ".cell-checkin - cyan",
+          ".cell-checkout - purple"
+        ],
+        "improvement": "Could be a <StatusBadge status={status}> component"
+      },
+      {
+        "pattern": "Form grid layouts",
+        "count": 15,
+        "template": "display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px|16px'",
+        "improvement": "CSS class .form-grid-2 (already exists in forms.css)"
+      }
+    ]
+  },
+
+  "9_layoutPatterns": {
+    "flexPatterns": [
+      {
+        "name": "Horizontal flex (row)",
+        "usage": "Header, buttons, inline controls",
+        "example": "display: 'flex', gap: '8px', alignItems: 'center'",
+        "count": 30
+      },
+      {
+        "name": "Vertical flex (column)",
+        "usage": "Form fields, list items, modals",
+        "example": "display: 'flex', flexDirection: 'column', gap: '8px'",
+        "count": 20
+      }
+    ],
+    "gridPatterns": [
+      {
+        "name": "2-column form grid",
+        "usage": "Edit modals (rooms, blocks, properties)",
+        "template": "gridTemplateColumns: '1fr 1fr', gap: '12px|16px'",
+        "count": 8,
+        "responsiveness": "@media max-width: 800px → 1 column"
+      },
+      {
+        "name": "Auto-fill minibar grid",
+        "usage": "Minibar product cards",
+        "template": "grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)), gap: 8px",
+        "count": 1
+      },
+      {
+        "name": "Auto-fit card grid",
+        "usage": "Home page, dashboard",
+        "template": "grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)), gap: 20px",
+        "count": 2
+      }
+    ],
+    "stickyPatterns": [
+      {
+        "element": "Calendar header row",
+        "position": "sticky top, z-index: 1050",
+        "paired": "Floating thead backup with z-index: 1085"
+      },
+      {
+        "element": "Room column (left)",
+        "position": "sticky left, z-index: 1045",
+        "width": "100px min-width: 100px"
+      },
+      {
+        "element": "Sidebar",
+        "position": "fixed, z-index: 1090"
+      },
+      {
+        "element": "Header",
+        "position": "fixed, z-index: 1100"
+      }
+    ],
+    "zIndexLayers": {
+      "content": "auto (default)",
+      "calendar_rows": "2",
+      "room_col": "1045",
+      "room_col_header": "1046",
+      "floating_room": "1055",
+      "floating_thead": "1085",
+      "sidebar": "1090",
+      "header": "1100",
+      "modal": "2200",
+      "tooltip": "1200"
+    }
+  },
+
+  "10_dependencies": {
+    "frameworksAndLibraries": {
+      "react": "^19.2.4",
+      "react-dom": "^19.2.4",
+      "react-router-dom": "^7.13.0"
+    },
+    "uiLibraries": {
+      "chakra-ui/react": "^3.33.0 - Component library (selected components, many imports trigger errors)",
+      "chakra-ui/icons": "^2.2.4 - Icon set",
+      "@emotion/react": "^11.14.0 - Chakra dependency (CSS-in-JS)",
+      "@emotion/styled": "^11.14.1 - Chakra dependency",
+      "framer-motion": "^12.34.0 - Chakra dependency (animations)",
+      "react-icons": "^5.5.0 - Icon library (alternative to Chakra icons)"
+    },
+    "formsAndValidation": {
+      "react-hook-form": "^7.71.1 - Form state management",
+      "@hookform/resolvers": "^5.2.2 - Zod resolver",
+      "zod": "^4.3.6 - Schema validation",
+      "react-number-format": "^5.4.4 - Currency/number formatting"
+    },
+    "utilities": {
+      "date-fns": "^4.1.0 - Date manipulation (parseISO, format, addDays, etc.)",
+      "axios": "^1.13.5 - HTTP client"
+    },
+    "i18n": {
+      "i18next": "^25.8.8",
+      "i18next-browser-languagedetector": "^8.2.1",
+      "i18next-http-backend": "^3.0.2",
+      "react-i18next": "^16.5.4",
+      "flag-icons": "^6.7.0 - (optional) Flag icons for language selector"
+    },
+    "charts": {
+      "recharts": "^3.7.0 - Chart library (not yet heavily used)"
+    },
+    "dataFetching": {
+      "@tanstack/react-query": "^5.90.21 - Data fetching/caching (not yet used, commented out in services)"
+    },
+    "calendar": {
+      "react-day-picker": "^9.13.2 - Calendar widget"
+    },
+    "devDependencies": {
+      "typescript": "^5.9.3",
+      "vite": "^7.3.1 - Build tool",
+      "vitest": "^4.0.18 - Test runner",
+      "@vitest/coverage-v8": "^4.0.18 - Coverage",
+      "@testing-library/react": "^16.3.2",
+      "@testing-library/jest-dom": "^6.9.1",
+      "@testing-library/user-event": "^14.6.1",
+      "msw": "^2.12.10 - Mock Service Worker",
+      "eslint": "^9.39.2",
+      "prettier": "^3.8.1",
+      "jsdom": "^28.1.0"
+    },
+    "cssApproach": {
+      "strategy": "Mostly CSS modules or plain CSS files (no CSS-in-JS solution)",
+      "emotion": "Present (Chakra dependency) but not directly used",
+      "tailwind": "Not used (colors are hex/CSS vars)",
+      "cssVars": "var(--chakra-colors-white, #fff) - Chakra CSS var fallback pattern"
+    }
+  },
+
+  "11_issuesAndOpportunities": {
+    "technicalDebt": [
+      {
+        "issue": "Excessive inline styles (100+ matches)",
+        "files": ["MinibarPanel.tsx (35)", "ReservationModal.tsx (25)", "BackupModals"],
+        "impact": "Hard to maintain, no reusability, hard to theme",
+        "suggestion": "Extract to CSS classes in dedicated .css files"
+      },
+      {
+        "issue": "Inconsistent color usage (35+ hex values)",
+        "example": "#3182ce vs #3182CE vs #3b82f6 (all primary blue)",
+        "impact": "Inconsistent branding, hard to maintain",
+        "suggestion": "Create CSS color palette (--color-primary, --color-success, etc.)"
+      },
+      {
+        "issue": "No design tokens or theme system",
+        "impact": "Colors, fonts, spacing duplicated across files",
+        "suggestion": "Implement CSS custom properties or Tailwind config"
+      },
+      {
+        "issue": "CRUD page boilerplate (5 CRUD pages, 80% similar)",
+        "files": ["RoomsPage, PropertiesPage, PartnersPage, RoomCategoriesPage, BlocksPage"],
+        "impact": "30% code duplication",
+        "suggestion": "Generic <CRUDPage<T>> component"
+      },
+      {
+        "issue": "Modal boilerplate (5 edit modals, 70% similar)",
+        "files": ["EditRoomModal, EditBlockModal, EditRoomCategoryModal, etc."],
+        "impact": "30% code duplication",
+        "suggestion": "Meta-form builder or generic <EditModal> component"
+      },
+      {
+        "issue": "Chakra UI import errors (SyntaxError: does not provide export)",
+        "context": "Importing too many Chakra components at once causes Vite bundler issues",
+        "workaround": "Use HTML native elements + CSS for most components",
+        "suggestion": "Use only essential Chakra components (Box, Text, Button, Input)"
+      },
+      {
+        "issue": "Missing form component variants",
+        "current": "Custom <FormField> is basic",
+        "suggestion": "Add support for checkbox, radio, date picker variants"
+      }
+    ],
+    "refactoringOpportunities": [
+      {
+        "priority": "HIGH",
+        "title": "Create CSS design tokens (variables)",
+        "work": "1-2 days",
+        "impact": "Consistent colors, spacing, fonts; easier theming",
+        "implementation": "Create src/styles/tokens.css with CSS custom properties"
+      },
+      {
+        "priority": "HIGH",
+        "title": "Extract inline styles to CSS classes",
+        "work": "3-4 days",
+        "files": ["MinibarPanel.tsx", "ReservationModal.tsx"],
+        "impact": "30% CSS file size reduction, better maintainability"
+      },
+      {
+        "priority": "MEDIUM",
+        "title": "Create generic <CRUDPage> component",
+        "work": "2-3 days",
+        "impact": "Eliminate 80% CRUD page boilerplate",
+        "estimate": "Reduce 5 pages from ~200 lines each to ~50 lines"
+      },
+      {
+        "priority": "MEDIUM",
+        "title": "Create generic <EditModal> component",
+        "work": "2 days",
+        "impact": "Eliminate 70% edit modal boilerplate",
+        "estimate": "Reduce 5 modals from ~150 lines each to ~40 lines"
+      },
+      {
+        "priority": "MEDIUM",
+        "title": "Create <StatusBadge> component",
+        "work": "0.5 days",
+        "impact": "Centralize status styling, easier to modify"
+      },
+      {
+        "priority": "LOW",
+        "title": "Add dark mode support",
+        "work": "2 days",
+        "implementation": "Use CSS custom properties for colors, toggle via data-theme attribute"
+      },
+      {
+        "priority": "LOW",
+        "title": "Migrate non-critical Chakra to HTML + CSS",
+        "work": "1-2 days",
+        "impact": "Reduce bundle size, eliminate Chakra import issues",
+        "note": "DateTimeClock, some Typography components"
+      }
+    ]
+  },
+
+  "12_summary": {
+    "totalFiles": {
+      "tsx": 47,
+      "css": 13,
+      "total": 60
+    },
+    "codeOrganization": {
+      "strength": [
+        "Clear separation: pages, components, services, models",
+        "Reusable Shared components (Modal, FormField, DataList, CurrencyInput)",
+        "CRUD service factories (createCrudService, createScopedCrudService)",
+        "Form validation with react-hook-form + Zod",
+        "i18n support for 4 languages"
+      ],
+      "weakness": [
+        "Excessive inline styles (100+ instances)",
+        "CRUD page/modal boilerplate (5 pages/modals, 70-80% similar)",
+        "No design tokens or CSS variable system",
+        "Inconsistent color usage (35+ hex values)",
+        "Chakra UI import issues causing bundler errors"
+      ]
+    },
+    "designSystem": {
+      "colors": "35+ hex colors (should be ~10-12 tokens)",
+      "spacing": "Consistent use of 8px, 12px, 16px, 24px",
+      "typography": "Mostly 12px-24px fonts, consistent weights",
+      "borderRadius": "Mostly 6px (good consistency)"
+    },
+    "accessibility": {
+      "strong": [
+        "Modal role=dialog, aria-modal",
+        "FormField error messages",
+        "aria-hidden on icons",
+        "aria-label on close buttons"
+      ],
+      "improvable": [
+        "More aria-live regions for loading states",
+        "Better keyboard navigation in lists",
+        "Focus management in modals"
+      ]
+    },
+    "performanceConsiderations": [
+      "Calendar component: large DOM (many cells), consider virtualization",
+      "Floating sticky headers: CSS-based (good), not JS-based",
+      "Inline styles on MinibarPanel: could cause re-renders",
+      "DataList with key={idx}: should use unique item IDs for safety"
+    ]
+  }
+}

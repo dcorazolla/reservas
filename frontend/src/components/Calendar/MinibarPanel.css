@@ -1,4 +1,6 @@
-/* MinibarPanel Styles */
+/* MinibarPanel Styles - Consolidated with components-base patterns */
+
+/* ========== GRID AND CARDS ========== */
 
 .minibar-panel {
   width: 100%;
@@ -52,7 +54,7 @@
   color: #6b7280;
 }
 
-/* Modal Overlay */
+/* ========== MODAL - Uses components-base.css patterns ========== */
 
 .minibar-modal-overlay {
   position: fixed;
@@ -143,6 +145,8 @@
   font-size: 14px;
 }
 
+/* ========== QUANTITY SECTION - Uses form-control base ========== */
+
 .minibar-quantity {
   display: flex;
   flex-direction: column;
@@ -154,51 +158,6 @@
   color: #6b7280;
   font-size: 13px;
 }
-
-.minibar-total {
-  padding: 12px;
-  background: #f9fafb;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #e5e7eb;
-}
-
-.minibar-total .label {
-  font-weight: 600;
-  color: #374151;
-}
-
-.minibar-total .value {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1f2937;
-}
-
-.minibar-modal-footer {
-  padding: 16px;
-  border-top: 1px solid #e5e7eb;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-.minibar-modal-footer button {
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.minibar-modal-footer button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ========== QUANTITY CONTROLS ========== */
 
 .minibar-quantity-controls {
   display: flex;
@@ -241,7 +200,54 @@
   cursor: not-allowed;
 }
 
-/* ========== ERROR MESSAGE ========== */
+/* ========== TOTAL - Uses card pattern ========== */
+
+.minibar-total {
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+}
+
+.minibar-total .label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.minibar-total .value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* ========== MODAL FOOTER ========== */
+
+.minibar-modal-footer {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.minibar-modal-footer button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.minibar-modal-footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========== ERROR MESSAGE - Uses alert base pattern ========== */
 
 .minibar-error-message {
   padding: 12px;
@@ -252,7 +258,8 @@
   margin-top: 12px;
 }
 
-/* ========== HISTORY SECTION ========== */
+
+/* ========== HISTORY SECTION - Uses .section base ========== */
 
 .minibar-history-toggle-section {
   display: flex;
@@ -337,7 +344,7 @@
   font-size: 13px;
 }
 
-/* ========== HISTORY TABLE ========== */
+/* ========== HISTORY TABLE - Uses .table base pattern ========== */
 
 .minibar-history-table {
   width: 100%;
