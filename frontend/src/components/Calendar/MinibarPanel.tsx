@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react'
 import { format, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { createMinibarConsumption, listConsumptions } from '@services/minibar'
+import { createMinibarConsumption, listConsumptions, deleteConsumption } from '@services/minibar'
 import type { MinibarProduct, MinibarConsumption } from '@models/minibar'
 import './MinibarPanel.css'
 
@@ -14,6 +14,7 @@ type Props = {
   products: MinibarProduct[]
   reservationId: string | null
   onConsumptionCreated?: (consumption: MinibarConsumption) => void
+  onConsumptionDeleted?: (consumptionId: string) => void
   onProductsChange?: (products: MinibarProduct[]) => void
 }
 
@@ -21,6 +22,7 @@ export default function MinibarPanel({
   products,
   reservationId,
   onConsumptionCreated,
+  onConsumptionDeleted,
   onProductsChange,
 }: Props) {
   const [selectedProduct, setSelectedProduct] = useState<MinibarProduct | null>(null)
@@ -33,13 +35,19 @@ export default function MinibarPanel({
   const [consumptions, setConsumptions] = useState<MinibarConsumption[]>([])
   const [historyLoading, setHistoryLoading] = useState(false)
   const [historyError, setHistoryError] = useState('')
-
   // Load consumptions when history is toggled on
   useEffect(() => {
     if (showHistory && reservationId) {
       loadConsumptionHistory()
     }
   }, [showHistory, reservationId])
+
+  // Recarregar histórico quando um consumo é adicionado
+  useEffect(() => {
+    if (showHistory && reservationId) {
+      loadConsumptionHistory()
+    }
+  }, [])
 
   const loadConsumptionHistory = async () => {
     if (!reservationId) return
@@ -55,8 +63,38 @@ export default function MinibarPanel({
     }
   }
 
+  const handleDeleteConsumption = async (consumptionId: string) => {
+    try {
+      await deleteConsumption(consumptionId)
+      // Remover da lista local sem confirm
+      setConsumptions((prev) => prev.filter((c) => c.id !== consumptionId))
+      // Chamar callback para atualizar parent
+      if (onConsumptionDeleted) {
+        onConsumptionDeleted(consumptionId)
+      }
+    } catch (err: any) {
+      setHistoryError(err.message || 'Erro ao excluir consumo')
+    }
+  }
+
   const getProductPrice = (product: MinibarProduct): number => {
     return product.price || product.price_per_unit || 0
+  }
+
+  const getConsumptionTotal = (consumption: MinibarConsumption, products: MinibarProduct[]): number => {
+    if (consumption.total_price && consumption.total_price > 0) {
+      return consumption.total_price
+    }
+    
+    let unitPrice = consumption.unit_price || 0
+    
+    // Se unit_price é 0, busca do produto
+    if (unitPrice === 0) {
+      const product = products.find((p) => p.id === consumption.product_id)
+      unitPrice = product ? getProductPrice(product) : 0
+    }
+    
+    return unitPrice * consumption.quantity
   }
 
   const handleProductClick = (product: MinibarProduct) => {
@@ -83,6 +121,11 @@ export default function MinibarPanel({
 
       if (onConsumptionCreated) {
         onConsumptionCreated(consumption)
+      }
+
+      // Recarregar histórico se está mostrando
+      if (showHistory) {
+        loadConsumptionHistory()
       }
 
       // Atualizar estoque localmente
@@ -156,18 +199,12 @@ export default function MinibarPanel({
 
             <div className="minibar-quantity">
               <label htmlFor="quantity">Quantidade:</label>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="minibar-quantity-controls">
                 <button
                   type="button"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   disabled={loading || quantity <= 1}
-                  style={{
-                    padding: '4px 8px',
-                    backgroundColor: '#f5f5f5',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="minibar-quantity-button"
                 >
                   −
                 </button>
@@ -178,25 +215,13 @@ export default function MinibarPanel({
                   value={quantity}
                   onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                   disabled={loading}
-                  style={{
-                    width: '60px',
-                    padding: '6px 8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    textAlign: 'center',
-                  }}
+                  className="minibar-quantity-input"
                 />
                 <button
                   type="button"
                   onClick={() => setQuantity(quantity + 1)}
                   disabled={loading}
-                  style={{
-                    padding: '4px 8px',
-                    backgroundColor: '#f5f5f5',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="minibar-quantity-button"
                 >
                   +
                 </button>
@@ -214,16 +239,7 @@ export default function MinibarPanel({
             </div>
 
             {error && (
-              <div
-                style={{
-                  padding: '12px',
-                  backgroundColor: '#fee',
-                  color: '#c33',
-                  borderRadius: '4px',
-                  fontSize: '14px',
-                  marginTop: '12px',
-                }}
-              >
+              <div className="minibar-error-message">
                 {error}
               </div>
             )}
@@ -234,13 +250,7 @@ export default function MinibarPanel({
               type="button"
               onClick={handleCancel}
               disabled={loading}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#f5f5f5',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
+              className="btn btn-secondary"
             >
               Cancelar
             </button>
@@ -248,14 +258,7 @@ export default function MinibarPanel({
               type="button"
               onClick={handleAddConsumption}
               disabled={loading || !reservationId}
-              style={{
-                padding: '8px 16px',
-                backgroundColor: '#3182CE',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
+              className="btn btn-primary"
             >
               {loading ? 'Adicionando...' : 'Adicionar'}
             </button>
@@ -269,32 +272,31 @@ export default function MinibarPanel({
   return (
     <div className="minibar-panel">
       {/* Toggle para histórico */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px',
-          paddingBottom: '12px',
-          borderBottom: '1px solid #e5e7eb',
-        }}
-      >
-        <h3 style={{ margin: 0, fontSize: '14px', fontWeight: '600' }}>Adicionar Consumo</h3>
+      <div className="minibar-history-toggle-section">
+        <div className="minibar-history-toggle-info">
+          <h3 className="minibar-history-toggle-title">Adicionar Consumo</h3>
+          {consumptions.length > 0 && (
+            <div className="minibar-history-toggle-summary">
+              {consumptions.reduce((sum, c) => sum + c.quantity, 0)} item{consumptions.reduce((sum, c) => sum + c.quantity, 0) !== 1 ? 'ns' : ''} •{' '}
+              {new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              }).format(
+                consumptions.reduce((sum, c) => {
+                  const product = products.find((p) => p.id === c.product_id)
+                  const unitPrice = product ? (product.price || product.price_per_unit || 0) : (c.unit_price || 0)
+                  return sum + unitPrice * c.quantity
+                }, 0)
+              )}
+            </div>
+          )}
+        </div>
         <button
           type="button"
           onClick={() => setShowHistory(!showHistory)}
-          style={{
-            padding: '6px 12px',
-            fontSize: '12px',
-            backgroundColor: showHistory ? '#10b981' : '#6b7280',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: '500',
-          }}
+          className={`minibar-history-toggle-button ${showHistory ? 'active' : ''}`}
         >
-          {showHistory ? 'Ocultar Extrato' : 'Ver Extrato'}
+          {showHistory ? 'Ocultar Consumo' : 'Ver Consumo'}
         </button>
       </div>
 
@@ -325,111 +327,46 @@ export default function MinibarPanel({
 
       {/* Histórico de consumo */}
       {showHistory && (
-        <div
-          style={{
-            marginTop: '20px',
-            paddingTop: '16px',
-            borderTop: '2px solid #fcd34d',
-          }}
-        >
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
+        <div className="minibar-history-section">
+          <h3 className="minibar-history-title">
             Extrato de Consumo
           </h3>
 
           {historyLoading ? (
-            <div style={{ textAlign: 'center', padding: '16px', color: '#6b7280' }}>
+            <div className="minibar-history-loading">
               Carregando histórico...
             </div>
           ) : historyError ? (
-            <div
-              style={{
-                padding: '12px',
-                backgroundColor: '#fee',
-                color: '#c33',
-                borderRadius: '4px',
-                fontSize: '12px',
-              }}
-            >
+            <div className="minibar-history-error">
               {historyError}
             </div>
           ) : consumptions.length === 0 ? (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '16px',
-                color: '#9ca3af',
-                fontSize: '13px',
-              }}
-            >
+            <div className="minibar-history-empty">
               Nenhum consumo registrado
             </div>
           ) : (
             <>
               {/* Tabela de consumo */}
-              <table
-                style={{
-                  width: '100%',
-                  borderCollapse: 'collapse',
-                  fontSize: '12px',
-                  marginBottom: '12px',
-                }}
-              >
+              <table className="minibar-history-table">
                 <thead>
-                  <tr
-                    style={{
-                      backgroundColor: '#f3f4f6',
-                      borderBottom: '1px solid #d1d5db',
-                    }}
-                  >
-                    <th
-                      style={{
-                        padding: '8px',
-                        textAlign: 'left',
-                        fontWeight: '600',
-                        color: '#374151',
-                      }}
-                    >
+                  <tr className="minibar-history-table-header-row">
+                    <th className="minibar-history-table-header">
                       Data/Hora
                     </th>
-                    <th
-                      style={{
-                        padding: '8px',
-                        textAlign: 'left',
-                        fontWeight: '600',
-                        color: '#374151',
-                      }}
-                    >
+                    <th className="minibar-history-table-header">
                       Produto
                     </th>
-                    <th
-                      style={{
-                        padding: '8px',
-                        textAlign: 'right',
-                        fontWeight: '600',
-                        color: '#374151',
-                      }}
-                    >
+                    <th className="minibar-history-table-header text-right">
                       Valor Unit.
                     </th>
-                    <th
-                      style={{
-                        padding: '8px',
-                        textAlign: 'center',
-                        fontWeight: '600',
-                        color: '#374151',
-                      }}
-                    >
+                    <th className="minibar-history-table-header text-center">
                       Qtd
                     </th>
-                    <th
-                      style={{
-                        padding: '8px',
-                        textAlign: 'right',
-                        fontWeight: '600',
-                        color: '#374151',
-                      }}
-                    >
+                    <th className="minibar-history-table-header text-right">
                       Total
+                    </th>
+                    <th className="minibar-history-table-header text-center">
+                      Ação
                     </th>
                   </tr>
                 </thead>
@@ -437,55 +374,46 @@ export default function MinibarPanel({
                   {consumptions.map((consumption, index) => {
                     const product = products.find((p) => p.id === consumption.product_id)
                     const productName = product?.name || `Produto ${consumption.product_id}`
-                    const unitPrice = consumption.unit_price || product?.price || 0
-                    const totalPrice = consumption.total_price || unitPrice * consumption.quantity
+                    // Usar preço do produto como source of truth principal
+                    const unitPrice = product ? getProductPrice(product) : consumption.unit_price || 0
+                    const totalPrice = unitPrice * consumption.quantity
 
                     return (
                       <tr
                         key={consumption.id}
-                        style={{
-                          borderBottom: '1px solid #e5e7eb',
-                          backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
-                        }}
+                        className={`minibar-history-table-row ${index % 2 === 0 ? '' : 'alt'}`}
                       >
-                        <td style={{ padding: '8px', whiteSpace: 'nowrap' }}>
+                        <td className="minibar-history-table-cell">
                           {consumption.created_at
                             ? format(parseISO(consumption.created_at), 'dd/MM HH:mm', {
                                 locale: ptBR,
                               })
                             : '-'}
                         </td>
-                        <td style={{ padding: '8px' }}>{productName}</td>
-                        <td
-                          style={{
-                            padding: '8px',
-                            textAlign: 'right',
-                          }}
-                        >
+                        <td className="minibar-history-table-cell">{productName}</td>
+                        <td className="minibar-history-table-cell text-right">
                           {new Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
-                          }).format(unitPrice)}
+                          }).format(parseFloat(String(unitPrice)) || 0)}
                         </td>
-                        <td
-                          style={{
-                            padding: '8px',
-                            textAlign: 'center',
-                          }}
-                        >
+                        <td className="minibar-history-table-cell text-center">
                           {consumption.quantity}
                         </td>
-                        <td
-                          style={{
-                            padding: '8px',
-                            textAlign: 'right',
-                            fontWeight: '600',
-                          }}
-                        >
+                        <td className="minibar-history-table-cell text-right font-bold">
                           {new Intl.NumberFormat('pt-BR', {
                             style: 'currency',
                             currency: 'BRL',
-                          }).format(totalPrice)}
+                          }).format(parseFloat(String(totalPrice)) || 0)}
+                        </td>
+                        <td className="minibar-history-table-cell text-center">
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteConsumption(consumption.id)}
+                            className="btn btn-xs btn-danger"
+                          >
+                            Excluir
+                          </button>
                         </td>
                       </tr>
                     )
@@ -494,27 +422,20 @@ export default function MinibarPanel({
               </table>
 
               {/* Total */}
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  padding: '12px',
-                  backgroundColor: '#fffbeb',
-                  borderRadius: '4px',
-                  borderTop: '2px solid #fcd34d',
-                }}
-              >
-                <div style={{ fontSize: '14px', fontWeight: '600' }}>
+              <div className="minibar-history-total">
+                <div className="minibar-history-total-label">
                   Total:{' '}
-                  <span style={{ color: '#d97706' }}>
+                  <span className="minibar-history-total-amount">
                     {new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
                     }).format(
-                      consumptions.reduce(
-                        (sum, c) => sum + (c.total_price || c.unit_price * c.quantity),
-                        0
-                      )
+                      consumptions.reduce((sum, c) => {
+                        const product = products.find((p) => p.id === c.product_id)
+                        const unitPrice = product ? getProductPrice(product) : c.unit_price || 0
+                        const total = unitPrice * c.quantity
+                        return sum + total
+                      }, 0)
                     )}
                   </span>
                 </div>

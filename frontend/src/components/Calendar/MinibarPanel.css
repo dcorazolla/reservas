@@ -6,8 +6,8 @@
 
 .minibar-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
   width: 100%;
 }
 
@@ -15,12 +15,12 @@
   background: #fafafa;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
-  padding: 12px;
+  padding: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .minibar-card:hover {
@@ -197,3 +197,223 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ========== QUANTITY CONTROLS ========== */
+
+.minibar-quantity-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.minibar-quantity-button {
+  padding: 4px 8px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.minibar-quantity-button:hover:not(:disabled) {
+  background-color: #e5e5e5;
+  border-color: #999;
+}
+
+.minibar-quantity-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.minibar-quantity-input {
+  width: 60px;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.minibar-quantity-input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* ========== ERROR MESSAGE ========== */
+
+.minibar-error-message {
+  padding: 12px;
+  background-color: #fee;
+  color: #c33;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+/* ========== HISTORY SECTION ========== */
+
+.minibar-history-toggle-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 16px;
+}
+
+.minibar-history-toggle-info {
+  flex: 1;
+}
+
+.minibar-history-toggle-title {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.minibar-history-toggle-summary {
+  font-size: 12px;
+  color: #666;
+}
+
+.minibar-history-toggle-button {
+  padding: 6px 12px;
+  font-size: 12px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.minibar-history-toggle-button:hover {
+  background-color: #4b5563;
+}
+
+.minibar-history-toggle-button.active {
+  background-color: #10b981;
+}
+
+.minibar-history-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid #fcd34d;
+}
+
+.minibar-history-title {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.minibar-history-loading {
+  text-align: center;
+  padding: 16px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.minibar-history-error {
+  padding: 12px;
+  background-color: #fee;
+  color: #c33;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.minibar-history-empty {
+  text-align: center;
+  padding: 16px;
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* ========== HISTORY TABLE ========== */
+
+.minibar-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.minibar-history-table-header-row {
+  background-color: #f3f4f6;
+  border-bottom: 1px solid #d1d5db;
+}
+
+.minibar-history-table-header {
+  padding: 8px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+}
+
+.minibar-history-table-header.text-right {
+  text-align: right;
+}
+
+.minibar-history-table-header.text-center {
+  text-align: center;
+}
+
+.minibar-history-table-row {
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+.minibar-history-table-row.alt {
+  background-color: #f9fafb;
+}
+
+.minibar-history-table-cell {
+  padding: 8px;
+  white-space: nowrap;
+}
+
+.minibar-history-table-cell.text-right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.minibar-history-table-cell.text-center {
+  text-align: center;
+}
+
+.minibar-history-table-cell.font-bold {
+  font-weight: 600;
+}
+
+/* ========== HISTORY TOTAL ========== */
+
+.minibar-history-total {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px;
+  background-color: #fffbeb;
+  border-radius: 4px;
+  border-top: 2px solid #fcd34d;
+  margin-top: 8px;
+}
+
+.minibar-history-total-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.minibar-history-total-amount {
+  color: #d97706;
+  font-weight: 700;
+}
+
+
