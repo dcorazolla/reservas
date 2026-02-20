@@ -92,7 +92,7 @@
   justify-content: center;
   padding: 8px 16px;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -141,7 +141,7 @@
   background-color: transparent;
   border: 1px solid #ef4444;
   color: #ef4444;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
