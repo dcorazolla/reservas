@@ -1,0 +1,419 @@
+/* ============================================================================
+   RESERVATION MODAL - Component Styling
+   
+   All inline styles extracted from ReservationModal.tsx component.
+   Uses CSS variables from base.css for consistency.
+   ============================================================================ */
+
+/* ========== MODAL CONTENT WRAPPER ========== */
+
+.reservation-modal-content {
+  padding: var(--spacing-xl);
+  max-width: 800px;
+}
+
+/* ========== MODAL HEADER SECTION ========== */
+
+.reservation-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: var(--border-width) solid var(--color-border);
+  gap: var(--spacing-2xl);
+}
+
+.reservation-modal-header__title-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.reservation-modal-header__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+/* ========== STATUS BADGE ========== */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 0;
+  background: none;
+  border: none;
+  white-space: nowrap;
+}
+
+.status-badge::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-badge.status-pre-reserva {
+  color: #1e3a8a;
+}
+
+.status-badge.status-pre-reserva::before {
+  background-color: #93c5fd;
+}
+
+.status-badge.status-reservado {
+  color: #1d4ed8;
+}
+
+.status-badge.status-reservado::before {
+  background-color: #3b82f6;
+}
+
+.status-badge.status-confirmado {
+  color: #047857;
+}
+
+.status-badge.status-confirmado::before {
+  background-color: #10b981;
+}
+
+.status-badge.status-checked-in {
+  color: #0e7490;
+}
+
+.status-badge.status-checked-in::before {
+  background-color: #0891b2;
+}
+
+.status-badge.status-checked-out {
+  color: #475569;
+}
+
+.status-badge.status-checked-out::before {
+  background-color: #64748b;
+}
+
+.status-badge.status-no-show {
+  color: #ea580c;
+}
+
+.status-badge.status-no-show::before {
+  background-color: #f97316;
+}
+
+.status-badge.status-cancelado {
+  color: #7f1d1d;
+}
+
+.status-badge.status-cancelado::before {
+  background-color: #991b1b;
+}
+
+/* ========== FORM GRIDS ========== */
+
+.reservation-modal-grid-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.reservation-modal-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ========== FORM FIELDS ========== */
+
+.reservation-modal-textarea {
+  min-height: 80px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+/* ========== PRICE AND VALUES SECTION ========== */
+
+.reservation-modal-values-section {
+  background-color: var(--color-info-light);
+  border: var(--border-width) solid var(--color-info);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.reservation-modal-values-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-info-dark);
+  margin-bottom: var(--spacing-md);
+}
+
+.reservation-modal-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.reservation-modal-breakdown-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.reservation-modal-breakdown-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-info);
+  word-break: break-word;
+}
+
+.reservation-modal-total-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.reservation-modal-total-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-info-dark);
+}
+
+.reservation-modal-total-amount {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-info);
+}
+
+/* ========== MINIBAR SECTION ========== */
+
+.reservation-modal-minibar-section {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.reservation-modal-minibar-toggle {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-base);
+}
+
+.reservation-modal-minibar-toggle:hover {
+  background-color: var(--color-bg-hover);
+}
+
+/* ========== BUTTONS AND ACTIONS ========== */
+
+.reservation-modal-button-group {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  margin-top: var(--spacing-xl);
+}
+
+.reservation-modal-action-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-left: auto;
+}
+
+.reservation-modal-price-override-section {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.reservation-modal-price-override-input {
+  width: 100px;
+  flex-shrink: 0;
+}
+
+/* ========== CONFIRMATION DIALOGS ========== */
+
+/* Guarantee type dialog */
+.confirm-dialog-guarantee {
+  padding: var(--spacing-xl);
+  max-width: 500px;
+}
+
+.confirm-dialog-guarantee-text {
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.confirm-dialog-guarantee-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.confirm-dialog-guarantee-button {
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border: var(--border-width) solid var(--color-border);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-base);
+}
+
+.confirm-dialog-guarantee-button:hover {
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-primary);
+}
+
+.confirm-dialog-guarantee-button.active {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverted);
+  border-color: var(--color-primary);
+}
+
+.confirm-dialog-guarantee-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+}
+
+/* Cancellation dialog */
+.confirm-dialog-cancellation {
+  padding: var(--spacing-xl);
+  max-width: 500px;
+}
+
+.confirm-dialog-cancellation-message {
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.confirm-dialog-cancellation-warning {
+  background-color: var(--color-danger-light);
+  border-left: 4px solid var(--color-danger);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.confirm-dialog-cancellation-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+}
+
+/* ========== LOADING STATE ========== */
+
+.reservation-modal-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ========== HELPER TEXT UTILITIES ========== */
+
+.reservation-modal-text-muted {
+  color: var(--color-text-tertiary);
+}
+
+.reservation-modal-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.reservation-modal-text-info {
+  color: var(--color-info);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ========== SECTIONS ========== */
+
+.reservation-modal-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.reservation-modal-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* ========== FLEX UTILITIES FOR MODAL ========== */
+
+.reservation-modal-flex-row {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.reservation-modal-flex-row.space-between {
+  justify-content: space-between;
+}
+
+.reservation-modal-flex-row.center {
+  justify-content: center;
+}
+
+.reservation-modal-flex-row.end {
+  justify-content: flex-end;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 768px) {
+  .reservation-modal-content {
+    padding: var(--spacing-lg);
+    max-width: 100%;
+  }
+  
+  .reservation-modal-grid-3col {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .reservation-modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+  }
+  
+  .reservation-modal-header__actions {
+    width: 100%;
+  }
+  
+  .reservation-modal-breakdown {
+    grid-template-columns: 1fr;
+  }
+  
+  .reservation-modal-button-group {
+    flex-direction: column-reverse;
+  }
+  
+  .confirm-dialog-guarantee-buttons {
+    flex-direction: column;
+  }
+  
+  .confirm-dialog-guarantee-button {
+    width: 100%;
+  }
+}
+
