@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@contexts/AuthContext'
 import { decodeTokenPayload } from '@services/auth'
-import Modal from '@components/Shared/Modal/Modal'
+import ReservationModal from '@components/Calendar/ReservationModal'
 import SkeletonList from '@components/Shared/Skeleton/SkeletonList'
-import { format, parseISO, addDays, subDays, addMonths, startOfMonth } from 'date-fns'
+import { format, parseISO, addDays, subDays, addMonths, startOfMonth, differenceInCalendarDays } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import CalendarGrid from '@components/Calendar/CalendarGrid'
 import { getCalendarData, generateDateRange } from '@services/calendar'
 import { Room } from '@models/room'
 import { Reservation } from '@models/reservation'
 import './CalendarPage.css'
+import PeriodPicker from '@components/PeriodoPicker/PeriodPicker'
 
 export default function CalendarPage() {
   const { t } = useTranslation()
@@ -177,7 +178,6 @@ export default function CalendarPage() {
 
         <div className="controls-group">
           <div className="control-item">
-            <label htmlFor="days-count">{t('calendar.days')}</label>
             <input
               type="number"
               id="days-count"
@@ -188,9 +188,19 @@ export default function CalendarPage() {
             />
           </div>
 
-          <div className="period-label">
-            {monthYearLabel}
-          </div>
+          {/* Period picker: default month/year control with optional day-level */}
+          <PeriodPicker
+            currentDate={currentDate}
+            days={days}
+            onPickDate={(dateStr: string) => {
+              // dateStr: 'YYYY-MM' for month picker or 'YYYY-MM-DD' for day picker
+              const picked = parseISO(dateStr + (dateStr.length === 7 ? '-01' : ''))
+              const halfDays = Math.floor(days / 2)
+              const base = addDays(subDays(new Date(), halfDays), 0)
+              const delta = differenceInCalendarDays(picked, base)
+              setDateOffset(delta)
+            }}
+          />
         </div>
       </div>
 
@@ -211,7 +221,7 @@ export default function CalendarPage() {
         )}
       </div>
 
-      <Modal
+      <ReservationModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false)
@@ -219,28 +229,12 @@ export default function CalendarPage() {
           setSelectedRoom(null)
           setSelectedDate(null)
         }}
-        title={selectedReservation ? t('reservations.edit') : t('reservations.new')}
-      >
-        <div style={{ padding: '20px' }}>
-          <p>{selectedReservation ? 'Editar reserva' : 'Criar nova reserva'}</p>
-          <p>Room: {selectedRoom}</p>
-          <p>Date: {selectedDate}</p>
-          <button
-            onClick={handleSaveReservation}
-            style={{
-              padding: '8px 16px',
-              marginTop: '16px',
-              backgroundColor: '#3182CE',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            Salvar
-          </button>
-        </div>
-      </Modal>
+        onSaved={handleSaveReservation}
+        reservation={selectedReservation}
+        roomId={selectedRoom}
+        date={selectedDate}
+        rooms={rooms}
+      />
     </div>
   )
 }

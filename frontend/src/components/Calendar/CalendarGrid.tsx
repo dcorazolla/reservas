@@ -323,24 +323,8 @@ export default function CalendarGrid({
 
                 // Click handler to determine which day and which half was clicked
                 const handleResTdClick = (e: React.MouseEvent<HTMLTableCellElement>) => {
-                  const td = e.currentTarget as HTMLTableCellElement
-                  const rect = td.getBoundingClientRect()
-                  const clickX = e.clientX - rect.left
-                  const dayWidth = rect.width / span
-                  const offset = Math.min(Math.floor(clickX / dayWidth), span - 1)
-                  const clickedDateIndex = startIdx + offset
-                  const intraDayX = clickX - offset * dayWidth
-                  const isLeftHalf = intraDayX < dayWidth / 2
-
-                  // If clicked on the left half of the checkout day -> edit reservation
-                  if (clickedDateIndex === endIdx && isLeftHalf) {
-                    onReservationClick(res)
-                    return
-                  }
-
-                  // Otherwise treat as creating a reservation starting on the clicked date
-                  const clickedDate = dates[clickedDateIndex]
-                  onEmptyCellClick(room.id, clickedDate)
+                  // Simple click on a reservation -> edit it
+                  onReservationClick(res)
                 }
 
                 cells.push(

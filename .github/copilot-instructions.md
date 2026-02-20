@@ -48,6 +48,14 @@ Use SEMPRE:
 - Atualizar documentação e OpenAPI quando endpoints mudarem.
 - Ao finalizar um ciclo: versionamento (frontend: `npm run bump:patch|minor|major`), gerar release-notes, criar commit(es) com mensagens concisas, fazer push, e abrir PR com `gh pr create --fill`.
 - **O agente NÃO deve fazer merge**: sempre aguardar revisão humana e aprovação antes de mesclar.
+
+### Dev Server (Frontend)
+
+- **O agente NÃO deve iniciar o dev server manualmente** (npm run dev).
+- Usuário inicia e gerencia o dev server manualmente: `cd frontend && npm run dev`.
+- Agente pode gerar previewscom `open_simple_browser` apenas se o dev server já estiver rodando.
+- Agente não monitora ou encerra o dev server; usuário tem controle total.
+- Se agente iniciou um servidor anteriormente, SEMPRE encerra antes de devolver para o usuário.
 - Usar `gh` (GitHub CLI) para todas as operações Git e PRs. Nunca usar gitkraken.
 
 ## Regras específicas para automação
@@ -129,6 +137,7 @@ docker compose exec app php artisan env  # Deve retornar: "testing"
 - `property_id` é o escopo ativo (vem no JWT). Serviços e controllers usam este claim.
 - Lógica de negócio deve ficar em `backend/src/app/Services/*`; controllers apenas orquestram.
 - Frontend: seguir padrão de serviços em `frontend/src/services/*`, páginas em `frontend/src/pages/*`, componentes em `frontend/src/components/*` e traduções em `frontend/public/locales/<lang>/common.json`.
+- **CRÍTICO - Models/Types em arquivos separados:** Todos os tipos TypeScript (interfaces, types) devem ficar em `frontend/src/models/*.ts` com arquivos nomeados conforme a entidade (ex: `models/reservation.ts`, `models/minibar.ts`, `models/room.ts`). **NUNCA exporte types/interfaces diretamente de serviços ou componentes.** Serviços importam types com `type { ... } from '@models/<entity>'`. Isto mantém separação de responsabilidades e evita circular dependencies.
 - Modal compartilhado: `frontend/src/components/Shared/Modal/Modal.tsx` (padrão simples — usado por muitos modals locais).
 
 ## ⚠️ Evitar Reinvenção de Componentes - CONSULTE ANTES DE CRIAR
@@ -508,6 +517,58 @@ import Modal from '@components/Shared/Modal/Modal'
 - O toggle de tarifas deve **sempre iniciar fechado** ao abrir o modal (`setShowRates(false)` no `useEffect` de abertura).
 - Campos de tarifa são opcionais: campo vazio = não grava no banco. Se o campo tinha valor e foi limpo = deleta o registro.
 - Ao reduzir a capacidade de um quarto, rates órfãos (people_count > nova capacidade) devem ser incluídos no payload com `price_per_day: null` para serem deletados.
+
+## Modal de Reserva (ReservationModal)
+
+**Localização:** `frontend/src/components/Calendar/ReservationModal.tsx`
+
+**Funcionalidades implementadas (integradas com APIs):**
+- ✅ CRUD de reservas: criar, editar, salvar
+- ✅ Status transitions: botões contextuais baseados no status atual
+  - Pré-reserva → Confirmar
+  - Reservado → Confirmar, Check-in, Cancelar
+  - Confirmado → Check-in
+  - Check-in → Check-out
+- ✅ Cálculo de preço: chamada ao backend com cascade de tarifas (room period → category period → base)
+- ✅ Preço manual: toggle com campo compacto (100px) ao lado do botão
+- ✅ Indicador de status: badge colorida com guarantee_type quando disponível
+- ✅ Carregamento de parceiros, quartos e preço via APIs
+- ✅ Validações: capacidade, datas, campos obrigatórios
+- ✅ Accessibility: focus management, ESC key, aria-busy, aria-live
+- ✅ Skeleton loading: campos individuais durante carregamento
+- ✅ Breakdown de preço: mostra dias/preço em pipe-separated format, fonte pequena
+
+**Estrutura de campos (ordem importante):**
+1. Hóspede (obrigatório)
+2. Adultos, Crianças, Bebês (3 colunas)
+3. Entrada, Saída (2 colunas)
+4. Quarto (obrigatório)
+5. **Resumo** (box destacado com total, dias breakdown, toggle preço manual)
+6. Parceiro, Observações (2 colunas)
+7. Status (apenas edit mode)
+8. Botões de ação
+
+**APIs utilizadas:**
+- `createReservation(propertyId, payload)` - criar reserva
+- `updateReservation(propertyId, id, payload)` - editar reserva
+- `calculateReservationPrice(propertyId, input)` - calcular com breakdown
+- `confirmReservation(propertyId, id, data)` - confirmar (pode incluir guarantee_type)
+- `checkInReservation(propertyId, id)` - check-in
+- `checkOutReservation(propertyId, id)` - check-out
+- `cancelReservation(propertyId, id)` - cancelar
+- `listPartners()` - lista de parceiros (sem scoping)
+- `listRooms()` - lista de quartos (sem scoping)
+
+**Props:**
+- `isOpen: boolean` - controla visibilidade
+- `onClose: () => void` - callback para fechar
+- `onSaved?: () => void` - callback após salvar (para refresh do calendário)
+- `reservation?: Reservation | null` - reserva em edição (null = criar)
+- `roomId?: string | null` - pré-selecionar quarto ao criar
+- `date?: string | null` - data de entrada ao criar (YYYY-MM-DD)
+- `rooms?: Room[]` - lista de quartos (passada do calendário, re-carregada na modal)
+
+**Testes:** `ReservationModal.test.tsx` com mocks de APIs e ciclos de vida.
 
 ## Cascata de preços (backend)
 
