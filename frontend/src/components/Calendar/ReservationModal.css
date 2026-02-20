@@ -246,6 +246,19 @@
 
 /* ========== CONFIRMATION DIALOGS ========== */
 
+/* Dialog content wrapper */
+.confirm-dialog-content {
+  padding: var(--spacing-xl);
+  max-width: 500px;
+}
+
+/* Dialog actions */
+.confirm-dialog-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+}
+
 /* Guarantee type dialog */
 .confirm-dialog-guarantee {
   padding: var(--spacing-xl);

@@ -18,7 +18,8 @@ import {
 } from '@services/reservations'
 import { listPartners } from '@services/partners'
 import { listRooms } from '@services/rooms'
-import { listMinibarProducts } from '@services/minibar'
+import { listMinibarProducts, listConsumptions } from '@services/minibar'
+import './ReservationModal.css'
 import type { Reservation } from '@models/reservation'
 import type { Room } from '@models/room'
 import type { Partner } from '@models/partner'
@@ -47,15 +48,14 @@ type ReservationFormData = {
   status: string
 }
 
-const STATUS_COLORS: Record<string, { bg: string; text: string; label: string }> = {
-  'pre-reserva': { bg: '#fbbf24', text: '#78350f', label: 'Pré-reserva' },
-  'reservado': { bg: '#60a5fa', text: 'white', label: 'Reservado' },
-  'confirmado': { bg: '#34d399', text: 'white', label: 'Confirmado' },
-  'checked_in': { bg: '#a78bfa', text: 'white', label: 'Check-in' },
-  'checked_out': { bg: '#fb923c', text: 'white', label: 'Check-out' },
-  'no_show': { bg: '#ef4444', text: 'white', label: 'No-show' },
-  'cancelado': { bg: '#9ca3af', text: 'white', label: 'Cancelado' },
-  'blocked': { bg: '#6b7280', text: 'white', label: 'Bloqueado' },
+const STATUS_LABELS: Record<string, string> = {
+  'pre-reserva': 'Pré-reserva',
+  'reservado': 'Reservado',
+  'confirmado': 'Confirmado',
+  'checked_in': 'Check-in',
+  'checked_out': 'Check-out',
+  'no_show': 'No-show',
+  'cancelado': 'Cancelado',
 }
 
 export default function ReservationModal({
@@ -107,8 +107,13 @@ export default function ReservationModal({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
-
-  // Extract property_id from token
+  
+  // Status action dialogs
+  const [confirmDialog, setConfirmDialog] = useState<{
+    action: 'confirm' | 'checkin' | 'checkout' | 'cancel' | null
+    isOpen: boolean
+  }>({ action: null, isOpen: false })
+  const [guaranteeInput, setGuaranteeInput] = useState('')
   useEffect(() => {
     if (token) {
       const payload = decodeTokenPayload(token) as any
@@ -173,6 +178,24 @@ export default function ReservationModal({
       }))
     }
   }, [isEditing, reservation, date, roomId])
+
+  // Load existing minibar consumptions when reservation is loaded
+  useEffect(() => {
+    if (isEditing && reservation?.id) {
+      const loadConsumptions = async () => {
+        try {
+          const consumptions = await listConsumptions(reservation.id)
+          setLocalConsumptions(consumptions)
+        } catch (err) {
+          console.error('Error loading minibar consumptions:', err)
+        }
+      }
+      loadConsumptions()
+    } else {
+      // Reset consumptions for new reservation
+      setLocalConsumptions([])
+    }
+  }, [isEditing, reservation?.id])
 
   // Accessibility: manage focus
   useEffect(() => {
@@ -280,7 +303,20 @@ export default function ReservationModal({
   }
 
   const handleStatusAction = useCallback(
-    async (action: 'confirm' | 'checkin' | 'checkout' | 'cancel' | 'finalize', extras?: Record<string, string>) => {
+    async (action: 'confirm' | 'checkin' | 'checkout' | 'cancel' | 'finalize') => {
+      if (action === 'confirm') {
+        // Open dialog for guarantee type
+        setConfirmDialog({ action: 'confirm', isOpen: true })
+        return
+      }
+
+      if (action === 'cancel') {
+        // Open dialog for cancel confirmation
+        setConfirmDialog({ action: 'cancel', isOpen: true })
+        return
+      }
+
+      // For checkin and checkout, execute directly
       if (!reservation || !propertyId) return
 
       try {
@@ -289,22 +325,12 @@ export default function ReservationModal({
 
         let updated: Reservation
         switch (action) {
-          case 'confirm': {
-            const guarantee = window.prompt('Tipo de garantia (card/prepay) — deixe vazio para sem garantia')
-            updated = await confirmReservation(propertyId, reservation.id, guarantee ? { guarantee_type: guarantee } : {})
-            break
-          }
           case 'checkin':
             updated = await checkInReservation(propertyId, reservation.id)
             break
           case 'checkout':
             updated = await checkOutReservation(propertyId, reservation.id)
             break
-          case 'cancel': {
-            const reason = window.prompt('Motivo do cancelamento')
-            updated = await cancelReservation(propertyId, reservation.id)
-            break
-          }
           default:
             return
         }
@@ -318,6 +344,38 @@ export default function ReservationModal({
       }
     },
     [reservation, propertyId, onSaved, onClose]
+  )
+
+  const executeStatusAction = useCallback(async () => {
+    if (!reservation || !propertyId || !confirmDialog.action) return
+
+    try {
+      setLoading(true)
+      setError('')
+
+      let updated: Reservation
+      switch (confirmDialog.action) {
+        case 'confirm':
+          updated = await confirmReservation(propertyId, reservation.id, guaranteeInput ? { guarantee_type: guaranteeInput } : {})
+          break
+        case 'cancel':
+          updated = await cancelReservation(propertyId, reservation.id)
+          break
+        default:
+          return
+      }
+
+      setConfirmDialog({ action: null, isOpen: false })
+      setGuaranteeInput('')
+      if (onSaved) onSaved()
+      onClose()
+    } catch (err: any) {
+      setError(err.message || 'Erro ao executar ação')
+    } finally {
+      setLoading(false)
+    }
+  },
+    [reservation, propertyId, confirmDialog.action, guaranteeInput, onSaved, onClose]
   )
 
   const handleSave = async () => {
@@ -372,41 +430,107 @@ export default function ReservationModal({
       ? differenceInCalendarDays(parseISO(formData.end_date), parseISO(formData.start_date))
       : 0
 
-  const statusConfig = STATUS_COLORS[formData.status] || STATUS_COLORS['pre-reserva']
+  // Calculate minibar total
+  const minibarTotal = localConsumptions.reduce((sum, consumption) => {
+    const product = minibarProducts.find((p) => p.id === consumption.product_id)
+    const unitPrice = product ? (product.price || product.price_per_unit || 0) : (consumption.unit_price || 0)
+    const total = unitPrice * consumption.quantity
+    return sum + total
+  }, 0)
+
+  const totalWithMinibar = (priceOverride ? parseFloat(priceOverride) : calcTotal) + minibarTotal
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={isEditing ? 'Editar Reserva' : 'Nova Reserva'}
-    >
-      <div style={{ padding: '20px', maxWidth: '800px' }} aria-busy={initialLoading || calcLoading}>
+    <>
+      {/* Confirmation Dialog for Guarantee Type or Cancellation */}
+      <Modal
+        isOpen={confirmDialog.isOpen}
+        onClose={() => {
+          setConfirmDialog({ action: null, isOpen: false })
+          setGuaranteeInput('')
+        }}
+        title={confirmDialog.action === 'confirm' ? 'Confirmar Reserva' : 'Cancelar Reserva'}
+      >
+        <div className="confirm-dialog-content">
+          {confirmDialog.action === 'confirm' && (
+            <>
+              <p className="confirm-dialog-guarantee-text">
+                Selecione o tipo de garantia ou deixe em branco:
+              </p>
+              <div className="confirm-dialog-guarantee-buttons">
+                <button
+                  type="button"
+                  onClick={() => setGuaranteeInput('card')}
+                  className={`confirm-dialog-guarantee-button ${guaranteeInput === 'card' ? 'active' : ''}`}
+                >
+                  Cartão
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGuaranteeInput('prepay')}
+                  className={`confirm-dialog-guarantee-button ${guaranteeInput === 'prepay' ? 'active' : ''}`}
+                >
+                  Pré-pago
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGuaranteeInput('')}
+                  className={`confirm-dialog-guarantee-button ${guaranteeInput === '' ? 'active' : ''}`}
+                >
+                  Nenhuma
+                </button>
+              </div>
+            </>
+          )}
+
+          {confirmDialog.action === 'cancel' && (
+            <p className="confirm-dialog-cancellation-message">
+              Tem certeza que deseja cancelar esta reserva? Esta ação não pode ser desfeita.
+            </p>
+          )}
+
+          <div className="confirm-dialog-actions">
+            <button
+              type="button"
+              onClick={() => {
+                setConfirmDialog({ action: null, isOpen: false })
+                setGuaranteeInput('')
+              }}
+              className="btn btn-secondary"
+              disabled={loading}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={executeStatusAction}
+              className={`btn ${confirmDialog.action === 'cancel' ? 'btn-danger' : 'btn-success'}`}
+              disabled={loading}
+            >
+              {loading ? 'Processando...' : confirmDialog.action === 'confirm' ? 'Confirmar' : 'Cancelar Reserva'}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={isEditing ? 'Editar Reserva' : 'Nova Reserva'}
+      >
+      <div className="reservation-modal-content" aria-busy={initialLoading || calcLoading}>
         {/* Status row with indicator and action buttons (edit mode only) */}
         {isEditing && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', paddingBottom: '12px', borderBottom: '1px solid #e5e7eb' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="reservation-modal-header">
+            <div className="reservation-modal-header__status-section">
               <div
-                style={{
-                  padding: '6px 12px',
-                  backgroundColor: statusConfig.bg,
-                  color: statusConfig.text,
-                  borderRadius: '4px',
-                  fontWeight: '500',
-                  fontSize: '14px',
-                }}
+                className={`status-badge status-${formData.status}`}
               >
-                {statusConfig.label}
+                {STATUS_LABELS[formData.status] || formData.status}
               </div>
               {reservation?.guarantee_type && (
                 <div
-                  style={{
-                    padding: '6px 12px',
-                    backgroundColor: '#f0f0f0',
-                    color: '#333',
-                    borderRadius: '4px',
-                    fontSize: '12px',
-                    fontWeight: '500',
-                  }}
+                  className="reservation-modal-guarantee-badge"
                   title={`Garantia: ${reservation.guarantee_type}`}
                 >
                   {reservation.guarantee_type}
@@ -415,21 +539,13 @@ export default function ReservationModal({
             </div>
 
             {/* Status transition buttons */}
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div className="reservation-modal-header__actions">
               {formData.status === 'pre-reserva' && (
                 <>
                   <button
                     type="button"
                     onClick={() => handleStatusAction('confirm')}
-                    style={{
-                      padding: '6px 12px',
-                      fontSize: '12px',
-                      backgroundColor: '#34d399',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                    }}
+                    className="btn btn-sm btn-success"
                     disabled={loading}
                   >
                     Confirmar
@@ -441,15 +557,7 @@ export default function ReservationModal({
                   <button
                     type="button"
                     onClick={() => handleStatusAction('confirm')}
-                    style={{
-                      padding: '6px 12px',
-                      fontSize: '12px',
-                      backgroundColor: '#34d399',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                    }}
+                    className="btn btn-sm btn-success"
                     disabled={loading}
                   >
                     Confirmar
@@ -457,15 +565,7 @@ export default function ReservationModal({
                   <button
                     type="button"
                     onClick={() => handleStatusAction('checkin')}
-                    style={{
-                      padding: '6px 12px',
-                      fontSize: '12px',
-                      backgroundColor: '#a78bfa',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                    }}
+                    className="btn btn-sm btn-purple"
                     disabled={loading}
                   >
                     Check-in
@@ -473,15 +573,7 @@ export default function ReservationModal({
                   <button
                     type="button"
                     onClick={() => handleStatusAction('cancel')}
-                    style={{
-                      padding: '6px 12px',
-                      fontSize: '12px',
-                      backgroundColor: '#ef4444',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                    }}
+                    className="btn btn-sm btn-danger"
                     disabled={loading}
                   >
                     Cancelar
@@ -492,15 +584,7 @@ export default function ReservationModal({
                 <button
                   type="button"
                   onClick={() => handleStatusAction('checkin')}
-                  style={{
-                    padding: '6px 12px',
-                    fontSize: '12px',
-                    backgroundColor: '#a78bfa',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="btn btn-sm btn-purple"
                   disabled={loading}
                 >
                   Check-in
@@ -510,15 +594,7 @@ export default function ReservationModal({
                 <button
                   type="button"
                   onClick={() => handleStatusAction('checkout')}
-                  style={{
-                    padding: '6px 12px',
-                    fontSize: '12px',
-                    backgroundColor: '#fb923c',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="btn btn-sm btn-warning"
                   disabled={loading}
                 >
                   Check-out
@@ -528,45 +604,29 @@ export default function ReservationModal({
 
             {/* Minibar toggle button (edit mode only) */}
             {isEditing && minibarProducts.length > 0 && (
-              <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowMinibar(!showMinibar)}
-                  style={{
-                    padding: '6px 12px',
-                    fontSize: '12px',
-                    backgroundColor: '#f59e0b',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontWeight: '500',
-                  }}
-                  disabled={loading}
-                >
-                  {showMinibar ? 'Ocultar Frigobar' : 'Mostrar Frigobar'}
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setShowMinibar(!showMinibar)}
+                className="btn btn-sm btn-warning ml-auto"
+                disabled={loading}
+              >
+                {showMinibar ? 'Ocultar Frigobar' : 'Mostrar Frigobar'}
+              </button>
             )}
           </div>
         )}
 
         {/* Minibar Panel */}
         {isEditing && showMinibar && minibarProducts.length > 0 && (
-          <div
-            style={{
-              padding: '12px',
-              marginBottom: '16px',
-              backgroundColor: '#fffbeb',
-              border: '1px solid #fcd34d',
-              borderRadius: '4px',
-            }}
-          >
+          <div className="reservation-modal-minibar-panel">
             <MinibarPanel
               products={minibarProducts}
               reservationId={reservation?.id || null}
               onConsumptionCreated={(consumption) => {
                 setLocalConsumptions((prev) => [consumption, ...prev])
+              }}
+              onConsumptionDeleted={(consumptionId) => {
+                setLocalConsumptions((prev) => prev.filter((c) => c.id !== consumptionId))
               }}
               onProductsChange={setMinibarProducts}
             />
@@ -575,14 +635,7 @@ export default function ReservationModal({
 
         {error && (
           <div
-            style={{
-              padding: '12px',
-              marginBottom: '16px',
-              backgroundColor: '#fee',
-              color: '#c33',
-              borderRadius: '4px',
-              fontSize: '14px',
-            }}
+            className="reservation-modal-error"
             aria-live="assertive"
           >
             {error}
@@ -608,7 +661,7 @@ export default function ReservationModal({
             </FormField>
 
             {/* Guests breakdown - 3 column layout */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className="form-grid form-grid--3col">
               <FormField label="Adultos" name="adults_count" errors={fieldErrors}>
                 <input
                   type="number"
@@ -642,7 +695,7 @@ export default function ReservationModal({
             </div>
 
             {/* Dates - 2 column layout */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className="form-grid form-grid--2col">
               <FormField label="Entrada" name="start_date" errors={fieldErrors}>
                 <input
                   type="date"
@@ -680,112 +733,8 @@ export default function ReservationModal({
               </select>
             </FormField>
 
-            {/* Price Summary */}
-            <div
-              style={{
-                padding: '12px',
-                marginBottom: '16px',
-                backgroundColor: '#f5f5f5',
-                borderRadius: '4px',
-                border: '1px solid #ddd',
-              }}
-            >
-              {calcLoading ? (
-                <div>Calculando preço…</div>
-              ) : (
-                <>
-                  {/* Total price row with edit button */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '8px' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 'bold', fontSize: '16px', marginBottom: '4px' }}>
-                        Total: {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calcTotal)}
-                      </div>
-                      <div style={{ fontSize: '12px', color: '#666' }}>
-                        {stayLength} noite{stayLength !== 1 ? 's' : ''}
-                      </div>
-                    </div>
-
-                    {/* Manual price input field (compact, inline with button) */}
-                    {showManualPrice && (
-                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={priceOverride || ''}
-                          onChange={(e) => setPriceOverride(e.target.value)}
-                          placeholder={String(calcTotal)}
-                          style={{
-                            padding: '6px 8px',
-                            fontSize: '13px',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            width: '100px',
-                          }}
-                          disabled={loading || calcLoading}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setPriceOverride(null)
-                            setShowManualPrice(false)
-                          }}
-                          style={{
-                            padding: '6px 8px',
-                            fontSize: '12px',
-                            cursor: 'pointer',
-                            backgroundColor: '#fff',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            whiteSpace: 'nowrap',
-                          }}
-                          disabled={loading || calcLoading}
-                        >
-                          Apagar
-                        </button>
-                      </div>
-                    )}
-
-                    {!showManualPrice && (
-                      <button
-                        type="button"
-                        onClick={() => setShowManualPrice(true)}
-                        style={{
-                          padding: '6px 12px',
-                          fontSize: '12px',
-                          cursor: 'pointer',
-                          backgroundColor: '#fff',
-                          border: '1px solid #ccc',
-                          borderRadius: '4px',
-                          whiteSpace: 'nowrap',
-                        }}
-                        disabled={loading || calcLoading}
-                      >
-                        Editar
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Days breakdown (small font, pipe-separated) */}
-                  {daysBreakdown.length > 0 && !priceOverride && (
-                    <div style={{ fontSize: '12px', color: '#666', marginTop: '8px', lineHeight: '1.4' }}>
-                      {daysBreakdown
-                        .map((d) => `${format(parseISO(d.date), 'dd/MM')}: ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(d.price)}`)
-                        .join(' | ')}
-                    </div>
-                  )}
-
-                  {/* Show when no manual override */}
-                  {!priceOverride && !showManualPrice && daysBreakdown.length === 0 && (
-                    <div style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
-                      (Preço manual não definido)
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-
             {/* Partner and Notes - 2 column layout */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div className="form-grid form-grid--2col">
               <FormField label="Parceiro" name="partner_id">
                 <select
                   name="partner_id"
@@ -808,7 +757,7 @@ export default function ReservationModal({
                   value={formData.notes}
                   onChange={handleInputChange}
                   placeholder="Adicione informações adicionais..."
-                  style={{ minHeight: '80px', fontFamily: 'inherit', resize: 'vertical' }}
+                  className="form-textarea"
                   disabled={loading || calcLoading}
                 />
               </FormField>
@@ -830,23 +779,121 @@ export default function ReservationModal({
                   <option value="checked_out">Check-out</option>
                   <option value="no_show">No-show</option>
                   <option value="cancelado">Cancelado</option>
-                  <option value="blocked">Bloqueado</option>
                 </select>
               </FormField>
             )}
 
+            {/* Summary Panel - Values Breakdown */}
+            <div className="reservation-modal-price-summary">
+              {/* Hospedagem Breakdown */}
+              <div className="reservation-modal-section">
+                <div className="reservation-modal-section__title">
+                  HOSPEDAGEM
+                </div>
+                <div className="reservation-modal-days-breakdown">
+                  {daysBreakdown.length > 0 ? (
+                    daysBreakdown.map((day, idx) => (
+                      <span key={idx} className="reservation-modal-days-breakdown__day">
+                        {format(parseISO(day.date), 'dd/MM')}:{' '}
+                        <span className="reservation-modal-days-breakdown__price">
+                          {new Intl.NumberFormat('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          }).format(day.price)}
+                        </span>
+                        {idx < daysBreakdown.length - 1 && ' |'}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="reservation-modal-days-breakdown__placeholder">Selecione as datas</span>
+                  )}
+                </div>
+                <div className="reservation-modal-subtotal-row">
+                  <div className="reservation-modal-subtotal-row__label">
+                    Subtotal Hospedagem:{' '}
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(priceOverride ? parseFloat(priceOverride) : calcTotal)}
+                  </div>
+
+                  {/* Manual price control */}
+                  <div className="reservation-modal-manual-price">
+                    {showManualPrice && (
+                      <>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={priceOverride || ''}
+                          onChange={(e) => setPriceOverride(e.target.value)}
+                          placeholder={calcTotal.toFixed(2)}
+                          className="reservation-modal-manual-price__input"
+                          disabled={loading || calcLoading}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPriceOverride(null)
+                            setShowManualPrice(false)
+                          }}
+                          className="btn btn-xs btn-danger"
+                          disabled={loading || calcLoading}
+                        >
+                          Cancelar
+                        </button>
+                      </>
+                    )}
+                    {!showManualPrice && (
+                      <button
+                        type="button"
+                        onClick={() => setShowManualPrice(true)}
+                        className="btn btn-xs btn-secondary"
+                        disabled={loading || calcLoading}
+                      >
+                        Valor Manual
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Frigobar */}
+              {minibarTotal > 0 && (
+                <div className="reservation-modal-section reservation-modal-section--frigobar">
+                  <div className="reservation-modal-section__title">
+                    FRIGOBAR
+                  </div>
+                  <div className="reservation-modal-section__quantity">
+                    {localConsumptions.reduce((sum, c) => sum + c.quantity, 0)} item{localConsumptions.reduce((sum, c) => sum + c.quantity, 0) !== 1 ? 'ns' : ''}
+                  </div>
+                  <div className="reservation-modal-subtotal-row__label">
+                    Subtotal Frigobar:{' '}
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    }).format(minibarTotal)}
+                  </div>
+                </div>
+              )}
+
+              {/* Total */}
+              <div className="reservation-modal-total-row">
+                <span className="reservation-modal-total-row__label">TOTAL:</span>
+                <span className="reservation-modal-total-row__amount">
+                  {new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  }).format(totalWithMinibar)}
+                </span>
+              </div>
+            </div>
+
             {/* Actions */}
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '20px' }}>
+            <div className="reservation-modal-actions">
               <button
                 type="button"
                 onClick={onClose}
-                style={{
-                  padding: '8px 16px',
-                  backgroundColor: '#f5f5f5',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                }}
+                className="btn btn-secondary"
                 disabled={loading || calcLoading}
               >
                 Cancelar
@@ -854,14 +901,7 @@ export default function ReservationModal({
               <button
                 type="button"
                 onClick={handleSave}
-                style={{
-                  padding: '8px 16px',
-                  backgroundColor: '#3182CE',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                }}
+                className="btn btn-primary"
                 disabled={loading || calcLoading || Object.keys(fieldErrors).length > 0}
               >
                 {loading ? 'Salvando...' : 'Salvar'}
@@ -871,5 +911,7 @@ export default function ReservationModal({
         )}
       </div>
     </Modal>
+    </>
   )
 }
+
