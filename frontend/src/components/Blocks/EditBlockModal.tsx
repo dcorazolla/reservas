@@ -117,7 +117,7 @@ export default function EditBlockModal({ isOpen, block, onClose, onSave, rooms: 
         </FormField>
 
         {/* Date range - Group on same row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <div className="form-grid form-grid--2col">
           <FormField label={t('blocks.form.start_date')} name="start_date" errors={errors}>
             <input type="date" {...register('start_date')} disabled={isSubmitting} />
           </FormField>

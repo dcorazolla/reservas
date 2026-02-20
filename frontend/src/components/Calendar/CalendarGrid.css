@@ -4,6 +4,11 @@
   overflow-x: visible;
 }
 
+/* Hidden state for floating elements */
+.hidden {
+  display: none !important;
+}
+
 /* Floating cloned header used as a robust fallback when native sticky misbehaves */
 .floating-thead {
   position: fixed;
@@ -258,47 +263,47 @@ thead .room-col {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Status colors - 8 statuses */
+/* Status colors - 7 statuses */
 .status-pre-reserva {
-  background-color: #fbbf24;
-  color: #78350f;
-  border-left: 3px solid #f59e0b;
-}
-
-.status-reservado {
-  background-color: #60a5fa;
-  color: white;
+  background-color: #93c5fd;
+  color: #1e3a8a;
   border-left: 3px solid #3b82f6;
 }
 
-.status-confirmado {
-  background-color: #34d399;
+.status-reservado {
+  background-color: #3b82f6;
   color: white;
-  border-left: 3px solid #10b981;
+  border-left: 3px solid #1d4ed8;
+}
+
+.status-confirmado {
+  background-color: #10b981;
+  color: white;
+  border-left: 3px solid #047857;
 }
 
 .status-checked-in {
-  background-color: #a78bfa;
+  background-color: #0891b2;
   color: white;
-  border-left: 3px solid #8b5cf6;
+  border-left: 3px solid #0e7490;
 }
 
 .status-checked-out {
-  background-color: #fb923c;
+  background-color: #64748b;
   color: white;
-  border-left: 3px solid #f97316;
+  border-left: 3px solid #475569;
 }
 
 .status-no-show {
-  background-color: #ef4444;
+  background-color: #f97316;
   color: white;
-  border-left: 3px solid #dc2626;
+  border-left: 3px solid #ea580c;
 }
 
 .status-cancelado {
-  background-color: #9ca3af;
+  background-color: #991b1b;
   color: white;
-  border-left: 3px solid #6b7280;
+  border-left: 3px solid #7f1d1d;
 }
 
 /* Room block (blocked) status */

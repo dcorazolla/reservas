@@ -215,7 +215,7 @@ export default function CalendarGrid({
   return (
     <div className="calendar-wrapper">
       {/* Floating cloned header (hidden until needed) */}
-      <div ref={floatingRef} className="floating-thead" aria-hidden={!floatingVisible} style={{ display: 'none' }}>
+      <div ref={floatingRef} className={`floating-thead ${!floatingVisible ? 'hidden' : ''}`} aria-hidden={!floatingVisible}>
         <table className="calendar-table floating-table" role="presentation">
           <thead>
             <tr>
@@ -238,7 +238,7 @@ export default function CalendarGrid({
       </div>
 
       {/* Floating room column clone */}
-      <div ref={floatingRoomRef} className="floating-roomcol" aria-hidden={!floatingRoomVisible} style={{ display: 'none' }} />
+      <div ref={floatingRoomRef} className={`floating-roomcol ${!floatingRoomVisible ? 'hidden' : ''}`} aria-hidden={!floatingRoomVisible} />
 
       <table ref={tableRef} className="calendar-table">
         <thead>
@@ -277,6 +277,9 @@ export default function CalendarGrid({
             }> = []
 
             reservations.forEach((r) => {
+              // Skip canceled reservations - they appear in a separate reservations list page
+              if (canonicalStatus(r.status) === 'cancelado') return
+
               const s = format(parseISO(String(r.start_date)), 'yyyy-MM-dd')
               const e = format(parseISO(String(r.end_date)), 'yyyy-MM-dd')
               const origStart = dates.indexOf(s)

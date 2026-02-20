@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { format, parseISO, startOfMonth } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import './PeriodPicker.css'
 
 type Props = {
   currentDate: Date
@@ -15,7 +16,7 @@ export default function PeriodPicker({ currentDate, days, onPickDate }: Props) {
   const dayVal = format(currentDate, 'yyyy-MM-dd')
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div className="period-picker">
       {!dayMode ? (
         <input
           type="month"
@@ -35,8 +36,7 @@ export default function PeriodPicker({ currentDate, days, onPickDate }: Props) {
       <button
         onClick={() => setDayMode((s) => !s)}
         title={dayMode ? 'Voltar para mês/ano' : 'Abrir seleção por dia'}
-        className="btn-nav btn-nav-small"
-        style={{ padding: '6px 8px' }}
+        className="btn-nav btn-nav-small period-picker-toggle"
       >
         {dayMode ? 'Mês' : 'Dia'}
       </button>
