@@ -246,6 +246,33 @@
       "delete": "Supprimer"
     }
   },
+  "cancellation": {
+    "modal_title": "Annuler la Réservation",
+    "reason": "Motif de l'Annulation",
+    "reason_placeholder": "Décrivez le motif de l'annulation (obligatoire)",
+    "refund_preview": "Aperçu du Remboursement",
+    "refund_percentage": "Pourcentage de Remboursement",
+    "days_until_checkin": "Jours jusqu'à l'Arrivée",
+    "refund_amount": "Montant du Remboursement",
+    "preview_button": "Aperçu du Remboursement",
+    "confirm_button": "Confirmer l'Annulation",
+    "preview_note": "Vérifiez le montant du remboursement avant de confirmer l'annulation.",
+    "success_message": "Réservation annulée avec succès ! Le remboursement a été traité.",
+    "errors": {
+      "reason_required": "Le motif de l'annulation est requis",
+      "cancellation_failed": "Erreur lors du traitement de l'annulation. Veuillez réessayer."
+    }
+  },
+  "common": {
+    "guest": "Client",
+    "check_in": "Arrivée",
+    "check_out": "Départ",
+    "total_price": "Prix Total",
+    "days": "jours",
+    "close": "Fermer",
+    "loading": "Chargement",
+    "processing": "Traitement..."
+  },
   "home": {
     "title": "Tableau de bord",
     "description": "Gérez vos propriétés, réservations et disponibilité",

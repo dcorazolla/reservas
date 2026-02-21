@@ -269,6 +269,33 @@
       "delete": "Delete"
     }
   },
+  "cancellation": {
+    "modal_title": "Cancel Reservation",
+    "reason": "Cancellation Reason",
+    "reason_placeholder": "Describe the reason for cancellation (required)",
+    "refund_preview": "Refund Preview",
+    "refund_percentage": "Refund Percentage",
+    "days_until_checkin": "Days Until Check-in",
+    "refund_amount": "Refund Amount",
+    "preview_button": "Preview Refund",
+    "confirm_button": "Confirm Cancellation",
+    "preview_note": "Check the refund amount before confirming the cancellation.",
+    "success_message": "Reservation cancelled successfully! The refund has been processed.",
+    "errors": {
+      "reason_required": "Cancellation reason is required",
+      "cancellation_failed": "Error processing cancellation. Please try again."
+    }
+  },
+  "common": {
+    "guest": "Guest",
+    "check_in": "Check-in",
+    "check_out": "Check-out",
+    "total_price": "Total Price",
+    "days": "days",
+    "close": "Close",
+    "loading": "Loading",
+    "processing": "Processing..."
+  },
   "home": {
     "title": "Dashboard",
     "description": "Manage your properties, reservations and availability",

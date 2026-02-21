@@ -7,6 +7,7 @@ import Modal from '@components/Shared/Modal/Modal'
 import FormField from '@components/Shared/FormField/FormField'
 import SkeletonFields from '@components/Shared/Skeleton/SkeletonFields'
 import MinibarPanel from './MinibarPanel'
+import ReservationCancellationModal from './ReservationCancellationModal'
 import {
   createReservation,
   updateReservation,
@@ -114,6 +115,7 @@ export default function ReservationModal({
     isOpen: boolean
   }>({ action: null, isOpen: false })
   const [guaranteeInput, setGuaranteeInput] = useState('')
+  const [showCancellationModal, setShowCancellationModal] = useState(false)
   useEffect(() => {
     if (token) {
       const payload = decodeTokenPayload(token) as any
@@ -311,8 +313,8 @@ export default function ReservationModal({
       }
 
       if (action === 'cancel') {
-        // Open dialog for cancel confirmation
-        setConfirmDialog({ action: 'cancel', isOpen: true })
+        // Open cancellation modal with refund preview
+        setShowCancellationModal(true)
         return
       }
 
@@ -442,52 +444,42 @@ export default function ReservationModal({
 
   return (
     <>
-      {/* Confirmation Dialog for Guarantee Type or Cancellation */}
+      {/* Confirmation Dialog for Guarantee Type */}
       <Modal
-        isOpen={confirmDialog.isOpen}
+        isOpen={confirmDialog.isOpen && confirmDialog.action === 'confirm'}
         onClose={() => {
           setConfirmDialog({ action: null, isOpen: false })
           setGuaranteeInput('')
         }}
-        title={confirmDialog.action === 'confirm' ? 'Confirmar Reserva' : 'Cancelar Reserva'}
+        title="Confirmar Reserva"
       >
         <div className="confirm-dialog-content">
-          {confirmDialog.action === 'confirm' && (
-            <>
-              <p className="confirm-dialog-guarantee-text">
-                Selecione o tipo de garantia ou deixe em branco:
-              </p>
-              <div className="confirm-dialog-guarantee-buttons">
-                <button
-                  type="button"
-                  onClick={() => setGuaranteeInput('card')}
-                  className={`confirm-dialog-guarantee-button ${guaranteeInput === 'card' ? 'active' : ''}`}
-                >
-                  Cartão
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setGuaranteeInput('prepay')}
-                  className={`confirm-dialog-guarantee-button ${guaranteeInput === 'prepay' ? 'active' : ''}`}
-                >
-                  Pré-pago
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setGuaranteeInput('')}
-                  className={`confirm-dialog-guarantee-button ${guaranteeInput === '' ? 'active' : ''}`}
-                >
-                  Nenhuma
-                </button>
-              </div>
-            </>
-          )}
-
-          {confirmDialog.action === 'cancel' && (
-            <p className="confirm-dialog-cancellation-message">
-              Tem certeza que deseja cancelar esta reserva? Esta ação não pode ser desfeita.
-            </p>
-          )}
+          <p className="confirm-dialog-guarantee-text">
+            Selecione o tipo de garantia ou deixe em branco:
+          </p>
+          <div className="confirm-dialog-guarantee-buttons">
+            <button
+              type="button"
+              onClick={() => setGuaranteeInput('card')}
+              className={`confirm-dialog-guarantee-button ${guaranteeInput === 'card' ? 'active' : ''}`}
+            >
+              Cartão
+            </button>
+            <button
+              type="button"
+              onClick={() => setGuaranteeInput('prepay')}
+              className={`confirm-dialog-guarantee-button ${guaranteeInput === 'prepay' ? 'active' : ''}`}
+            >
+              Pré-pago
+            </button>
+            <button
+              type="button"
+              onClick={() => setGuaranteeInput('')}
+              className={`confirm-dialog-guarantee-button ${guaranteeInput === '' ? 'active' : ''}`}
+            >
+              Nenhuma
+            </button>
+          </div>
 
           <div className="confirm-dialog-actions">
             <button
@@ -504,14 +496,35 @@ export default function ReservationModal({
             <button
               type="button"
               onClick={executeStatusAction}
-              className={`btn ${confirmDialog.action === 'cancel' ? 'btn-danger' : 'btn-success'}`}
+              className="btn btn-success"
               disabled={loading}
             >
-              {loading ? 'Processando...' : confirmDialog.action === 'confirm' ? 'Confirmar' : 'Cancelar Reserva'}
+              {loading ? 'Processando...' : 'Confirmar'}
             </button>
           </div>
         </div>
       </Modal>
+
+      {/* Cancellation Modal with Refund Preview */}
+      {reservation && (
+        <ReservationCancellationModal
+          isOpen={showCancellationModal}
+          onClose={() => setShowCancellationModal(false)}
+          onConfirm={() => {
+            setShowCancellationModal(false)
+            if (onSaved) onSaved()
+            onClose()
+          }}
+          reservation={{
+            id: reservation.id,
+            guest_name: reservation.guest_name,
+            check_in_date: reservation.start_date,
+            check_out_date: reservation.end_date,
+            total_price: reservation.price_override || calcTotal,
+            status: reservation.status,
+          }}
+        />
+      )}
 
       <Modal
         isOpen={isOpen}

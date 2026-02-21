@@ -246,6 +246,33 @@
       "delete": "Eliminar"
     }
   },
+  "cancellation": {
+    "modal_title": "Cancelar Reserva",
+    "reason": "Motivo de la Cancelación",
+    "reason_placeholder": "Describa el motivo de la cancelación (requerido)",
+    "refund_preview": "Vista Previa del Reembolso",
+    "refund_percentage": "Porcentaje de Reembolso",
+    "days_until_checkin": "Días hasta el Check-in",
+    "refund_amount": "Monto del Reembolso",
+    "preview_button": "Vista Previa del Reembolso",
+    "confirm_button": "Confirmar Cancelación",
+    "preview_note": "Verifique el monto del reembolso antes de confirmar la cancelación.",
+    "success_message": "¡Reserva cancelada exitosamente! El reembolso ha sido procesado.",
+    "errors": {
+      "reason_required": "El motivo de la cancelación es requerido",
+      "cancellation_failed": "Error al procesar la cancelación. Intente de nuevo."
+    }
+  },
+  "common": {
+    "guest": "Huésped",
+    "check_in": "Check-in",
+    "check_out": "Check-out",
+    "total_price": "Precio Total",
+    "days": "días",
+    "close": "Cerrar",
+    "loading": "Cargando",
+    "processing": "Procesando..."
+  },
   "home": {
     "title": "Panel de control",
     "description": "Administre sus propiedades, reservas y disponibilidad",
