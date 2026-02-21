@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PartnerController;
 use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\CancellationPolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,13 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/reservations/calculate', [ReservationPriceController::class, 'calculate']);
     Route::post('/reservations/calculate-detailed', [ReservationPriceController::class, 'calculateDetailed']);
     Route::post('/availability/search', [AvailabilityController::class, 'search']);
+
+    // Cancellation policies
+    Route::get('/properties/{property}/cancellation-policy', [CancellationPolicyController::class, 'show']);
+    Route::put('/properties/{property}/cancellation-policy', [CancellationPolicyController::class, 'update']);
+    Route::get('/cancellation-policy-templates', [CancellationPolicyController::class, 'templates']);
+    Route::get('/reservations/{reservation}/preview-cancellation', [CancellationPolicyController::class, 'previewCancellation']);
+    Route::post('/reservations/{reservation}/cancel-with-policy', [CancellationPolicyController::class, 'cancel']);
 
     // Categorias e quartos
     Route::apiResource('room-categories', RoomCategoryController::class);

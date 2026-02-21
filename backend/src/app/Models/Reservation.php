@@ -33,6 +33,9 @@ class Reservation extends Model
         'guarantee_at',
         'guarantee_token',
         'notes',
+        'cancelled_at',
+        'cancellation_reason',
+        'cancellation_refund_calc',
     ];
 
     protected $casts = [

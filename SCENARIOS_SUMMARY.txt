@@ -1,0 +1,90 @@
+╔═══════════════════════════════════════════════════════════════════════════════════╗
+║                    RESERVAS + FINANCEIRO - ANÁLISE COMPLETA                       ║
+║                          Cenários Descobertos (20/02/2026)                         ║
+╚═══════════════════════════════════════════════════════════════════════════════════╝
+
+RESULTADO DA ANÁLISE:
+====================
+
+✅ COBERTO (Hoje + Fase 1):
+  • Criação de reserva (pré-reserva)
+  • Confirmação (reservado → confirmado)
+  • Check-in standard
+  • Check-out standard
+  • Cancelamento simples
+  • Price override com auditoria
+  • Minibar tracking
+  • Invoice auto-creation
+
+🚨 DESCOBERTO - CRÍTICO (Fase 2):
+  • EARLY DEPARTURE: Hóspede sai antes. Recalc preço, reduz invoice, refund
+  • GUEST MODIFICATION: Correção de dados pós-check-in (typos, doc errado)
+  • REFUND POLICY: % refund baseado em dias antes do check-in
+  • MULTI-LINE INVOICE: Consolidar booking + minibar + extras em 1 invoice
+  • FINALIZE: Lock guest data + preço após check-out
+
+⚠️  IMPORTANTE (Fase 2):
+  • NO-SHOW: Novo status, possível penalidade
+  • PRICE RECALC ON EDIT: Editar datas → recalc invoice
+  • ROOM CHANGE: Trocar quarto mid-stay → novo preço
+  • LATE CHECKOUT: Prorrogar 2h → taxa extra
+  • PAYMENT STATUS SYNC: Update payment_status com invoice tracking
+
+IMPACTO FNRH:
+=============
+
+SEM FASE 2 (Implementar FNRH agora):
+  ❌ FNRH não saberá de early departures
+  ❌ FNRH não saberá de guest modifications
+  ❌ FNRH não saberá de refunds
+  ❌ FNRH não saberá de preços ajustados
+  ❌ Backend terá lógica quebrada → ficaremos remendando depois
+
+COM FASE 2 COMPLETA (Depois implementar FNRH):
+  ✅ FNRH terá todos os cenários financeiros cobertos
+  ✅ Backend pronto para qualquer scenario de reserva
+  ✅ Audit trail completo para todas as mudanças
+  ✅ FNRH Outbox pode enfileirar 6 stages (não 3)
+  ✅ Offline-first funciona 100% mesmo sem FNRH
+
+NOVO ROADMAP (5 FASES):
+=======================
+
+FASE 1: RESERVAS CORE (Semana 1)
+  Scope: Pré-check-in minimal, check-in, checkout, cancelamento, audit
+  Status: Exatamente como planejado antes
+  Outputs: Backend + Frontend offline-funcional
+
+FASE 2: RESERVAS EXTENDED + FINANCEIRO (Semana 2) 🚨 NOVO
+  Scope: Early departure, guest modification, no-show, finalize, refund, price recalc
+  Status: CRÍTICO - implementar ANTES de FNRH
+  Outputs: Todos os scenarios financeiros + audit + invoice extended
+
+FASE 3: FINANCIAL INTEGRATION (Semana 2.5)
+  Scope: Multi-line invoice, payment status, lock after send
+  Status: Consolidação financeira
+  Outputs: Financeiro integrado e consistente
+
+FASE 4: FNRH OUTBOX (Semana 3) 🎯 FNRH AGORA SIM
+  Scope: Async queue com 6 stages (guest, checkin, checkout, early_dep, guest_upd, finalized)
+  Status: Com cobertura completa de scenarios
+  Outputs: FNRH pronto com dados completos
+
+FASE 5: POLISH + DOCS (Semana 4)
+  Scope: Error handling, perf, OpenAPI, ADRs, docs
+  Status: Finalização
+  Outputs: Documentação e polimento
+
+ARQUIVOS ATUALIZADOS:
+====================
+  ✅ plan-fnrhHybridSyncFlow.prompt.md (seção "Cenários de Reservas QUE NÃO TEMOS")
+  ✅ plan-fnrhHybridSyncFlow.prompt.md (novo roadmap 5-fases)
+  ✅ plan-fnrhHybridSyncFlow.prompt.md (Key Decisions atualizado)
+  ✅ FNRH_SCENARIOS_ANALYSIS.md (análise detalhada - novo arquivo)
+  ✅ TODO.md (8 fases planejadas)
+
+RECOMENDAÇÃO FINAL:
+==================
+Implementar Fase 1 + Fase 2 antes de FNRH.
+Seria corrigir depois financeiro será 10x mais caro.
+
