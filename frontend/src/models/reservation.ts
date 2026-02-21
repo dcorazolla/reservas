@@ -3,6 +3,8 @@
  * Types and interfaces for reservations, rooms, and calendar data
  */
 
+import { parseISO, differenceInDays, isBefore } from 'date-fns'
+
 /**
  * Reservation Status - 8 possible states
  * Transitions: pre-reserva → reservado → confirmado → checked_in → checked_out
@@ -232,18 +234,26 @@ export function getCalendarConfig(viewportWidth: number) {
  * Helper to validate reservation date range
  */
 export function isValidReservationDates(startDate: string, endDate: string): boolean {
-  const start = new Date(startDate)
-  const end = new Date(endDate)
-  return start < end
+  try {
+    const start = parseISO(startDate)
+    const end = parseISO(endDate)
+    return isBefore(start, end)
+  } catch {
+    return false
+  }
 }
 
 /**
  * Helper to calculate length of stay in days
  */
 export function getStayLength(startDate: string, endDate: string): number {
-  const start = new Date(startDate)
-  const end = new Date(endDate)
-  return Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+  try {
+    const start = parseISO(startDate)
+    const end = parseISO(endDate)
+    return differenceInDays(end, start)
+  } catch {
+    return 0
+  }
 }
 
 /**

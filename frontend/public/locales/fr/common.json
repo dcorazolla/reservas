@@ -6,7 +6,10 @@
       "cancel": "Annuler",
       "create": "Créer",
       "save": "Enregistrer",
-      "confirm": "Confirmer"
+      "confirm": "Confirmer",
+      "update": "Mettre à jour",
+      "view": "Afficher",
+      "logout": "Déconnexion"
     },
     "status": {
       "loading": "Chargement...",
@@ -20,7 +23,9 @@
       "error_max_100": "Ne peut pas être supérieur à 100",
       "error_loading": "Erreur lors du chargement des données",
       "error_saving": "Erreur lors de l'enregistrement des données",
-      "success": "Succès"
+      "success": "Succès",
+      "welcome": "Bienvenue",
+      "coming_soon": "À venir"
     },
     "confirm": {
       "delete_title": "Confirmation de suppression",
@@ -82,6 +87,7 @@
     "error": "Erreur d'authentification"
   },
   "menu": {
+    "home": "Accueil",
     "calendar": "Calendrier",
     "reservations": "Réservations",
     "navigation": "Navigation",
@@ -94,6 +100,7 @@
       "rooms": "Chambres",
       "users": "Utilisateurs",
       "partners": "Partenaires",
+      "blocks": "Blocages",
       "rates": {
         "label": "Tarifs",
         "base": "Tarif de base",
@@ -153,5 +160,97 @@
     "form": {
       "saved_success": "Tarifs de base enregistrés avec succès!"
     }
+  },
+  "blocks": {
+    "page": {
+      "title": "Blocages de Chambres"
+    },
+    "form": {
+      "new": "Nouveau Blocage",
+      "edit": "Modifier le Blocage",
+      "room": "Chambre",
+      "type": "Type de Blocage",
+      "start_date": "Date de Début",
+      "end_date": "Date de Fin",
+      "reason": "Raison",
+      "recurrence": "Récurrence"
+    },
+    "type": {
+      "maintenance": "Maintenance",
+      "cleaning": "Nettoyage",
+      "private": "Privé",
+      "custom": "Personnalisé"
+    }
+  },
+  "calendar": {
+    "title": "Calendrier des Réservations",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "period": "Période",
+    "days": "Jours",
+    "empty": "Aucune réservation trouvée pour cette période",
+    "error_loading": "Erreur lors du chargement du calendrier"
+  },
+  "reservations": {
+    "title": "Réservations",
+    "new": "Nouvelle Réservation",
+    "edit": "Modifier la Réservation",
+    "form": {
+      "guest_name": "Nom de l'Hôte",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "room": "Chambre",
+      "start_date": "Arrivée",
+      "end_date": "Départ",
+      "adults_count": "Adultes",
+      "children_count": "Enfants",
+      "infants_count": "Bébés",
+      "status": "Statut",
+      "partner": "Partenaire",
+      "notes": "Remarques",
+      "price_override": "Prix Manuel",
+      "total_value": "Valeur Totale"
+    },
+    "list": {
+      "room": "Chambre",
+      "guest": "Hôte",
+      "checkin": "Arrivée",
+      "checkout": "Départ",
+      "status": "Statut",
+      "contact": "Contact",
+      "partner": "Partenaire",
+      "value": "Valeur",
+      "actions": "Actions",
+      "period": "Période",
+      "search_guest": "Rechercher par nom",
+      "search_contact": "Rechercher par contact",
+      "filter_status": "Filtrer par statut",
+      "filter_partner": "Filtrer par partenaire"
+    },
+    "status": {
+      "pre-reserva": "Pré-réservation",
+      "reservado": "Réservé",
+      "confirmado": "Confirmé",
+      "checked-in": "Arrivée confirmée",
+      "checked-out": "Départ confirmé",
+      "no-show": "Absent",
+      "cancelado": "Annulé",
+      "blocked": "Bloqué"
+    },
+    "actions": {
+      "checkin": "Arrivée",
+      "checkout": "Départ",
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "finalize": "Finaliser",
+      "delete": "Supprimer"
+    }
+  },
+  "home": {
+    "title": "Tableau de bord",
+    "description": "Gérez vos propriétés, réservations et disponibilité",
+    "calendar_description": "Visualisez et gérez vos réservations dans un calendrier interactif",
+    "reservations_description": "Gérez vos réservations avec des filtres et des rapports",
+    "coming_soon": "À venir"
   }
 }

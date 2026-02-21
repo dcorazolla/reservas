@@ -1,10 +1,256 @@
 {
-  "title": "Reservas",
+  "common": {
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "cancel": "Cancelar",
+      "create": "Crear",
+      "save": "Guardar",
+      "confirm": "Confirmar",
+      "update": "Actualizar",
+      "view": "Ver",
+      "logout": "Cerrar sesión"
+    },
+    "status": {
+      "loading": "Cargando...",
+      "error": "Ocurrió un error",
+      "new": "Nuevo",
+      "no_data": "No hay datos disponibles",
+      "error_required": "Campo obligatorio",
+      "error_invalid_email": "Correo electrónico inválido",
+      "error_max": "Campo demasiado largo",
+      "error_min_zero": "Debe ser mayor que cero",
+      "error_max_100": "No puede ser mayor que 100",
+      "error_loading": "Error al cargar datos",
+      "error_saving": "Error al guardar datos",
+      "success": "Éxito",
+      "welcome": "Bienvenido",
+      "coming_soon": "Próximamente"
+    },
+    "confirm": {
+      "delete_title": "Confirmación de eliminación",
+      "delete_message_prefix": "¿Está seguro que desea eliminar",
+      "delete_message_suffix": "Esta acción no se puede deshacer.",
+      "delete_confirm": "Eliminar"
+    },
+    "pricing": {
+      "additional_adult": "Precio adulto adicional",
+      "child_factor": "Factor niño",
+      "child_max_age": "Edad máxima (niños)",
+      "child_price": "Precio niño",
+      "base_one_adult": "Base 1 adulto",
+      "base_two_adults": "Base 2 adultos",
+      "tariff_base": "Tarifa base",
+      "five_adults": "Precio 5 adultos",
+      "four_adults": "Precio 4 adultos",
+      "hide_rates": "Ocultar tarifas",
+      "infant_max_age": "Edad máxima (infantes)",
+      "seven_adults": "Precio 7 adultos",
+      "show_rates": "Mostrar tarifas",
+      "six_adults": "Precio 6 adultos",
+      "three_adults": "Precio 3 adultos",
+      "price_n_people": "Precio para {{count}} persona(s)"
+    }
+  },
+  "header": {
+    "open_menu": "Abrir menú",
+    "subtitle": "gestión de reservas",
+    "user_menu_button": "Menú de usuario",
+    "user_fallback": "Usuario",
+    "logout": "Salir"
+  },
+  "footer": {
+    "copy": "© 2026 Reservas. Todos los derechos reservados."
+  },
   "login": {
+    "change_language": "Cambiar idioma",
     "title": "Iniciar sesión",
+    "subtitle": "Inicia sesión en tu cuenta para continuar",
     "email": "Correo electrónico",
     "password": "Contraseña",
     "submit": "Entrar",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "create_account": "Crear cuenta",
+    "no_account": "¿No tienes una cuenta?",
+    "remember_me": "Recuérdame",
+    "social_google": "Entrar con Google",
+    "social_facebook": "Entrar con Facebook",
+    "social_google_notice": "Inicio con Google no habilitado en este prototipo",
+    "social_facebook_notice": "Inicio con Facebook no habilitado en este prototipo",
+    "or": "o",
+    "email_placeholder": "tu@correo.com",
+    "password_placeholder": "••••••••",
+    "demo_notice": "La funcionalidad de inicio de sesión no está implementada en este prototipo.",
+    "accessible_help": "Rellena el formulario para iniciar sesión",
+    "email_error": "Proporciona un correo electrónico válido",
+    "password_error": "La contraseña debe tener al menos 6 caracteres",
     "error": "Error al autenticar"
+  },
+  "menu": {
+    "home": "Inicio",
+    "calendar": "Calendario",
+    "reservations": "Reservas",
+    "navigation": "Navegación",
+    "open": "Abrir menú",
+    "toggle": "Alternar submenú",
+    "settings": {
+      "label": "Configuración",
+      "properties": "Propiedades",
+      "roomCategories": "Categorías de habitación",
+      "rooms": "Habitaciones",
+      "users": "Usuarios",
+      "partners": "Socios",
+      "blocks": "Bloqueos",
+      "rates": {
+        "label": "Tarifas",
+        "base": "Tarifa base",
+        "room": "Tarifa por habitación",
+        "period": "Tarifa por periodo"
+      }
+    }
+  },
+  "properties": {
+    "page": {
+      "title": "Propiedades"
+    },
+    "form": {
+      "name": "Nombre",
+      "timezone": "Zona horaria",
+      "new": "Nueva propiedad",
+      "edit": "Editar propiedad",
+      "base_rates_title": "Tarifa Base"
+    }
+  },
+  "roomCategories": {
+    "page": {
+      "title": "Categorías de cuarto"
+    },
+    "form": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "show_rates": "Mostrar tarifas",
+      "hide_rates": "Ocultar tarifas",
+      "new": "Nueva categoría",
+      "edit": "Editar categoría",
+      "rate_group_title": "Tarifas de categoría"
+    }
+  },
+  "rooms": {
+    "page": {
+      "title": "Habitaciones"
+    },
+    "form": {
+      "name": "Nombre",
+      "category": "Categoría",
+      "category_placeholder": "Selecciona una categoría",
+      "beds": "Camas",
+      "capacity": "Capacidad",
+      "notes": "Notas",
+      "number": "Número",
+      "create": "Crear habitación",
+      "new": "Nueva habitación",
+      "edit": "Editar habitación"
+    },
+    "errors": {
+      "load": "Error al cargar habitaciones",
+      "save": "Error al guardar habitación"
+    }
+  },
+  "baseRates": {
+    "form": {
+      "saved_success": "¡Tarifas base guardadas con éxito!"
+    }
+  },
+  "blocks": {
+    "page": {
+      "title": "Bloqueos de Habitaciones"
+    },
+    "form": {
+      "new": "Nuevo Bloqueo",
+      "edit": "Editar Bloqueo",
+      "room": "Habitación",
+      "type": "Tipo de Bloqueo",
+      "start_date": "Fecha de Inicio",
+      "end_date": "Fecha de Fin",
+      "reason": "Motivo",
+      "recurrence": "Recurrencia"
+    },
+    "type": {
+      "maintenance": "Mantenimiento",
+      "cleaning": "Limpieza",
+      "private": "Privado",
+      "custom": "Personalizado"
+    }
+  },
+  "calendar": {
+    "title": "Calendario de Reservas",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "period": "Período",
+    "days": "Días",
+    "empty": "No hay reservas para este período",
+    "error_loading": "Error al cargar el calendario"
+  },
+  "reservations": {
+    "title": "Reservas",
+    "new": "Nueva Reserva",
+    "edit": "Editar Reserva",
+    "form": {
+      "guest_name": "Nombre del Huésped",
+      "email": "Correo Electrónico",
+      "phone": "Teléfono",
+      "room": "Habitación",
+      "start_date": "Check-in",
+      "end_date": "Check-out",
+      "adults_count": "Adultos",
+      "children_count": "Niños",
+      "infants_count": "Bebés",
+      "status": "Estado",
+      "partner": "Socio",
+      "notes": "Notas",
+      "price_override": "Precio Manual",
+      "total_value": "Valor Total"
+    },
+    "list": {
+      "room": "Habitación",
+      "guest": "Huésped",
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "status": "Estado",
+      "contact": "Contacto",
+      "partner": "Socio",
+      "value": "Valor",
+      "actions": "Acciones",
+      "period": "Período",
+      "search_guest": "Buscar por huésped",
+      "search_contact": "Buscar por contacto",
+      "filter_status": "Filtrar por estado",
+      "filter_partner": "Filtrar por socio"
+    },
+    "status": {
+      "pre-reserva": "Pre-reserva",
+      "reservado": "Reservado",
+      "confirmado": "Confirmado",
+      "checked-in": "Ingresado",
+      "checked-out": "Salida",
+      "no-show": "No se presentó",
+      "cancelado": "Cancelado",
+      "blocked": "Bloqueado"
+    },
+    "actions": {
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "finalize": "Finalizar",
+      "delete": "Eliminar"
+    }
+  },
+  "home": {
+    "title": "Panel de control",
+    "description": "Administre sus propiedades, reservas y disponibilidad",
+    "calendar_description": "Vea y administre sus reservas en un calendario interactivo",
+    "reservations_description": "Administre sus reservas con filtros e informes",
+    "coming_soon": "Próximamente"
   }
 }

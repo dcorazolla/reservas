@@ -36,7 +36,7 @@
 .form-field input,
 .form-field select,
 .form-field textarea {
-  padding: 8px;
+  padding: var(--spacing-sm);
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.08);
   width: 100%;
@@ -70,7 +70,7 @@
 
 /* --- Buttons --- */
 .btn {
-  padding: 8px 12px;
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: 6px;
   border: 1px solid transparent;
   background: transparent;
@@ -111,7 +111,7 @@
 .rate-group {
   grid-column: 1 / -1;
   border: 1px solid rgba(0, 0, 0, 0.06);
-  padding: 10px;
+  padding: var(--spacing-md);
   border-radius: 8px;
   background: var(--chakra-colors-white, #fff);
 }
@@ -124,7 +124,7 @@
 }
 
 .group-toggle {
-  padding: 6px 10px;
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.06);
   background: transparent;
@@ -147,7 +147,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: var(--spacing-md);
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.04);
   background: var(--chakra-colors-white, #fff);

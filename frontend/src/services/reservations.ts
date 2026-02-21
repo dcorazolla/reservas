@@ -4,6 +4,7 @@
  */
 
 import api from './api'
+import { format, startOfMonth, endOfMonth, parseISO } from 'date-fns'
 import type {
   Reservation,
   ReservationListResponse,
@@ -41,8 +42,9 @@ export async function listReservations(
   }
 
   if (filters.month && filters.year) {
-    const from = new Date(filters.year, filters.month - 1, 1).toISOString().split('T')[0]
-    const to = new Date(filters.year, filters.month, 0).toISOString().split('T')[0]
+    const date = new Date(filters.year, filters.month - 1, 1)
+    const from = format(startOfMonth(date), 'yyyy-MM-dd')
+    const to = format(endOfMonth(date), 'yyyy-MM-dd')
     params.from = from
     params.to = to
   }

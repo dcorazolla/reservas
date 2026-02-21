@@ -48,6 +48,7 @@ class RoomBlockCrudTest extends TestCase
                 'room_id' => $room->id,
                 'start_date' => now()->toDateString(),
                 'end_date' => now()->addDays(1)->toDateString(),
+                'type' => 'maintenance',
                 'reason' => 'Maintenance',
             ])->assertStatus(201)
             ->json();

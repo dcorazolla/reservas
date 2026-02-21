@@ -1,0 +1,460 @@
+/* Calendar Grid Styles */
+.calendar-wrapper {
+  width: 100%;
+  overflow-x: visible;
+}
+
+/* Hidden state for floating elements */
+.hidden {
+  display: none !important;
+}
+
+/* Floating cloned header used as a robust fallback when native sticky misbehaves */
+.floating-thead {
+  position: fixed;
+  top: calc(var(--app-header-h, 60px));
+  left: 0;
+  /* place the floating day-row above the room column but below the sidebar/header */
+  z-index: 1085; /* below sidebar (1090) and header (1100) */
+  pointer-events: none; /* avoid intercepting clicks; presentational only */
+}
+.floating-thead .floating-table {
+  border-collapse: collapse;
+  background: transparent;
+}
+.floating-thead .calendar-table th,
+.floating-thead .calendar-table td {
+  background: #f8f9fa;
+}
+
+/* Floating room column clone */
+.floating-roomcol {
+  position: fixed;
+  left: calc(var(--app-sidebar-left, 55px));
+  z-index: 1055;
+  pointer-events: none;
+  background: transparent;
+  overflow: hidden;
+}
+.floating-roomcol .floating-room-table th,
+.floating-roomcol .floating-room-table td {
+  background: #f8f9fa;
+}
+
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 14px;
+  --day-cell-w: 30px;
+  table-layout: fixed;
+}
+
+.calendar-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  /* keep thead as structural element; make individual th sticky for robustness */
+  position: relative;
+  z-index: 2;
+}
+
+/* Make each header cell sticky so the header row pins reliably under the app header */
+.calendar-table thead th {
+  position: sticky;
+  top: 0; /* original header sticks at table top (document handles vertical offset) */
+  z-index: 1050; /* below app header (1100), above table rows */
+  background: #f8f9fa; /* ensure header covers rows scrolling underneath */
+  box-shadow: 0 -1px 0 rgba(222,226,230,1); /* subtle top border matching table */
+}
+
+.calendar-table th {
+  padding: 6px 2px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  border-right: 1px solid #e9ecef;
+  font-size: 12px;
+}
+
+.calendar-table th:last-child {
+  border-right: none;
+}
+
+/* Room column - sticky on left */
+.room-col {
+  background-color: #fff !important;
+  position: sticky;
+  /* stick at the left edge of the table */
+  left: 0;
+  /* normal room column sits below floating clones and day-row */
+  z-index: 1045;
+  width: 100px;
+  min-width: 100px;
+  text-align: left;
+  padding: 8px !important;
+  font-weight: 600;
+  border-right: 2px solid #dee2e6;
+  font-size: 12px;
+}
+
+thead .room-col {
+  background-color: #f8f9fa !important;
+  z-index: 1046;
+  border-right: 2px solid #dee2e6;
+}
+
+/* Day header */
+.day-header {
+  width: var(--day-cell-w);
+  min-width: var(--day-cell-w);
+  border-left: 1px solid #e9ecef;
+  box-sizing: border-box;
+}
+
+.day-header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 4px 0;
+}
+
+.month-label {
+  font-size: 9px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1;
+}
+
+.day-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1;
+}
+
+/* Table body */
+.calendar-table tbody tr {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.calendar-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Half cells (checkout/checkin) */
+.half-cell {
+  width: 28px;
+  height: 28px;
+  border-right: none;
+  cursor: pointer;
+  position: relative;
+  background-color: white;
+  transition: background-color 0.2s;
+  padding: 0;
+}
+
+.half-cell:hover {
+  background-color: #f0f7ff;
+  box-shadow: inset 0 0 4px rgba(0, 123, 255, 0.2);
+}
+
+.half-cell.checkout::after {
+  content: '';
+  display: none;
+}
+
+.half-cell.checkin::after {
+  content: '';
+  display: none;
+}
+.day-cell {
+  width: var(--day-cell-w);
+  height: var(--day-cell-w);
+  border-right: none;
+  cursor: pointer;
+  position: relative;
+  background-color: white;
+  transition: background-color 0.12s;
+  padding: 0;
+}
+
+/* show borders between days (no border between halves because halves are overlays) */
+.calendar-table td.day-cell,
+.calendar-table th.day-header {
+  border-left: 1px solid #e9ecef;
+}
+
+.day-cell.empty:hover {
+  background-color: #f0f7ff;
+  box-shadow: inset 0 0 4px rgba(0, 123, 255, 0.08);
+}
+
+/* Reservation overlay inside a single day cell */
+.reservation-overlay {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.reservation-overlay.full {
+  left: 2px;
+  right: 2px;
+}
+
+.reservation-overlay.half.left {
+  left: 2px;
+  right: 50%;
+}
+
+.reservation-overlay.half.right {
+  left: 50%;
+  right: 2px;
+}
+
+.reservation-overlay .reservation-info {
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Reservation cells */
+.reservation-cell {
+  padding: 4px;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: 500;
+  border-right: none;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.reservation-cell:hover {
+  opacity: 0.85;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.reservation-cell {
+  padding: 4px;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+  font-weight: 500;
+  border-right: none;
+  transition: all 0.12s;
+  position: relative;
+  overflow: hidden;
+}
+.reservation-cell:hover {
+  opacity: 0.95;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Status colors - 7 statuses */
+.status-pre-reserva {
+  background-color: #93c5fd;
+  color: #1e3a8a;
+  border-left: 3px solid #3b82f6;
+}
+
+.status-reservado {
+  background-color: #3b82f6;
+  color: white;
+  border-left: 3px solid #1d4ed8;
+}
+
+.status-confirmado {
+  background-color: #10b981;
+  color: white;
+  border-left: 3px solid #047857;
+}
+
+.status-checked-in {
+  background-color: #0891b2;
+  color: white;
+  border-left: 3px solid #0e7490;
+}
+
+.status-checked-out {
+  background-color: #64748b;
+  color: white;
+  border-left: 3px solid #475569;
+}
+
+.status-no-show {
+  background-color: #f97316;
+  color: white;
+  border-left: 3px solid #ea580c;
+}
+
+.status-cancelado {
+  background-color: #991b1b;
+  color: white;
+  border-left: 3px solid #7f1d1d;
+}
+
+/* Room block (blocked) status */
+.room-block-cell {
+  background-color: #1f2937;
+  color: white;
+  border-left: 3px solid #111827;
+}
+
+.room-block-cell:hover {
+  background-color: #374151;
+}
+
+/* Reservation info */
+.reservation-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  word-break: break-word;
+  padding: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.guest-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partner-badge {
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+/* Room block display */
+.room-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.block-label {
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.block-reason {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Responsive: Mobile (< 600px) */
+@media (max-width: 600px) {
+  .room-col {
+    width: 60px;
+    min-width: 60px;
+    padding: 6px !important;
+    font-size: 12px;
+  }
+
+  .calendar-table {
+    --day-cell-w: 28px;
+  }
+
+  .day-header {
+    min-width: 60px;
+  }
+
+  .day-header-inner {
+    gap: 0;
+  }
+
+  .month-label {
+    font-size: 9px;
+  }
+
+  .day-label {
+    font-size: 12px;
+  }
+
+  .reservation-cell {
+    font-size: 10px;
+    padding: 2px;
+  }
+
+  .reservation-info {
+    font-size: 10px;
+    gap: 2px;
+  }
+
+  .partner-badge {
+    font-size: 10px;
+  }
+
+  .room-col {
+    background-color: #fff !important;
+  }
+
+  thead .room-col {
+    background-color: #f8f9fa !important;
+  }
+}
+
+/* Responsive: Tablet (600px - 1024px) */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .room-col {
+    width: 90px;
+    min-width: 90px;
+  }
+
+  .calendar-table {
+    --day-cell-w: 36px;
+  }
+
+  .day-header {
+    min-width: 70px;
+  }
+
+  .day-label {
+    font-size: 14px;
+  }
+
+  .reservation-info {
+    font-size: 11px;
+  }
+}
+
+/* Responsive: Desktop (> 1024px) */
+@media (min-width: 1024px) {
+  .room-col {
+    width: 120px;
+    min-width: 120px;
+  }
+  .calendar-table {
+    --day-cell-w: 40px;
+  }
+
+  .day-header {
+    min-width: 80px;
+  }
+}

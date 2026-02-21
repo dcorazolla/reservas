@@ -41,6 +41,8 @@ vi.mock('react-icons/fi', () => {
     FiChevronLeft: icon,
     FiHome: icon,
     FiBox: icon,
+    FiPackage: icon,
+    FiLock: icon,
     FiUsers: icon,
     FiBriefcase: icon,
     FiTag: icon,

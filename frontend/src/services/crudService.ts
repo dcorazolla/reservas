@@ -1,4 +1,5 @@
 import api from './api'
+import { decodeJwtPayload } from '@utils/jwt'
 
 /**
  * Generic CRUD service factory.
@@ -13,6 +14,18 @@ import api from './api'
  */
 export interface CrudService<T, P> {
   list(): Promise<T[]>
+  get(id: string): Promise<T>
+  create(payload: P): Promise<T>
+  update(id: string, payload: P): Promise<T>
+  remove(id: string): Promise<void>
+}
+
+/**
+ * Scoped CRUD service with propertyId from JWT.
+ * All operations automatically pass propertyId from JWT token.
+ */
+export interface ScopedCrudService<T, P> {
+  list(filters?: Record<string, unknown>): Promise<T[]>
   get(id: string): Promise<T>
   create(payload: P): Promise<T>
   update(id: string, payload: P): Promise<T>
@@ -39,6 +52,66 @@ export function createCrudService<T, P>(basePath: string): CrudService<T, P> {
     },
     async remove(id: string): Promise<void> {
       await api.delete(`${basePath}/${id}`)
+    },
+  }
+}
+
+/**
+ * Create a scoped CRUD service that automatically injects propertyId from JWT.
+ * 
+ * Usage:
+ * ```tsx
+ * // In a component or service
+ * const { token } = useAuth()
+ * const blocksService = createScopedCrudService<RoomBlock, RoomBlockInput>(
+ *   '/api/room-blocks',
+ *   token
+ * )
+ * const blocks = await blocksService.list()  // propertyId injected automatically
+ * ```
+ * 
+ * @param basePath - The API endpoint base path (e.g., '/api/room-blocks')
+ * @param token - JWT token containing property_id claim
+ */
+export function createScopedCrudService<T, P>(
+  basePath: string,
+  token: string | null
+): ScopedCrudService<T, P> {
+  const payload = decodeJwtPayload(token)
+  const propertyId = payload?.property_id
+
+  if (!propertyId) {
+    throw new Error('No property_id found in JWT token. Ensure token contains property_id claim.')
+  }
+
+  return {
+    async list(filters: Record<string, unknown> = {}): Promise<T[]> {
+      const params = { property_id: propertyId, ...filters }
+      const resp = await api.get<T[]>(basePath, { params })
+      return resp.data
+    },
+    async get(id: string): Promise<T> {
+      const resp = await api.get<T>(`${basePath}/${id}`, {
+        params: { property_id: propertyId },
+      })
+      return resp.data
+    },
+    async create(payload: P): Promise<T> {
+      const resp = await api.post<T>(basePath, payload, {
+        params: { property_id: propertyId },
+      })
+      return resp.data
+    },
+    async update(id: string, payload: P): Promise<T> {
+      const resp = await api.put<T>(`${basePath}/${id}`, payload, {
+        params: { property_id: propertyId },
+      })
+      return resp.data
+    },
+    async remove(id: string): Promise<void> {
+      await api.delete(`${basePath}/${id}`, {
+        params: { property_id: propertyId },
+      })
     },
   }
 }

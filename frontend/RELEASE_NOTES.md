@@ -2,31 +2,38 @@
 
 ## v0.3.0 - 2026-02-18
 
-**Reservations Module - Phase 1 & 2: Models and Services**
+**Reservations Module Complete + Room Blocks Management**
 
-### Features
+### Phase 1-2: Reservations Module (Models and Services)
 - feat(reservations): implement complete Reservation model with 8 statuses, 3 payment types, 4 guarantee types
 - feat(reservations): add ReservationStatus enum (pre-reserva, reservado, confirmado, checked_in, checked_out, no_show, cancelado, blocked)
 - feat(reservations): add status color mapping (8 colors) and English labels for all statuses
 - feat(reservations): add CALENDAR_BREAKPOINTS configuration (mobile/tablet/desktop with adaptive 5-35 days)
 - feat(reservations): add helper functions (getCalendarConfig, isValidReservationDates, getStayLength, isDateInReservation, canonicalizeStatus)
-- feat(reservations): add canonicalizeStatus function handling 30+ backend status variations
-- feat(reservations): add Reservation, Room, RoomBlock, CalendarResponse, ReservationListResponse types
-- feat(reservations): implement ReservationService with CRUD operations (list, get, create, update, delete)
-- feat(reservations): add state transition methods (checkIn, checkOut, confirm, cancel)
-- feat(reservations): add price calculation with cascade source indication
-- feat(reservations): implement ReservationFilters with guest_name, contact, partner_id, status, pagination, sorting
-- feat(reservations): implement calendar service with date utilities (generateDateRange, formatDateDisplay, month navigation)
-- feat(reservations): add room filtering and sorting utilities (sortRoomsByName, filterRoomsByName)
-- feat(reservations): add multi-tenant safety with property_id in all requests
-- feat(reservations): add factory pattern helper createReservationCrudService
+- feat(reservations): implement ReservationService with CRUD operations, state transitions, price calculation
+- feat(reservations): implement calendar service with date utilities and room filtering
+
+### Phase 3a-3e: Room Blocks Management (Models, Services, Components, Page, Routes)
+- feat(blocks): implement BlockType enum (maintenance, cleaning, private, custom)
+- feat(blocks): implement BlockRecurrence enum (none, daily, weekly, monthly) with helper expansion logic
+- feat(blocks): implement 16+ helper functions for block status, duration, validation, sorting, grouping
+- feat(blocks): add RoomBlockService with CRUD + expand operations (list, get, create, update, delete, expandBlocks)
+- feat(blocks): add batch operations support (createBlocksBatch, deleteBlocksBatch)
+- feat(blocks): add API data formatting and expansion logic for recurring blocks
+- feat(blocks): implement BlockStatusBadge component with type-specific colors and icons
+- feat(blocks): implement BlocksList component with sorting (date/type/duration), filtering, CRUD actions
+- feat(blocks): implement BlocksModal component with form validation, date range checking, recurrence support
+- feat(blocks): add BlocksPage (full CRUD interface) with loading states, error handling, statistics
+- feat(routes): add /settings/blocks route with lazy loading and auth protection
+- feat(menu): add "🚫 Bloqueios" menu item to Settings submenu with i18n support
 
 ### Testing
-- test(reservations): add 38 comprehensive tests for reservation models (100% passing)
-- test(reservations): add 32 tests for calendar service utilities (100% passing)
-- test(reservations): add 29 tests for reservation CRUD service (100% passing)
-- test(reservations): validate filter support, pagination, sorting, state transitions, error handling, concurrency
-- test(overall): 309/309 frontend tests passing (100% coverage maintained)
+- test(blocks): 47 comprehensive tests for block models (helpers, recurrence, validation, sorting, grouping)
+- test(blocks): 23 tests for block CRUD service (list, get, create, update, delete, expand, batch operations)
+- test(blocks): 16 tests for block components (exports, prop interfaces, edge cases)
+- test(calendar): 32 tests for calendar service utilities
+- test(reservations): 38 tests for reservation models, 29 tests for reservation service
+- test(overall): 395/395 frontend tests passing (100% coverage maintained across all modules)
 
 ### Previous Release - 2026-02-18
 - feat(crud-pages): add success/error messages with 30s autoclose to all CRUD pages (Diogo Santana Corazolla)

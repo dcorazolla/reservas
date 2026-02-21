@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 import { Header, Sidebar, Footer } from '../Layout'
 
@@ -12,11 +12,26 @@ export default function PageShell({ children }: Props) {
   // pattern by exposing a synthetic handler that toggles a mobile drawer.
   const [isDrawerOpen, setDrawerOpen] = React.useState(false)
 
+  const headerRef = useRef<HTMLDivElement | null>(null)
+
+  useLayoutEffect(() => {
+    function setHeaderVar() {
+      const h = headerRef.current ? Math.round(headerRef.current.getBoundingClientRect().height) : 60
+      document.documentElement.style.setProperty('--app-header-h', `${h}px`)
+    }
+
+    setHeaderVar()
+    window.addEventListener('resize', setHeaderVar)
+    return () => window.removeEventListener('resize', setHeaderVar)
+  }, [])
+
   return (
     <Box minH="100vh" pb="64px"> {/* reserve footer height */}
-      <Header onOpenMenu={() => setDrawerOpen(true)} />
+      <Box ref={headerRef} position="fixed" top={0} left={0} right={0} zIndex={1100}>
+        <Header onOpenMenu={() => setDrawerOpen(true)} />
+      </Box>
 
-      <Flex as="main" align="stretch">
+      <Flex as="main" align="stretch" mt="var(--app-header-h)">
         <Box display={{ base: 'none', md: 'block' }} aria-hidden={false}>
           <Sidebar desktop />
         </Box>

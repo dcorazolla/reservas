@@ -1,0 +1,200 @@
+/* Calendar Page Styles - aligned with design system */
+.calendar-page {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  background: transparent;
+  padding: 0;
+  /* allow page/document vertical scroll so sticky headers work */
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.btn-nav {
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-nav-small {
+  padding: 4px 8px;
+  font-size: 12px;
+  min-width: 36px;
+  text-align: center;
+}
+
+.btn-nav:hover {
+  background-color: #2563eb;
+}
+
+.btn-nav:active {
+  background-color: #1e40af;
+}
+
+.controls-group {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.control-item label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.control-item input {
+  padding: 4px 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: inherit;
+  background: white;
+  color: #1f2937;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 50px;
+}
+
+.control-item input[type="date"] {
+  min-width: 100px;
+}
+
+.control-item input[type="number"] {
+  min-width: 50px;
+}
+
+.control-item input:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.1);
+}
+
+.period-label {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 500;
+  padding: 4px 8px;
+  background-color: #f3f4f6;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.calendar-grid-wrapper {
+  flex: 1;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* allow horizontal scrolling of the calendar only (keep vertical scroll on document)
+     This prevents the calendar container from becoming the scroll container and breaking
+     position: sticky on the header cells. */
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  min-height: 0;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  min-height: 400px;
+  color: #9ca3af;
+}
+
+.empty-state p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .calendar-page {
+    height: auto;
+  }
+
+  .calendar-header {
+    padding: 0;
+  }
+
+  .calendar-header h1 {
+    font-size: 20px;
+  }
+
+  .calendar-controls {
+    padding: 12px;
+    margin-bottom: 12px;
+    gap: 12px;
+  }
+
+  .btn-nav {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .controls-group {
+    gap: 12px;
+  }
+
+  .control-item {
+    gap: 2px;
+  }
+
+  .control-item label {
+    font-size: 11px;
+  }
+
+  .control-item input {
+    padding: 6px 10px;
+    font-size: 13px;
+    min-width: 80px;
+  }
+
+  .control-item input[type="date"] {
+    min-width: 120px;
+  }
+
+  .calendar-grid-wrapper {
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 601px) {
+  .calendar-header h1 {
+    font-size: 22px;
+  }
+}

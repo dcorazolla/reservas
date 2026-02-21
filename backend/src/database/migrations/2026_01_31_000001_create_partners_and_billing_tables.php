@@ -100,23 +100,8 @@ return new class extends Migration {
             });
         }
 
-        if (!Schema::hasTable('financial_audit_logs')) {
-            Schema::create('financial_audit_logs', function (Blueprint $table) use ($driver) {
-                if ($driver === 'sqlite') {
-                    $table->uuid('id')->primary();
-                } else {
-                    $table->uuid('id')->primary()->default(DB::raw('gen_random_uuid()'));
-                }
-                $table->string('event_type');
-                $table->jsonb('payload')->nullable();
-                $table->string('actor_type')->nullable();
-                $table->uuid('actor_id')->nullable();
-                $table->string('resource_type')->nullable();
-                $table->uuid('resource_id')->nullable();
-                $table->string('hash')->nullable();
-                $table->timestamps();
-            });
-        }
+        // NOTE: financial_audit_logs is now created in migration 2026_02_08_010000_create_financial_audit_logs
+        // with the correct schema including user_id. Removed from here to avoid duplicate table creation.
     }
 
     public function down(): void
@@ -126,6 +111,6 @@ return new class extends Migration {
         Schema::dropIfExists('invoice_lines');
         Schema::dropIfExists('invoices');
         Schema::dropIfExists('partners');
-        Schema::dropIfExists('financial_audit_logs');
+        // financial_audit_logs is handled by its dedicated migration
     }
 };

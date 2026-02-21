@@ -31,6 +31,8 @@ tags:
     description: Tarifas base por categoria
   - name: Category Rate Periods
     description: Tarifas por período por categoria
+  - name: Room Blocks
+    description: Bloqueios de disponibilidade de quartos
 components:
   securitySchemes:
     bearerAuth:
@@ -51,6 +53,25 @@ components:
         base_two_adults: { type: number, nullable: true }
         additional_adult: { type: number, nullable: true }
         child_price: { type: number, nullable: true }
+    RoomBlockInput:
+      type: object
+      required: [room_id, start_date, end_date, type]
+      properties:
+        room_id: { type: string, format: uuid }
+        start_date: { type: string, format: date, example: "2026-02-18" }
+        end_date: { type: string, format: date, example: "2026-02-25" }
+        type: { type: string, enum: [maintenance, cleaning, private, custom] }
+        reason: { type: string, nullable: true, example: "Maintenance work" }
+        recurrence: { type: string, enum: [none, daily, weekly, monthly], default: "none" }
+    RoomBlock:
+      allOf:
+        - $ref: "#/components/schemas/RoomBlockInput"
+        - type: object
+          properties:
+            id: { type: string, format: uuid }
+            created_by: { type: string, format: uuid, nullable: true }
+            created_at: { type: string, format: date-time }
+            updated_at: { type: string, format: date-time }
 security:
   - bearerAuth: []
 paths:
@@ -804,6 +825,140 @@ paths:
           schema: { type: string, format: uuid }
       responses:
         '204': { description: Excluído }
+
+  /room-blocks:
+    get:
+      tags: [Room Blocks]
+      summary: Listar bloqueios de disponibilidade
+      parameters:
+        - in: query
+          name: room_id
+          schema: { type: string, format: uuid }
+          description: Filtrar por quarto
+        - in: query
+          name: type
+          schema: { type: string, enum: [maintenance, cleaning, private, custom] }
+          description: Filtrar por tipo de bloqueio
+        - in: query
+          name: recurrence
+          schema: { type: string, enum: [none, daily, weekly, monthly] }
+          description: Filtrar por recorrência
+        - in: query
+          name: from
+          schema: { type: string, format: date }
+          description: Data inicial do range (YYYY-MM-DD)
+        - in: query
+          name: to
+          schema: { type: string, format: date }
+          description: Data final do range (YYYY-MM-DD)
+        - in: query
+          name: per_page
+          schema: { type: integer, default: 15 }
+          description: Registros por página
+      responses:
+        '200':
+          description: Lista de bloqueios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { type: array, items: { $ref: "#/components/schemas/RoomBlock" } }
+                  pagination: { type: object }
+
+    post:
+      tags: [Room Blocks]
+      summary: Criar bloqueio de disponibilidade
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RoomBlockInput" }
+      responses:
+        '201':
+          description: Bloqueio criado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomBlock" }
+        '422':
+          description: Validação falhou
+
+  /room-blocks/expand:
+    get:
+      tags: [Room Blocks]
+      summary: Expandir bloqueios periódicos para datas específicas
+      description: Retorna todas as datas bloqueadas dentro do range, expandindo bloqueios periódicos
+      parameters:
+        - in: query
+          name: room_id
+          required: true
+          schema: { type: string, format: uuid }
+          description: ID do quarto
+        - in: query
+          name: from
+          required: true
+          schema: { type: string, format: date }
+          description: Data inicial (YYYY-MM-DD)
+        - in: query
+          name: to
+          required: true
+          schema: { type: string, format: date }
+          description: Data final (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Datas bloqueadas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blocked_dates:
+                    type: array
+                    items: { type: string, format: date }
+                    example: ["2026-02-18", "2026-02-19", "2026-02-25"]
+
+  /room-blocks/{roomBlock}:
+    put:
+      tags: [Room Blocks]
+      summary: Editar bloqueio
+      parameters:
+        - in: path
+          name: roomBlock
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_date: { type: string, format: date }
+                end_date: { type: string, format: date }
+                type: { type: string, enum: [maintenance, cleaning, private, custom] }
+                reason: { type: string, nullable: true }
+                recurrence: { type: string, enum: [none, daily, weekly, monthly] }
+      responses:
+        '200':
+          description: Bloqueio atualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/RoomBlock" }
+        '404':
+          description: Bloqueio não encontrado
+
+    delete:
+      tags: [Room Blocks]
+      summary: Deletar bloqueio
+      parameters:
+        - in: path
+          name: roomBlock
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '204': { description: Bloqueio deletado }
+        '404':
+          description: Bloqueio não encontrado
 
   /invoices:
     post:

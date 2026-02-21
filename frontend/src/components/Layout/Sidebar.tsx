@@ -7,7 +7,7 @@ import {
   useDisclosure,
   Button,
 } from '@chakra-ui/react'
-import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiBox, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock } from 'react-icons/fi'
+import { FiCalendar, FiSettings, FiChevronDown, FiChevronRight, FiList, FiChevronLeft, FiHome, FiBox, FiUsers, FiBriefcase, FiTag, FiDollarSign, FiClock, FiPackage, FiLock } from 'react-icons/fi'
 import { MdMeetingRoom } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -20,14 +20,16 @@ type NavItem = {
 }
 
 const ICON_MAP: Record<string, any> = {
+  home: FiHome,
   calendar: FiCalendar,
   reservations: FiList,
   settings: FiSettings,
   properties: FiHome,
   rooms: MdMeetingRoom,
-  roomCategories: FiBox,
+  roomCategories: FiPackage,
   users: FiUsers,
   partners: FiBriefcase,
+  blocks: FiLock,
   rates: FiTag,
   base: FiDollarSign,
   roomRate: FiHome,
@@ -35,6 +37,7 @@ const ICON_MAP: Record<string, any> = {
 }
 
 const nav: NavItem[] = [
+  { labelKey: 'menu.home', to: '/', icon: 'home' },
   { labelKey: 'menu.calendar', to: '/calendar', icon: 'calendar' },
   { labelKey: 'menu.reservations', to: '/reservations', icon: 'reservations' },
   {
@@ -46,6 +49,7 @@ const nav: NavItem[] = [
     { labelKey: 'menu.settings.rooms', to: '/settings/rooms', icon: 'rooms' },
       { labelKey: 'menu.settings.users', to: '/settings/users', icon: 'users' },
       { labelKey: 'menu.settings.partners', to: '/settings/partners', icon: 'partners' },
+      { labelKey: 'menu.settings.blocks', to: '/settings/blocks', icon: 'blocks' },
       {
         labelKey: 'menu.settings.rates.label',
         icon: 'rates',
@@ -231,7 +235,7 @@ export default function Sidebar({ desktop, isOpen, onOpen, onClose, expandAll = 
             right={0}
             bottom={0}
             bg="blackAlpha.200"
-            zIndex={59}
+            zIndex={1089}
             pointerEvents="none"
           />
         )}
@@ -246,7 +250,7 @@ export default function Sidebar({ desktop, isOpen, onOpen, onClose, expandAll = 
           left={0}
           top={`${topOffset}px`}
           height={headerHeight ? `calc(100vh - ${topOffset}px)` : '100vh'}
-          zIndex={60}
+          zIndex={1090}
           bg="gray.100"
           boxShadow={compact ? 'sm' : 'lg'}
           borderRight={compact ? '1px' : undefined}

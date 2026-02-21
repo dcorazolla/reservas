@@ -1,0 +1,318 @@
+/* ============================================================================
+   THEMES - Light, Dark, and High Contrast variants
+   ============================================================================
+   
+   Color scheme variants for accessibility and user preference.
+   
+   Usage:
+   - Light (default): Uses :root variables as-is
+   - Dark: Apply with [data-theme="dark"]
+   - High Contrast: Apply with [data-theme="high-contrast"]
+   - Automatic: Respects OS prefers-color-scheme when no [data-theme] set
+   
+   ========================================================================== */
+
+/* ============================================================================
+   DARK THEME - Activated by [data-theme="dark"] or OS preference
+   ============================================================================ */
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  
+  /* ========== TEXT COLORS ========== */
+  --color-text-primary: #f3f4f6;      /* Light gray text */
+  --color-text-secondary: #d1d5db;    /* Lighter gray */
+  --color-text-tertiary: #9ca3af;     /* Medium gray */
+  --color-text-disabled: #6b7280;     /* Dark gray */
+  --color-text-inverted: #111827;     /* Dark text on light bg */
+  
+  /* ========== BACKGROUND COLORS ========== */
+  --color-bg-page: #0f172a;           /* Very dark blue-black */
+  --color-bg-surface: #1e293b;        /* Dark blue-gray */
+  --color-bg-hover: #334155;          /* Slightly lighter */
+  --color-bg-active: #475569;         /* Even lighter */
+  --color-bg-disabled: #1e293b;       /* Same as surface */
+  
+  /* ========== BORDER COLORS ========== */
+  --color-border: #334155;            /* Dark border */
+  --color-border-light: #1e293b;      /* Very dark border */
+  --color-border-dark: #475569;       /* Lighter border for contrast */
+  
+  /* ========== SEMANTIC COLORS (DARK MODE ADJUSTED) ========== */
+  --color-primary: #60a5fa;           /* Brighter blue for dark mode */
+  --color-primary-dark: #3b82f6;      /* Original blue */
+  --color-primary-light: #1e40af;     /* Darker blue for surfaces */
+  
+  --color-success: #34d399;           /* Brighter green */
+  --color-success-dark: #10b981;      /* Original green */
+  --color-success-light: #064e3b;     /* Dark green for surfaces */
+  
+  --color-warning: #fbbf24;           /* Brighter amber */
+  --color-warning-dark: #f59e0b;      /* Original orange */
+  --color-warning-light: #78350f;     /* Dark orange for surfaces */
+  
+  --color-danger: #f87171;            /* Brighter red */
+  --color-danger-dark: #ef4444;       /* Original red */
+  --color-danger-light: #7f1d1d;      /* Dark red for surfaces */
+  
+  --color-info: #22d3ee;              /* Brighter cyan */
+  --color-info-dark: #06b6d4;         /* Original cyan */
+  --color-info-light: #0c4a6e;        /* Dark cyan for surfaces */
+  
+  /* ========== SHADOW ADJUSTMENTS (Darker shadows) ========== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================================
+   HIGH CONTRAST THEME - Activated by [data-theme="high-contrast"]
+   ============================================================================
+   
+   Maximized contrast for users with vision impairment or color blindness.
+   Uses pure black/white with saturated semantic colors.
+   
+   ========================================================================== */
+
+[data-theme="high-contrast"] {
+  color-scheme: light;
+  
+  /* ========== TEXT COLORS (MAXIMUM CONTRAST) ========== */
+  --color-text-primary: #000000;      /* Pure black */
+  --color-text-secondary: #1a1a1a;    /* Near black */
+  --color-text-tertiary: #404040;     /* Dark gray */
+  --color-text-disabled: #808080;     /* Medium gray */
+  --color-text-inverted: #ffffff;     /* Pure white */
+  
+  /* ========== BACKGROUND COLORS ========== */
+  --color-bg-page: #ffffff;           /* Pure white */
+  --color-bg-surface: #ffffff;        /* Pure white */
+  --color-bg-hover: #f0f0f0;          /* Very light gray */
+  --color-bg-active: #e0e0e0;         /* Light gray */
+  --color-bg-disabled: #f0f0f0;       /* Very light gray */
+  
+  /* ========== BORDER COLORS (HIGH CONTRAST) ========== */
+  --color-border: #000000;            /* Pure black */
+  --color-border-light: #404040;      /* Dark gray */
+  --color-border-dark: #000000;       /* Pure black */
+  
+  /* ========== SEMANTIC COLORS (SATURATED FOR VISIBILITY) ========== */
+  --color-primary: #0000ff;           /* Pure blue */
+  --color-primary-dark: #0000cc;      /* Darker blue */
+  --color-primary-light: #6666ff;     /* Lighter blue */
+  
+  --color-success: #008000;           /* Pure green */
+  --color-success-dark: #006600;      /* Darker green */
+  --color-success-light: #66cc66;     /* Lighter green */
+  
+  --color-warning: #ff8800;           /* Pure orange */
+  --color-warning-dark: #cc6600;      /* Darker orange */
+  --color-warning-light: #ffbb33;     /* Lighter orange */
+  
+  --color-danger: #ff0000;            /* Pure red */
+  --color-danger-dark: #cc0000;       /* Darker red */
+  --color-danger-light: #ff6666;      /* Lighter red */
+  
+  --color-info: #0099ff;              /* Pure cyan */
+  --color-info-dark: #0066cc;         /* Darker cyan */
+  --color-info-light: #66ccff;        /* Lighter cyan */
+  
+  /* ========== STATUS COLORS (HIGH CONTRAST) ========== */
+  --color-status-pre-reserva: #ff9900;     /* Orange */
+  --color-status-reservado: #0000ff;      /* Blue */
+  --color-status-confirmado: #008000;     /* Green */
+  --color-status-checked-in: #6600cc;     /* Purple */
+  --color-status-checked-out: #ff8800;    /* Orange */
+  --color-status-no-show: #ff0000;        /* Red */
+  --color-status-cancelado: #808080;      /* Gray */
+  
+  /* ========== BORDERS (THICKER FOR HIGH CONTRAST) ========== */
+  --border-width: 2px;
+  
+  /* ========== SHADOWS (STRONGER FOR SEPARATION) ========== */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.8);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.8);
+  
+  /* ========== DISABLE TRANSPARENCY (SOLID COLORS ONLY) ========== */
+  body {
+    text-rendering: optimizeSpeed;
+  }
+}
+
+/* ============================================================================
+   AUTOMATIC DARK MODE - Respects OS preference when no [data-theme] set
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    
+    --color-text-primary: #f3f4f6;
+    --color-text-secondary: #d1d5db;
+    --color-text-tertiary: #9ca3af;
+    --color-text-disabled: #6b7280;
+    
+    --color-bg-page: #0f172a;
+    --color-bg-surface: #1e293b;
+    --color-bg-hover: #334155;
+    --color-bg-active: #475569;
+    
+    --color-border: #334155;
+    --color-border-light: #1e293b;
+    --color-border-dark: #475569;
+    
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-primary-light: #1e40af;
+    
+    --color-success: #34d399;
+    --color-success-dark: #10b981;
+    --color-success-light: #064e3b;
+    
+    --color-warning: #fbbf24;
+    --color-warning-dark: #f59e0b;
+    --color-warning-light: #78350f;
+    
+    --color-danger: #f87171;
+    --color-danger-dark: #ef4444;
+    --color-danger-light: #7f1d1d;
+    
+    --color-info: #22d3ee;
+    --color-info-dark: #06b6d4;
+    --color-info-light: #0c4a6e;
+    
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5), 0 10px 10px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* ============================================================================
+   AUTOMATIC HIGH CONTRAST - Respects OS preference for high contrast
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+  :root:not([data-theme]) {
+    --color-text-primary: #000000;
+    --color-text-secondary: #1a1a1a;
+    --color-text-tertiary: #404040;
+    
+    --border-width: 2px;
+    
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* ============================================================================
+   REDUCED MOTION - Respects user's motion preferences
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   LIGHT PRINT - Optimizes contrast for printing
+   ============================================================================ */
+
+@media print {
+  :root {
+    --color-bg-page: #ffffff;
+    --color-bg-surface: #ffffff;
+    --color-text-primary: #000000;
+    --color-border: #000000;
+  }
+  
+  [data-theme="dark"] {
+    color-scheme: light;
+    --color-bg-page: #ffffff;
+    --color-bg-surface: #ffffff;
+    --color-text-primary: #000000;
+    --color-border: #000000;
+  }
+}
+
+/* ============================================================================
+   THEME-AWARE COMPONENT EXAMPLES
+   ============================================================================
+   
+   These classes demonstrate how themes can be used in components.
+   Use alongside utility classes for flexible theming.
+   
+   ========================================================================== */
+
+/* Modal overlay with theme-aware background */
+.modal-overlay-themed {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .modal-overlay-themed {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="high-contrast"] .modal-overlay-themed {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* Card component with theme-aware shadow */
+.card-themed {
+  background-color: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+}
+
+/* Button with theme-aware states */
+.button-themed {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverted);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.button-themed:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.button-themed:focus-visible {
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
+/* Input with theme-aware styling */
+.input-themed {
+  background-color: var(--color-bg-surface);
+  border: var(--border-width) solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+}
+
+.input-themed:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="high-contrast"] .input-themed:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

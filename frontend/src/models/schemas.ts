@@ -88,3 +88,18 @@ export const partnerSchema = z.object({
 
 export type PartnerFormData = z.infer<typeof partnerSchema>
 
+/* ------------------------------------------------------------------ */
+/*  Room Block schema                                                   */
+/* ------------------------------------------------------------------ */
+
+export const blockSchema = z.object({
+  room_id: z.string().min(1, 'common.status.error_required'),
+  start_date: z.string().min(1, 'common.status.error_required'),
+  end_date: z.string().min(1, 'common.status.error_required'),
+  type: z.enum(['maintenance', 'cleaning', 'private', 'custom']),
+  reason: z.string().optional().nullable(),
+  recurrence: z.enum(['none', 'daily', 'weekly', 'monthly']).optional(),
+})
+
+export type BlockFormData = z.infer<typeof blockSchema>
+

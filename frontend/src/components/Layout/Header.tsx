@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import './header.css'
 import { Flex, IconButton, HStack, Box, Text, VStack, Button } from '@chakra-ui/react'
 import { FiMenu } from 'react-icons/fi'
+import { Link as RouterLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { LanguageSelector } from '@components/LanguageSelector'
 import { DateTimeClock}  from '@components/DateTimeClock'
@@ -47,7 +48,7 @@ export default function Header({ onOpenMenu }: Props) {
         <IconButton aria-label="Open menu" icon={<FiMenu />} onClick={onOpenMenu} display={{ base: 'inline-flex', md: 'none' }} variant="ghost" />
 
         <HStack spacing={3} align="center">
-          <Box>
+          <Box as={RouterLink} to="/" _hover={{ textDecoration: 'none', opacity: 0.8 }} transition="opacity 0.2s">
             <Text as="span" fontSize={{ base: 'md', md: 'lg' }} fontWeight={700} color="gray.800">
               {property ?? 'Reservas'}
             </Text>

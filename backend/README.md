@@ -6,6 +6,8 @@ Este diretório contém o código do backend. Estrutura relevante:
 - Tests (phpunit): `backend/src/tests/`
 - Config phpunit: `backend/src/phpunit.xml`
 
+- **Versão:** `0.3.1`
+
 Para rodar testes localmente (assumindo dependências instaladas):
 
 ```bash

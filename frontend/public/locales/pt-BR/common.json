@@ -6,7 +6,10 @@
       "cancel": "Cancelar",
       "create": "Criar",
       "save": "Salvar",
-      "confirm": "Confirmar"
+      "confirm": "Confirmar",
+      "update": "Atualizar",
+      "view": "Visualizar",
+      "logout": "Sair"
     },
     "status": {
       "loading": "Carregando...",
@@ -20,7 +23,12 @@
       "error_max_100": "Não pode ser maior que 100",
       "error_loading": "Erro ao carregar dados",
       "error_saving": "Erro ao salvar dados",
-      "success": "Sucesso"
+      "success": "Sucesso",
+      "welcome": "Bem-vindo",
+      "coming_soon": "Em breve"
+    },
+    "list": {
+      "empty": "Nenhum registro encontrado"
     },
     "confirm": {
       "delete_title": "Confirmação de remoção",
@@ -82,6 +90,7 @@
     "error": "Falha ao autenticar — verifique suas credenciais."
   },
   "menu": {
+    "home": "Início",
     "calendar": "Calendário",
     "reservations": "Reservas",
     "navigation": "Navegação",
@@ -94,6 +103,7 @@
       "rooms": "Quartos",
       "users": "Usuários",
       "partners": "Parceiros",
+      "blocks": "Bloqueios",
       "rates": {
         "label": "Tarifas",
         "base": "Tarifa base",
@@ -176,6 +186,98 @@
         "saved_success": "Tarifas base salvas com sucesso!"
       }
     }
+  },
+  "blocks": {
+    "page": {
+      "title": "Bloqueios de Quartos"
+    },
+    "form": {
+      "new": "Novo Bloqueio",
+      "edit": "Editar Bloqueio",
+      "room": "Quarto",
+      "type": "Tipo de Bloqueio",
+      "start_date": "Data Inicial",
+      "end_date": "Data Final",
+      "reason": "Motivo",
+      "recurrence": "Recorrência"
+    },
+    "type": {
+      "maintenance": "Manutenção",
+      "cleaning": "Limpeza",
+      "private": "Privado",
+      "custom": "Customizado"
+    }
+  },
+  "calendar": {
+    "title": "Calendário de Reservas",
+    "prev": "Anterior",
+    "next": "Próximo",
+    "period": "Período",
+    "days": "Dias",
+    "empty": "Nenhuma reserva encontrada para este período",
+    "error_loading": "Erro ao carregar calendário"
+  },
+  "reservations": {
+    "title": "Reservas",
+    "new": "Nova Reserva",
+    "edit": "Editar Reserva",
+    "form": {
+      "guest_name": "Nome do Hóspede",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "room": "Quarto",
+      "start_date": "Check-in",
+      "end_date": "Check-out",
+      "adults_count": "Adultos",
+      "children_count": "Crianças",
+      "infants_count": "Bebês",
+      "status": "Status",
+      "partner": "Parceiro",
+      "notes": "Notas",
+      "price_override": "Preço Manual",
+      "total_value": "Valor Total"
+    },
+    "list": {
+      "room": "Quarto",
+      "guest": "Hóspede",
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "status": "Status",
+      "contact": "Contato",
+      "partner": "Parceiro",
+      "value": "Valor",
+      "actions": "Ações",
+      "period": "Período",
+      "search_guest": "Buscar por hóspede",
+      "search_contact": "Buscar por contato",
+      "filter_status": "Filtrar por status",
+      "filter_partner": "Filtrar por parceiro"
+    },
+    "status": {
+      "pre-reserva": "Pré-reserva",
+      "reservado": "Reservado",
+      "confirmado": "Confirmado",
+      "checked-in": "Check-in",
+      "checked-out": "Check-out",
+      "no-show": "Ausência",
+      "cancelado": "Cancelado",
+      "blocked": "Bloqueado"
+    },
+    "actions": {
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "finalize": "Finalizar",
+      "delete": "Remover"
+    }
+  },
+  "home": {
+    "title": "Dashboard",
+    "description": "Gerencie suas propriedades, reservas e disponibilidade",
+    "calendar_description": "Visualize e gerencie suas reservas em um calendário interativo",
+    "reservations_description": "Gerencie suas reservas com filtros e relatórios",
+    "coming_soon": "Em breve"
   }
 }
 

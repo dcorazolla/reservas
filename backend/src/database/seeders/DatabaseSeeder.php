@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             RoomRatePeriodSeeder::class,
             ProductSeeder::class,
             PartnerReservationsSeeder::class,
+            RoomBlockSeeder::class,
         ]);
     }
 }

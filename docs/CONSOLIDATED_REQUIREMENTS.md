@@ -151,8 +151,81 @@ Flexibilidade por porte:
 - Pagamentos: parciais e totais, integração com frigobar, alocações por linha.
 - Frigobar: catálogo, lançamentos vinculados a reservas, agrupamento em invoice.
 
+## 11) Requisitos de Navegação e Layout - Frontend
+
+### 11.1 Menu Principal (Sidebar)
+**Estrutura de Navegação (consolidada)**:
+```
+Menu Principal:
+├── 🏠 Home (/)
+├── 📅 Calendário (/calendar)
+│   └── Exibe grid de reservas com status coloridos
+│   └── Navegação intuitiva (prev/next mês, seletor de dias 5-35)
+│   └── Acesso para criar/editar reservas
+├── 📋 Reservas (/reservations)
+│   └── CRUD listagem com filtros (hospede, contato, partner, status)
+│   └── Paginação, sorting
+│   └── Ações: criar, editar, deletar, check-in, check-out, confirmar, cancelar
+└── ⚙️ Configurações (menu dropdown)
+    ├── 🏢 Propriedades (/settings/properties)
+    ├── 🏷️ Categorias de Quartos (/settings/room-categories)
+    ├── 🛏️ Quartos (/settings/rooms)
+    ├── 👥 Usuários (/settings/users) [placeholder]
+    ├── 🤝 Partners (/settings/partners)
+    ├── 💰 Tarifas (submenu)
+    │   ├── Base (/settings/base-rates)
+    │   ├── Por Quarto (/settings/rates/room)
+    │   └── Por Período (/settings/rates/period)
+    └── 🚫 Bloqueios (/settings/blocks)
+        └── CRUD para bloqueios de disponibilidade
+        └── Periódico, pontos de interesse, manutenção, limpeza
+        └── Integra com calendário para visualização
+```
+
+### 11.2 Regras de Navegação
+
+**Home Page (`/`)**:
+- Exibir dashboard com resumo geral
+- Link destaque para Calendário e Reservas
+
+**Calendário (`/calendar`)**:
+- Grid responsivo: 7 dias mobile, 12 dias tablet, 21 dias desktop (user-selectable 5-35)
+- 2 colunas por dia (check-in/checkout)
+- Cores por status de reserva (8 cores)
+- Navegação por mês, visualização de bloqueios
+- Integração com bloqueios (exibir como "Indisponível")
+
+**Reservas (`/reservations`)**:
+- Tabela/lista com 9+ colunas (ID, hospede, contato, quarto, check-in, check-out, status, partner, ações)
+- Filtros: hospede (nome), contato (email+phone), partner, status, data range
+- Sorting: por qualquer coluna
+- Paginação: 10/20/50 registros por página
+- Ações inline: editar, deletar, check-in, check-out, confirmar, cancelar
+
+**Configurações → Bloqueios (`/settings/blocks`)**:
+- CRUD de bloqueios de disponibilidade
+- Campos: quarto, data inicial, data final, tipo (manutenção, limpeza, private), motivo
+- Visualização integrada com calendário (exibir bloqueios como "Indisponível")
+- Suporte a bloqueios periódicos (recorrência: diária, semanal, mensal)
+- Importância: bloqueios devem **prevenir criação/edição de reservas** nas datas bloqueadas
+- Validação: ao criar/editar reserva, validar contra bloqueios ativos
+
+### 11.3 Componentes Compartilhados
+
+**Modal/Form de Bloqueio**:
+- Quarto (selector)
+- Data inicial (date picker)
+- Data final (date picker)
+- Tipo (radio: manutenção, limpeza, private, custom)
+- Motivo (texto livre)
+- Recorrência (opcional: none, daily, weekly, monthly)
+- Submit/Cancel
+
+**Modal/Form de Reserva**:
+- (Já definido em seção 9, adicionar validação contra bloqueios)
+
 ---
 Referências originárias: `docs/AGENT_CONTEXT/RULES_AND_REQUIREMENTS.md`, `docs/requirements/*`, `docs/adr/*`.
 
-**Última atualização**: 2026-02-18 - Adicionada seção 9 (Requisitos de Reservas - UI)
+**Última atualização**: 2026-02-18 - Adicionada seção 9 (Requisitos de Reservas - UI), Seção 11 (Navegação + Bloqueios)
 

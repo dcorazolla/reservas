@@ -608,4 +608,21 @@ class ReservationController extends BaseApiController
 
         return $this->ok(new ReservationResource($reservation));
     }
+
+    public function destroy(Request $request, Reservation $reservation, ReservationService $service)
+    {
+        $propertyId = $this->getPropertyId($request);
+        $this->assertBelongsToProperty($reservation->room, $propertyId);
+
+        $service->delete($reservation);
+
+        FinancialAuditLog::create([
+            'event_type' => 'reservation.deleted',
+            'payload' => ['reservation_id' => $reservation->id],
+            'resource_type' => 'reservation',
+            'resource_id' => $reservation->id,
+        ]);
+
+        return $this->ok(['message' => 'Reservation deleted successfully']);
+    }
 }

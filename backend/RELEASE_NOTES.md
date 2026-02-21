@@ -1,16 +1,49 @@
 # Release Notes - Backend
 
-## 0.1.0 - Inicial
+## 0.3.0 - Room Blocks & Service Layer Refactoring (2026-02-18)
 
-- Versão inicial do backend: `0.1.0`.
-- Atualizações/observações:
-  - Campo `version` adicionado ao `composer.json` para rastreamento semver.
-  - Ajustes recentes em validação de datas e testes para evitar exceções do Carbon.
+- Entregas principais:
+  - **Room Blocks (Bloqueios de Disponibilidade)**: 
+    - Novos campos no modelo: `type` (enum: maintenance, cleaning, private, custom) e `recurrence` (enum: none, daily, weekly, monthly).
+    - O escopo por propriedade foi mantido pela relação `room -> property_id`; não foi adicionada uma coluna `property_id` redundante na tabela `room_blocks`.
+    - Remoção de `partner_id` (substituído pelo sistema de `type`).
+    - Nova migration: `2026_02_18_000001_update_room_blocks_table.php` com adição de colunas e índices relevantes para `type` e `recurrence`.
+  - **RoomBlockService (Nova Camada de Serviço)**:
+    - Seguindo padrão arquitetural do projeto, toda lógica de CRUD movida para `App\Services\RoomBlockService`.
+    - Métodos: `list()`, `create()`, `update()`, `delete()`, `expandBlocks()`.
+    - Validação centralizada de date range, room-property relationship, e recurrence patterns.
+  - **RoomBlockController Refatorado**:
+    - Simplificado para apenas HTTP layer (validação de requisição, chamada ao service, resposta).
+    - Segue padrão do `RoomController` e `RoomService`.
+  - **Validação de Recorrência em Reservas**:
+    - `CreateReservationService` agora valida bloqueios periódicos (daily, weekly, monthly) ao criar reservas.
+    - Métodos helpers: `isBlockedByRecurringRules()`, `dateIsBlocked()`.
+  - **Novo Endpoint**:
+    - `GET /room-blocks/expand` retorna datas bloqueadas em um range (útil para calendário).
+  - **Filtros Avançados**:
+    - Filtros por `type`, `recurrence`, date range na listagem.
+    - Suporte a paginação via `per_page`.
+  - **Documentação OpenAPI**:
+    - Tag "Room Blocks" adicionada com schemas `RoomBlockInput` e `RoomBlock`.
+    - Todos os 5 endpoints documentados com exemplos de request/response.
+  - **ADR 0012**:
+    - Arquitetura de decisão criada e atualizada com status "Implemented (Backend Complete)".
+  
+- Testes:
+  - ✅ 201/201 backend tests passing
+  - ✅ 698 assertions
+  - Cobertura: CRUD, authorization, recurrence validation, date range handling.
 
-Fluxo para nova release:
-- Atualizar `backend/src/composer.json` com a nova versão (ex.: `0.1.1`).
-- Atualizar `backend/RELEASE_NOTES.md` com mudanças.
-- Tag no git: `git tag -a backend/v0.1.0 -m "backend v0.1.0"`
+ - Breaking Changes:
+  - `RoomBlock` agora requer campos `type` e `recurrence` (com defaults no controller).
+  - `partner_id` removido do modelo (usar `type` em vez disso).
+  - A coluna `property_id` não existe em `room_blocks`; o scoping deve ser feito através da relação `room -> property_id`.
+
+- Next Steps (Frontend):
+  - Fase 3a: Bloqueios Models (frontend/src/models/blocks.ts)
+  - Fase 3b: Bloqueios Services (frontend/src/services/blocks.ts)
+  - Fase 3c-3d: Components + Pages + Routes
+  - Fase 3e: Integração com calendário
 
 ## 0.2.0 - Sprint 1 MVP (2026-02-08)
 

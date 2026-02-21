@@ -6,7 +6,10 @@
       "cancel": "Cancel",
       "create": "Create",
       "save": "Save",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "update": "Update",
+      "view": "View",
+      "logout": "Sign Out"
     },
     "status": {
       "loading": "Loading...",
@@ -20,7 +23,9 @@
       "error_max_100": "Cannot be greater than 100",
       "error_loading": "Error loading data",
       "error_saving": "Error saving data",
-      "success": "Success"
+      "success": "Success",
+      "welcome": "Welcome",
+      "coming_soon": "Coming Soon"
     },
     "confirm": {
       "delete_title": "Delete confirmation",
@@ -82,6 +87,7 @@
     "error": "Failed to authenticate"
   },
   "menu": {
+    "home": "Home",
     "calendar": "Calendar",
     "reservations": "Reservations",
     "navigation": "Navigation",
@@ -94,6 +100,7 @@
       "rooms": "Rooms",
       "users": "Users",
       "partners": "Partners",
+      "blocks": "Blocks",
       "rates": {
         "label": "Rates",
         "base": "Base rate",
@@ -176,5 +183,97 @@
         "saved_success": "Base rates saved successfully!"
       }
     }
+  },
+  "blocks": {
+    "page": {
+      "title": "Room Blocks"
+    },
+    "form": {
+      "new": "New Block",
+      "edit": "Edit Block",
+      "room": "Room",
+      "type": "Block Type",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "reason": "Reason",
+      "recurrence": "Recurrence"
+    },
+    "type": {
+      "maintenance": "Maintenance",
+      "cleaning": "Cleaning",
+      "private": "Private",
+      "custom": "Custom"
+    }
+  },
+  "calendar": {
+    "title": "Reservations Calendar",
+    "prev": "Previous",
+    "next": "Next",
+    "period": "Period",
+    "days": "Days",
+    "empty": "No reservations found for this period",
+    "error_loading": "Error loading calendar"
+  },
+  "reservations": {
+    "title": "Reservations",
+    "new": "New Reservation",
+    "edit": "Edit Reservation",
+    "form": {
+      "guest_name": "Guest Name",
+      "email": "Email",
+      "phone": "Phone",
+      "room": "Room",
+      "start_date": "Check-in",
+      "end_date": "Check-out",
+      "adults_count": "Adults",
+      "children_count": "Children",
+      "infants_count": "Infants",
+      "status": "Status",
+      "partner": "Partner",
+      "notes": "Notes",
+      "price_override": "Manual Price",
+      "total_value": "Total Value"
+    },
+    "list": {
+      "room": "Room",
+      "guest": "Guest",
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "status": "Status",
+      "contact": "Contact",
+      "partner": "Partner",
+      "value": "Value",
+      "actions": "Actions",
+      "period": "Period",
+      "search_guest": "Search by guest",
+      "search_contact": "Search by contact",
+      "filter_status": "Filter by status",
+      "filter_partner": "Filter by partner"
+    },
+    "status": {
+      "pre-reserva": "Pre-reservation",
+      "reservado": "Reserved",
+      "confirmado": "Confirmed",
+      "checked-in": "Checked In",
+      "checked-out": "Checked Out",
+      "no-show": "No Show",
+      "cancelado": "Cancelled",
+      "blocked": "Blocked"
+    },
+    "actions": {
+      "checkin": "Check-in",
+      "checkout": "Check-out",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "finalize": "Finalize",
+      "delete": "Delete"
+    }
+  },
+  "home": {
+    "title": "Dashboard",
+    "description": "Manage your properties, reservations and availability",
+    "calendar_description": "View and manage your reservations in an interactive calendar",
+    "reservations_description": "Manage your reservations with filters and reports",
+    "coming_soon": "Coming Soon"
   }
 }
