@@ -1,5 +1,63 @@
 # Release Notes - Backend
 
+## 0.2.2 - Multi-Property Cancellation Policies (2026-02-20)
+
+**FASE 1 Backend - Production Ready ✅**
+
+### Features
+- **CancellationPolicy Model**: 1:1 relationship with Property, soft-deletes for audit trail
+- **CancellationRefundRule Model**: N:M relationship with Policy, priority-ordered rules
+- **CancellationService**: Complete business logic for refund calculation and audit logging
+- **CancellationPolicyController**: 4 endpoints for GET/PUT policy and POST preview/cancel
+- **Dynamic Refund Rules**:
+  - 7+ days before check-in: 100% refund
+  - 5-6 days before check-in: 50% refund
+  - 3-4 days before check-in: 0% refund (non-refundable)
+  - After check-in: 0% refund (cannot cancel)
+- **Financial Audit Trail**: Complete logging with refund details, user context, and policy/rule IDs
+- **Property-Scoped Operations**: All operations filtered by property_id from JWT token
+- **Automatic Invoice Generation**: Refund credits automatically created when applicable
+
+### Database Changes
+- New table: `cancellation_policies` (id, property_id, name, type, active, config, applies_from, created_by_id, soft-deletes)
+- New table: `cancellation_refund_rules` (id, policy_id, days_before_checkin_min/max, refund_percent, priority)
+- Join table: `cancellation_policy_refund_rule` for N:M relationship
+- New columns on `reservations`: `cancelled_at`, `cancellation_reason`, `cancellation_refund_calc` (JSON)
+- Fixed: Removed duplicate `financial_audit_logs` creation in 2026_01_31 migration (schema now correct with user_id)
+
+### API Endpoints
+- `GET /api/properties/{id}/cancellation-policy` - Fetch active policy + rules
+- `PUT /api/properties/{id}/cancellation-policy` - Create/update policy and rules
+- `POST /api/reservations/{id}/preview-cancellation` - Calculate refund without persisting
+- `POST /api/reservations/{id}/cancel-with-policy` - Execute cancellation with audit trail
+
+### Testing
+- ✅ 26/26 tests passing (100%)
+- ✅ 89 assertions verified
+- Test breakdown:
+  - 10 CancellationPolicyTest (models, relationships, scopes, casting)
+  - 8 CancellationServiceTest (refund calculations, audit logging, edge cases)
+  - 8 CancellationPolicyControllerTest (endpoints, auth, authorization, error handling)
+
+### Bug Fixes
+- Fixed duplicate `financial_audit_logs` table creation in migrations
+  - Removed table creation from 2026_01_31 migration
+  - Kept authoritative schema in 2026_02_08 migration
+  - Result: Schema now correct with user_id column (was 1/26 tests failing, now 26/26 passing)
+
+### Breaking Changes
+- None (fully backward compatible)
+
+### Migration Required
+Yes - Run `php artisan migrate`
+
+### Next Steps
+- FASE 1.7: Frontend ReservationCancellationModal component
+- FASE 2: OpenAPI documentation update
+- FASE 3: Advanced features (partial refunds, penalty escalation)
+
+---
+
 ## 0.3.0 - Room Blocks & Service Layer Refactoring (2026-02-18)
 
 - Entregas principais:
@@ -58,6 +116,7 @@
 
 - Observações e próximos passos:
   - Habilitar feature-flag `invoices.create_from_reservation` em staging para validação manual.
+
   - Revisar pequenas deprecações do PHPUnit em follow-up.
 
 ## 0.1.1 - Patch (2026-02-08)
